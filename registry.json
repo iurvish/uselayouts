@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "local",
+  "homepage": "http://localhost:300",
+  "items": [
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Lonely Button",
+      "description": "This is Lonely btn",
+      "files": [
+        {
+          "path": "components/counter.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
