@@ -4,7 +4,6 @@ import { type ComponentProps, type ReactNode, useMemo } from "react";
 import { cn } from "../../../lib/cn";
 import { TreeContextProvider, useTreeContext } from "fumadocs-ui/contexts/tree";
 import Link from "fumadocs-core/link";
-import { useSearchContext } from "fumadocs-ui/contexts/search";
 import { cva } from "class-variance-authority";
 import { usePathname } from "fumadocs-core/framework";
 import {
@@ -24,6 +23,7 @@ import {
   SidebarInset,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import SearchDialog from "@/components/search-dialog";
 
 export interface DocsLayoutProps {
   tree: PageTree.Root;
@@ -34,7 +34,7 @@ export function DocsLayout({ tree, children }: DocsLayoutProps) {
   return (
     <TreeContextProvider tree={tree}>
       <SidebarProvider>
-        <ShadcnSidebar>
+        <ShadcnSidebar variant={"floating"}>
           <SidebarHeader>
             <Link href="/" className="font-medium px-2 py-2">
               My Docs
@@ -45,11 +45,11 @@ export function DocsLayout({ tree, children }: DocsLayoutProps) {
           </SidebarContent>
         </ShadcnSidebar>
         <SidebarInset>
-          <header className="sticky top-0 bg-fd-background h-14 z-20 border-b">
+          <header className="sticky top-0  h-14 z-20 ">
             <nav className="flex flex-row items-center gap-2 size-full px-4">
               <SidebarTrigger />
               <div className="flex-1" />
-              <SearchToggle />
+              <SearchDialog />
             </nav>
           </header>
           <main id="nd-docs-layout" className="flex flex-1 flex-row">
@@ -58,24 +58,6 @@ export function DocsLayout({ tree, children }: DocsLayoutProps) {
         </SidebarInset>
       </SidebarProvider>
     </TreeContextProvider>
-  );
-}
-
-function SearchToggle(props: ComponentProps<"button">) {
-  const { enabled, setOpenSearch } = useSearchContext();
-  if (!enabled) return null;
-
-  return (
-    <button
-      {...props}
-      className={cn(
-        "text-sm px-3 py-1.5 rounded-md hover:bg-sidebar-accent",
-        props.className
-      )}
-      onClick={() => setOpenSearch(true)}
-    >
-      Search
-    </button>
   );
 }
 
@@ -178,7 +160,7 @@ function SidebarItem({
             <span>{item.name}</span>
           </SidebarMenuSubButton>
         )}
-        {children}
+        {children && <SidebarMenuSub>{children}</SidebarMenuSub>}
       </SidebarMenuSubItem>
     );
   }
