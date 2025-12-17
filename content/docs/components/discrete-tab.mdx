@@ -6,12 +6,13 @@ description: A minimal tab component with discrete animations.
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import DiscreteTabs from "@/registry/default/example/discrete-tabs";
+import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-10">
+    <ComponentPreview>
       <DiscreteTabs />
-    </div>
+    </ComponentPreview>
   </Tab>
   <Tab value="Code">
     ```tsx

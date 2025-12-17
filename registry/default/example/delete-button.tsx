@@ -1,26 +1,35 @@
 "use client";
-"use client";
-import { UndoIcon } from "@hugeicons/core-free-icons";
+
+import { Undo03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { motion, AnimatePresence } from "motion/react";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
+
 const DeleteButton = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [count, setCount] = useState(10);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Counter Logic (10 → 0)
   useEffect(() => {
     if (!isDeleting) return;
 
-    if (count === 0) {
-      // Code to be performed when the counter finishes
-      return;
-    }
+    if (count === 0) return;
 
     const timer = setTimeout(() => setCount((c) => c - 1), 1000);
     return () => clearTimeout(timer);
   }, [isDeleting, count]);
+
+  // Handle animation lock
+  const handleClick = (newState: boolean) => {
+    if (isAnimating) return; // Prevent clicks during animation
+    setIsAnimating(true);
+    setIsDeleting(newState);
+    if (newState) setCount(10);
+
+    // Release lock after animation completes
+    setTimeout(() => setIsAnimating(false), 400);
+  };
 
   // Split text into characters for animation
   const deleteText = "Delete Account";
@@ -34,19 +43,30 @@ const DeleteButton = () => {
           <motion.button
             key="delete"
             layoutId="deleteButton"
-            onClick={() => {
-              setIsDeleting(true);
-              setCount(10);
-            }}
+            onClick={() => handleClick(true)}
             whileTap={{ scale: 0.95 }}
-            initial={{ backgroundColor: "#FFEDF1", filter: "blur(1px)" }}
-            animate={{ backgroundColor: "#FE322A", filter: "blur(0px)" }}
-            exit={{ backgroundColor: "#FFEDF1", filter: "blur(1px)" }}
+            style={{ pointerEvents: isAnimating ? "none" : "auto" }}
+            initial={{
+              backgroundColor: "#FFEDF1",
+              filter: "blur(1px)",
+              opacity: 1,
+            }}
+            animate={{
+              backgroundColor: "#FE322A",
+              filter: "blur(0px)",
+              opacity: 1,
+            }}
+            exit={{
+              backgroundColor: "#FFEDF1",
+              filter: "blur(1px)",
+              opacity: 0,
+            }}
             className="text-white px-5 py-3 rounded-full flex items-center justify-center overflow-hidden"
             transition={{
               layout: { duration: 0.4, ease: [0.77, 0, 0.175, 1] },
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.1, ease: "easeInOut" },
+              opacity: { duration: 0.2, ease: "easeOut" },
             }}
           >
             <motion.span
@@ -80,16 +100,30 @@ const DeleteButton = () => {
           <motion.button
             key="cancel"
             layoutId="deleteButton"
-            onClick={() => setIsDeleting(false)}
+            onClick={() => handleClick(false)}
             whileTap={{ scale: 0.95 }}
-            initial={{ backgroundColor: "#FE322A", filter: "blur(1px)" }}
-            animate={{ backgroundColor: "#FFEDF1", filter: "blur(0px)" }}
-            exit={{ backgroundColor: "#FE322A", filter: "blur(1px)" }}
+            style={{ pointerEvents: isAnimating ? "none" : "auto" }}
+            initial={{
+              backgroundColor: "#FE322A",
+              filter: "blur(1px)",
+              opacity: 0,
+            }}
+            animate={{
+              backgroundColor: "#FFEDF1",
+              filter: "blur(0px)",
+              opacity: 1,
+            }}
+            exit={{
+              backgroundColor: "#FE322A",
+              filter: "blur(1px)",
+              opacity: 0,
+            }}
             className="px-3 py-3 rounded-full flex items-center gap-2 overflow-hidden"
             transition={{
               layout: { duration: 0.4, ease: [0.77, 0, 0.175, 1] },
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.2, ease: "easeInOut" },
+              opacity: { duration: 0.2, ease: "easeIn" },
             }}
           >
             {/* ICON */}
@@ -100,7 +134,7 @@ const DeleteButton = () => {
               transition={{ duration: 0.2, delay: 0.05 }}
               className="bg-[#FE322A] p-1.5 rounded-full flex items-center justify-center shrink-0"
             >
-              <HugeiconsIcon icon={UndoIcon} className="h-4 w-4 text-white" />
+              <HugeiconsIcon icon={Undo03Icon} className="h-4 w-4 text-white" />
             </motion.div>
 
             {/* TEXT */}
