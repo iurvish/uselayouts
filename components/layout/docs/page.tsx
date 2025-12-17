@@ -1,15 +1,16 @@
-'use client';
+"use client";
 
-import { type ComponentProps, type ReactNode, useMemo } from 'react';
+import { type ComponentProps, type ReactNode, useMemo } from "react";
 import {
   AnchorProvider,
   type TOCItemType,
   useActiveAnchors,
-} from 'fumadocs-core/toc';
-import { cn } from '../../../lib/cn';
-import { useTreeContext } from 'fumadocs-ui/contexts/tree';
-import { Link, usePathname } from 'fumadocs-core/framework';
-import type * as PageTree from 'fumadocs-core/page-tree';
+} from "fumadocs-core/toc";
+import { cn } from "../../../lib/cn";
+import { useTreeContext } from "fumadocs-ui/contexts/tree";
+import { Link, usePathname } from "fumadocs-core/framework";
+import type * as PageTree from "fumadocs-core/page-tree";
+import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 
 export interface DocsPageProps {
   toc?: TOCItemType[];
@@ -22,6 +23,7 @@ export function DocsPage({ toc = [], ...props }: DocsPageProps) {
     <AnchorProvider toc={toc}>
       <main className="flex w-full min-w-0 flex-col">
         <article className="flex flex-1 flex-col w-full max-w-[860px] gap-6 px-4 py-8 md:px-6 md:mx-auto">
+          <InlineTOC items={toc} className="xl:hidden mb-6" />
           {props.children}
           <Footer />
         </article>
@@ -40,31 +42,31 @@ export function DocsPage({ toc = [], ...props }: DocsPageProps) {
   );
 }
 
-export function DocsBody(props: ComponentProps<'div'>) {
+export function DocsBody(props: ComponentProps<"div">) {
   return (
-    <div {...props} className={cn('prose', props.className)}>
+    <div {...props} className={cn("prose", props.className)}>
       {props.children}
     </div>
   );
 }
 
-export function DocsDescription(props: ComponentProps<'p'>) {
+export function DocsDescription(props: ComponentProps<"p">) {
   // don't render if no description provided
   if (props.children === undefined) return null;
 
   return (
     <p
       {...props}
-      className={cn('mb-8 text-lg text-fd-muted-foreground', props.className)}
+      className={cn("mb-8 text-lg text-fd-muted-foreground", props.className)}
     >
       {props.children}
     </p>
   );
 }
 
-export function DocsTitle(props: ComponentProps<'h1'>) {
+export function DocsTitle(props: ComponentProps<"h1">) {
   return (
-    <h1 {...props} className={cn('text-3xl font-semibold', props.className)}>
+    <h1 {...props} className={cn("text-3xl font-semibold", props.className)}>
       {props.children}
     </h1>
   );
@@ -77,8 +79,8 @@ function TocItem({ item }: { item: TOCItemType }) {
     <a
       href={item.url}
       className={cn(
-        'text-sm text-fd-foreground/80 py-1',
-        isActive && 'text-fd-primary',
+        "text-sm text-fd-foreground/80 py-1",
+        isActive && "text-fd-primary"
       )}
       style={{
         paddingLeft: Math.max(0, item.depth - 2) * 16,
@@ -97,8 +99,8 @@ function Footer() {
 
     function scan(items: PageTree.Node[]) {
       for (const item of items) {
-        if (item.type === 'page') result.push(item);
-        else if (item.type === 'folder') {
+        if (item.type === "page") result.push(item);
+        else if (item.type === "folder") {
           if (item.index) result.push(item.index);
           scan(item.children);
         }

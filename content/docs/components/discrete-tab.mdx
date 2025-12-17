@@ -4,6 +4,7 @@ description: A minimal tab component with discrete animations.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
 import DiscreteTabs from "@/registry/default/example/discrete-tabs";
 
 <Tabs items={['Preview', 'Code']}>
@@ -225,3 +226,45 @@ import DiscreteTabs from "@/registry/default/example/discrete-tabs";
 
   </Tab>
 </Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/discrete-tabs.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/discrete-tabs.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import DiscreteTabs from "@/components/discrete-tabs";
+
+export default function Page() {
+  return <DiscreteTabs />;
+}
+```
