@@ -1,5 +1,6 @@
-import { motion } from "motion/react";
-import { useRef, useState } from "react";
+"use client";
+import { delay, motion } from "motion/react";
+import React, { useRef, useState } from "react";
 import {
   InboxIcon,
   Message01Icon,
@@ -84,22 +85,46 @@ function ToolbarButton({
 
 function ExtendedToolbar() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [primaryRef, primaryBounds] = useMeasure();
   const [secondaryRef, secondaryBounds] = useMeasure();
 
+  // Set mounted after first render to prevent initial animation
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const currentWidth = isExpanded ? secondaryBounds.width : primaryBounds.width;
+  const hasMeasurements = primaryBounds.width > 0;
+
+  // Use primary width initially, or auto if not measured yet
+  const initialWidth = hasMeasurements ? primaryBounds.width : "auto";
+
+  // Consistent spring animation for both directions
+  const springTransition = {
+    type: "spring" as const,
+    stiffness: 200,
+    damping: 20,
+    mass: 0.8,
+    bounce: 0.9,
+    duration: isExpanded ? 0.7 : 1,
+    delay: isExpanded ? 0 : 0.01,
+  };
 
   return (
     <motion.div
-      className="relative h-14 rounded-full bg-muted overflow-hidden"
-      animate={{ width: currentWidth || "auto" }}
-      transition={{ type: "spring", bounce: 0.3, duration: 0.7 }}
+      className="relative h-14 rounded-full bg-muted border border-border overflow-hidden"
+      initial={{ width: initialWidth }}
+      animate={
+        hasMeasurements ? { width: currentWidth } : { width: initialWidth }
+      }
+      transition={isMounted ? springTransition : { duration: 0 }}
     >
       <motion.div
         className="h-full flex"
         initial={false}
         animate={{ x: isExpanded ? -primaryBounds.width : 0 }}
-        transition={{ type: "spring", bounce: 0.3, duration: 0.7 }}
+        transition={isMounted ? springTransition : { duration: 0 }}
       >
         {/* Primary Tools Panel */}
         <div
@@ -132,6 +157,11 @@ function ExtendedToolbar() {
         <div
           ref={secondaryRef as React.RefObject<HTMLDivElement>}
           className="flex items-center gap-1 p-1.5 pl-2 pr-3 flex-shrink-0"
+          style={{
+            position: isExpanded ? "relative" : "absolute",
+            opacity: isExpanded ? 1 : 0,
+            pointerEvents: isExpanded ? "auto" : "none",
+          }}
         >
           <motion.button
             whileTap={{ scale: 0.9 }}

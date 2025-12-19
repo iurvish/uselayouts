@@ -94,9 +94,9 @@ import {
   LogoutIcon,
 } from "@hugeicons/core-free-icons";
 import MenuInteraction from "./checking";
-import FolderInteraction from "./todo/folder-interaction";
-import FilterInteraction from "./todo/list-item";
-import ExtendedToolbar from "./todo/expanded-toolbar";
+import FolderInteraction from "@/registry/default/example/folder-interaction";
+import FilterInteraction from "@/registry/default/example/list-item";
+import ExtendedToolbar from "@/registry/default/example/expanded-toolbar";
 
 export function ComponentExample() {
   return (
@@ -104,8 +104,9 @@ export function ComponentExample() {
       {/* <CardExample />
       <FormExample />
       <MenuInteraction /> */}
-      {/* <FolderInteraction /> */}
-      {/* <FilterInteraction /> */}
+
+      <FolderInteraction />
+      <FilterInteraction />
       <ExtendedToolbar />
     </ExampleWrapper>
   );

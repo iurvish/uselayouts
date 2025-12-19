@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -9,7 +10,7 @@ function FolderInteraction() {
   };
 
   return (
-    <div className="w-full h-dvh flex justify-center items-center">
+    <div className="w-full  flex justify-center items-center">
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="w-80 h-52 relative wrapper"
