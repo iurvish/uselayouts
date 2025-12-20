@@ -79,7 +79,11 @@ function PricingCard() {
                 animate={{ opacity: activePlan == item.id ? 1 : 0 }}
                 className="absolute -inset-0.5 flex items-center justify-center rounded-full bg-primary"
               >
-                <HugeiconsIcon icon={Tick02Icon} size={20} />
+                <HugeiconsIcon
+                  icon={Tick02Icon}
+                  size={20}
+                  className="text-primary-foreground"
+                />
               </motion.div>
             </div>
           </div>

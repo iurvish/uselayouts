@@ -96,6 +96,7 @@ import {
 import FolderInteraction from "@/registry/default/example/folder-interaction";
 import FilterInteraction from "@/registry/default/example/list-item";
 import ExtendedToolbar from "@/registry/default/example/expanded-toolbar";
+import SaveInput from "./save-input";
 
 export function ComponentExample() {
   return (
@@ -108,6 +109,7 @@ export function ComponentExample() {
     
       <FilterInteraction />
       <ExtendedToolbar /> */}
+      <SaveInput />
     </ExampleWrapper>
   );
 }
