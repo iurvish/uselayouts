@@ -105,6 +105,7 @@ export function ComponentExample() {
       <MenuInteraction /> */}
       {/* 
       <FolderInteraction />
+    
       <FilterInteraction />
       <ExtendedToolbar /> */}
     </ExampleWrapper>
