@@ -144,21 +144,7 @@ const Bucket = () => {
               shapeRendering="crispEdges"
             />
           </g>
-          <foreignObject
-            x="443.561"
-            y="20.823"
-            width="137.255"
-            height="136.012"
-          >
-            <div
-              style={{
-                backdropFilter: "blur(11.03px)",
-                clipPath: "url(#bgblur_4_51_65_clip_path)",
-                height: "100%",
-                width: "100%",
-              }}
-            ></div>
-          </foreignObject>
+
           <g
             filter="url(#filter5_dddi_51_65)"
             data-figma-bg-blur-radius="22.0545"
@@ -170,21 +156,6 @@ const Bucket = () => {
               shapeRendering="crispEdges"
             />
           </g>
-          <foreignObject
-            x="21.477"
-            y="56.6875"
-            width="612.444"
-            height="212.562"
-          >
-            <div
-              style={{
-                backdropFilter: "blur(11.03px)",
-                clipPath: "url(#bgblur_5_51_65_clip_path)",
-                height: "100%",
-                width: "100%",
-              }}
-            ></div>
-          </foreignObject>
 
           <defs>
             <filter
@@ -839,7 +810,7 @@ const Bucket = () => {
         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           <div
             className="relative w-full h-full flex justify-center items-center"
-            style={{ paddingBottom: "30%" }}
+            style={{ paddingBottom: "80%" }}
           >
             <AnimatePresence mode="popLayout">
               {items.map((chip, index) => {
@@ -878,6 +849,23 @@ const Bucket = () => {
               fill="#FBFBFB"
             />
           </g>
+
+          <foreignObject
+            x="21.477"
+            y="56.6875"
+            width="612.444"
+            height="212.562"
+          >
+            <div
+              style={{
+                backdropFilter: "blur(11.03px)",
+                clipPath: "url(#bgblur_5_51_65_clip_path)",
+                height: "100%",
+                width: "100%",
+              }}
+            ></div>
+          </foreignObject>
+
           {/* Top Layer Part 2: filter6 */}
           <g
             filter="url(#filter6_dddi_51_65)"
