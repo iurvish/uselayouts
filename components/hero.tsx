@@ -11,6 +11,7 @@ import {
   useScroll,
   useTransform,
   useMotionValueEvent,
+  useMotionTemplate,
 } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -18,41 +19,29 @@ import { GithubIcon } from "@hugeicons/core-free-icons";
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const isMobile = useIsMobile();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    console.log("Page scroll: ", latest);
-  });
-
-  const margin: any = useTransform(
+  const insetVal = useTransform(scrollY, [0, 300], isMobile ? [8, 0] : [14, 0]);
+  const bottomInsetVal = useTransform(
     scrollY,
     [0, 300],
-    isMobile ? [8, 0] : [14, 0]
+    isMobile ? [0, 0] : [12, 0]
   );
-  const radius = useTransform(scrollY, [0, 300], isMobile ? [36, 0] : [36, 0]);
+  const radius = useTransform(scrollY, [0, 300], isMobile ? [24, 0] : [32, 0]);
+
+  const clipPathSpec = useMotionTemplate`inset(0px ${insetVal}px ${bottomInsetVal}px ${insetVal}px round ${radius}px)`;
 
   return (
     <>
       <Header />
       <motion.section
         style={{
-          marginLeft: margin,
-          marginRight: margin,
-          // marginTop: "2px",
-          borderRadius: radius,
-          willChange: "margin, border-radius",
+          clipPath: clipPathSpec,
+          transform: "translateZ(0)",
         }}
-        className="relative border min-h-[calc(100svh-4rem)] overflow-hidden bg-background py-8 md:py-16 lg:py-24 flex flex-col squircle "
+        className="relative border min-h-[calc(100svh-4rem)] overflow-hidden bg-background py-8 md:py-16 lg:py-24 flex flex-col will-change-transform"
       >
         <div className="absolute inset-0 z-0 ">
-          {/* <Image
-          src="/hero-bg.png"
-          alt="Abstract background"
-          fill
-          className="object-cover"
-          priority
-        /> */}
           <Image
             src="/background.png"
             alt="Background"
@@ -60,7 +49,6 @@ const Hero = () => {
             className="object-cover"
             priority
           />
-          {/* <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" /> */}
         </div>
 
         <div className="relative z-10 w-full px-4 md:px-8 lg:pl-12 lg:pr-0 xl:pl-20 xl:pr-14 flex-1 flex flex-col justify-center  max-sm:px-2">
@@ -99,7 +87,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="flex-1 flex justify-end items-end lg:justify-end w-full h-full max-md:items-end max-md:pb-6">
+            <div className="flex-1 flex justify-end items-end lg:justify-end w-full h-full max-md:items-end max-md:pb-6 max-md:landscape:hidden">
               <div className="w-full max-w-[600px] lg:max-w-none">
                 <Bucket />
               </div>
