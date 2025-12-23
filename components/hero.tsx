@@ -39,7 +39,7 @@ const Hero = () => {
           clipPath: clipPathSpec,
           transform: "translateZ(0)",
         }}
-        className="relative border min-h-[calc(100svh-4rem)] overflow-hidden bg-background py-8 md:py-16 lg:py-24 flex flex-col will-change-transform"
+        className="relative border min-h-[calc(100svh-4rem)] overflow-hidden bg-background py-8 md:py-16 lg:py-24 flex flex-col will-change-transform squircle"
       >
         <div className="absolute inset-0 z-0 ">
           <Image
