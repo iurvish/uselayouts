@@ -1,3 +1,5 @@
+"use client";
+
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { Edit01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
@@ -12,17 +14,15 @@ function SaveInput() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="w-full h-dvh flex justify-center items-center text-xl">
+    <div className="w-full flex justify-center items-center text-xl">
       <motion.div
         layout
         initial={{
-          borderColor: "hsl(var(--border))",
           boxShadow: "0px 0px 2px hsl(var(--foreground) / 0.1)",
         }}
         animate={{
-          borderColor: isEditing ? "hsl(var(--ring))" : "hsl(var(--border))",
           boxShadow: isEditing
-            ? "none"
+            ? " none border border-foreground"
             : "0px 0px 2px hsl(var(--foreground) / 0.1)",
         }}
         className={cn(
@@ -41,6 +41,7 @@ function SaveInput() {
             "h-12 border-0 shadow-none focus-visible:ring-0 bg-transparent p-0 text-base w-full min-w-32 pl-4 pr-12",
             isEditing ? "text-foreground" : "text-muted-foreground"
           )}
+          placeholder="username"
         />
         <AnimatePresence initial={false}>
           {!isEditing ? (

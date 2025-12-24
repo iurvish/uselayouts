@@ -32,14 +32,14 @@ export function SaveButton() {
   }, [status]);
 
   return (
-    <div className="relative inline-flex group font-sans dark">
+    <div className="relative inline-flex group font-sans">
       <Button
         onClick={handleClick}
         className={cn(
           "relative rounded-full h-12 px-8 text-base font-medium transition-all duration-300 min-w-[140px] disabled:opacity-100",
           status === "idle"
             ? "transition-colors"
-            : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed border-muted"
+            : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed border-muted shadow-sm"
         )}
         variant={"default"}
         disabled={status !== "idle"}

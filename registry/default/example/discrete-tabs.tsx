@@ -195,9 +195,6 @@ function Button({
               style={{ willChange: "transform" }}
             >
               {title}
-              {showShine && (
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent [background-size:200%_100%] animate-[shiny-text_0.8s_ease-out_forwards]" />
-              )}
             </motion.span>
           </motion.div>
         )}

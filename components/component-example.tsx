@@ -96,8 +96,11 @@ import {
 import FolderInteraction from "@/registry/default/example/folder-interaction";
 import FilterInteraction from "@/registry/default/example/list-item";
 import ExtendedToolbar from "@/registry/default/example/expanded-toolbar";
-import SaveInput from "./todo/save-input";
+import SaveInput from "../registry/default/example/save-input";
 import Bucket from "./bucket";
+import { SaveButton } from "../registry/default/example/save-button";
+import InputSwitch from "../registry/default/example/input-switch";
+import FrequencySelector from "../registry/default/example/frequency-selector";
 
 export function ComponentExample() {
   return (
@@ -110,7 +113,10 @@ export function ComponentExample() {
     
       <FilterInteraction />
       <ExtendedToolbar /> */}
-      {/* <SaveInput /> */}
+      <SaveInput />
+      <SaveButton />
+      <InputSwitch />
+      <FrequencySelector />
       <Bucket />
     </ExampleWrapper>
   );
