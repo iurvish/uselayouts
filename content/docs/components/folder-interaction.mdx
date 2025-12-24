@@ -7,12 +7,15 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { Callout } from "fumadocs-ui/components/callout";
 import FolderInteraction from "@/registry/default/example/folder-interaction";
+import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Callout type="warning">
-  **Note:** The backdrop blur effect may not appear in this documentation preview due to MDX rendering limitations. However, when you install and use this component in your project, the blur effect will work correctly. 
-  
-  **[View Live Demo →](https://uselayouts.com/components/folder-interaction)** to see the full effect with blur.
+  **Note:** The backdrop blur effect may not appear in this documentation
+  preview due to MDX rendering limitations. However, when you install and use
+  this component in your project, the blur effect will work correctly. **[View
+  Live Demo →](https://uselayouts.com/components/folder-interaction)** to see
+  the full effect with blur.
 </Callout>
 
 <Tabs items={['Preview', 'Code']}>
@@ -22,139 +25,7 @@ import { ComponentPreview } from "@/components/component-preview";
     </ComponentPreview>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    import { motion } from "motion/react";
-    import { useState } from "react";
-
-    function FolderInteraction() {
-      const [isOpen, setIsOpen] = useState(false);
-
-      const pageVariants = {
-        spring: { type: "spring" as const, duration: 0.6 },
-      };
-
-      return (
-        <div className="w-full h-dvh flex justify-center items-center">
-          <div
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-80 h-52 relative wrapper"
-          >
-            <div
-              className="folder relative w-[87.5%] mx-auto items-center h-full flex justify-center"
-              style={{
-                background: "#18151B",
-                boxShadow:
-                  "0px 0px 15.699999809265137px 16px rgba(79, 73, 85, 0.30) inset",
-                borderRadius: 10,
-              }}
-            >
-              {[
-                {
-                  initial: { rotate: -3, x: -38, y: 2 },
-                  open: { rotate: -8, x: -70, y: -55 },
-                  transition: {
-                    ...pageVariants.spring,
-                    bounce: 0.15,
-                    stiffness: 160,
-                    damping: 22,
-                  },
-                  className: "z-10 shadow-md",
-                },
-                {
-                  initial: { rotate: 0, x: 0, y: 0 },
-                  open: { rotate: 1, x: 2, y: -75 },
-                  transition: {
-                    ...pageVariants.spring,
-                    duration: 0.55,
-                    bounce: 0.12,
-                    stiffness: 190,
-                    damping: 24,
-                  },
-                  className: "z-20 shadow-lg",
-                },
-                {
-                  initial: { rotate: 3.5, x: 42, y: 1 },
-                  open: { rotate: 9, x: 75, y: -60 },
-                  transition: {
-                    ...pageVariants.spring,
-                    duration: 0.58,
-                    bounce: 0.17,
-                    stiffness: 170,
-                    damping: 21,
-                  },
-                  className: "z-10 shadow-md",
-                },
-              ].map((page, i) => (
-                <motion.div
-                  key={i}
-                  initial={page.initial}
-                  animate={isOpen ? page.open : page.initial}
-                  transition={page.transition}
-                  className={`absolute top-2 w-32 h-fit rounded-xl ${page.className}`}
-                >
-                  <Page />
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              animate={{ rotateX: isOpen ? -40 : 0 }}
-              transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
-              className="absolute -left-[1px] -right-[1px] -bottom-[1px] z-20 h-44 rounded-3xl origin-bottom flex justify-center items-center overflow-visible"
-            >
-              <svg
-                className="w-full h-full overflow-visible"
-                viewBox="0 0 235 121"
-                fill="none"
-                preserveAspectRatio="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* SVG folder front with blur effect */}
-                <foreignObject x="-13" y="-13" width="262.4" height="148.4">
-                  <div
-                    style={{
-                      backdropFilter: "blur(6.5px)",
-                      clipPath: "url(#bgblur_0_1_106_clip_path)",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  ></div>
-                </foreignObject>
-                <path
-                  id="Vector"
-                  data-figma-bg-blur-radius="13"
-                  d="M104.615 0.350494L33.1297 0.838776..."
-                  fill="url(#paint0_linear_1_106)"
-                  fillOpacity="0.3"
-                  stroke="url(#paint1_linear_1_106)"
-                  strokeWidth="0.7"
-                />
-                <defs>
-                  {/* Gradient definitions */}
-                </defs>
-              </svg>
-            </motion.div>
-          </div>
-        </div>
-      );
-    }
-
-    export default FolderInteraction;
-
-    const Page = () => (
-      <div className="w-full h-full bg-gradient-to-b from-[#E8E7F0] to-[#DCDAE8] rounded-xl shadow-lg p-3 sm:p-4">
-        <div className="flex flex-col gap-1.5 sm:gap-2">
-          <div className="w-full h-1 sm:h-1.5 bg-[#CFCDE0] rounded-full" />
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="flex gap-1.5 sm:gap-2">
-              <div className="flex-1 h-1 sm:h-1.5 bg-[#CFCDE0] rounded-full" />
-              <div className="flex-1 h-1 sm:h-1.5 bg-[#CFCDE0] rounded-full" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-    ```
+    <SourceCode filePath="registry/default/example/folder-interaction.tsx" />
 
   </Tab>
 </Tabs>
@@ -216,7 +87,8 @@ export default function Page() {
 ## Important Note
 
 <Callout type="info">
-  The backdrop blur effect uses CSS `backdrop-filter` which may not render correctly in MDX documentation previews due to browser security restrictions with SVG `foreignObject` elements. When you install this component in your project, the blur effect will work perfectly. 
+  The backdrop blur effect uses CSS `backdrop-filter` which may not render correctly in MDX documentation previews due to browser security restrictions with SVG `foreignObject` elements. When you install this component in your project, the blur effect will work perfectly.
 
-  For the best experience, check out the **[live demo](https://uselayouts.com/components/folder-interaction)** to see the component with full blur effects.
+For the best experience, check out the **[live demo](https://uselayouts.com/components/folder-interaction)** to see the component with full blur effects.
+
 </Callout>

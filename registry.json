@@ -14,6 +14,54 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "frequency-selector",
+      "type": "registry:example",
+      "title": "Frequency Selector",
+      "description": "A frequency selector component with spring animations.",
+      "files": [
+        {
+          "path": "example/frequency-selector.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-switch",
+      "type": "registry:example",
+      "title": "Input Switch",
+      "description": "An input placeholder switch component.",
+      "files": [
+        {
+          "path": "example/input-switch.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "save-button",
+      "type": "registry:example",
+      "title": "Save Button",
+      "description": "A save button with loading and success states.",
+      "files": [
+        {
+          "path": "example/save-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "save-input",
+      "type": "registry:example",
+      "title": "Save Input",
+      "description": "An input that switches between read and edit modes.",
+      "files": [
+        {
+          "path": "example/save-input.tsx",
+          "type": "registry:example"
+        }
+      ]
     }
   ]
 }

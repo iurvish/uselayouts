@@ -28,7 +28,7 @@
     "next": "16.0.10",
     "radix-ui": "^1.4.3",
     "react": "^19.2.3",
-    "react-dom": "19.2.1",
+    "react-dom": "19.2.3",
     "react-use-measure": "^2.1.7",
     "shadcn": "^3.6.1",
     "tailwind-merge": "^3.4.0",
