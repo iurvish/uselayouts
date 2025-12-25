@@ -80,7 +80,7 @@ export default function PhotoGallery() {
   const layoutGroupId = useId();
 
   return (
-    <section className="relative w-full py-12 px-6 bg-background flex flex-col items-center justify-start min-h-[850px] overflow-hidden">
+    <section className="relative w-full py-12 px-4 md:px-8 bg-background flex flex-col items-center justify-start min-h-[850px] overflow-hidden">
       <LayoutGroup id={layoutGroupId}>
         <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
           <div className="w-full h-12 flex items-center justify-between px-4 mb-2">
@@ -162,8 +162,8 @@ export default function PhotoGallery() {
                     className={cn(
                       "cursor-pointer overflow-hidden bg-muted",
                       isExpanded
-                        ? "relative aspect-square rounded-[2rem] md:rounded-[3rem] border-4 md:border-[6px] border-white dark:border-zinc-900 border-solid shadow-lg"
-                        : "absolute w-44 h-44 md:w-60 md:h-60 rounded-[2.5rem] md:rounded-[3rem] border-[6px] border-white dark:border-zinc-900 border-solid shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
+                        ? "relative aspect-square rounded-[2rem] md:rounded-[3rem] border-4 md:border-[6px] border-background shadow-lg"
+                        : "absolute w-44 h-44 md:w-60 md:h-60 rounded-[2.5rem] md:rounded-[3rem] border-[6px] border-background shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
                     )}
                     onClick={() => !isExpanded && setIsExpanded(true)}
                   >
