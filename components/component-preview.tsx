@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 interface ComponentPreviewProps extends React.ComponentProps<"div"> {
   align?: "center" | "start" | "end";
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+  full?: boolean;
 }
 
 export function ComponentPreview({
@@ -13,6 +14,7 @@ export function ComponentPreview({
   className,
   align = "center",
   size = "md",
+  full = false,
   ...props
 }: ComponentPreviewProps) {
   return (
@@ -25,7 +27,8 @@ export function ComponentPreview({
     >
       <div
         className={cn(
-          "relative flex min-h-[400px] w-full overflow-hidden p-10 light bg-[#F0F0F0] text-foreground rounded-xl",
+          "relative flex w-full overflow-hidden light bg-[#F0F0F0] text-foreground rounded-xl",
+          !full ? "p-4 md:p-10 min-h-[400px]" : "p-0 min-h-[300px]",
           align === "center" && "items-center justify-center",
           align === "start" && "items-start justify-center",
           align === "end" && "items-end justify-center"

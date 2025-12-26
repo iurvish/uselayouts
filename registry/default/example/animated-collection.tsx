@@ -1,236 +1,298 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
-import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import * as React from "react";
+import {
+  motion,
+  LayoutGroup,
+  AnimatePresence,
+  type Transition,
+} from "motion/react";
+import {
+  Playlist01Icon,
+  GridViewIcon,
+  Layers01Icon,
+  StarIcon,
+  Ticket01Icon,
+  Camera01Icon,
+  BrushIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { cn } from "@/lib/utils";
 
-const SERVICES = [
+interface CollectionItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  idNumber: string;
+  image: string;
+  icon: any;
+}
+
+const ITEMS: CollectionItem[] = [
   {
-    id: "01",
-    title: "Web Design",
-    description:
-      "Creating beautiful, functional, and user-centric digital experiences.",
+    id: "1",
+    title: "Cinematic Horizons",
+    subtitle: "Photography",
+    idNumber: "209",
     image:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400&h=400&auto=format&fit=crop",
+    icon: Camera01Icon,
   },
   {
-    id: "02",
-    title: "Framer Development",
-    description: "Building high-performance, animated websites with Framer.",
+    id: "2",
+    title: "Abstract Dreams",
+    subtitle: "Digital Art",
+    idNumber: "808",
     image:
-      "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=1200",
-  },
-  {
-    id: "03",
-    title: "Branding",
-    description:
-      "Defining your brand's visual identity and voice for a lasting impression.",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200",
+      "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=400&h=400&auto=format&fit=crop",
+    icon: BrushIcon,
   },
 ];
+type ViewMode = "list" | "card" | "pack";
 
-const AUTO_PLAY_DURATION = 5000;
+const snappySpring: Transition = {
+  type: "spring",
+  stiffness: 350,
+  damping: 30,
+  mass: 1,
+};
 
-export default function AnimatedCollection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+const fastFade: Transition = {
+  duration: 0.1,
+  ease: "linear",
+};
 
-  const handleNext = useCallback(() => {
-    setDirection(1);
-    setActiveIndex((prev) => (prev + 1) % SERVICES.length);
-  }, []);
-
-  const handlePrev = useCallback(() => {
-    setDirection(-1);
-    setActiveIndex((prev) => (prev - 1 + SERVICES.length) % SERVICES.length);
-  }, []);
-
-  const handleTabClick = (index: number) => {
-    if (index === activeIndex) return;
-    setDirection(index > activeIndex ? 1 : -1);
-    setActiveIndex(index);
-    setIsPaused(false);
-  };
-
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      handleNext();
-    }, AUTO_PLAY_DURATION);
-
-    return () => clearInterval(interval);
-  }, [activeIndex, isPaused, handleNext]);
-
-  const variants = {
-    enter: (direction: number) => ({
-      y: direction > 0 ? "-100%" : "100%",
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      y: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      y: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-  };
-
+export default function LayoutSwitcher() {
+  const [view, setView] = React.useState<ViewMode>("list");
   return (
-    <section className="w-full bg-background py-8 md:py-16 lg:py-24">
-      <div className="w-full px-4 md:px-8 lg:px-12 xl:px-20 mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Content */}
-          <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 pt-4">
-            <div className="space-y-1 mb-12">
-              <h2 className="tracking-tighter text-balance text-3xl font-medium md:text-4xl lg:text-5xl text-foreground">
-                How I can help you
-              </h2>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-[0.3em] block ml-0.5">
-                (SERVICES)
-              </span>
-            </div>
+    <div className="w-full max-w-xl mx-auto p-4 md:p-8 font-sans selection:bg-primary/10">
+      <div className="flex flex-col gap-6">
+        {/* Header Section */}
+        <div className="flex flex-col gap-5">
+          <h2 className="text-xl font-medium text-foreground ">
+            My Collection
+          </h2>
 
-            <div className="flex flex-col space-y-0">
-              {SERVICES.map((service, index) => {
-                const isActive = activeIndex === index;
-                return (
-                  <button
-                    key={service.id}
-                    onClick={() => handleTabClick(index)}
-                    className={cn(
-                      "group relative flex items-start gap-4 py-6 md:py-8 text-left transition-all duration-500 border-t border-border/50 first:border-0",
-                      isActive
-                        ? "text-foreground"
-                        : "text-muted-foreground/60 hover:text-foreground"
-                    )}
-                  >
-                    <div className="absolute left-[-16px] md:left-[-24px] top-0 bottom-0 w-[2px] bg-muted">
-                      {isActive && (
-                        <motion.div
-                          key={`progress-${index}-${isPaused}`}
-                          className="absolute top-0 left-0 w-full bg-foreground origin-top"
-                          initial={{ height: "0%" }}
-                          animate={
-                            isPaused ? { height: "0%" } : { height: "100%" }
-                          }
-                          transition={{
-                            duration: AUTO_PLAY_DURATION / 1000,
-                            ease: "linear",
-                          }}
-                        />
-                      )}
-                    </div>
-
-                    <span className="text-[9px] md:text-[10px] font-medium mt-1 tabular-nums opacity-50">
-                      /{service.id}
-                    </span>
-
-                    <div className="flex flex-col gap-2 flex-1">
-                      <span
-                        className={cn(
-                          "text-2xl md:text-3xl lg:text-4xl font-normal tracking-tight transition-colors duration-500",
-                          isActive ? "text-foreground" : ""
-                        )}
-                      >
-                        {service.title}
-                      </span>
-
-                      <AnimatePresence mode="wait">
-                        {isActive && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{
-                              duration: 0.3,
-                              ease: [0.23, 1, 0.32, 1],
-                            }}
-                            className="overflow-hidden"
-                          >
-                            <p className="text-muted-foreground text-sm md:text-base font-normal leading-relaxed max-w-sm pb-2">
-                              {service.description}
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
-            <div
-              className="relative group/gallery"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              <div className="relative aspect-4/5 md:aspect-4/3 lg:aspect-16/11 rounded-3xl md:rounded-[2.5rem] overflow-hidden bg-muted/30 border border-border/40">
-                <AnimatePresence
-                  initial={false}
-                  custom={direction}
-                  mode="popLayout"
-                >
-                  <motion.div
-                    key={activeIndex}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      y: { type: "spring", stiffness: 260, damping: 32 },
-                      opacity: { duration: 0.4 },
-                    }}
-                    className="absolute inset-0 w-full h-full cursor-pointer"
-                    onClick={handleNext}
-                  >
-                    <img
-                      src={SERVICES[activeIndex].image}
-                      alt={SERVICES[activeIndex].title}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
-
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-60" />
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex gap-2 md:gap-3 z-20">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePrev();
-                    }}
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-background/80 backdrop-blur-md border border-border/50 flex items-center justify-center text-foreground hover:bg-background transition-all active:scale-90"
-                    aria-label="Previous"
-                  >
-                    <HugeiconsIcon icon={ArrowLeft01Icon} size={20} />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNext();
-                    }}
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-background/80 backdrop-blur-md border border-border/50 flex items-center justify-center text-foreground hover:bg-background transition-all active:scale-90"
-                    aria-label="Next"
-                  >
-                    <HugeiconsIcon icon={ArrowRight01Icon} size={20} />
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div className="flex p-1 bg-muted rounded-full w-fit border border-border">
+            <Tab
+              active={view === "list"}
+              onClick={() => setView("list")}
+              icon={Playlist01Icon}
+              label="List view"
+            />
+            <Tab
+              active={view === "card"}
+              onClick={() => setView("card")}
+              icon={GridViewIcon}
+              label="Card view"
+            />
+            <Tab
+              active={view === "pack"}
+              onClick={() => setView("pack")}
+              icon={Layers01Icon}
+              label="Pack view"
+            />
           </div>
         </div>
+        <div className="h-px bg-border w-full" />
+        {/* Content Section */}
+        <div className="relative min-h-[350px] flex flex-col items-center">
+          <LayoutGroup>
+            <motion.div
+              layout
+              transition={snappySpring}
+              className={cn(
+                "w-full relative",
+                view === "list" && "flex flex-col gap-4",
+                view === "card" && "grid grid-cols-2 gap-4",
+                view === "pack" && "h-64 flex items-center justify-center mt-8"
+              )}
+            >
+              {ITEMS.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  layout
+                  transition={snappySpring}
+                  className={cn(
+                    "relative flex items-center z-10",
+                    view === "list" && "flex-row gap-4 w-full",
+                    view === "card" && "flex-col gap-3 w-full items-start",
+                    view === "pack" &&
+                      "absolute w-56 h-56 items-center justify-center"
+                  )}
+                  style={{
+                    zIndex: view === "pack" ? ITEMS.length - index : 1,
+                  }}
+                  animate={
+                    view === "pack"
+                      ? {
+                          rotate: index === 0 ? -12 : 6,
+                          x: index === 0 ? -25 : 25,
+                          y: index === 0 ? -5 : 5,
+                        }
+                      : {
+                          rotate: 0,
+                          x: 0,
+                          y: 0,
+                        }
+                  }
+                >
+                  <motion.div
+                    layout
+                    transition={snappySpring}
+                    className={cn(
+                      "relative overflow-hidden shrink-0 bg-background",
+                      view === "list" &&
+                        "w-16 h-16 rounded-2xl border border-border/50 ",
+                      view === "card" &&
+                        "w-full aspect-square rounded-[1.8rem] border border-border/50 shadow-sm",
+                      view === "pack" &&
+                        "w-full h-full rounded-[2rem] border border-border/50  shadow-xl"
+                    )}
+                  >
+                    <motion.img
+                      layout
+                      transition={snappySpring}
+                      src={item.image}
+                      alt={item.title}
+                      className={cn(
+                        "w-full h-full object-cover m-0! p-0! block",
+                        view === "list" && "rounded-2xl",
+                        view === "card" && "rounded-[1.8rem]",
+                        view === "pack" && "rounded-[2rem]"
+                      )}
+                    />
+                  </motion.div>
+
+                  <AnimatePresence mode="popLayout" initial={false}>
+                    {view !== "pack" && (
+                      <motion.div
+                        key={`${item.id}-info`}
+                        layout
+                        initial={{
+                          opacity: 0,
+                          scale: 0.9,
+                          filter: "blur(4px)",
+                        }}
+                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
+                        transition={fastFade}
+                        className={cn(
+                          "flex flex-1 justify-between items-center min-w-0",
+                          view === "card" ? "w-full px-1" : "px-0"
+                        )}
+                      >
+                        <div className="flex flex-col gap-0.5 min-w-0">
+                          <motion.h3
+                            layout
+                            className="font-medium text-[15px] text-foreground leading-tight truncate"
+                          >
+                            {item.title}
+                          </motion.h3>
+                          <motion.div
+                            layout
+                            className="text-muted-foreground font-medium text-xs flex items-center gap-1.5"
+                          >
+                            <HugeiconsIcon
+                              icon={item.icon}
+                              size={12}
+                              className="text-primary/70"
+                            />
+                            <span className="truncate">{item.subtitle}</span>
+                          </motion.div>
+                        </div>
+
+                        <motion.div
+                          layout
+                          className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold shrink-0 ml-2"
+                        >
+                          <HugeiconsIcon
+                            icon={StarIcon}
+                            size={10}
+                            className="text-yellow-500 fill-yellow-500"
+                          />
+                          <span>#{item.idNumber}</span>
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {view === "list" && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute -bottom-2 left-18 right-0 h-px bg-border/40"
+                    />
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <AnimatePresence>
+              {view === "pack" && (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: 5, filter: "blur(5px)" }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="mt-16 text-center space-y-3 px-4 relative z-0"
+                >
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wide">
+                    <HugeiconsIcon icon={Ticket01Icon} size={12} />
+                    <span>Bundle unlocked</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </LayoutGroup>
+        </div>
       </div>
-    </section>
+    </div>
+  );
+}
+
+function Tab({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: any;
+  label: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "relative flex items-center gap-2 px-4 py-2 text-sm font-normal  uppercase transition-all rounded-full outline-none",
+        active
+          ? "text-primary-foreground"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+      )}
+    >
+      {active && (
+        <motion.div
+          layoutId="active-tab"
+          className="absolute inset-0 bg-primary rounded-full shadow-md"
+          transition={snappySpring}
+        />
+      )}
+      <span className="relative z-10 flex items-center gap-2">
+        <HugeiconsIcon
+          icon={icon}
+          size={16}
+          className={cn(
+            "transition-transform duration-300",
+            active && "scale-110"
+          )}
+        />
+        {label}
+      </span>
+    </button>
   );
 }

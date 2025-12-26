@@ -1,22 +1,22 @@
 ---
-title: Expandable Gallery
-description: A stacked photo gallery that expands into a grid view on interaction.
+title: Vertical Tabs
+description: A collection showcase with vertical navigation, progress indicators, and synchronized content updates.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import ExpandableGalleryDemo from "@/registry/default/demo/expandable-gallery-demo";
+import VerticalTabsDemo from "@/registry/default/demo/vertical-tabs-demo";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
     <ComponentPreview full>
-      <ExpandableGalleryDemo />
+      <VerticalTabsDemo />
     </ComponentPreview>
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/expandable-gallery.tsx" />
+    <SourceCode filePath="registry/default/example/vertical-tabs.tsx" />
   </Tab>
 </Tabs>
 
@@ -25,7 +25,7 @@ import { ComponentPreview } from "@/components/component-preview";
 <Tabs items={['CLI', 'Manual']}>
   <Tab value="CLI">
     ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/expandable-gallery.json"
+    npx shadcn@latest add "https://uselayouts.com/r/vertical-tabs.json"
     ```
   </Tab>
   <Tab value="Manual">
@@ -40,7 +40,7 @@ import { ComponentPreview } from "@/components/component-preview";
       <Step>
         ### Copy the code
 
-        Copy the code from the **Code** tab above into `components/expandable-gallery.tsx`.
+        Copy the code from the **Code** tab above into `components/vertical-tabs.tsx`.
       </Step>
       <Step>
         ### Update imports
@@ -55,17 +55,17 @@ import { ComponentPreview } from "@/components/component-preview";
 ## Usage
 
 ```tsx
-import ExpandableGallery from "@/components/expandable-gallery";
+import VerticalTabs from "@/components/vertical-tabs";
 
 export default function Page() {
-  return <ExpandableGallery />;
+  return <VerticalTabs />;
 }
 ```
 
 ## Features
 
-- **Stacked Initial State**: Photos start in a playful, rotated stack.
-- **Expand to Grid**: Expands into a full grid view on click or "Explore" action.
-- **Smooth Expansion**: Transitions smoothly between stack and grid layouts using `LayoutGroup`.
-- **Hover Effects**: Interactive hover states for both stack and grid items.
-- **Featured Items**: Highlights primary items in the collapsed stack view.
+- **Progress Indicators**: Visual progress bars show auto-play status on active items.
+- **Content Synchronization**: Updates image and text content based on the selected item.
+- **Auto-cycle**: Automatically rotates through the collection (pauses on hover).
+- **Smooth Transitions**: Slide animations for content changes.
+- **Interactive Navigation**: Click to jump to any item in the collection.
