@@ -55,14 +55,26 @@ const MultiStepForm = () => {
     comment: "",
   });
 
+  const [direction, setDirection] = useState<number>();
+
   const [ref, bounds] = useMeasure();
 
   const nextStep = () => {
-    if (currentStep < 2) setCurrentStep((prev) => prev + 1);
+    if (currentStep === 2) {
+      setDirection(-1);
+      return;
+    }
+    if (currentStep < 2) {
+      setDirection(1);
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const prevStep = () => {
-    if (currentStep > 0) setCurrentStep((prev) => prev - 1);
+    if (currentStep > 0) {
+      setDirection(-1);
+      setCurrentStep((prev) => prev - 1);
+    }
   };
 
   const stepTitles = [
@@ -235,13 +247,23 @@ const MultiStepForm = () => {
     }
   }, [currentStep]);
 
+  const variants = {
+    initial: (direction: number) => {
+      return { x: `${110 * direction}%`, opacity: 0 };
+    },
+    animate: { x: "0%", opacity: 1 },
+    exit: (direction: number) => {
+      return { x: `${-110 * direction}%`, opacity: 0 };
+    },
+  };
+
   return (
     <MotionConfig
       transition={{
-        duration: 0.4,
+        duration: 0.5,
         type: "spring",
         bounce: 0,
-        opacity: { duration: 0.2 },
+        // opacity: { duration: 0.2 },
       }}
     >
       <div className="flex w-full items-center justify-center bg-muted/10 p-4">
@@ -274,18 +296,25 @@ const MultiStepForm = () => {
             <motion.div
               animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
               className="relative overflow-hidden"
-              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+              transition={{ type: "spring", bounce: 0, duration: 0.5 }}
             >
               <div ref={ref}>
                 <CardContent className="px-6 py-2 relative">
-                  <AnimatePresence mode="popLayout" initial={false}>
+                  <AnimatePresence
+                    mode="popLayout"
+                    initial={false}
+                    custom={direction}
+                  >
                     <motion.div
                       key={currentStep}
-                      initial={{ x: "110%", opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: "-110%", opacity: 0 }}
+                      variants={variants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
                       className="w-full"
+                      custom={direction}
                     >
+                      {direction}
                       {content}
                     </motion.div>
                   </AnimatePresence>
@@ -293,27 +322,23 @@ const MultiStepForm = () => {
               </div>
             </motion.div>
 
-            <CardFooter className="flex justify-between border-t">
+            <CardFooter className="flex justify-between items-center border-t">
               <Button
-                variant="ghost"
+                variant={"secondary"}
                 onClick={prevStep}
                 disabled={currentStep === 0}
-                className="text-muted-foreground hover:text-foreground hover:bg-transparent"
               >
-                <ChevronLeft className="mr-2 h-4 w-4" />
+                <ChevronLeft className="h-4 w-4" />
                 Back
               </Button>
-              <Button
-                onClick={nextStep}
-                className="bg-primary text-primary-foreground flex items-center justify-center "
-              >
+              <Button onClick={nextStep}>
                 {currentStep === stepTitles.length - 1 ? (
                   <>
-                    Finish <Check className="ml-2 h-4 w-4" />
+                    Finish <Check className="h-4 w-4" />
                   </>
                 ) : (
                   <>
-                    Continue <ChevronRight className="ml-2 h-4 w-4" />
+                    Continue <ChevronRight className="h-4 w-4" />
                   </>
                 )}
               </Button>
