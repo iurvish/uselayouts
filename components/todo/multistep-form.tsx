@@ -30,6 +30,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
+import useMeasure from "react-use-measure";
 
 const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -52,6 +54,8 @@ const MultiStepForm = () => {
     mood: "",
     comment: "",
   });
+
+  const [ref, bounds] = useMeasure();
 
   const nextStep = () => {
     if (currentStep < 2) setCurrentStep((prev) => prev + 1);
@@ -232,8 +236,11 @@ const MultiStepForm = () => {
   }, [currentStep]);
 
   return (
-    <div className="flex min-h-[600px] w-full items-center justify-center  bg-muted/10">
-      <Card className="w-full max-w-xl shadow-none h-fit border">
+    <motion.div
+      animate={{ height: bounds.height }}
+      className="flex  w-full items-center justify-center bg-muted/10"
+    >
+      <Card className="w-full max-w-xl shadow-none border ">
         <CardHeader className="flex flex-row items-start justify-between space-y-0 px-6 py-2">
           <div className="flex flex-col gap-1">
             <CardTitle className="text-xl">
@@ -255,34 +262,51 @@ const MultiStepForm = () => {
             ))}
           </div>
         </CardHeader>
-        <CardContent className="px-6 py-2">{content}</CardContent>
-        <CardFooter className="flex justify-between border-t ">
-          <Button
-            variant="ghost"
-            onClick={prevStep}
-            disabled={currentStep === 0}
-            className="text-muted-foreground hover:text-foreground  hover:bg-transparent"
-          >
-            <ChevronLeft />
-            Back
-          </Button>
-          <Button
-            onClick={nextStep}
-            className="bg-primary text-primary-foreground flex items-center justify-center"
-          >
-            {currentStep === stepTitles.length - 1 ? (
-              <>
-                Finish <Check />
-              </>
-            ) : (
-              <>
-                Continue <ChevronRight />
-              </>
-            )}
-          </Button>
-        </CardFooter>
+
+        <CardContent className="px-6 py-2 overflow-hidden relative" ref={ref}>
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={currentStep}
+              initial={{ x: "110%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "-110%", opacity: 0 }}
+              transition={{ duration: 0.4, type: "spring", bounce: 0 }}
+              className="overflow-hidden"
+            >
+              {content}
+            </motion.div>
+          </AnimatePresence>
+        </CardContent>
+
+        <motion.div layout>
+          <CardFooter className="flex justify-between border-t ">
+            <Button
+              variant="ghost"
+              onClick={prevStep}
+              disabled={currentStep === 0}
+              className="text-muted-foreground hover:text-foreground  hover:bg-transparent"
+            >
+              <ChevronLeft />
+              Back
+            </Button>
+            <Button
+              onClick={nextStep}
+              className="bg-primary text-primary-foreground flex items-center justify-center"
+            >
+              {currentStep === stepTitles.length - 1 ? (
+                <>
+                  Finish <Check />
+                </>
+              ) : (
+                <>
+                  Continue <ChevronRight />
+                </>
+              )}
+            </Button>
+          </CardFooter>
+        </motion.div>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 
