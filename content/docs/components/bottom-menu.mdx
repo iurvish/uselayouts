@@ -5,19 +5,15 @@ description: A dynamic bottom menu with expanding submenus and theme switching.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import BottomMenu from "@/registry/default/example/bottom-menu";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview align="end">
-      <BottomMenu />
-    </ComponentPreview>
+    <ComponentPreview name="bottom-menu" align="end" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/bottom-menu.tsx" />
-
+    <SourceCode name="bottom-menu" />
   </Tab>
 </Tabs>
 

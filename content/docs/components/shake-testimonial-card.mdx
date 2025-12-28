@@ -5,18 +5,19 @@ description: An eye-catching testimonial carousel with a playful "shake and toss
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import ShakeTestimonialDemo from "@/registry/default/example/shake-testimonial-card";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview full className="min-h-[500px]">
-      <ShakeTestimonialDemo />
-    </ComponentPreview>
+    <ComponentPreview
+      name="shake-testimonial-card"
+      full
+      className="min-h-[500px]"
+    />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/shake-testimonial-card.tsx" />
+    <SourceCode name="shake-testimonial-card" />
   </Tab>
 </Tabs>
 

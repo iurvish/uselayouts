@@ -5,19 +5,15 @@ description: A delete button with a confirmation countdown and undo functionalit
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import DeleteButton from "@/registry/default/example/delete-button";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <DeleteButton />
-    </ComponentPreview>
+    <ComponentPreview name="delete-button" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/delete-button.tsx" />
-
+    <SourceCode name="delete-button" />
   </Tab>
 </Tabs>
 

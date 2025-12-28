@@ -5,19 +5,15 @@ description: A search and filter component with expanding search bar.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import DiscoverButton from "@/registry/default/example/discover-button";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <DiscoverButton />
-    </ComponentPreview>
+    <ComponentPreview name="discover-button" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/discover-button.tsx" />
-
+    <SourceCode name="discover-button" />
   </Tab>
 </Tabs>
 

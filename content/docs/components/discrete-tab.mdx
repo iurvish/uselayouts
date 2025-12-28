@@ -5,19 +5,15 @@ description: A minimal tab component with discrete animations.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import DiscreteTabs from "@/registry/default/example/discrete-tabs";
-import DiscreteTabsDemo from "@/registry/default/demo/discrete-tabs-demo";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview size="lg">
-      <DiscreteTabsDemo />
-    </ComponentPreview>
+    <ComponentPreview name="discrete-tabs" size="lg" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/discrete-tabs.tsx" />
+    <SourceCode name="discrete-tabs" />
   </Tab>
 </Tabs>
 

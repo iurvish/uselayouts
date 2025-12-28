@@ -5,18 +5,15 @@ description: A collection showcase with vertical navigation, progress indicators
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import VerticalTabsDemo from "@/registry/default/demo/vertical-tabs-demo";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview full>
-      <VerticalTabsDemo />
-    </ComponentPreview>
+    <ComponentPreview name="vertical-tabs" full />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/vertical-tabs.tsx" />
+    <SourceCode name="vertical-tabs" />
   </Tab>
 </Tabs>
 

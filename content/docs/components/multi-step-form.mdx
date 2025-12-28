@@ -5,18 +5,15 @@ description: A dynamic, animated multi-step form with validation and progress tr
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import MultiStepFormDemo from "@/registry/default/example/multi-step-form";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <MultiStepFormDemo />
-    </ComponentPreview>
+    <ComponentPreview name="multi-step-form" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/multi-step-form.tsx" />
+    <SourceCode name="multi-step-form" />
   </Tab>
 </Tabs>
 

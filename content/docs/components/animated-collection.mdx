@@ -5,18 +5,15 @@ description: A component to switch between List, Card, and Pack views with morph
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import AnimatedCollection from "@/registry/default/example/animated-collection";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview full>
-      <AnimatedCollection />
-    </ComponentPreview>
+    <ComponentPreview name="animated-collection" full />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/animated-collection.tsx" />
+    <SourceCode name="animated-collection" />
   </Tab>
 </Tabs>
 

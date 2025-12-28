@@ -5,19 +5,15 @@ description: An editable input field that toggles between view and edit modes wi
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import SaveInput from "@/registry/default/example/inline-edit";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview align="center">
-      <SaveInput />
-    </ComponentPreview>
+    <ComponentPreview name="inline-edit" align="center" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/inline-edit.tsx" />
-
+    <SourceCode name="inline-edit" />
   </Tab>
 </Tabs>
 

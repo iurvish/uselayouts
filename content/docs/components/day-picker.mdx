@@ -6,18 +6,15 @@ description: A frequency selector component with spring animations and expandabl
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { ComponentPreview } from "@/components/component-preview";
-import TwentyThreeFour from "@/registry/default/example/day-picker";
 import { SourceCode } from "@/components/source-code";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview align="center">
-      <TwentyThreeFour />
-    </ComponentPreview>
+    <ComponentPreview name="day-picker" align="center" />
   </Tab>
 
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/day-picker.tsx" />
+    <SourceCode name="day-picker" />
   </Tab>
 </Tabs>
 

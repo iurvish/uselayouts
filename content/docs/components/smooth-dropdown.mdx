@@ -5,21 +5,15 @@ description: A morphing menu interaction with smooth animations.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import MenuInteraction from "@/registry/default/example/smooth-dropdown";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-  <ComponentPreview align="start">
-      <div className="flex items-start relative h-[400px] justify-center w-full pt-6">
-        <MenuInteraction />
-      </div>
-  </ComponentPreview>
+    <ComponentPreview name="smooth-dropdown" align="start" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/smooth-dropdown.tsx" />
-
+    <SourceCode name="smooth-dropdown" />
   </Tab>
 </Tabs>
 

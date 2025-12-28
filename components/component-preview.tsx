@@ -2,14 +2,18 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { Index } from "@/registry/__index__";
+import { Loader2 } from "lucide-react";
 
 interface ComponentPreviewProps extends React.ComponentProps<"div"> {
+  name?: string;
   align?: "center" | "start" | "end";
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
   full?: boolean;
 }
 
 export function ComponentPreview({
+  name,
   children,
   className,
   align = "center",
@@ -17,6 +21,11 @@ export function ComponentPreview({
   full = false,
   ...props
 }: ComponentPreviewProps) {
+  const Component = React.useMemo(() => {
+    if (!name) return null;
+    return Index[name]?.component;
+  }, [name]);
+
   return (
     <div
       className={cn(
@@ -34,12 +43,24 @@ export function ComponentPreview({
           align === "end" && "items-end justify-center"
         )}
       >
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            return React.cloneElement(child, { size } as any);
+        <React.Suspense
+          fallback={
+            <div className="flex items-center justify-center w-full h-full">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
           }
-          return child;
-        })}
+        >
+          {Component ? (
+            <Component size={size} />
+          ) : (
+            React.Children.map(children, (child) => {
+              if (React.isValidElement(child)) {
+                return React.cloneElement(child, { size } as any);
+              }
+              return child;
+            })
+          )}
+        </React.Suspense>
       </div>
     </div>
   );

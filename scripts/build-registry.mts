@@ -23,9 +23,17 @@ export const Index: Record<string, any> = {`;
       continue;
     }
 
-    const componentPath = item.files?.[0]?.path
+    const demoPath = `registry/default/demo/${item.name}-demo.tsx`;
+    let componentPath = item.files?.[0]?.path
       ? `@/registry/default/${item.files[0].path}`
       : "";
+
+    try {
+      await fs.access(path.join(process.cwd(), demoPath));
+      componentPath = `@/${demoPath}`;
+    } catch (e) {
+      // Demo not found, use the first file from registry
+    }
 
     index += `
   "${item.name}": {
@@ -48,7 +56,7 @@ export const Index: Record<string, any> = {`;
       componentPath
         ? `React.lazy(async () => {
       const mod = await import("${componentPath}")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "${item.name}"
       return { default: mod.default || mod[exportName] }
     })`
         : "null"

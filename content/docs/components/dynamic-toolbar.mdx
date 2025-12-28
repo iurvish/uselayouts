@@ -5,19 +5,15 @@ description: An animated toolbar that expands to reveal additional tools with sm
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import ExpandedToolbar from "@/registry/default/example/dynamic-toolbar";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <ExpandedToolbar />
-    </ComponentPreview>
+    <ComponentPreview name="dynamic-toolbar" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/dynamic-toolbar.tsx" />
-
+    <SourceCode name="dynamic-toolbar" />
   </Tab>
 </Tabs>
 

@@ -7,6 +7,7 @@ import FolderInteraction from "@/registry/default/example/folder-interaction";
 import MorphCollections from "@/components/todo/morph-collections";
 import MultiStepForm from "@/components/todo/multistep-form";
 import ShakeTestimonial from "@/registry/default/example/shake-testimonial-card";
+import PricingCard from "@/registry/default/example/pricing-card";
 
 export default function Page() {
   return (
@@ -14,6 +15,8 @@ export default function Page() {
       <Hero />
       <div className="flex flex-col min-h-screen items-center justify-center gap-24 py-20 px-4">
         {/* <ShakeTestimonial /> */}
+
+        <PricingCard />
         <LayoutSwitcher />
         <FolderInteraction />
         <MorphCollections />

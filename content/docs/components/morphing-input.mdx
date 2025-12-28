@@ -6,18 +6,14 @@ description: An input field with an animated placeholder and toggleable icon swi
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { ComponentPreview } from "@/components/component-preview";
-import InputSwitch from "@/registry/default/example/morphing-input";
 import { SourceCode } from "@/components/source-code";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview align="center">
-      <InputSwitch />
-    </ComponentPreview>
+    <ComponentPreview name="morphing-input" align="center" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/morphing-input.tsx" />
-
+    <SourceCode name="morphing-input" />
   </Tab>
 </Tabs>
 

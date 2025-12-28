@@ -5,19 +5,15 @@ description: An animated filter selector with morphing container and staggered l
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import FilterInteraction from "@/registry/default/example/list-item";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <FilterInteraction />
-    </ComponentPreview>
+    <ComponentPreview name="list-item" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/list-item.tsx" />
-
+    <SourceCode name="list-item" />
   </Tab>
 </Tabs>
 

@@ -6,91 +6,253 @@
 import * as React from "react"
 
 export const Index: Record<string, any> = {
-  "button": {
-    name: "button",
-    description: "This is Lonely btn",
-    type: "registry:ui",
+  "3d-book": {
+    name: "3d-book",
+    description: "An interactive 3D book component with page flip animations.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
-      path: "components/counter.tsx",
-      type: "registry:ui",
+      path: "example/3d-book.tsx",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/components/counter.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const mod = await import("@/registry/default/example/3d-book.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "3d-book"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
     meta: undefined,
   },
-  "frequency-selector": {
-    name: "frequency-selector",
-    description: "A frequency selector component with spring animations.",
-    type: "registry:example",
+  "animated-collection": {
+    name: "animated-collection",
+    description: "A collection of items with smooth layout transitions and animations.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
-      path: "example/frequency-selector.tsx",
-      type: "registry:example",
+      path: "example/animated-collection.tsx",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/frequency-selector.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const mod = await import("@/registry/default/example/animated-collection.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "animated-collection"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
     meta: undefined,
   },
-  "input-switch": {
-    name: "input-switch",
-    description: "An input placeholder switch component.",
-    type: "registry:example",
+  "bottom-menu": {
+    name: "bottom-menu",
+    description: "A floating bottom navigation menu with smooth interactions.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
-      path: "example/input-switch.tsx",
-      type: "registry:example",
+      path: "example/bottom-menu.tsx",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/input-switch.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const mod = await import("@/registry/default/example/bottom-menu.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bottom-menu"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
     meta: undefined,
   },
-  "save-button": {
-    name: "save-button",
-    description: "A save button with loading and success states.",
-    type: "registry:example",
+  "day-picker": {
+    name: "day-picker",
+    description: "A custom day picker component with smooth animations.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
-      path: "example/save-button.tsx",
-      type: "registry:example",
+      path: "example/day-picker.tsx",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/save-button.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const mod = await import("@/registry/default/example/day-picker.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "day-picker"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
     meta: undefined,
   },
-  "save-input": {
-    name: "save-input",
+  "delete-button": {
+    name: "delete-button",
+    description: "A confirmation button with smooth icon transitions.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/delete-button.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/delete-button-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "delete-button"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "discover-button": {
+    name: "discover-button",
+    description: "An interactive button with expanding discovery state.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/discover-button.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/discover-button.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "discover-button"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "discrete-tabs": {
+    name: "discrete-tabs",
+    description: "A tab component with discrete sliding animations.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/discrete-tabs.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/discrete-tabs-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "discrete-tabs"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "dynamic-toolbar": {
+    name: "dynamic-toolbar",
+    description: "A toolbar that adapts its size and layout based on content.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/dynamic-toolbar.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/dynamic-toolbar.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "dynamic-toolbar"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "expandable-gallery": {
+    name: "expandable-gallery",
+    description: "A photo gallery with smooth item expansion.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/expandable-gallery.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/expandable-gallery-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "expandable-gallery"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "feature-carousel": {
+    name: "feature-carousel",
+    description: "A smooth carousel for showcasing product features.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/feature-carousel.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/feature-carousel-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "feature-carousel"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "folder-interaction": {
+    name: "folder-interaction",
+    description: "A folder management system with drag-and-drop-like feel.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/folder-interaction.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/folder-interaction.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "folder-interaction"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "inline-edit": {
+    name: "inline-edit",
     description: "An input that switches between read and edit modes.",
-    type: "registry:example",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
-      path: "example/save-input.tsx",
-      type: "registry:example",
+      path: "example/inline-edit.tsx",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/save-input.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const mod = await import("@/registry/default/example/inline-edit.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "inline-edit"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "list-item": {
+    name: "list-item",
+    description: "Interactive list items with hover and focus effects.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/list-item.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/list-item.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "list-item"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "morphing-input": {
+    name: "morphing-input",
+    description: "An input field that morphs between different states.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/morphing-input.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/morphing-input.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "morphing-input"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -98,17 +260,35 @@ export const Index: Record<string, any> = {
   },
   "multi-step-form": {
     name: "multi-step-form",
-    description: "A dynamic, animated multi-step form with validation and progress tracking.",
-    type: "registry:example",
+    description: "A dynamic, animated multi-step form with validation.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
       path: "example/multi-step-form.tsx",
-      type: "registry:example",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/multi-step-form.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "multi-step-form"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "pricing-card": {
+    name: "pricing-card",
+    description: "A focused pricing card layout with clear hierarchy.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/pricing-card.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/pricing-card.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "pricing-card"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -116,17 +296,71 @@ export const Index: Record<string, any> = {
   },
   "shake-testimonial-card": {
     name: "shake-testimonial-card",
-    description: "An eye-catching testimonial carousel with a playful shake and toss animation.",
-    type: "registry:example",
+    description: "An eye-catching testimonial card with playful animations.",
+    type: "registry:block",
     registryDependencies: undefined,
     files: [{
       path: "example/shake-testimonial-card.tsx",
-      type: "registry:example",
+      type: "registry:block",
       target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/shake-testimonial-card.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "shake-testimonial-card"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "smooth-dropdown": {
+    name: "smooth-dropdown",
+    description: "A dropdown menu with premium layout transitions.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/smooth-dropdown.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/smooth-dropdown.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "smooth-dropdown"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "status-button": {
+    name: "status-button",
+    description: "A button with animated states for idle, loading, and success.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/status-button.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/status-button.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "status-button"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "vertical-tabs": {
+    name: "vertical-tabs",
+    description: "A vertical tab interaction with smooth content switching.",
+    type: "registry:block",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/vertical-tabs.tsx",
+      type: "registry:block",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/vertical-tabs-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "vertical-tabs"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

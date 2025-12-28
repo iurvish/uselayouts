@@ -5,18 +5,15 @@ description: A stacked photo gallery that expands into a grid view on interactio
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import ExpandableGalleryDemo from "@/registry/default/demo/expandable-gallery-demo";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview full>
-      <ExpandableGalleryDemo />
-    </ComponentPreview>
+    <ComponentPreview name="expandable-gallery" full />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/expandable-gallery.tsx" />
+    <SourceCode name="expandable-gallery" />
   </Tab>
 </Tabs>
 

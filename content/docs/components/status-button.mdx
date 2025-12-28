@@ -5,19 +5,15 @@ description: A save button with animated states for idle, loading, and success.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SaveButton } from "@/registry/default/example/status-button";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview align="center" >
-      <SaveButton />
-    </ComponentPreview>
+    <ComponentPreview name="status-button" align="center" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/status-button.tsx" />
-
+    <SourceCode name="status-button" />
   </Tab>
 </Tabs>
 

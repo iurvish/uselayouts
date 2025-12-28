@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:registry && next build",
     "start": "next start",
     "lint": "eslint",
     "build:docs": "fumadocs-mdx",
+    "build:registry": "npx tsx scripts/build-registry.mts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

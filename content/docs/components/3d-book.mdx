@@ -5,19 +5,15 @@ description: A 3D interactive book component that opens on hover or drag.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import InteractiveBook from "@/registry/default/example/3d-book";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <InteractiveBook />
-    </ComponentPreview>
+    <ComponentPreview name="3d-book" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/3d-book.tsx" />
-
+    <SourceCode name="3d-book" />
   </Tab>
 </Tabs>
 

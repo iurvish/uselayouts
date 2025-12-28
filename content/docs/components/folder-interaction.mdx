@@ -6,7 +6,6 @@ description: An interactive 3D folder animation that opens to reveal documents w
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import { Callout } from "fumadocs-ui/components/callout";
-import FolderInteraction from "@/registry/default/example/folder-interaction";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
 
@@ -18,15 +17,12 @@ import { ComponentPreview } from "@/components/component-preview";
   the full effect with blur.
 </Callout>
 
-<Tabs items={['Preview', 'Code']}>
+<Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview>
-      <FolderInteraction />
-    </ComponentPreview>
+    <ComponentPreview name="folder-interaction" />
   </Tab>
   <Tab value="Code">
-    <SourceCode filePath="registry/default/example/folder-interaction.tsx" />
-
+    <SourceCode name="folder-interaction" />
   </Tab>
 </Tabs>
 

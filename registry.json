@@ -1,77 +1,245 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "local",
-  "homepage": "http://localhost:300",
+  "name": "uselayouts",
+  "homepage": "https://uselayouts.com",
   "items": [
     {
-      "name": "frequency-selector",
-      "type": "registry:example",
-      "title": "Frequency Selector",
-      "description": "A frequency selector component with spring animations.",
+      "name": "3d-book",
+      "type": "registry:block",
+      "title": "3D Book",
+      "description": "An interactive 3D book component with page flip animations.",
       "files": [
         {
-          "path": "example/frequency-selector.tsx",
-          "type": "registry:example"
+          "path": "example/3d-book.tsx",
+          "type": "registry:block"
         }
       ]
     },
     {
-      "name": "input-switch",
-      "type": "registry:example",
-      "title": "Input Switch",
-      "description": "An input placeholder switch component.",
+      "name": "animated-collection",
+      "type": "registry:block",
+      "title": "Animated Collection",
+      "description": "A collection of items with smooth layout transitions and animations.",
       "files": [
         {
-          "path": "example/input-switch.tsx",
-          "type": "registry:example"
+          "path": "example/animated-collection.tsx",
+          "type": "registry:block"
         }
       ]
     },
     {
-      "name": "save-button",
-      "type": "registry:example",
-      "title": "Save Button",
-      "description": "A save button with loading and success states.",
+      "name": "bottom-menu",
+      "type": "registry:block",
+      "title": "Bottom Menu",
+      "description": "A floating bottom navigation menu with smooth interactions.",
       "files": [
         {
-          "path": "example/save-button.tsx",
-          "type": "registry:example"
+          "path": "example/bottom-menu.tsx",
+          "type": "registry:block"
         }
       ]
     },
     {
-      "name": "save-input",
-      "type": "registry:example",
-      "title": "Save Input",
+      "name": "day-picker",
+      "type": "registry:block",
+      "title": "Day Picker",
+      "description": "A custom day picker component with smooth animations.",
+      "files": [
+        {
+          "path": "example/day-picker.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "delete-button",
+      "type": "registry:block",
+      "title": "Delete Button",
+      "description": "A confirmation button with smooth icon transitions.",
+      "files": [
+        {
+          "path": "example/delete-button.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "discover-button",
+      "type": "registry:block",
+      "title": "Discover Button",
+      "description": "An interactive button with expanding discovery state.",
+      "files": [
+        {
+          "path": "example/discover-button.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "discrete-tabs",
+      "type": "registry:block",
+      "title": "Discrete Tabs",
+      "description": "A tab component with discrete sliding animations.",
+      "files": [
+        {
+          "path": "example/discrete-tabs.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-toolbar",
+      "type": "registry:block",
+      "title": "Dynamic Toolbar",
+      "description": "A toolbar that adapts its size and layout based on content.",
+      "files": [
+        {
+          "path": "example/dynamic-toolbar.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "expandable-gallery",
+      "type": "registry:block",
+      "title": "Expandable Gallery",
+      "description": "A photo gallery with smooth item expansion.",
+      "files": [
+        {
+          "path": "example/expandable-gallery.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "feature-carousel",
+      "type": "registry:block",
+      "title": "Feature Carousel",
+      "description": "A smooth carousel for showcasing product features.",
+      "files": [
+        {
+          "path": "example/feature-carousel.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "folder-interaction",
+      "type": "registry:block",
+      "title": "Folder Interaction",
+      "description": "A folder management system with drag-and-drop-like feel.",
+      "files": [
+        {
+          "path": "example/folder-interaction.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "inline-edit",
+      "type": "registry:block",
+      "title": "Inline Edit",
       "description": "An input that switches between read and edit modes.",
       "files": [
         {
-          "path": "example/save-input.tsx",
-          "type": "registry:example"
+          "path": "example/inline-edit.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "list-item",
+      "type": "registry:block",
+      "title": "List Item",
+      "description": "Interactive list items with hover and focus effects.",
+      "files": [
+        {
+          "path": "example/list-item.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "morphing-input",
+      "type": "registry:block",
+      "title": "Morphing Input",
+      "description": "An input field that morphs between different states.",
+      "files": [
+        {
+          "path": "example/morphing-input.tsx",
+          "type": "registry:block"
         }
       ]
     },
     {
       "name": "multi-step-form",
-      "type": "registry:example",
+      "type": "registry:block",
       "title": "Multi Step Form",
-      "description": "A dynamic, animated multi-step form with validation and progress tracking.",
+      "description": "A dynamic, animated multi-step form with validation.",
       "files": [
         {
           "path": "example/multi-step-form.tsx",
-          "type": "registry:example"
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "pricing-card",
+      "type": "registry:block",
+      "title": "Pricing Card",
+      "description": "A focused pricing card layout with clear hierarchy.",
+      "files": [
+        {
+          "path": "example/pricing-card.tsx",
+          "type": "registry:block"
         }
       ]
     },
     {
       "name": "shake-testimonial-card",
-      "type": "registry:example",
+      "type": "registry:block",
       "title": "Shake Testimonial Card",
-      "description": "An eye-catching testimonial carousel with a playful shake and toss animation.",
+      "description": "An eye-catching testimonial card with playful animations.",
       "files": [
         {
           "path": "example/shake-testimonial-card.tsx",
-          "type": "registry:example"
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "smooth-dropdown",
+      "type": "registry:block",
+      "title": "Smooth Dropdown",
+      "description": "A dropdown menu with premium layout transitions.",
+      "files": [
+        {
+          "path": "example/smooth-dropdown.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "status-button",
+      "type": "registry:block",
+      "title": "Status Button",
+      "description": "A button with animated states for idle, loading, and success.",
+      "files": [
+        {
+          "path": "example/status-button.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "vertical-tabs",
+      "type": "registry:block",
+      "title": "Vertical Tabs",
+      "description": "A vertical tab interaction with smooth content switching.",
+      "files": [
+        {
+          "path": "example/vertical-tabs.tsx",
+          "type": "registry:block"
         }
       ]
     }

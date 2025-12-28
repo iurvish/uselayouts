@@ -1,0 +1,73 @@
+---
+title: Pricing Card
+description: A focused pricing card layout with clear hierarchy, period switching, and animated price transitions.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="pricing-card" />
+  </Tab>
+  <Tab value="Code">
+    <SourceCode name="pricing-card" />
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/pricing-card.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion @hugeicons/react @hugeicons/core-free-icons @number-flow/react
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/pricing-card.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import PricingCard from "@/components/pricing-card";
+
+export default function Page() {
+  return (
+    <div className="flex items-center justify-center py-10 w-full">
+      <PricingCard />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Period Switching**: Seamlessly toggle between monthly and yearly billing with shared layout animations.
+- **Animated Pricing**: Utilizes `NumberFlow` for smooth, high-quality transitions between price points.
+- **Interactive Selection**: Plan selection is highlighted with animated borders and checkmarks.
+- **Responsive Layout**: Designed to look great on both mobile and desktop within a 320px-384px container.
+- **Modern Aesthetic**: Minimalist UI with subtle shadows, rounded corners, and premium typography.
+- **Popular Choice Badge**: Easily highlight specific plans with a "Popular" tag.

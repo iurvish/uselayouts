@@ -1,15 +1,32 @@
 import fs from "fs/promises";
 import path from "path";
-import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
+import { CodeBlock } from "fumadocs-ui/components/codeblock";
 import { codeToHtml } from "shiki";
+import { Index } from "@/registry/__index__";
 
 export async function SourceCode({
-  filePath,
+  name,
+  filePath: providedFilePath,
   title,
 }: {
-  filePath: string;
+  name?: string;
+  filePath?: string;
   title?: string;
 }) {
+  let filePath = providedFilePath;
+
+  if (name && Index[name]) {
+    filePath = `registry/default/${Index[name].files[0].path}`;
+  }
+
+  if (!filePath) {
+    return (
+      <div className="p-4 bg-red-100 text-red-800 rounded-md">
+        Error: No name or filePath provided to SourceCode.
+      </div>
+    );
+  }
+
   const fullPath = path.join(process.cwd(), filePath);
   let content = "";
   try {
