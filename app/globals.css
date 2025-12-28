@@ -194,5 +194,8 @@
   corner-shape: squircle;
 }
 .z-priority {
-  z-index: 99999;
+  z-index: 9999;
+}
+.z-sidebar {
+  z-index: 10000;
 }
