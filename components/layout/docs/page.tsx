@@ -52,7 +52,7 @@ export function DocsPage({ toc = [], ...props }: DocsPageProps) {
         </main>
       </div>
       {toc.length > 0 && (
-        <div className="sticky top-14 w-[260px] shrink-0 h-[calc(100dvh-3.5rem)] pt-8 pb-4 pr-4 overflow-y-auto max-xl:hidden">
+        <div className="sticky top-14  shrink-0 h-[calc(100dvh-3.5rem)] pt-8 pb-4 pr-4 overflow-y-auto max-xl:hidden">
           <p className="text-sm text-fd-muted-foreground mb-2 px-2">
             On this page
           </p>

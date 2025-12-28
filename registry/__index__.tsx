@@ -96,4 +96,40 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "multi-step-form": {
+    name: "multi-step-form",
+    description: "A dynamic, animated multi-step form with validation and progress tracking.",
+    type: "registry:example",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/multi-step-form.tsx",
+      type: "registry:example",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/multi-step-form.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "shake-testimonial-card": {
+    name: "shake-testimonial-card",
+    description: "An eye-catching testimonial carousel with a playful shake and toss animation.",
+    type: "registry:example",
+    registryDependencies: undefined,
+    files: [{
+      path: "example/shake-testimonial-card.tsx",
+      type: "registry:example",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/shake-testimonial-card.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   }

@@ -62,6 +62,30 @@
           "type": "registry:example"
         }
       ]
+    },
+    {
+      "name": "multi-step-form",
+      "type": "registry:example",
+      "title": "Multi Step Form",
+      "description": "A dynamic, animated multi-step form with validation and progress tracking.",
+      "files": [
+        {
+          "path": "example/multi-step-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "shake-testimonial-card",
+      "type": "registry:example",
+      "title": "Shake Testimonial Card",
+      "description": "An eye-catching testimonial carousel with a playful shake and toss animation.",
+      "files": [
+        {
+          "path": "example/shake-testimonial-card.tsx",
+          "type": "registry:example"
+        }
+      ]
     }
   ]
 }

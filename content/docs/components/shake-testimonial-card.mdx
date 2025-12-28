@@ -1,0 +1,76 @@
+---
+title: Shake Testimonial Card
+description: An eye-catching testimonial carousel with a playful "shake and toss" animation effect.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import ShakeTestimonialDemo from "@/registry/default/example/shake-testimonial-card";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview full className="min-h-[500px]">
+      <ShakeTestimonialDemo />
+    </ComponentPreview>
+  </Tab>
+  <Tab value="Code">
+    <SourceCode filePath="registry/default/example/shake-testimonial-card.tsx" />
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/shake-testimonial-card.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/shake-testimonial-card.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import ShakeTestimonial from "@/components/shake-testimonial-card";
+
+export default function Page() {
+  return (
+    <div className="h-[500px] w-full flex items-center justify-center">
+      <ShakeTestimonial />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Shake & Toss Animation**: A unique, playful animation where cards shake before being "tossed" to the back of the stack.
+- **Auto-play**: Automatically cycles through testimonials with a configurable interval.
+- **Depth Effect**: Uses 3D perspective and scaling to create a realistic sense of a stacked deck.
+- **Interactive**: Allows users to manually skip to the next testimonial by clicking on the stack.
+- **Responsive**: Adapts perfectly to mobile and desktop screens.
+- **Premium Feel**: Uses spring-based physics for all movements, ensuring a natural and high-quality feel.
