@@ -207,15 +207,14 @@ export default function ExpandableGallery() {
 
                   <div className="flex justify-center">
                     <Button
-                      variant="outline"
-                      size="lg"
+                      variant="default"
                       onClick={() => setIsExpanded(true)}
-                      className="rounded-full h-12 px-8 border-border/40 hover:border-border/80 hover:bg-muted/30 transition-all duration-300 font-normal group text-base"
+                      className="rounded-full cursor-pointer py-6 px-8 border-border/40 font-normal group "
                     >
                       Explore more components
                       <HugeiconsIcon
                         icon={ArrowRight01Icon}
-                        className="ml-2 transition-transform group-hover:translate-x-1"
+                        className="transition-transform group-hover:translate-x-1"
                         width={20}
                         height={20}
                       />

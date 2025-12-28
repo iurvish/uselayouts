@@ -207,10 +207,9 @@ export default function PhotoGallery() {
 
                   <div className="flex justify-center">
                     <Button
-                      variant="outline"
+                      variant={"default"}
                       size="lg"
                       onClick={() => setIsExpanded(true)}
-                      className="rounded-full h-12 px-8 border-border/40 hover:border-border/80 hover:bg-muted/30 transition-all duration-300 font-normal group text-base"
                     >
                       Explore more components
                       <HugeiconsIcon

@@ -168,7 +168,7 @@ export default function VerticalTabs() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
+          <div className="lg:col-span-7 flex flex-col justify-end h-full order-1 lg:order-2">
             <div
               className="relative group/gallery"
               onMouseEnter={() => setIsPaused(true)}
