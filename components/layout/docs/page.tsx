@@ -33,7 +33,7 @@ function StickyTOC({ toc }: { toc: TOCItemType[] }) {
   if (toc.length === 0) return null;
 
   return (
-    <div className="sticky top-14 z-10 xl:hidden">
+    <div className="sticky top-14 z-10 xl:hidden z-priority">
       <InlineTOC items={toc}>{activeItem?.title || "On this page"}</InlineTOC>
     </div>
   );

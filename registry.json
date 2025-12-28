@@ -4,18 +4,6 @@
   "homepage": "http://localhost:300",
   "items": [
     {
-      "name": "button",
-      "type": "registry:ui",
-      "title": "Lonely Button",
-      "description": "This is Lonely btn",
-      "files": [
-        {
-          "path": "components/counter.tsx",
-          "type": "registry:ui"
-        }
-      ]
-    },
-    {
       "name": "frequency-selector",
       "type": "registry:example",
       "title": "Frequency Selector",
