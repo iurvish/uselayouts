@@ -13,13 +13,13 @@ export default function Page() {
     <main className="min-h-screen light bg-white font-[family-name:var(--font-geist-sans)]">
       <Hero />
       <div className="flex flex-col min-h-screen items-center justify-center gap-24 py-20 px-4">
-        {/* <ShakeTestimonial />
+        <ShakeTestimonial />
         <LayoutSwitcher />
         <FolderInteraction />
         <MorphCollections />
         <FeatureCarousel />
         <ExpandableGallery />
-        <VerticalTabs /> */}
+        <VerticalTabs />
 
         <MultiStepForm />
       </div>

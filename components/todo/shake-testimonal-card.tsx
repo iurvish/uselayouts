@@ -77,7 +77,7 @@ export default function ShakeTestimonial() {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext();
-    }, 2000);
+    }, 1500);
     return () => clearInterval(interval);
   }, [handleNext]);
 

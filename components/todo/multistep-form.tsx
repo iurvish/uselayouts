@@ -3,6 +3,16 @@
 import React, { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { Check, ChevronRight, ChevronLeft, CalendarIcon } from "lucide-react";
+import { useForm, FormProvider as Form } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@/components/ui/field";
 import {
   Card,
   CardHeader,
@@ -32,36 +42,75 @@ import {
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import useMeasure from "react-use-measure";
+import {
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+} from "@/components/ui/select";
+
+const TEAM_SIZE_OPTIONS = [
+  { label: "Select team size", value: null },
+  { label: "1-5 Members", value: "1-5" },
+  { label: "5-10 Members", value: "5-10" },
+  { label: "10+ Members", value: "10+" },
+];
+
+const PRIORITY_OPTIONS = [
+  { label: "Select priority", value: null },
+  { label: "Low", value: "Low" },
+  { label: "Medium", value: "Medium" },
+  { label: "High", value: "High" },
+  { label: "Critical", value: "Critical" },
+];
+
+const formSchema = z.object({
+  "project-name": z.string().optional(),
+  "due-date": z.date().optional(),
+  description: z.string().optional(),
+  "team-size": z.string().nullable().optional(),
+  priority: z.string().nullable().optional(),
+  tag: z.array(z.string()).optional(),
+  mood: z.string().optional(),
+  comment: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<{
-    projectName: string;
-    dueDate: Date | undefined;
-    description: string;
-    teamSize: string;
-    priority: string;
-    tags: string;
-    mood: string;
-    comment: string;
-  }>({
-    projectName: "",
-    dueDate: undefined,
-    description: "",
-    teamSize: "",
-    priority: "",
-    tags: "",
-    mood: "",
-    comment: "",
+  const [direction, setDirection] = useState<number>();
+  const [ref, bounds] = useMeasure();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      "project-name": "",
+      "due-date": undefined,
+      description: "",
+      "team-size": null,
+      priority: null,
+      tag: [],
+      mood: "",
+      comment: "",
+    },
   });
 
-  const [direction, setDirection] = useState<number>();
-
-  const [ref, bounds] = useMeasure();
+  function onSubmit(values: FormValues) {
+    try {
+      console.log(values);
+      toast(
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      );
+    } catch (error) {
+      console.error("Form submission error", error);
+      toast.error("Failed to submit the form. Please try again.");
+    }
+  }
 
   const nextStep = () => {
     if (currentStep === 2) {
-      setDirection(-1);
+      form.handleSubmit(onSubmit)();
       return;
     }
     if (currentStep < 2) {
@@ -93,113 +142,171 @@ const MultiStepForm = () => {
     },
   ];
 
+  const watchedValues = form.watch();
+
   const content = useMemo(() => {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="projectName">Project Name</Label>
+          <div className="space-y-6 py-4">
+            <Field>
+              <FieldLabel htmlFor="project-name">Project Name</FieldLabel>
               <Input
-                id="projectName"
-                name="projectName"
-                placeholder="e.g. Website Redesign"
-                value={formData.projectName}
-                onChange={(e) =>
-                  setFormData({ ...formData, projectName: e.target.value })
-                }
+                id="project-name"
+                placeholder="e.g Website Design"
+                {...form.register("project-name")}
               />
-            </div>
-            <div className="space-y-2 flex flex-col">
-              <Label htmlFor="dueDate">Due Date</Label>
+              <FieldError>
+                {form.formState.errors["project-name"]?.message}
+              </FieldError>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="due-date">Due Date</FieldLabel>
               <Popover>
                 <PopoverTrigger
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "w-full justify-start text-left font-normal",
-                    !formData.dueDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {formData.dueDate ? (
-                    format(formData.dueDate, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </PopoverTrigger>
+                  render={
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !watchedValues["due-date"] && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {watchedValues["due-date"] ? (
+                        format(watchedValues["due-date"] as Date, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                    </Button>
+                  }
+                />
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={formData.dueDate}
-                    onSelect={(date) =>
-                      setFormData({ ...formData, dueDate: date })
-                    }
+                    selected={watchedValues["due-date"]}
+                    onSelect={(date) => form.setValue("due-date", date)}
+                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <FieldError>
+                {form.formState.errors["due-date"]?.message}
+              </FieldError>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="description">Description</FieldLabel>
               <Textarea
                 id="description"
-                name="description"
                 placeholder="Describe the project goals and scope..."
-                className="resize-none min-h-[100px]"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                className="min-h-[100px]"
+                {...form.register("description")}
               />
-            </div>
+              <FieldDescription>
+                Briefly outline the goals and scope.
+              </FieldDescription>
+              <FieldError>
+                {form.formState.errors.description?.message}
+              </FieldError>
+            </Field>
           </div>
         );
       case 1:
         return (
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Team Size</Label>
-                <Select value={formData.teamSize}>
-                  <SelectTrigger className="w-full">
+              <Field>
+                <FieldLabel htmlFor="team-size">Team Size</FieldLabel>
+                <Select
+                  items={TEAM_SIZE_OPTIONS}
+                  value={watchedValues["team-size"] ?? null}
+                  onValueChange={(val) => form.setValue("team-size", val)}
+                >
+                  <SelectTrigger id="team-size" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1-5">1-5 Members</SelectItem>
-                    <SelectItem value="5-10">5-10 Members</SelectItem>
-                    <SelectItem value="10+">10+ Members</SelectItem>
+                    {TEAM_SIZE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.label} value={opt.value as any}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Priority</Label>
-                <Select value={formData.priority}>
-                  <SelectTrigger className="w-full">
+                <FieldError>
+                  {form.formState.errors["team-size"]?.message}
+                </FieldError>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="priority">Priority</FieldLabel>
+                <Select
+                  items={PRIORITY_OPTIONS}
+                  value={watchedValues["priority"] ?? null}
+                  onValueChange={(val) => form.setValue("priority", val)}
+                >
+                  <SelectTrigger id="priority" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
+                    {PRIORITY_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.label} value={opt.value as any}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-              </div>
+                <FieldError>
+                  {form.formState.errors.priority?.message}
+                </FieldError>
+              </Field>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="tags">Tags</Label>
-              <div className="relative">
+            <Field>
+              <FieldLabel htmlFor="tag">Tags</FieldLabel>
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {watchedValues["tag"]?.map((t, i) => (
+                    <Badge key={i} variant="secondary" className="gap-1">
+                      {t}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const tags = form.getValues("tag") || [];
+                          form.setValue(
+                            "tag",
+                            tags.filter((_, index) => index !== i)
+                          );
+                        }}
+                        className="hover:text-destructive"
+                      >
+                        ×
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
                 <Input
-                  id="tags"
-                  name="tags"
+                  id="tag"
                   placeholder="e.g. Design, Marketing"
-                  value={formData.tags}
-                  onChange={(e) =>
-                    setFormData({ ...formData, tags: e.target.value })
-                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const val = e.currentTarget.value.trim();
+                      if (val) {
+                        const tags = form.getValues("tag") || [];
+                        if (!tags.includes(val)) {
+                          form.setValue("tag", [...tags, val]);
+                        }
+                        e.currentTarget.value = "";
+                      }
+                    }
+                  }}
                 />
               </div>
-            </div>
+              <FieldError>{form.formState.errors.tag?.message}</FieldError>
+            </Field>
           </div>
         );
       case 2:
@@ -218,12 +325,13 @@ const MultiStepForm = () => {
                     key={option.value}
                     className={cn(
                       "flex-1 p-3 md:p-4 text-2xl md:text-3xl transition-all hover:bg-muted focus:outline-none",
-                      formData.mood === option.value
+                      watchedValues["mood"] === option.value
                         ? "bg-primary/10 grayscale-0"
                         : "grayscale-[1] hover:grayscale-0"
                     )}
                     type="button"
                     title={option.label}
+                    onClick={() => form.setValue("mood", option.value)}
                   >
                     {option.emoji}
                   </button>
@@ -231,21 +339,20 @@ const MultiStepForm = () => {
               </div>
               <Textarea
                 id="comment"
-                name="comment"
                 placeholder="Add a comment..."
-                value={formData.comment}
                 className="min-h-[140px] resize-none border-0 focus-visible:ring-0 rounded-none bg-transparent p-4 placeholder:text-muted-foreground/60"
-                onChange={(e) =>
-                  setFormData({ ...formData, comment: e.target.value })
-                }
+                {...form.register("comment")}
               />
             </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Your feedback helps us understand the project kickoff vibe.
+            </p>
           </div>
         );
       default:
         return null;
     }
-  }, [currentStep]);
+  }, [currentStep, form, watchedValues]);
 
   const variants = {
     initial: (direction: number) => {
@@ -258,95 +365,97 @@ const MultiStepForm = () => {
   };
 
   return (
-    <MotionConfig
-      transition={{
-        duration: 0.5,
-        type: "spring",
-        bounce: 0,
-        // opacity: { duration: 0.2 },
-      }}
-    >
-      <div className="flex w-full items-center justify-center bg-muted/10 p-4">
-        <Card className="w-full max-w-xl shadow-none border overflow-hidden">
-          <motion.div layout>
-            <CardHeader className="flex flex-row items-start justify-between space-y-0 px-6 py-4">
-              <div className="flex flex-col gap-1">
-                <CardTitle className="text-xl">
-                  {stepTitles[currentStep].title}
-                </CardTitle>
-                <CardDescription>
-                  {stepTitles[currentStep].description}
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-1.5 pt-1">
-                {stepTitles.map((_, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "h-2 rounded-full transition-all duration-300",
-                      currentStep === index
-                        ? "w-8 bg-primary"
-                        : "w-2 bg-primary/20"
-                    )}
-                  />
-                ))}
-              </div>
-            </CardHeader>
+    <Form {...form}>
+      <MotionConfig
+        transition={{
+          duration: 0.5,
+          type: "spring",
+          bounce: 0,
+          // opacity: { duration: 0.2 },
+        }}
+      >
+        <div className="flex w-full items-center justify-center bg-muted/10 p-4">
+          <Card className="w-full max-w-xl shadow-none border overflow-hidden">
+            <motion.div layout>
+              <CardHeader className="flex flex-row items-start justify-between space-y-0 px-6 py-4">
+                <div className="flex flex-col gap-1">
+                  <CardTitle className="text-xl">
+                    {stepTitles[currentStep].title}
+                  </CardTitle>
+                  <CardDescription>
+                    {stepTitles[currentStep].description}
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-1.5 pt-1">
+                  {stepTitles.map((_, index) => (
+                    <div
+                      key={index}
+                      className={cn(
+                        "h-2 rounded-full transition-all duration-300",
+                        currentStep === index
+                          ? "w-8 bg-primary"
+                          : "w-2 bg-primary/20"
+                      )}
+                    />
+                  ))}
+                </div>
+              </CardHeader>
 
-            <motion.div
-              animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
-              className="relative overflow-hidden"
-              transition={{ type: "spring", bounce: 0, duration: 0.5 }}
-            >
-              <div ref={ref}>
-                <CardContent className="px-6 py-2 relative">
-                  <AnimatePresence
-                    mode="popLayout"
-                    initial={false}
-                    custom={direction}
-                  >
-                    <motion.div
-                      key={currentStep}
-                      variants={variants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      className="w-full"
+              <motion.div
+                animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
+                className="relative overflow-hidden"
+                transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+              >
+                <div ref={ref}>
+                  <CardContent className="px-6 py-2 relative">
+                    <AnimatePresence
+                      mode="popLayout"
+                      initial={false}
                       custom={direction}
                     >
-                      {direction}
-                      {content}
-                    </motion.div>
-                  </AnimatePresence>
-                </CardContent>
-              </div>
-            </motion.div>
+                      <motion.div
+                        key={currentStep}
+                        variants={variants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="w-full"
+                        custom={direction}
+                      >
+                        {content}
+                      </motion.div>
+                    </AnimatePresence>
+                  </CardContent>
+                </div>
+              </motion.div>
 
-            <CardFooter className="flex justify-between items-center border-t">
-              <Button
-                variant={"secondary"}
-                onClick={prevStep}
-                disabled={currentStep === 0}
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Back
-              </Button>
-              <Button onClick={nextStep}>
-                {currentStep === stepTitles.length - 1 ? (
-                  <>
-                    Finish <Check className="h-4 w-4" />
-                  </>
-                ) : (
-                  <>
-                    Continue <ChevronRight className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          </motion.div>
-        </Card>
-      </div>
-    </MotionConfig>
+              <CardFooter className="flex justify-between items-center border-t">
+                <Button
+                  variant={"secondary"}
+                  type="button"
+                  onClick={prevStep}
+                  disabled={currentStep === 0}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </Button>
+                <Button type="button" onClick={nextStep}>
+                  {currentStep === stepTitles.length - 1 ? (
+                    <>
+                      Finish <Check className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Continue <ChevronRight className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </CardFooter>
+            </motion.div>
+          </Card>
+        </div>
+      </MotionConfig>
+    </Form>
   );
 };
 
