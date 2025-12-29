@@ -29,37 +29,35 @@ const benefits: Benefit[] = [
   {
     title: "Built on Shadcn UI",
     description:
-      "Engineered to extend Shadcn's visual language while adding meaningful motion and professional depth.",
+      "Extending Shadcn with meaningful motion and professional depth.",
     icon: Layout,
   },
   {
     title: "Framer Motion Powered",
     description:
-      "Leverage the full power of industry-standard animation libraries for buttery smooth, fluid interactions.",
+      "Buttery smooth transitions using industry-standard libraries.",
     icon: Zap,
   },
   {
     title: "Copy & Paste Simplicity",
-    description:
-      "No bloat. No complex setup. Just copy the code and give your app a premium feel in minutes.",
+    description: "Copy and paste to give your app a premium feel instantly.",
     icon: Copy,
   },
   {
     title: "Type Inference Ready",
     description:
-      "Fully typed with TypeScript, providing great DX and error-free integration into your codebase.",
+      "Fully typed with TypeScript for a seamless developer experience.",
     icon: Code2,
   },
   {
     title: "Customizable Aesthetics",
     description:
-      "Easily tweak colors, timings, and scales using Tailwind CSS and CSS variables to match your brand.",
+      "Tweak colors and timings easily with Tailwind and CSS variables.",
     icon: Palette,
   },
   {
     title: "Performance Optimized",
-    description:
-      "Lightweight components that prioritize 60FPS animations without sacrificing your bundle size.",
+    description: "Lightweight 60FPS animations optimized for performance.",
     icon: Cpu,
   },
 ];
@@ -74,7 +72,7 @@ const dockItems = [
 
 export default function ProductBenefits() {
   return (
-    <section className="relative w-full py-24 px-4 bg-white overflow-hidden">
+    <section className="relative w-full py-24 px-4 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="h-full w-full opacity-[0.03]"
@@ -86,25 +84,14 @@ export default function ProductBenefits() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground mb-6"
-          >
+        <div className="text-center mb-16">
+          <h2 className="tracking-tighter text-balance text-4xl font-medium md:text-5xl lg:text-6xl text-foreground mb-4">
             Built for Motion
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-          >
-            Why Settle for Static? Bring your UI to life with professional-grade
-            animations designed to integrate seamlessly into your Shadcn
-            workflow.
-          </motion.p>
+          </h2>
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Stop settling for static. Give your UI more life with professional
+            animations made for your projects.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-dashed border-l border-t border-muted-foreground/20">
@@ -115,21 +102,21 @@ export default function ProductBenefits() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="p-10 md:p-14 border-dashed border-r border-b border-muted-foreground/20 flex flex-col items-center text-center group relative overflow-hidden"
+              className="p-8 md:p-8 border-dashed border-r border-b border-muted-foreground/20 flex flex-col items-center text-center group relative overflow-hidden h-full min-h-[200px] sm:min-h-[250px] justify-center"
             >
-              <div className="absolute inset-0 bg-muted/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 bg-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-              <div className="mb-8 p-4 rounded-2xl bg-muted/30 group-hover:scale-110 transition-transform duration-300">
+              <div className="mb-6 p-3.5 rounded-2xl bg-muted/40 group-hover:bg-background/80 group-hover:scale-110 transition-all duration-300 z-10">
                 <benefit.icon
-                  className="w-8 h-8 text-foreground"
+                  className="w-7 h-7 text-foreground"
                   strokeWidth={1.5}
                 />
               </div>
 
-              <h3 className="text-xl font-semibold mb-4 text-foreground transition-colors">
+              <h3 className="text-xl font-medium mb-3 text-foreground transition-colors z-10">
                 {benefit.title}
               </h3>
-              <p className="text-muted-foreground leading-relaxed text-[15px]">
+              <p className="text-muted-foreground leading-relaxed text-md z-10 max-w-[300px] sm:max-w-[320px]">
                 {benefit.description}
               </p>
             </motion.div>

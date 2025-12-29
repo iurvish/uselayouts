@@ -9,12 +9,14 @@ import MorphCollections from "@/components/todo/morph-collections";
 import MultiStepForm from "@/components/todo/multistep-form";
 import ShakeTestimonial from "@/registry/default/example/shake-testimonial-card";
 import PricingCard from "@/registry/default/example/pricing-card";
+import Testimonial from "@/components/testimonial";
 
 export default function Page() {
   return (
     <main className="min-h-screen light bg-white font-[family-name:var(--font-geist-sans)]">
       <Hero />
       <ProductBenefits />
+      <Testimonial />
 
       <div className="flex flex-col min-h-screen items-center justify-center gap-24 py-20 px-4">
         {/* <ShakeTestimonial /> */}
