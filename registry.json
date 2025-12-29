@@ -1,13 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "localhost",
-  "homepage": "https://localhost:3000",
+  "name": "uselayouts",
+  "homepage": "https://uselayouts.com",
   "items": [
     {
       "name": "3d-book",
       "type": "registry:block",
       "title": "3D Book",
       "description": "An interactive 3D book component with page flip animations.",
+      "dependencies": ["motion", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "registry/default/example/3d-book.tsx",
@@ -20,6 +21,13 @@
       "type": "registry:block",
       "title": "Animated Collection",
       "description": "A collection of items with smooth layout transitions and animations.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/animated-collection.tsx",
@@ -32,6 +40,14 @@
       "type": "registry:block",
       "title": "Bottom Menu",
       "description": "A floating bottom navigation menu with smooth interactions.",
+      "dependencies": [
+        "motion",
+        "react-use-measure",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/bottom-menu.tsx",
@@ -44,6 +60,13 @@
       "type": "registry:block",
       "title": "Day Picker",
       "description": "A custom day picker component with smooth animations.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/day-picker.tsx",
@@ -56,6 +79,13 @@
       "type": "registry:block",
       "title": "Delete Button",
       "description": "A confirmation button with smooth icon transitions.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/delete-button.tsx",
@@ -68,6 +98,13 @@
       "type": "registry:block",
       "title": "Discover Button",
       "description": "An interactive button with expanding discovery state.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/discover-button.tsx",
@@ -80,6 +117,7 @@
       "type": "registry:block",
       "title": "Discrete Tabs",
       "description": "A tab component with discrete sliding animations.",
+      "dependencies": ["motion", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "registry/default/example/discrete-tabs.tsx",
@@ -92,10 +130,21 @@
       "type": "registry:block",
       "title": "Dynamic Toolbar",
       "description": "A toolbar that adapts its size and layout based on content.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/dynamic-toolbar.tsx",
           "type": "registry:block"
+        },
+        {
+          "path": "hooks/use-measure.tsx",
+          "type": "registry:hook"
         }
       ]
     },
@@ -104,6 +153,14 @@
       "type": "registry:block",
       "title": "Expandable Gallery",
       "description": "A photo gallery with smooth item expansion.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["button"],
       "files": [
         {
           "path": "registry/default/example/expandable-gallery.tsx",
@@ -116,6 +173,13 @@
       "type": "registry:block",
       "title": "Feature Carousel",
       "description": "A smooth carousel for showcasing product features.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/feature-carousel.tsx",
@@ -128,6 +192,13 @@
       "type": "registry:block",
       "title": "Folder Interaction",
       "description": "A folder management system with drag-and-drop-like feel.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/folder-interaction.tsx",
@@ -140,6 +211,14 @@
       "type": "registry:block",
       "title": "Inline Edit",
       "description": "An input that switches between read and edit modes.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["input"],
       "files": [
         {
           "path": "registry/default/example/inline-edit.tsx",
@@ -152,6 +231,13 @@
       "type": "registry:block",
       "title": "List Item",
       "description": "Interactive list items with hover and focus effects.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/list-item.tsx",
@@ -164,6 +250,14 @@
       "type": "registry:block",
       "title": "Morphing Input",
       "description": "An input field that morphs between different states.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["input"],
       "files": [
         {
           "path": "registry/default/example/morphing-input.tsx",
@@ -176,10 +270,36 @@
       "type": "registry:block",
       "title": "Multi Step Form",
       "description": "A dynamic, animated multi-step form with validation.",
+      "dependencies": [
+        "motion",
+        "date-fns",
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "lucide-react",
+        "react-use-measure",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "card",
+        "button",
+        "input",
+        "textarea",
+        "select",
+        "badge",
+        "calendar",
+        "popover"
+      ],
       "files": [
         {
           "path": "registry/default/example/multi-step-form.tsx",
           "type": "registry:block"
+        },
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
         }
       ]
     },
@@ -188,6 +308,15 @@
       "type": "registry:block",
       "title": "Pricing Card",
       "description": "A focused pricing card layout with clear hierarchy.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "lucide-react",
+        "@number-flow/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/pricing-card.tsx",
@@ -200,6 +329,13 @@
       "type": "registry:block",
       "title": "Shake Testimonial Card",
       "description": "An eye-catching testimonial card with playful animations.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/shake-testimonial-card.tsx",
@@ -212,6 +348,13 @@
       "type": "registry:block",
       "title": "Smooth Dropdown",
       "description": "A dropdown menu with premium layout transitions.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/smooth-dropdown.tsx",
@@ -224,6 +367,14 @@
       "type": "registry:block",
       "title": "Status Button",
       "description": "A button with animated states for idle, loading, and success.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["button"],
       "files": [
         {
           "path": "registry/default/example/status-button.tsx",
@@ -236,6 +387,13 @@
       "type": "registry:block",
       "title": "Vertical Tabs",
       "description": "A vertical tab interaction with smooth content switching.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/vertical-tabs.tsx",

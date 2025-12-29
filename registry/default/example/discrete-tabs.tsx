@@ -79,28 +79,26 @@ const Inbox: React.FC<React.SVGProps<SVGSVGElement> & { size?: number }> = ({
   );
 };
 
+// Change Here
+const TABS = [
+  { id: "Inbox", title: "Inbox", icon: Inbox },
+  { id: "Planner", title: "Planner", icon: Calendar },
+  { id: "Alerts", title: "Alerts", icon: Alert },
+];
+
 export default function DiscreteTabs() {
-  const [activeButton, setActiveButton] = useState("Inbox");
+  const [activeButton, setActiveButton] = useState(TABS[0].id);
   return (
     <div className="flex gap-4 items-center">
-      <Button
-        title="Inbox"
-        ButtonIcon={Inbox}
-        isActive={activeButton === "Inbox"}
-        setActiveButton={setActiveButton}
-      />
-      <Button
-        title="Planner"
-        ButtonIcon={Calendar}
-        isActive={activeButton === "Planner"}
-        setActiveButton={setActiveButton}
-      />
-      <Button
-        title="Alerts"
-        ButtonIcon={Alert}
-        isActive={activeButton === "Alerts"}
-        setActiveButton={setActiveButton}
-      />
+      {TABS.map((tab) => (
+        <Button
+          key={tab.id}
+          title={tab.title}
+          ButtonIcon={tab.icon}
+          isActive={activeButton === tab.id}
+          setActiveButton={setActiveButton}
+        />
+      ))}
     </div>
   );
 }

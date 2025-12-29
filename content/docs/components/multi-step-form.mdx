@@ -51,6 +51,43 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+You can easily update the step titles and descriptions by modifying the `stepTitles` array inside the component:
+
+```tsx
+// Change Here
+const stepTitles = [
+  {
+    title: "Create New Project",
+    description: "Start by providing the essential details.",
+  },
+  // ...
+];
+```
+
+#### Step Content
+
+The actual form fields for each step are defined in the `content` useMemo block. You can add or modify fields here:
+
+```tsx
+const content = useMemo(() => {
+  switch (currentStep) {
+    case 0:
+      return (
+        <div className="space-y-6 py-4">
+          <Field>
+            <FieldLabel htmlFor="project-name">Project Name</FieldLabel>
+            <Input id="project-name" {...form.register("project-name")} />
+          </Field>
+          {/* Add more fields for Step 1 */}
+        </div>
+      );
+    // Add more cases for each step index...
+  }
+}, [currentStep, form]);
+```
+
 ```tsx
 import MultiStepForm from "@/components/multi-step-form";
 

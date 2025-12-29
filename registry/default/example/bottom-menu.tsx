@@ -20,6 +20,36 @@ import { AnimatePresence, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import { cn } from "@/lib/utils";
 
+// Change Here
+const MAIN_NAV = [
+  { icon: PlusSignIcon, name: "home" },
+  { icon: Search01Icon, name: "search" },
+  { icon: Notification03Icon, name: "notifications" },
+  { icon: UserEdit01Icon, name: "profile" },
+  { icon: Sun03Icon, name: "theme" },
+];
+
+const HOME_ITEMS = [
+  { icon: PencilEdit02Icon, text: "Note" },
+  { icon: Mic01Icon, text: "Voice" },
+  { icon: Camera01Icon, text: "Screenshot" },
+];
+
+const SEARCH_OPTIONS = [
+  { icon: FilterHorizontalIcon, text: "Filter" },
+  { icon: AutoConversationsIcon, text: "Trending" },
+];
+
+const NOTIFICATION_TYPES = ["Messages", "System Alerts"];
+
+const PROFILE_LINKS = ["My Account", "Settings", "Subscription / Billing"];
+
+const THEME_OPTIONS = [
+  { key: "light", icon: Sun03Icon, text: "Light" },
+  { key: "dark", icon: Moon02Icon, text: "Dark" },
+  { key: "system", icon: ComputerIcon, text: "System" },
+];
+
 const BottomMenu = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [elementRef] = useMeasure();
@@ -57,11 +87,7 @@ const BottomMenu = () => {
       case "home":
         return (
           <div className="space-y-0.5 min-w-[210px] p-[6px] py-0.5">
-            {[
-              { icon: PencilEdit02Icon, text: "Note" },
-              { icon: Mic01Icon, text: "Voice" },
-              { icon: Camera01Icon, text: "Screenshot" },
-            ].map(({ icon: Icon, text }) => (
+            {HOME_ITEMS.map(({ icon: Icon, text }) => (
               <button
                 key={text}
                 className={`${sharedHover} flex items-center gap-3`}
@@ -93,10 +119,7 @@ const BottomMenu = () => {
               />
             </div>
             <div className="flex gap-1.5">
-              {[
-                { icon: FilterHorizontalIcon, text: "Filter" },
-                { icon: AutoConversationsIcon, text: "Trending" },
-              ].map(({ icon: Icon, text }) => (
+              {SEARCH_OPTIONS.map(({ icon: Icon, text }) => (
                 <button
                   key={text}
                   className={`${sharedHover} flex-1 flex items-center justify-center gap-1.5 bg-muted hover:bg-accent`}
@@ -117,7 +140,7 @@ const BottomMenu = () => {
       case "notifications":
         return (
           <div className="space-y-0.5 min-w-[210px] p-[6px] py-0.5">
-            {["Messages", "System Alerts"].map((t) => (
+            {NOTIFICATION_TYPES.map((t) => (
               <button key={t} className={sharedHover}>
                 <span className="transition-all duration-75">{t}</span>
               </button>
@@ -128,7 +151,7 @@ const BottomMenu = () => {
       case "profile":
         return (
           <div className="space-y-0.5 min-w-[230px] p-[6px] py-0.5">
-            {["My Account", "Settings", "Subscription / Billing"].map((t) => (
+            {PROFILE_LINKS.map((t) => (
               <button key={t} className={sharedHover}>
                 <span className="transition-all duration-75">{t}</span>
               </button>
@@ -143,11 +166,7 @@ const BottomMenu = () => {
       case "theme":
         return (
           <div className="flex items-center justify-between gap-1.5 min-w-[270px] p-[6px] py-0.5">
-            {[
-              { key: "light", icon: Sun03Icon, text: "Light" },
-              { key: "dark", icon: Moon02Icon, text: "Dark" },
-              { key: "system", icon: ComputerIcon, text: "System" },
-            ].map(({ key, icon: Icon, text }) => (
+            {THEME_OPTIONS.map(({ key, icon: Icon, text }) => (
               <button
                 key={key}
                 onClick={() => setTheme(key as "light" | "dark" | "system")}
@@ -269,13 +288,7 @@ const BottomMenu = () => {
 
       {/* Toolbar */}
       <div className="flex items-center gap-1 bg-background/95 backdrop-blur-xl border border-border rounded-[18px] p-1 mt-3 z-10">
-        {[
-          { icon: PlusSignIcon, name: "home" },
-          { icon: Search01Icon, name: "search" },
-          { icon: Notification03Icon, name: "notifications" },
-          { icon: UserEdit01Icon, name: "profile" },
-          { icon: Sun03Icon, name: "theme" },
-        ].map(({ icon: Icon, name }) => (
+        {MAIN_NAV.map(({ icon: Icon, name }) => (
           <button
             key={name}
             className={`p-3 rounded-[16px] transition-all ${

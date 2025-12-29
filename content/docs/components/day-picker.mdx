@@ -23,7 +23,7 @@ import { SourceCode } from "@/components/source-code";
 <Tabs items={['CLI', 'Manual']}>
   <Tab value="CLI">
     ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/frequency-selector.json"
+    npx shadcn@latest add "https://uselayouts.com/r/day-picker.json"
     ```
   </Tab>
   <Tab value="Manual">
@@ -51,6 +51,15 @@ import { SourceCode } from "@/components/source-code";
 </Tabs>
 
 ## Usage
+
+### Customizing Content
+
+You can modify the frequency options by updating the `options` array:
+
+```tsx
+// Change Here
+const options = ["Daily", "Weekly", "Monthly", "Yearly"];
+```
 
 ```tsx
 import FrequencySelector from "@/components/day-picker";

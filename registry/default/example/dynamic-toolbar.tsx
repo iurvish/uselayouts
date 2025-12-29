@@ -18,6 +18,7 @@ import useMeasure from "@/hooks/use-measure";
 
 const ICON_SIZE = 24;
 
+// Change Here
 const primaryTools = [
   { icon: InboxIcon, label: "Inbox" },
   { icon: Message01Icon, label: "Messages" },
@@ -89,7 +90,6 @@ function ExtendedToolbar() {
   const [primaryRef, primaryBounds] = useMeasure();
   const [secondaryRef, secondaryBounds] = useMeasure();
 
-  // Set mounted after first render to prevent initial animation
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -97,10 +97,8 @@ function ExtendedToolbar() {
   const currentWidth = isExpanded ? secondaryBounds.width : primaryBounds.width;
   const hasMeasurements = primaryBounds.width > 0;
 
-  // Use primary width initially, or auto if not measured yet
   const initialWidth = hasMeasurements ? primaryBounds.width : "auto";
 
-  // Consistent spring animation for both directions
   const springTransition = {
     type: "spring" as const,
     stiffness: 200,

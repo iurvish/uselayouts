@@ -44,6 +44,19 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Modify the `menuItems` array to customize your dropdown options:
+
+```tsx
+// Change Here
+const menuItems = [
+  { id: "profile", label: "Profile", icon: UserIcon },
+  { id: "upgrade", label: "Upgrade", icon: CreditCardIcon },
+  // ...
+];
+```
+
 ```tsx
 import MenuInteraction from "@/components/smooth-dropdown";
 

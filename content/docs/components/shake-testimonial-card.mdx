@@ -55,6 +55,26 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+You can easily swap out the testimonials by modifying the `testimonials` array at the top of the file:
+
+```tsx
+// Change Here
+const testimonials = [
+  {
+    id: 1,
+    name: "Marcus Thorne",
+    role: "Head of Product",
+    avatar: "/ui/memoji/1.svg",
+    content: "The interface is so intuitive...",
+    color: "#E0F2FE",
+    textColor: "#1E3A8A",
+  },
+  // ...
+];
+```
+
 ```tsx
 import ShakeTestimonial from "@/components/shake-testimonial-card";
 

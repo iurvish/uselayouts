@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+// Change Here
 const FEATURES = [
   {
     id: "sustainable",

@@ -51,6 +51,22 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Swap out the images by modifying the `PHOTOS` array at the top of the component file:
+
+```tsx
+// Change Here
+const PHOTOS = [
+  {
+    id: "photo-1",
+    src: "https://images.unsplash.com...",
+    alt: "Image Description",
+  },
+  // ...
+];
+```
+
 ```tsx
 import ExpandableGallery from "@/components/expandable-gallery";
 

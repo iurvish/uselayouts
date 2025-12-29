@@ -1,6 +1,5 @@
 "use client";
 import { motion, MotionConfig } from "motion/react";
-// import { FilterKey } from "../constants";
 import { Dispatch, SetStateAction, useState } from "react";
 import clsx from "clsx";
 
@@ -19,6 +18,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 export type FilterKey = (typeof filterKeys)[number];
 
+// Change Here
 export const filterKeys = [
   {
     name: "tasks",

@@ -22,7 +22,7 @@ import { ComponentPreview } from "@/components/component-preview";
 <Tabs items={['CLI', 'Manual']}>
   <Tab value="CLI">
     ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/layout-switcher.json"
+    npx shadcn@latest add "https://uselayouts.com/r/animated-collection.json"
     ```
   </Tab>
   <Tab value="Manual">
@@ -50,6 +50,25 @@ import { ComponentPreview } from "@/components/component-preview";
 </Tabs>
 
 ## Usage
+
+### Customizing Content
+
+You can easily swap out the items by modifying the `ITEMS` array at the top of the component file:
+
+```tsx
+// Change Here
+const ITEMS = [
+  {
+    id: "1",
+    title: "Cinematic Horizons",
+    subtitle: "Photography",
+    idNumber: "209",
+    image: "https://...",
+    icon: Camera01Icon,
+  },
+  // ... add more items
+];
+```
 
 ```tsx
 import LayoutSwitcher from "@/components/layout-switcher";

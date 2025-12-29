@@ -51,6 +51,44 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+You can easily customize the menu items by modifying the arrays at the top of the file:
+
+```tsx
+// Change Here
+const HOME_ITEMS = [
+  { icon: PencilEdit02Icon, text: "Note" },
+  { icon: Mic01Icon, text: "Voice" },
+  // ...
+];
+
+const NOTIFICATION_TYPES = ["Messages", "System Alerts"];
+```
+
+#### Submenu Content
+
+You can define the layout and elements of each submenu within the `content` useMemo:
+
+```tsx
+const content = useMemo(() => {
+  switch (view) {
+    case "home":
+      return (
+        <div className="space-y-0.5 min-w-[210px] p-[6px] py-0.5">
+          {HOME_ITEMS.map(({ icon: Icon, text }) => (
+            <button key={text} className="...">
+              <HugeiconsIcon icon={Icon} size={20} />
+              <span>{text}</span>
+            </button>
+          ))}
+        </div>
+      );
+    // Add more cases for other views...
+  }
+}, [view]);
+```
+
 ```tsx
 import BottomMenu from "@/components/bottom-menu";
 

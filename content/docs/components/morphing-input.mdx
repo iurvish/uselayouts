@@ -19,7 +19,12 @@ import { SourceCode } from "@/components/source-code";
 
 ## Installation
 
-<Tabs items={['Manual']}>
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/morphing-input.json"
+    ```
+  </Tab>
   <Tab value="Manual">
     <Steps>
       <Step>
@@ -49,6 +54,19 @@ import { SourceCode } from "@/components/source-code";
 </Tabs>
 
 ## Usage
+
+### Customizing Content
+
+Adjust the placeholder text and icons by modifying the `placeholderOptions` array:
+
+```tsx
+// Change Here
+const placeholderOptions = [
+  { id: 1, placeholder: "Search anything...", icon: SparklesIcon },
+  { id: 2, placeholder: "Generate Image", icon: Album02Icon },
+  // ...
+];
+```
 
 ```tsx
 import InputSwitch from "@/components/morphing-input";

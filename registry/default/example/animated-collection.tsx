@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   motion,
   LayoutGroup,
@@ -18,6 +17,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 
 interface CollectionItem {
   id: string;
@@ -28,6 +28,7 @@ interface CollectionItem {
   icon: any;
 }
 
+// Change Here
 const ITEMS: CollectionItem[] = [
   {
     id: "1",
@@ -63,11 +64,10 @@ const fastFade: Transition = {
 };
 
 export default function LayoutSwitcher() {
-  const [view, setView] = React.useState<ViewMode>("list");
+  const [view, setView] = useState<ViewMode>("list");
   return (
     <div className="w-full max-w-xl mx-auto p-4 md:p-8 font-sans selection:bg-primary/10">
       <div className="flex flex-col gap-6">
-        {/* Header Section */}
         <div className="flex flex-col gap-5">
           <h2 className="text-xl font-medium text-foreground ">
             My Collection

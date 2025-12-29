@@ -51,6 +51,25 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Update the `plans` array to set your own pricing and features:
+
+```tsx
+// Change Here
+const plans = [
+  {
+    id: "plus",
+    name: "Plus",
+    description: "solo",
+    monthlyPrice: 8.99,
+    yearlyPrice: 6.99,
+    features: ["1TB Space", "30 days recovery"],
+  },
+  // ...
+];
+```
+
 ```tsx
 import PricingCard from "@/components/pricing-card";
 

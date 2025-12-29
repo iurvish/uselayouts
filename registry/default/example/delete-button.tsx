@@ -10,7 +10,6 @@ const DeleteButton = () => {
   const [count, setCount] = useState(10);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Counter Logic (10 → 0)
   useEffect(() => {
     if (!isDeleting) return;
 
@@ -20,9 +19,8 @@ const DeleteButton = () => {
     return () => clearTimeout(timer);
   }, [isDeleting, count]);
 
-  // Handle animation lock
   const handleClick = (newState: boolean) => {
-    if (isAnimating) return; // Prevent clicks during animation
+    if (isAnimating) return;
     setIsAnimating(true);
     setIsDeleting(newState);
     if (newState) setCount(10);
@@ -31,7 +29,7 @@ const DeleteButton = () => {
     setTimeout(() => setIsAnimating(false), 400);
   };
 
-  // Split text into characters for animation
+  // Change Here
   const deleteText = "Delete Account";
   const cancelText = "Cancel Deletion";
 
@@ -126,7 +124,6 @@ const DeleteButton = () => {
               opacity: { duration: 0.2, ease: "easeIn" },
             }}
           >
-            {/* ICON */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -137,7 +134,6 @@ const DeleteButton = () => {
               <HugeiconsIcon icon={Undo03Icon} className="h-4 w-4 text-white" />
             </motion.div>
 
-            {/* TEXT */}
             <motion.span
               layoutId="buttonText"
               className="text-[#FE322A] font-medium flex"
@@ -164,7 +160,6 @@ const DeleteButton = () => {
               ))}
             </motion.span>
 
-            {/* COUNTER WITH ANIMATION (10 → 0) */}
             <motion.div
               className="bg-[#FE322A] text-white px-4 py-3 rounded-full text-sm font-semibold flex items-center justify-center relative overflow-hidden shrink-0 min-w-[32px]"
               initial={{ opacity: 0, scale: 0.5 }}

@@ -51,6 +51,19 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+You can easily add or remove tabs by modifying the `TABS` array at the top of the component:
+
+```tsx
+// Change Here
+const TABS = [
+  { id: "Inbox", title: "Inbox", icon: Inbox },
+  { id: "Planner", title: "Planner", icon: Calendar },
+  { id: "Alerts", title: "Alerts", icon: Alert },
+];
+```
+
 ```tsx
 import DiscreteTabs from "@/components/discrete-tabs";
 

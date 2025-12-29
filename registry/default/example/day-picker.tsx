@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 type options = "Daily" | "Weekly" | "Monthly" | "Yearly";
+// Change Here
 const options: options[] = ["Daily", "Weekly", "Monthly", "Yearly"];
 
 const springTransition = {

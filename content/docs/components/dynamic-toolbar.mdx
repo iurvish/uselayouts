@@ -22,7 +22,7 @@ import { ComponentPreview } from "@/components/component-preview";
 <Tabs items={['CLI', 'Manual']}>
   <Tab value="CLI">
     ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/expanded-toolbar.json"
+    npx shadcn@latest add "https://uselayouts.com/r/dynamic-toolbar.json"
     ```
   </Tab>
   <Tab value="Manual">
@@ -50,6 +50,19 @@ import { ComponentPreview } from "@/components/component-preview";
 </Tabs>
 
 ## Usage
+
+### Customizing Content
+
+You can easily modify the available tools by updating the `primaryTools` and `secondaryTools` arrays at the top of the file:
+
+```tsx
+// Change Here
+const primaryTools = [
+  { icon: InboxIcon, label: "Inbox" },
+  { icon: Message01Icon, label: "Messages" },
+  // ...
+];
+```
 
 ```tsx
 import ExpandedToolbar from "@/components/dynamic-toolbar";

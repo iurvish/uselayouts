@@ -11,9 +11,29 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+// Change Here
+const TABS = [
+  {
+    id: "popular",
+    label: "Popular",
+    icon: Fire02Icon,
+    color: "text-red-500",
+    fill: "fill-red-500",
+    bg: "bg-red-50",
+  },
+  {
+    id: "favorites",
+    label: "Favorites",
+    icon: FavouriteIcon,
+    color: "text-gray-900",
+    fill: "fill-gray-900",
+    bg: "bg-gray-100",
+  },
+] as const;
+
 export default function DiscoverButton() {
-  const [activeTab, setActiveTab] = useState<"popular" | "favorites">(
-    "popular"
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]["id"]>(
+    TABS[0].id
   );
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
@@ -104,57 +124,37 @@ export default function DiscoverButton() {
             className={`flex items-center  whitespace-nowrap `}
           >
             <div className="flex items-center gap-2 px-[6px]">
-              {/* Popular Tab */}
-              <button
-                onClick={() => setActiveTab("popular")}
-                className={`flex items-center gap-2 px-6 py-3 rounded-[3rem] transition-colors relative ${
-                  activeTab === "popular" ? "text-red-500" : "text-gray-700"
-                }`}
-              >
-                {activeTab === "popular" && (
-                  <motion.span
-                    layoutId="bubble"
-                    className="absolute inset-0 z-0 bg-red-50"
-                    style={{ borderRadius: 9999 }}
-                    transition={{ type: "spring", bounce: 0.19, duration: 0.4 }}
-                  />
-                )}
-                <HugeiconsIcon
-                  icon={Fire02Icon}
-                  className={`w-5 h-5 relative z-10 ${
-                    activeTab === "popular" ? "fill-red-500" : ""
+              {TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-[3rem] transition-colors relative ${
+                    activeTab === tab.id ? tab.color : "text-gray-700"
                   }`}
-                />
-                <span className="font-semibold font-mono uppercase relative z-10">
-                  Popular
-                </span>
-              </button>
-
-              {/* Favorites Tab */}
-              <button
-                onClick={() => setActiveTab("favorites")}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full transition-colors relative ${
-                  activeTab === "favorites" ? "text-gray-900" : "text-gray-700"
-                }`}
-              >
-                {activeTab === "favorites" && (
-                  <motion.span
-                    layoutId="bubble"
-                    className="absolute inset-0 z-0 bg-gray-100"
-                    style={{ borderRadius: 9999 }}
-                    transition={{ type: "spring", bounce: 0.19, duration: 0.4 }}
+                >
+                  {activeTab === tab.id && (
+                    <motion.span
+                      layoutId="bubble"
+                      className={`absolute inset-0 z-0 ${tab.bg}`}
+                      style={{ borderRadius: 9999 }}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.19,
+                        duration: 0.4,
+                      }}
+                    />
+                  )}
+                  <HugeiconsIcon
+                    icon={tab.icon}
+                    className={`w-5 h-5 relative z-10 ${
+                      activeTab === tab.id ? tab.fill : ""
+                    }`}
                   />
-                )}
-                <HugeiconsIcon
-                  icon={FavouriteIcon}
-                  className={`w-5 h-5 relative z-10 ${
-                    activeTab === "favorites" ? "fill-gray-900" : ""
-                  }`}
-                />
-                <span className="font-semibold font-mono uppercase relative z-10">
-                  Favorites
-                </span>
-              </button>
+                  <span className="font-semibold font-mono uppercase relative z-10">
+                    {tab.label}
+                  </span>
+                </button>
+              ))}
             </div>
           </motion.div>
 

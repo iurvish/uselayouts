@@ -8,6 +8,7 @@ import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 
+// Change Here
 const PHOTOS = [
   {
     id: "photo-1",

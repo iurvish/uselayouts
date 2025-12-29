@@ -51,6 +51,19 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Adjust the navigation items by modifying the `TABS` array at the top of the file:
+
+```tsx
+// Change Here
+const TABS = [
+  { id: "popular", label: "Popular", icon: Fire02Icon, color: "text-red-500", ... },
+  { id: "favorites", label: "Favorites", icon: FavouriteIcon, color: "text-gray-900", ... },
+  // ...
+];
+```
+
 ```tsx
 import DiscoverButton from "@/components/discover-button";
 

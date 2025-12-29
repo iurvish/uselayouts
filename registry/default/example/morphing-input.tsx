@@ -17,6 +17,7 @@ interface PlaceholderConfig {
   icon: any;
 }
 
+// Change Here
 const placeholderOptions: PlaceholderConfig[] = [
   { id: 1, placeholder: "Search anything...", icon: SparklesIcon },
   { id: 2, placeholder: "Generate Image", icon: Album02Icon },

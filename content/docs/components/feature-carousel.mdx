@@ -51,6 +51,24 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Adjust the `FEATURES` array to change the icons, images, and descriptions:
+
+```tsx
+// Change Here
+const FEATURES = [
+  {
+    id: "sustainable",
+    label: "Sustainable Sourcing",
+    icon: Pizza04Icon,
+    image: "https://images.unsplash.com...",
+    description: "Ethically sourced ingredients.",
+  },
+  // ...
+];
+```
+
 ```tsx
 import FeatureCarousel from "@/components/feature-carousel";
 

@@ -14,6 +14,7 @@ interface Testimonial {
   textColor: string;
 }
 
+// Change Here
 const testimonials: Testimonial[] = [
   {
     id: 1,

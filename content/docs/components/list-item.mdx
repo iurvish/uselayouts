@@ -22,7 +22,7 @@ import { ComponentPreview } from "@/components/component-preview";
 <Tabs items={['CLI', 'Manual']}>
   <Tab value="CLI">
     ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/filter-interaction.json"
+    npx shadcn@latest add "https://uselayouts.com/r/list-item.json"
     ```
   </Tab>
   <Tab value="Manual">
@@ -50,6 +50,21 @@ import { ComponentPreview } from "@/components/component-preview";
 </Tabs>
 
 ## Usage
+
+### Customizing Content
+
+You can easily add or remove filter options by modifying the `filterKeys` array:
+
+```tsx
+// Change Here
+export const filterKeys = [
+  {
+    name: "tasks",
+    icon: FolderIcon,
+  },
+  // ...
+];
+```
 
 ```tsx
 import FilterInteraction from "@/components/filter-interaction";

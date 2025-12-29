@@ -51,6 +51,23 @@ import { ComponentPreview } from "@/components/component-preview";
 
 ## Usage
 
+### Customizing Content
+
+Modify the `SERVICES` array at the top of the file to add your own sections:
+
+```tsx
+// Change Here
+const SERVICES = [
+  {
+    id: "01",
+    title: "Web Design",
+    description: "Creating beautiful digital experiences.",
+    image: "https://images.unsplash.com...",
+  },
+  // ...
+];
+```
+
 ```tsx
 import VerticalTabs from "@/components/vertical-tabs";
 
