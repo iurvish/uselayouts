@@ -27,8 +27,6 @@ Replace `3d-book` with any component name from our [documentation](https://usela
 
 ## Features
 
-- **Component Registry**: Automatically generates code for your project.
-- **SEO Optimized**: Built-in support for OG images and metadata.
 - **Accessible**: Built on top of accessible primitives.
 - **Customizable**: Fully stylable with Tailwind CSS classes.
 

@@ -15,7 +15,8 @@
     "tailwind-css",
     "components",
     "ui-library",
-    "micro-interactions"
+    "micro-interactions",
+    "motion"
   ],
   "scripts": {
     "dev": "next dev",

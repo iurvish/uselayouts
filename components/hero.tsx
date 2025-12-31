@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
+
 import Image from "next/image";
 import Bucket from "./bucket";
-import { MoveRight, Github } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Header from "./header";
@@ -12,7 +11,7 @@ import {
   useTransform,
   useMotionValueEvent,
   useMotionTemplate,
-} from "framer-motion";
+} from "motion/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GithubIcon } from "@hugeicons/core-free-icons";
