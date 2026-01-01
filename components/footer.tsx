@@ -93,7 +93,7 @@ const Footer = () => {
           <div className="flex items-center gap-1 sm:gap-2 text-sm sm:text-base text-muted-foreground transition-colors whitespace-nowrap">
             <span className=" xs:inline">Built by</span>
             <Link
-              href="https://x.com/0xUrvish"
+              href="https://twitter.com/0xUrvish"
               target="_blank"
               className="font-semibold text-foreground hover:text-primary transition-colors hover:underline"
             >

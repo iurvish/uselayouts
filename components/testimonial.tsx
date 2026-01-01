@@ -146,7 +146,7 @@ export default function Testimonial() {
         </p>
         <div className="flex flex-col items-center gap-4">
           <a
-            href="https://x.com/intent/post?text=Recently%20used%20uselayouts.com%20[your%20experience]%20by%20@0xUrvish"
+            href="https://twitter.com/intent/tweet?text=Recently%20used%20uselayouts.com%20%5Byour%20experience%5D%20by%20%400xUrvish"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-3 px-6 py-3 rounded-full border border-dashed border-muted-foreground/30 bg-background hover:border-primary hover:bg-primary/5 transition-all duration-300"

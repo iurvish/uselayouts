@@ -98,7 +98,7 @@ const Header = () => {
                 </Link>
 
                 <Link
-                  href="https://x.com/0xUrvish"
+                  href="https://twitter.com/0xUrvish"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
