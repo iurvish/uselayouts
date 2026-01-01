@@ -52,22 +52,22 @@ export default function SearchDialog() {
   return (
     <>
       <button
-        className="inline-flex h-9 w-fit rounded-md border border-input bg-sidebar px-3 py-2 text-foreground text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:border-ring/50"
+        className="inline-flex h-9 w-fit max-sm:max-w-[200px] rounded-md border border-input bg-sidebar px-3 py-2 text-foreground text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:border-ring/50"
         onClick={() => setOpen(true)}
         type="button"
       >
-        <span className="flex grow items-center">
+        <span className="flex grow items-center min-w-0">
           <HugeiconsIcon
             icon={Search01Icon}
             aria-hidden="true"
-            className="-ms-1 me-3 text-muted-foreground/80"
+            className="-ms-1 me-2 sm:me-3 text-muted-foreground/80 shrink-0"
             size={16}
           />
-          <span className="font-normal text-muted-foreground/70">
+          <span className="font-normal text-muted-foreground/70 truncate whitespace-nowrap">
             Search documentation...
           </span>
         </span>
-        <kbd className="-me-1 ms-12 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit]  font-medium  text-muted-foreground/70 gap-1.5">
+        <kbd className="-me-1 ms-12 hidden sm:inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit]  font-medium  text-muted-foreground/70 gap-1.5">
           <span className="pt-0.5 text-[0.625rem]">⌘</span>{" "}
           <span className="leading-0 text-xs">K</span>
         </kbd>
