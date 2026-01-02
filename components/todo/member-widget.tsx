@@ -101,6 +101,8 @@ const containerSpring = {
   stiffness: 240,
   damping: 30,
   mass: 0.8,
+  ease: "easeInOut",
+  // duration: 0.4,
 };
 
 const sweepSpring = {
@@ -219,7 +221,7 @@ export default function MemberWidget() {
   );
 
   return (
-    <div className="flex items-center justify-center min-h-[600px] w-full bg-muted/50 p-6 font-sans">
+    <div className="flex items-center justify-center min-h-screen w-full bg-muted/50 p-6 font-sans">
       <div className="relative w-full max-w-[440px] pb-6 bg-background rounded-[40px] border border-border flex flex-col overflow-hidden shadow-none">
         <div className="flex flex-col h-full bg-background">
           <div className="p-8 pb-3">
@@ -299,7 +301,7 @@ export default function MemberWidget() {
                   Member Directory
                 </h4>
                 <p className="text-xs font-regular leading-none text-muted-foreground  mt-1">
-                  {ALL_MEMBERS.length} Registered
+                  8 Members Registered
                 </p>
               </motion.div>
             </div>
