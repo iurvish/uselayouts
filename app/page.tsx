@@ -1,9 +1,9 @@
 import Hero from "@/components/hero";
 import ProductBenefits from "@/components/product-benefits";
-import Testimonial from "@/components/testimonial";
 import Footer from "@/components/footer";
 import ExpandableGalleryDemo from "@/registry/default/demo/expandable-gallery-demo";
 import MemberWidget from "@/components/todo/member-widget";
+import { Testimonial } from "@/components/testimonial";
 
 export default function Page() {
   return (
@@ -12,7 +12,10 @@ export default function Page() {
       <ProductBenefits />
       <Testimonial />
 
+      
       <Footer /> */}
+
+      {/* <Testimonial /> */}
 
       <MemberWidget />
     </main>

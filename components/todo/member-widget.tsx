@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
 import {
@@ -153,7 +154,7 @@ const RoleBadge = ({
       className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${style.bg} ${style.text} ${style.border} shrink-0`}
     >
       <Icon size={12} strokeWidth={2.5} />
-      <span className="text-[11px] font-bold tracking-tight uppercase whitespace-nowrap">
+      <span className="text-xs font-regular tracking-tight uppercase whitespace-nowrap truncate max-w-[60px] sm:max-w-none">
         {label}
       </span>
     </div>
@@ -183,7 +184,7 @@ const MemberItem = ({ member }: { member: Member }) => (
       )}
     </div>
     <div className="flex-1 min-w-0">
-      <h3 className="text-base font-semibold text-foreground tracking-tight leading-none mb-1.5">
+      <h3 className="text-base font-semibold text-foreground tracking-tight leading-none mb-1.5 truncate">
         {member.name}
       </h3>
       <div className="flex items-center gap-1.5 opacity-80">
@@ -199,7 +200,7 @@ const MemberItem = ({ member }: { member: Member }) => (
         </p>
       </div>
     </div>
-    <div className="ml-3 shrink-0">
+    <div className=" shrink-0">
       <RoleBadge type={member.roleType} label={member.role} />
     </div>
   </motion.div>
@@ -220,9 +221,9 @@ export default function MemberWidget() {
   );
 
   return (
-    <div className="flex items-center justify-center min-h-[600px] w-full bg-slate-50/50 p-6 font-sans">
-      <div className="relative w-full max-w-[440px] h-[540px] bg-white rounded-[40px] border border-border flex flex-col overflow-hidden shadow-none">
-        <div className="flex flex-col h-full bg-white">
+    <div className="flex items-center justify-center min-h-[600px] w-full bg-muted/50 p-6 font-sans">
+      <div className="relative w-full max-w-[440px] pb-6 bg-background rounded-[40px] border border-border flex flex-col overflow-hidden shadow-none">
+        <div className="flex flex-col h-full bg-background">
           <div className="p-8 pb-3">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-foreground tracking-tight flex items-center gap-2">
@@ -277,10 +278,9 @@ export default function MemberWidget() {
             bottom: isExpanded ? "10px" : "20px",
             left: isExpanded ? "10px" : "20px",
             borderRadius: isExpanded ? "32px" : "24px",
-            backgroundColor: isExpanded ? "#ffffff" : "#fbfbfc",
           }}
           transition={containerSpring}
-          className="absolute z-50 overflow-hidden border border-border shadow-none flex flex-col group/bar"
+          className="absolute z-50 overflow-hidden border border-border shadow-none flex flex-col group/bar bg-card"
           style={{ cursor: isExpanded ? "default" : "pointer" }}
           onClick={() => !isExpanded && setIsExpanded(true)}
         >
@@ -291,7 +291,7 @@ export default function MemberWidget() {
           >
             <div className="flex items-center gap-3">
               <div
-                className={`w-11 h-11 rounded-xl bg-white border border-border flex items-center justify-center text-muted-foreground/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-transform group-hover/bar:scale-105`}
+                className={`w-11 h-11 rounded-xl bg-background border border-border flex items-center justify-center text-muted-foreground/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-transform group-hover/bar:scale-105`}
               >
                 <HugeiconsIcon icon={ProfileIcon} size={20} strokeWidth={2} />
               </div>
