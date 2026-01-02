@@ -3,6 +3,7 @@ import ProductBenefits from "@/components/product-benefits";
 import Footer from "@/components/footer";
 import ShakeTestimonial from "@/registry/default/example/shake-testimonial-card";
 import Testimonial from "@/components/empty-testimonial";
+import StackedList from "@/registry/default/example/stacked-list";
 
 export default function Page() {
   return (
@@ -13,6 +14,7 @@ export default function Page() {
       <Footer />
 
       {/* <Testimonial /> */}
+      <StackedList />
     </main>
   );
 }

@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -95,15 +94,6 @@ const ALL_MEMBERS: Member[] = [
 ];
 
 const ACTIVE_MEMBERS = ALL_MEMBERS.filter((m) => m.online);
-
-const containerSpring = {
-  type: "spring" as const,
-  stiffness: 240,
-  damping: 30,
-  mass: 0.8,
-  ease: "easeInOut",
-  // duration: 0.4,
-};
 
 const sweepSpring = {
   type: "spring" as const,
@@ -206,7 +196,7 @@ const MemberItem = ({ member }: { member: Member }) => (
   </motion.div>
 );
 
-export default function MemberWidget() {
+export default function StackedList() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -221,7 +211,7 @@ export default function MemberWidget() {
   );
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-muted/50 p-6 font-sans">
+    <div className="flex items-center justify-center min-h-screen w-full bg-muted/50 p-6 font-sans not-prose">
       <div className="relative w-full max-w-[440px] pb-6 bg-background rounded-[40px] border border-border flex flex-col overflow-hidden shadow-none">
         <div className="flex flex-col h-full bg-background">
           <div className="p-8 pb-3">
@@ -280,7 +270,13 @@ export default function MemberWidget() {
             left: isExpanded ? "10px" : "20px",
             borderRadius: isExpanded ? "32px" : "24px",
           }}
-          transition={containerSpring}
+          transition={{
+            type: "spring",
+            stiffness: 240,
+            damping: 30,
+            mass: 0.8,
+            ease: "easeInOut",
+          }}
           className="absolute z-50 overflow-hidden border border-border shadow-none flex flex-col group/bar bg-card"
           style={{ cursor: isExpanded ? "default" : "pointer" }}
           onClick={() => !isExpanded && setIsExpanded(true)}

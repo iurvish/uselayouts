@@ -374,4 +374,22 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "stacked-list": {
+    name: "stacked-list",
+    description: "An expandable list widget with a stacked layout and smooth morphing transitions.",
+    type: "registry:component",
+    registryDependencies: ["input","button"],
+    files: [{
+      path: "registry/default/example/stacked-list.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/stacked-list.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "stacked-list"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   }

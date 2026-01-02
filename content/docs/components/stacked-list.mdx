@@ -1,0 +1,98 @@
+---
+title: Stacked List
+description: An expandable list widget with a stacked layout and smooth morphing transitions.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="stacked-list" full />
+  </Tab>
+  <Tab value="Code">
+    <SourceCode name="stacked-list" />
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/stacked-list.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion @hugeicons/react @hugeicons/core-free-icons
+        ```
+      </Step>
+      <Step>
+        ### Install shadcn components
+
+        ```bash
+        npx shadcn@latest add input button
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/stacked-list.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Customizing Content
+
+The component is designed to be highly flexible. You can represent any type of list (members, files, projects, etc.) by updating the `ALL_MEMBERS` array:
+
+```tsx
+// Change Here
+const ALL_MEMBERS = [
+  {
+    id: "01",
+    name: "Oliver Smith",
+    status: "Online",
+    online: true,
+    role: "Project Manager",
+    roleType: "pm",
+    avatar: "https://...",
+  },
+  // ... add more members
+];
+```
+
+The component automatically filters `ACTIVE_MEMBERS` for the primary view and uses `ALL_MEMBERS` for the expandable list view.
+
+```tsx
+import StackedList from "@/components/stacked-list";
+
+export default function Page() {
+  return <StackedList />;
+}
+```
+
+## Features
+
+- **Stacked Layout**: A unique interaction where a secondary directory "morphs" out from the bottom of the main view.
+- **Micro-animations**: Staggered entry animations for list items and smooth layout transitions using Framer Motion.
+- **Searchable**: Integrated search functionality in both the expanded and collapsed states.
+- **Categorization**: Support for different item categories with custom badges and icons.
+- **Responsive Design**: Handles long text and varying screen sizes with elegant truncations and flexible layouts.
+- **Interactive UI**: Hover states, active indicators, and satisfying spring-based animations.

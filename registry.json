@@ -400,6 +400,26 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "stacked-list",
+      "type": "registry:component",
+      "title": "Stacked List",
+      "description": "An expandable list widget with a stacked layout and smooth morphing transitions.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["input", "button"],
+      "files": [
+        {
+          "path": "registry/default/example/stacked-list.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }
