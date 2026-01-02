@@ -3,15 +3,18 @@ import ProductBenefits from "@/components/product-benefits";
 import Testimonial from "@/components/testimonial";
 import Footer from "@/components/footer";
 import ExpandableGalleryDemo from "@/registry/default/demo/expandable-gallery-demo";
+import MemberWidget from "@/components/todo/member-widget";
 
 export default function Page() {
   return (
     <main className="min-h-screen light bg-white font-[family-name:var(--font-geist-sans)]">
-      <Hero />
+      {/* <Hero />
       <ProductBenefits />
       <Testimonial />
 
-      <Footer />
+      <Footer /> */}
+
+      <MemberWidget />
     </main>
   );
 }
