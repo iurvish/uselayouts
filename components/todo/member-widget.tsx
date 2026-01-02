@@ -3,22 +3,20 @@
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
-import {
-  Search,
-  Users,
-  Circle,
-  X,
-  Plus,
-  Briefcase,
-  Palette,
-  Database,
-  PenTool,
-} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ProfileIcon } from "@hugeicons/core-free-icons";
+import {
+  ProfileIcon,
+  Search01Icon,
+  Cancel01Icon,
+  Add01Icon,
+  Briefcase01Icon,
+  PaintBoardIcon,
+  Database01Icon,
+  QuillWrite01Icon,
+} from "@hugeicons/core-free-icons";
 
 interface Member {
   id: string;
@@ -124,25 +122,25 @@ const RoleBadge = ({
       bg: "bg-[#FFFCEB]",
       text: "text-[#856404]",
       border: "border-[#FFEBA5]",
-      icon: Briefcase,
+      icon: Briefcase01Icon,
     },
     designer: {
       bg: "bg-[#F0F7FF]",
       text: "text-[#004085]",
       border: "border-[#B8DAFF]",
-      icon: Palette,
+      icon: PaintBoardIcon,
     },
     data: {
       bg: "bg-[#F3FAF4]",
       text: "text-[#155724]",
       border: "border-[#C3E6CB]",
-      icon: Database,
+      icon: Database01Icon,
     },
     creator: {
       bg: "bg-[#FCF5FF]",
       text: "text-[#522785]",
       border: "border-[#E8D1FF]",
-      icon: PenTool,
+      icon: QuillWrite01Icon,
     },
   };
 
@@ -153,7 +151,7 @@ const RoleBadge = ({
     <div
       className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${style.bg} ${style.text} ${style.border} shrink-0`}
     >
-      <Icon size={12} strokeWidth={2.5} />
+      <HugeiconsIcon icon={Icon} size={12} strokeWidth={1.8} />
       <span className="text-xs font-regular tracking-tight uppercase whitespace-nowrap truncate max-w-[60px] sm:max-w-none">
         {label}
       </span>
@@ -237,12 +235,13 @@ export default function MemberWidget() {
                 size="icon"
                 className="h-9 w-9 rounded-full border-border/50 text-muted-foreground hover:bg-muted/50"
               >
-                <Plus size={18} strokeWidth={2.5} />
+                <HugeiconsIcon icon={Add01Icon} size={18} strokeWidth={2.5} />
               </Button>
             </div>
 
             <div className="relative mb-4">
-              <Search
+              <HugeiconsIcon
+                icon={Search01Icon}
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 z-10"
                 size={16}
               />
@@ -335,7 +334,11 @@ export default function MemberWidget() {
                     setIsExpanded(false);
                   }}
                 >
-                  <X size={18} strokeWidth={2.5} />
+                  <HugeiconsIcon
+                    icon={Cancel01Icon}
+                    size={18}
+                    strokeWidth={2.5}
+                  />
                 </button>
               )}
             </div>
@@ -351,7 +354,8 @@ export default function MemberWidget() {
                   className="px-6 py-4"
                 >
                   <div className="relative">
-                    <Search
+                    <HugeiconsIcon
+                      icon={Search01Icon}
                       className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 z-10"
                       size={15}
                     />
