@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import {
@@ -9,11 +9,13 @@ import {
   Menu01FreeIcons,
   Menu11Icon,
   GithubIcon,
+  StarIcon,
   NewTwitterRectangleIcon,
   NewTwitterIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import GithubStarButton from "./github-button";
 
 const menuItems = [
   { name: "Components", href: "/docs/components/3d-book" },
@@ -23,6 +25,7 @@ const menuItems = [
 
 const Header = () => {
   const [menuState, setMenuState] = useState(false);
+
   return (
     <header>
       <nav
@@ -82,20 +85,8 @@ const Header = () => {
                 </ul>
               </div>
 
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
-                <Link
-                  href="https://github.com/iurvish/uselayouts"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="icon"
-                    variant={"secondary"}
-                    className="rounded-md p-1 cursor-pointer"
-                  >
-                    <HugeiconsIcon icon={GithubIcon} className="size-5" />
-                  </Button>
-                </Link>
+              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:items-center sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
+                <GithubStarButton />
 
                 <Link
                   href="https://twitter.com/0xUrvish"

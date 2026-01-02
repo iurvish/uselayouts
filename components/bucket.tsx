@@ -845,7 +845,7 @@ const Bucket = () => {
                   <motion.div
                     key={chip.id}
                     initial={{
-                      y: -100,
+                      y: isMobile ? -70 : -100,
                       opacity: 0,
                       scale: 0.8,
                       transition: {
@@ -856,7 +856,7 @@ const Bucket = () => {
                     }}
                     animate={{ y: 0, opacity: 1, scale: isMobile ? 1 : 1.25 }}
                     exit={{
-                      y: 130,
+                      y: isMobile ? 100 : 130,
                       scale: 0.8,
                       transition: {
                         duration: 0.8,

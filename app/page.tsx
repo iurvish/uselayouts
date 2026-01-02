@@ -1,8 +1,8 @@
 import Hero from "@/components/hero";
 import ProductBenefits from "@/components/product-benefits";
-import Testimonial from "@/components/testimonial";
 import Footer from "@/components/footer";
-import ExpandableGalleryDemo from "@/registry/default/demo/expandable-gallery-demo";
+import ShakeTestimonial from "@/registry/default/example/shake-testimonial-card";
+import Testimonial from "@/components/testimonial";
 
 export default function Page() {
   return (
@@ -10,7 +10,6 @@ export default function Page() {
       <Hero />
       <ProductBenefits />
       <Testimonial />
-
       <Footer />
     </main>
   );
