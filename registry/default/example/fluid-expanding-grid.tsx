@@ -39,10 +39,23 @@ const ITEMS: GalleryItem[] = [
   },
 ];
 
-export default function DynamicWidthExpand() {
-  const [layout, setLayout] = useState({
-    row1: ["grassy", "misty"],
-    row2: ["desert"],
+interface FluidExpandingGridProps {
+  items?: GalleryItem[];
+  className?: string;
+  id?: string;
+}
+
+export default function FluidExpandingGrid({
+  items = ITEMS,
+  className,
+  id = "fluid-gallery",
+}: FluidExpandingGridProps) {
+  const [layout, setLayout] = useState(() => {
+    const ids = items.map((item) => item.id);
+    return {
+      row1: ids.slice(0, 2),
+      row2: ids.slice(2, Math.min(items.length, 4)),
+    };
   });
 
   const handleExpand = (id: string) => {
@@ -59,26 +72,37 @@ export default function DynamicWidthExpand() {
       const neighbor = layout.row1.find((i) => i !== id)!;
       setLayout({
         row1: [id],
-        row2: [...layout.row2, neighbor],
+        row2: [neighbor, ...layout.row2.filter((i) => i !== neighbor)].slice(
+          0,
+          2
+        ),
       });
     } else {
       const neighbor = layout.row2.find((i) => i !== id)!;
       setLayout({
-        row1: [...layout.row1, neighbor],
+        row1: [neighbor, ...layout.row1.filter((i) => i !== neighbor)].slice(
+          0,
+          2
+        ),
         row2: [id],
       });
     }
   };
 
   return (
-    <div className="flex items-center justify-center  overflow-hidden">
+    <div
+      className={cn(
+        "w-full h-full flex items-center justify-center overflow-hidden py-12 not-prose",
+        className
+      )}
+    >
       <div className="w-full max-w-2xl px-6">
-        <LayoutGroup id="gallery-v5">
+        <LayoutGroup id={id}>
           <motion.div
             layout
-            className="grid grid-cols-2 gap-6 h-[340px] sm:h-[540px]"
+            className="grid grid-cols-2 grid-rows-2 gap-6 w-full h-[340px] sm:h-[540px]"
           >
-            {ITEMS.map((item) => {
+            {items.map((item) => {
               const isRow1 = layout.row1.includes(item.id);
               const rowArr = isRow1 ? layout.row1 : layout.row2;
               const isSelected = rowArr.length === 1 && rowArr[0] === item.id;
@@ -88,36 +112,33 @@ export default function DynamicWidthExpand() {
               if (isSelected) {
                 gridColumn = "1 / span 2";
               } else {
-                if (item.id === "grassy") gridColumn = "1";
-                else if (item.id === "misty") gridColumn = "2";
-                else {
-                  // Desert fills the remaining slot
-                  const otherInRow = rowArr.find((id) => id !== "desert");
-                  gridColumn = otherInRow === "grassy" ? "2" : "1";
+                if (isRow1) {
+                  gridColumn = layout.row1.indexOf(item.id) === 0 ? "1" : "2";
+                } else {
+                  gridColumn = layout.row2.indexOf(item.id) === 0 ? "1" : "2";
                 }
               }
 
               return (
                 <motion.div
                   key={item.id}
-                  layoutId={item.id}
+                  layoutId={`${id}-${item.id}`}
                   onClick={() => handleExpand(item.id)}
                   style={{ gridRow, gridColumn } as any}
                   className={cn(
-                    "relative cursor-pointer group",
-                    isSelected ? "z-30" : "z-50 "
+                    "relative cursor-pointer group w-full h-full",
+                    isSelected ? "z-30" : "z-10"
                   )}
                   transition={{
                     layout: {
                       type: "spring",
-                      stiffness: 85,
-                      damping: 24,
-                      mass: 1,
+                      stiffness: 100,
+                      damping: 25,
                     },
                   }}
                 >
                   <motion.div
-                    layoutId={item.id + "-mask-wrapper"}
+                    layoutId={`${id}-${item.id}-mask-wrapper`}
                     className="absolute inset-0 overflow-hidden bg-zinc-100"
                     style={{ borderRadius: 32 }}
                   >
@@ -125,17 +146,17 @@ export default function DynamicWidthExpand() {
                       src={item.image}
                       alt={item.title}
                       className={cn(
-                        "w-full h-full object-cover transition-all duration-1000 ease-in-out",
+                        "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out",
                         isSelected
                           ? "object-[center_35%]"
                           : "object-[center_50%]"
                       )}
                     />
                     <motion.div
-                      layoutId={item.id + "-mask"}
+                      layoutId={`${id}-${item.id}-mask`}
                       className={cn(
                         "absolute inset-0 transition-colors duration-700",
-                        isSelected ? "bg-black/0" : "bg-black/10"
+                        isSelected ? "bg-black/0" : "bg-black/20"
                       )}
                     />
                   </motion.div>
@@ -147,13 +168,13 @@ export default function DynamicWidthExpand() {
                     <motion.div layout="position" className="overflow-hidden">
                       <motion.h3
                         layout="position"
-                        className="text-3xl font-medium mb-1 tracking-tight"
+                        className="text-2xl sm:text-3xl font-medium mb-1 tracking-tight"
                       >
                         {item.title}
                       </motion.h3>
                       <motion.p
                         layout="position"
-                        className="text-sm text-white/80 font-normal whitespace-nowrap"
+                        className="text-xs sm:text-sm text-white/80 font-normal whitespace-nowrap"
                       >
                         {item.subtitle}
                       </motion.p>
@@ -161,16 +182,16 @@ export default function DynamicWidthExpand() {
                   </motion.div>
 
                   <motion.div
-                    layoutId={item.id + "-overlay"}
+                    layoutId={`${id}-${item.id}-overlay`}
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       borderRadius: 32,
                       background:
-                        "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 40%)",
+                        "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)",
                     }}
                   />
                   <motion.div
-                    layoutId={item.id + "-border"}
+                    layoutId={`${id}-${item.id}-border`}
                     className="absolute inset-0 border border-white/10 group-hover:border-white/20 transition-colors duration-500 pointer-events-none"
                     style={{ borderRadius: 32 }}
                   />
