@@ -14,6 +14,10 @@ const config = {
         protocol: "https",
         hostname: "tapback.co",
       },
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+      },
     ],
   },
 };
