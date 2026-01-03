@@ -1,0 +1,85 @@
+---
+title: Fluid Expanding Grid
+description: A responsive gallery grid that fluidly shifts and expands items using motion layout.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="fluid-expanding-grid" full />
+  </Tab>
+  <Tab value="Code">
+    <SourceCode name="fluid-expanding-grid" />
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/fluid-expanding-grid.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/fluid-expanding-grid.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Customizing Content
+
+You can customize the items by modifying the `ITEMS` array in the component file:
+
+```tsx
+const ITEMS = [
+  {
+    id: "grassy",
+    title: "Highlands",
+    subtitle: "Golden fields under the giant",
+    image: "https://images.unsplash.com/...",
+    color: "#84cc16",
+  },
+  // ...
+];
+```
+
+```tsx
+import FluidExpandingGrid from "@/components/fluid-expanding-grid";
+
+export default function Page() {
+  return <FluidExpandingGrid />;
+}
+```
+
+## Features
+
+- **Fluid Grid Transitions**: Items automatically shift between rows to accommodate expanded content.
+- **Responsive Layout**: Uses a smart grid system that adapts to both mobile and desktop screens.
+- **Premium Mask Effects**: Smooth image mask and background color transitions on selection.
+- **Motion-Engineered**: Leverages Framer Motion's `layout` properties for physics-based animations.
+- **High Interaction Bar**: Clean hover states and tactile click feedback.

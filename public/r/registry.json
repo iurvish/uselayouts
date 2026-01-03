@@ -420,6 +420,19 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "fluid-expanding-grid",
+      "type": "registry:component",
+      "title": "Fluid Expanding Grid",
+      "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
+      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/default/example/fluid-expanding-grid.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }
