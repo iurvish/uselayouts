@@ -55,7 +55,7 @@ const CONFIG = {
   title: "Intelligent Workflows",
   description:
     "Automatically categorize and search through your team's diverse skillsets and project phases with contextual awareness.",
-  containerHeight: "min-h-[200px] sm:min-h-[240px]",
+  containerHeight: "h-[200px] sm:h-[240px]",
   lensSize: 92,
 };
 
@@ -68,7 +68,7 @@ const MagnifiedBento = () => {
   const inverseMask = useMotionTemplate`radial-gradient(circle 30px at calc(50% + ${lensX}px - 10px) calc(50% + ${lensY}px - 10px), transparent 100%, black 100%)`;
 
   return (
-    <div className="flex items-center justify-center p-4 sm:p-6 w-full">
+    <div className="flex items-center justify-center p-4 sm:p-6 w-full not-prose">
       <div className="group relative w-full max-w-[420px] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border bg-card p-1.5 sm:p-2 shadow-2xl shadow-primary/5 transition-all duration-500 hover:shadow-primary/10 hover:-translate-y-1">
         <div
           ref={containerRef}
