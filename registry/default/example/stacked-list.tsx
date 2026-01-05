@@ -362,7 +362,6 @@ export default function StackedList() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="h-10 bg-muted/30 border-none focus-visible:ring-1 focus-visible:ring-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground/40 transition-all w-full box-border pl-10"
-                      autoFocus
                     />
                   </div>
                 </motion.div>

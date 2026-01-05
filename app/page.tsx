@@ -2,6 +2,7 @@ import Hero from "@/components/hero";
 import ProductBenefits from "@/components/product-benefits";
 import Footer from "@/components/footer";
 import { Testimonial } from "@/components/testimonial";
+import Bento2 from "@/components/todo/bento-2";
 
 export default function Page() {
   return (

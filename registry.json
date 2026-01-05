@@ -433,6 +433,25 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "magnified-bento",
+      "type": "registry:component",
+      "title": "Magnified Bento",
+      "description": "A bento card component with a draggable magnifying lens effect over scrolling chips.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/magnified-bento.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

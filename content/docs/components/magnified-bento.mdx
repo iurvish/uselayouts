@@ -1,0 +1,118 @@
+---
+title: Magnified Bento
+description: A bento card component with an interactive magnifying glass reveal effect.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="magnified-bento" size="lg" />
+  </Tab>
+  <Tab value="Code">
+    <SourceCode name="magnified-bento" />
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/magnified-bento.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion @hugeicons/react @hugeicons/core-free-icons
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/magnified-bento.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Customizing Content
+
+To change the chips, modify the `TAG_ROWS` array at the top of the component:
+
+```tsx
+// change here
+const TAG_ROWS = [
+  [
+    { id: "1", icon: Search01Icon, label: "Discovery" },
+    { id: "2", icon: UserGroupIcon, label: "Client Review" },
+    // ... add more items
+  ],
+  // ... add more rows
+];
+```
+
+### Basic Implementation
+
+```tsx
+import MagnifiedBento from "@/components/magnified-bento";
+
+export default function Page() {
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <MagnifiedBento />
+    </div>
+  );
+}
+```
+
+## Understanding the Logic
+
+This component uses a **Revealing Lens** approach where two identical layers of content move in perfect synchronization, creating a magnified visual effect visible only through a magnifying glass.
+
+### 1. The CONFIG Object
+
+At the top of the file, you'll find the `CONFIG` object. This is your primary control center:
+
+- `title`: The main heading of the bento card.
+- `description`: The subtext explaining the feature.
+- `containerHeight`: Controls how tall the chip animation area is.
+- `lensSize`: Adjusts the overall scaling of the magnifying glass SVG.
+
+### 2. The Base Layer
+
+This layer is always visible but has an **Inverse Mask** applied. The `inverseMask` makes the base chips disappear exactly where the magnifying lens is positioned, preventing any "ghosting" or overlapping with the zoomed content.
+
+### 3. The Reveal Layer
+
+Essentially a "secret" version of the chips that is only visible through the `clipPath` of the lens.
+
+- It features **larger chips** (`scale-125`).
+- It uses the **same transition duration** (25s) as the base layer to maintain perfect alignment while providing a "zoom" feel.
+
+### 4. The Lens
+
+A draggable `motion.div` that tracks `lensX` and `lensY`. These motion values are fed directly into the `clipPath` and `maskImage` templates, ensuring the magnification effect is perfectly synced with the SVG's position.
+
+## Features
+
+- **Interactive Magnification**: Draggable lens with high-fidelity reveal effects.
+- **Synchronized Layers**: Dual-layer animation that stays perfectly aligned.
+- **Glassmorphism**: Subtle highlights and shadows on the lens for realism.
+- **Infinite Scroll**: Multi-row chip animations moving in opposite directions.
+- **Easy Customization**: Centrally managed data and config objects for rapid editing.

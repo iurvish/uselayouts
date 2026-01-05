@@ -410,4 +410,22 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "magnified-bento": {
+    name: "magnified-bento",
+    description: "A bento card component with a draggable magnifying lens effect over scrolling chips.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/magnified-bento.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/magnified-bento-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "magnified-bento"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   }
