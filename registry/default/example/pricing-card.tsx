@@ -108,7 +108,7 @@ function PricingCard() {
               />
             )}
             <span className="relative z-10">Yearly</span>
-            <span className="relative z-10 bg-primary text-xs font-black px-1.5 py-0.5 rounded-full uppercase text-white tracking-tight whitespace-nowrap font-light">
+            <span className="relative z-10 bg-primary text-xs font-black px-1.5 py-0.5 rounded-full uppercase text-primary-foreground tracking-tight whitespace-nowrap font-light">
               20% OFF
             </span>
           </button>
