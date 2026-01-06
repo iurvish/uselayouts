@@ -1,6 +1,7 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
+import { Sparkles, ShieldCheck, Zap, Users } from "lucide-react";
 import {
   SecurityCheckIcon,
   ZapIcon,
@@ -9,7 +10,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useIsMobile } from "@/hooks/use-mobile";
-
 const INITIAL_CHIPS = [
   {
     id: 1,
@@ -53,7 +53,7 @@ const Bucket = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-fit relative w-full not-prose">
+    <div className="flex flex-col gap-4 items-center justify-center h-fit relative w-full">
       <div
         className="relative isolate w-full max-w-[655px]"
         style={{ aspectRatio: "655/352" }}
@@ -868,6 +868,11 @@ const Bucket = () => {
                     }}
                     className="bg-card border border-border z-10 rounded-full p-2 w-[240px] shadow-sm absolute pointer-events-auto flex items-center gap-2 origin-bottom"
                   >
+                    {/* <div className="size-8 rounded-full bg-emerald-500 shrink-0" />
+                    <div className="flex flex-col gap-1.5 w-full">
+                      <div className="h-2 w-3/4 bg-muted rounded-full" />
+                      <div className="h-2 w-1/2 bg-muted rounded-full" />
+                    </div> */}
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
                       <HugeiconsIcon icon={chip.icon} className="size-5" />
                     </div>

@@ -854,7 +854,7 @@ const BucketDemo = () => {
                         ease: [0.455, 0.03, 0.515, 0.955],
                       },
                     }}
-                    animate={{ y: 0, opacity: 1, scale: 1.1 }}
+                    animate={{ y: 0, opacity: 1, scale: isMobile ? 1 : 1.25 }}
                     exit={{
                       y: 110,
                       scale: 0.8,
@@ -866,7 +866,7 @@ const BucketDemo = () => {
                       duration: 0.5,
                       ease: [0.455, 0.03, 0.515, 0.955],
                     }}
-                    className="bg-card border border-border z-10 rounded-full p-2 w-[270px] shadow-sm absolute pointer-events-auto flex items-center gap-2 origin-bottom"
+                    className="bg-card border border-border z-10 rounded-full p-2 w-[240px] max-sm:w-[180px] shadow-sm absolute pointer-events-auto flex items-center gap-2 origin-bottom"
                   >
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
                       <HugeiconsIcon icon={chip.icon} className="size-5" />

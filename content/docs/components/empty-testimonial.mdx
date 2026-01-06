@@ -1,0 +1,97 @@
+---
+title: Empty Testimonial
+description: An interactive empty state for testimonials with a playful folder animation.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+import { Suspense } from "react";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="empty-testimonial" size="lg" />
+  </Tab>
+  <Tab value="Code">
+    <Suspense
+      fallback={
+        <div className="h-[400px] w-full animate-pulse bg-fd-muted rounded-xl" />
+      }
+    >
+      <SourceCode name="empty-testimonial" />
+    </Suspense>
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/empty-testimonial.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion lucide-react @hugeicons/react @hugeicons/core-free-icons
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/empty-testimonial.tsx`.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Basic Implementation
+
+```tsx
+import EmptyTestimonial from "@/components/empty-testimonial";
+
+export default function Page() {
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <EmptyTestimonial />
+    </div>
+  );
+}
+```
+
+## Understanding the Logic
+
+The **Empty Testimonial** component transforms a boring "no data" state into a delightful interaction.
+
+### 1. Folder Animation
+
+The core of the component is an animated file folder. When clicked, it uses Framer Motion to "open" the folder by rotating the front flap and revealing the "pages" inside.
+
+### 2. Spring Physics
+
+The pages inside the folder (represented by `motion.div`) use spring animations to slide out and spread apart. This gives the interaction a natural, tactile feel.
+
+### 3. SVG Detailing
+
+The folder's front flap is a custom SVG path designed to look like a physical folder tab. It includes procedural detailing like "rivets" (the small circles) and a label slot.
+
+### 4. Interactive Call to Action
+
+The component includes a magnetic-like hover effect on the "Wall of Love" heading and a clear, styled link to encourage users to add the first testimonial.
+
+## Features
+
+- **Micro-interactions**: Hover effects on the title and a satisfying click interaction on the folder.
+- **Spring Animations**: Uses `type: "spring"` for all movements to ensure a high-quality feel.
+- **Responsive Design**: Carefully sized to fit well on both mobile and desktop layouts.
+- **Custom SVG Assets**: Hand-crafted SVG paths for the folder interaction.
+- **Theming Support**: Uses Tailwind CSS colors (`primary`, `foreground`, `muted-foreground`) to integrate seamlessly with your existing theme.

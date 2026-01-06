@@ -445,18 +445,6 @@
       ]
     },
     {
-      "name": "bucket-demo",
-      "type": "registry:component",
-      "title": "Bucket Demo",
-      "description": "Bucket component demo.",
-      "files": [
-        {
-          "path": "registry/default/demo/bucket-demo.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "fluid-expanding-grid",
       "type": "registry:component",
       "title": "Fluid Expanding Grid",
@@ -484,6 +472,25 @@
       "files": [
         {
           "path": "registry/default/example/magnified-bento.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "empty-testimonial",
+      "type": "registry:component",
+      "title": "Empty Testimonial",
+      "description": "An interactive empty state for testimonials with a playful folder animation.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/empty-testimonial.tsx",
           "type": "registry:component"
         }
       ]
