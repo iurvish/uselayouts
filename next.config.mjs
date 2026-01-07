@@ -24,6 +24,14 @@ const config = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/docs/:path*.md",
+        destination: "/llm/:path*",
+      },
+    ];
+  },
 };
 
 const withMDX = createMDX({
