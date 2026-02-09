@@ -18,7 +18,7 @@ import { GithubIcon } from "@hugeicons/core-free-icons";
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
 
   const insetVal = useTransform(scrollY, [0, 300], isMobile ? [8, 0] : [14, 0]);
   const bottomInsetVal = useTransform(

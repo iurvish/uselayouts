@@ -40,7 +40,7 @@ const INITIAL_CHIPS = [
 const Bucket = () => {
   const [items, setItems] = useState(INITIAL_CHIPS);
 
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
   useEffect(() => {
     const interval = setInterval(() => {
       setItems((prev) => {
