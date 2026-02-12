@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 
 const registry = JSON.parse(
-  await fs.readFile(path.join(process.cwd(), "registry.json"), "utf8")
+  await fs.readFile(path.join(process.cwd(), "registry.json"), "utf8"),
 );
 
 async function buildRegistryIndex() {
@@ -94,60 +94,26 @@ export const Index: Record<string, any> = {`;
 //   )
 // }
 
-// async function buildRegistry() {
-//   return new Promise((resolve, reject) => {
-//     // Use local shadcn copy.
-//     // const process = exec(
-//     //   `node ../../packages/shadcn/dist/index.js build registry.json --output ../www/public/r/styles/default`
-//     // )
+async function buildRegistry() {
+  return new Promise((resolve, reject) => {
+    const process = exec(`bun x shadcn build registry.json --output public/r`);
 
-//     const process = exec(
-//       `pnpm dlx shadcn build registry.json --output public/r/styles/default`
-//     )
-
-//     process.on("exit", (code) => {
-//       if (code === 0) {
-//         resolve(undefined)
-//       } else {
-//         reject(new Error(`Process exited with code ${code}`))
-//       }
-//     })
-//   })
-// }
-
-// async function syncRegistry() {
-//   // Store the current registry content
-//   const registryDir = path.join(process.cwd(), "registry")
-//   const registryIndexPath = path.join(registryDir, "__index__.tsx")
-//   let registryContent = null
-
-//   try {
-//     registryContent = await fs.readFile(registryIndexPath, "utf8")
-//   } catch {
-//     // File might not exist yet, that's ok
-//   }
-
-//   // 1. The public/r directory is already in the correct location
-//   // No need to copy since we're already in the www directory
-
-//   // 2. Restore the registry content if we had it
-//   if (registryContent) {
-//     await fs.writeFile(registryIndexPath, registryContent, "utf8")
-//   }
-// }
+    process.on("exit", (code) => {
+      if (code === 0) {
+        resolve(undefined);
+      } else {
+        reject(new Error(`Process exited with code ${code}`));
+      }
+    });
+  });
+}
 
 try {
   console.log("🗂️ Building registry/__index__.tsx...");
   await buildRegistryIndex();
 
-  // console.log("💅 Building registry.json...")
-  // await buildRegistryJsonFile()
-
-  // console.log("🏗️ Building registry...")
-  // await buildRegistry()
-
-  // console.log("🔄 Syncing registry...")
-  // await syncRegistry()
+  console.log("🏗️ Building registry...");
+  await buildRegistry();
 } catch (error) {
   console.error(error);
   process.exit(1);

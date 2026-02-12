@@ -71,7 +71,7 @@ export function DocsPage({ toc = [], ...props }: DocsPageProps) {
 
 export function DocsBody(props: ComponentProps<"div">) {
   return (
-    <div {...props} className={cn("prose", props.className)}>
+    <div {...props} className={cn("", props.className)}>
       {props.children}
     </div>
   );
@@ -108,7 +108,7 @@ function TocItem({ item }: { item: TOCItemType }) {
       href={item.url}
       className={cn(
         "text-sm text-fd-muted-foreground py-1.5 px-2 rounded-md transition-colors hover:text-fd-foreground",
-        isActive && "text-fd-primary font-medium bg-fd-primary/5"
+        isActive && "text-fd-primary font-medium bg-fd-primary/5",
       )}
       style={{
         paddingLeft: Math.max(8, (item.depth - 2) * 16 + 8),

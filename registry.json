@@ -458,6 +458,25 @@
       ]
     },
     {
+      "name": "bento-card",
+      "type": "registry:component",
+      "title": "Bento Card",
+      "description": "An interactive bento card with animated tabs and workspace preview.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/bento-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "magnified-bento",
       "type": "registry:component",
       "title": "Magnified Bento",

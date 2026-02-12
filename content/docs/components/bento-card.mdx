@@ -1,0 +1,82 @@
+---
+title: Bento Card
+description: An interactive bento card with animated tabs and workspace preview.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { SourceCode } from "@/components/source-code";
+import { ComponentPreview } from "@/components/component-preview";
+
+import { Suspense } from "react";
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <ComponentPreview name="bento-card" size="lg" />
+  </Tab>
+  <Tab value="Code">
+    <Suspense
+      fallback={
+        <div className="h-[400px] w-full animate-pulse bg-fd-muted rounded-xl" />
+      }
+    >
+      <SourceCode name="bento-card" />
+    </Suspense>
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">
+    ```bash
+    npx shadcn@latest add "https://uselayouts.com/r/bento-card.json"
+    ```
+  </Tab>
+  <Tab value="Manual">
+    <Steps>
+      <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion @hugeicons/react @hugeicons/core-free-icons
+        ```
+      </Step>
+      <Step>
+        ### Copy the code
+
+        Copy the code from the **Code** tab above into `components/bento-card.tsx`.
+      </Step>
+      <Step>
+        ### Update imports
+
+        Update the imports to match your project structure.
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Basic Implementation
+
+```tsx
+import BentoCard from "@/components/bento-card";
+
+export default function Page() {
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <BentoCard />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Interactive Tabs**: Smooth switching between different dashboard views.
+- **Micro-animations**: Subtle layout transitions and hover effects using Framer Motion.
+- **Glassmorphism**: Elegant use of blur and borders for a premium feel.
+- **Responsive Design**: Adapts beautifully to different screen sizes.
+- **Clean API**: Easy to customize tabs and content.
