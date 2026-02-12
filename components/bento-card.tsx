@@ -96,9 +96,9 @@ const BentoCard = () => {
         </div>
 
         <div className="relative w-full h-[260px] sm:h-[300px] overflow-hidden rounded-2xl sm:rounded-[2rem] ">
-          <div className="absolute top-16 left-18 w-full h-full bg-muted rounded-3xl border border-border/50 opacity-80" />
+          <div className="absolute top-16 left-16 w-full h-full bg-muted rounded-3xl border border-border/50  opacity-80" />
 
-          <div className="absolute top-8 left-24 w-full h-full bg-background rounded-tl-3xl border-t border-l border-border/70 shadow-xl flex flex-col overflow-hidden ">
+          <div className="absolute top-8 left-24 w-full h-full bg-background rounded-tl-3xl shadow-xl flex flex-col overflow-hidden ring-6 ring-border">
             <div className="px-5 py-4 rounded-tl-3xl border-b border-border/70 flex items-center relative backdrop-blur-sm">
               <div className="flex gap-1.5">
                 <div className="w-2 h-2 rounded-full bg-muted-foreground/20" />
