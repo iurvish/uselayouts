@@ -385,10 +385,6 @@ const ThreadsDashboard = () => (
             <HugeiconsIcon icon={Add01Icon} size={8} strokeWidth={3} />
             Create
           </button>
-
-          <div className="absolute right-0 top-0 opacity-[0.03] group-hover:opacity-[0.08] group-hover:translate-x-1 transition-all duration-500">
-            <HugeiconsIcon icon={card.icon} size={48} />
-          </div>
         </div>
       ))}
     </div>

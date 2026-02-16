@@ -26,6 +26,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 export default function SearchDialog() {
   const [open, setOpen] = React.useState(false);
@@ -52,7 +53,7 @@ export default function SearchDialog() {
   return (
     <>
       <button
-        className="inline-flex h-9 w-fit max-sm:max-w-[200px] rounded-md border border-input bg-sidebar px-3 py-2 text-foreground text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:border-ring/50"
+        className="inline-flex h-9 w-fit max-sm:max-w-[200px] rounded-md border border-input bg-sidebar px-3 py-2 text-foreground text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:border-ring/50 "
         onClick={() => setOpen(true)}
         type="button"
       >
@@ -72,7 +73,11 @@ export default function SearchDialog() {
           <span className="leading-0 text-xs">K</span>
         </kbd>
       </button>
-      <CommandDialog onOpenChange={setOpen} open={open}>
+      <CommandDialog
+        onOpenChange={setOpen}
+        open={open}
+        className="sm:max-w-xl! data-open:animate-none! data-closed:animate-none! duration-0!"
+      >
         <CommandInput
           placeholder="Type a command or search..."
           value={search}
@@ -81,9 +86,9 @@ export default function SearchDialog() {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
 
-          {search === "" && (
+          {/* {search === "" && (
             <>
-              {/* <CommandGroup heading="Quick start">
+              <CommandGroup heading="Quick start">
                 <CommandItem onSelect={() => console.log("New folder")}>
                   <HugeiconsIcon
                     icon={FolderAddIcon}
@@ -150,37 +155,46 @@ export default function SearchDialog() {
                   />
                   <span>Go to connections</span>
                 </CommandItem>
-              </CommandGroup> */}
+              </CommandGroup>
             </>
-          )}
+          )} */}
 
           {search !== "" && query.data !== "empty" && query.data && (
-            <CommandGroup heading="Documentation">
+            <CommandGroup heading="Results">
               {query.data.map((item) => (
                 <CommandItem
                   key={item.id}
                   onSelect={() => onSelect(item.url)}
                   value={item.id}
                 >
-                  <HugeiconsIcon
-                    icon={
+                  <div
+                    className={cn(
+                      "flex items-center justify-center rounded-md size-8 shrink-0",
                       item.type === "page"
-                        ? File01Icon
+                        ? "bg-primary/10 text-primary"
                         : item.type === "heading"
-                        ? Heading01Icon
-                        : TextIcon
-                    }
-                    aria-hidden="true"
-                    className="opacity-60"
-                    size={16}
-                  />
-                  <div className="flex flex-col">
-                    <span>{item.content}</span>
-                    {item.type !== "page" && (
-                      <span className="text-xs text-muted-foreground">
-                        {item.breadcrumbs
-                          ? item.breadcrumbs.join(" > ")
-                          : item.url}
+                          ? "bg-blue-500/10 text-blue-500"
+                          : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    <HugeiconsIcon
+                      icon={
+                        item.type === "page"
+                          ? File01Icon
+                          : item.type === "heading"
+                            ? Heading01Icon
+                            : TextIcon
+                      }
+                      aria-hidden="true"
+                      size={16}
+                      className="opacity-60"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="truncate font-medium">{item.content}</span>
+                    {item.breadcrumbs && item.breadcrumbs.length > 0 && (
+                      <span className="text-xs text-muted-foreground truncate">
+                        {item.breadcrumbs.join(" › ")}
                       </span>
                     )}
                   </div>
