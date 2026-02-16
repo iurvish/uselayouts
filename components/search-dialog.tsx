@@ -167,8 +167,8 @@ export default function SearchDialog() {
                       item.type === "page"
                         ? File01Icon
                         : item.type === "heading"
-                        ? Heading01Icon
-                        : TextIcon
+                          ? Heading01Icon
+                          : TextIcon
                     }
                     aria-hidden="true"
                     className="opacity-60"
