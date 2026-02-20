@@ -10,9 +10,10 @@ import { cn } from "../../../lib/cn";
 import { useTreeContext } from "fumadocs-ui/contexts/tree";
 import { Link, usePathname } from "fumadocs-core/framework";
 import type * as PageTree from "fumadocs-core/page-tree";
-import { InlineTOC } from "@/components/inline-toc";
+import { InlineTOC } from "@/components/mdx/inline-toc";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { DocsTableOfContents } from "@/components/mdx/table-of-content";
 
 export interface DocsPageProps {
   toc?: TOCItemType[];
@@ -44,7 +45,7 @@ function StickyTOC({ toc }: { toc: TOCItemType[] }) {
 export function DocsPage({ toc = [], ...props }: DocsPageProps) {
   return (
     <AnchorProvider toc={toc}>
-      {toc.length > 0 && (
+      {/* {toc.length > 0 && (
         <div className="sticky top-14 shrink-0 h-[calc(100dvh-3.5rem)] pt-8 pb-4 pr-4 overflow-y-auto max-xl:hidden xl:order-last">
           <p className="text-sm text-fd-muted-foreground mb-2 px-2">
             On this page
@@ -55,7 +56,8 @@ export function DocsPage({ toc = [], ...props }: DocsPageProps) {
             ))}
           </div>
         </div>
-      )}
+      )} */}
+      {/* <DocsTableOfContents toc={doc.toc} /> */}
       <div className="flex flex-1 flex-col min-w-0">
         <StickyTOC toc={toc} />
         <main className="flex w-full min-w-0 flex-col flex-1">
