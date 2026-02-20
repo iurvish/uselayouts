@@ -3,6 +3,11 @@
 **A micro-interaction UI library for professionals.**
 
 [uselayouts](https://uselayouts.com) provides free premium animated React components and micro-interactions built with Framer Motion and Tailwind CSS. Designed to integrate seamlessly with Shadcn UI, it helps you bring your interfaces to life with ease.
+<br />
+<br />
+<a href="https://vercel.com/oss">
+  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" />
+</a>
 
 ![uselayouts Banner](https://uselayouts.com/og.png)
 
