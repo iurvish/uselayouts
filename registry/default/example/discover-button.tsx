@@ -38,7 +38,7 @@ export default function DiscoverButton() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   return (
-    <div className="flex items-center gap-3 p-2 h-full ">
+    <div className=" flex  flex-col md:flex-row items-center gap-3 p-2 h-full ">
       {/* Search Button / Input */}
       <motion.div
         layout
@@ -49,7 +49,7 @@ export default function DiscoverButton() {
           mass: 1.2,
         }}
         onClick={() => !isSearchExpanded && setIsSearchExpanded(true)}
-        className={`flex items-center bg-white rounded-[3rem] shadow-lg cursor-pointer h-[60px] overflow-hidden relative px-[1.125rem]     ${
+        className={`flex items-center bg-white rounded-[3rem] shadow-lg cursor-pointer h-[60px] overflow-hidden relative px-[1.125rem]  py-2   ${
           isSearchExpanded ? "flex-1" : ""
         }`}
       >
@@ -94,7 +94,7 @@ export default function DiscoverButton() {
           stiffness: 230,
           mass: 1.2,
         }}
-        className={`flex items-center bg-white rounded-[3rem] shadow-lg h-[60px] overflow-hidden relative `}
+        className={`flex  items-center bg-white rounded-[20px] md:rounded-[3rem] shadow-lg ${isSearchExpanded ? `h-[60px]` : `h-[120px]` } md:h-[60px] overflow-hidden relative`}
       >
         {/* Wrapper to control clipping - clips from right side */}
         <motion.div
@@ -108,7 +108,7 @@ export default function DiscoverButton() {
             stiffness: 230,
             mass: 1.2,
           }}
-          className="overflow-hidden relative h-full flex items-center"
+          className="overflow-hidden relative h-full flex  items-center"
         >
           {/* Tabs Group - stays in place, gets clipped */}
           <motion.div
@@ -121,22 +121,22 @@ export default function DiscoverButton() {
             transition={{
               duration: 0.2,
             }}
-            className={`flex items-center  whitespace-nowrap `}
+            className={` flex   items-center  whitespace-nowrap `}
           >
-            <div className="flex items-center gap-2 px-[6px]">
+            <div className="flex flex-col md:flex-row items-center gap-2 px-2  md:px-[6px]">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-[3rem] transition-colors relative ${
+                  className={`flex  items-center gap-2 w-full  px-7 md:px-6 py-3 rounded-2xl  md:rounded-[3rem] transition-colors relative ${
                     activeTab === tab.id ? tab.color : "text-gray-700"
                   }`}
                 >
                   {activeTab === tab.id && (
                     <motion.span
                       layoutId="bubble"
-                      className={`absolute inset-0 z-0 ${tab.bg}`}
-                      style={{ borderRadius: 9999 }}
+                      className={`absolute inset-0 z-0 ${tab.bg} rounded-[12px] md:rounded-[9999]`}
+                      // style={{ borderRadius: 9999 }}
                       transition={{
                         type: "spring",
                         bounce: 0.19,
@@ -168,7 +168,7 @@ export default function DiscoverButton() {
             transition={{
               duration: 0.2,
             }}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute  inset-0 flex items-center justify-center"
             style={{ pointerEvents: isSearchExpanded ? "auto" : "none" }}
           >
             <button
