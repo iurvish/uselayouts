@@ -105,7 +105,7 @@ const BottomMenu = () => {
 
       case "search":
         return (
-          <div className="space-y-2 min-w-[270px] p-[8px] py-1">
+          <div className="space-y-2 w-[240px] md:min-w-[270px] p-[8px] py-1">
             <div className="relative">
               <HugeiconsIcon
                 icon={Search01Icon}
@@ -150,7 +150,7 @@ const BottomMenu = () => {
 
       case "profile":
         return (
-          <div className="space-y-0.5 min-w-[230px] p-[6px] py-0.5">
+          <div className="space-y-0.5 w-[200px] md:min-w-[230px] p-[6px] py-0.5">
             {PROFILE_LINKS.map((t) => (
               <button key={t} className={sharedHover}>
                 <span className="transition-all duration-75">{t}</span>
@@ -165,7 +165,7 @@ const BottomMenu = () => {
 
       case "theme":
         return (
-          <div className="flex items-center justify-between gap-1.5 min-w-[270px] p-[6px] py-0.5">
+          <div className="flex items-center flex-col md:flex-row justify-between gap-1.5 w-[240px] md:min-w-[295px]  md:p-[6px] py-0.5">
             {THEME_OPTIONS.map(({ key, icon: Icon, text }) => (
               <button
                 key={key}
@@ -287,18 +287,18 @@ const BottomMenu = () => {
       </AnimatePresence>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-1 bg-background/95 backdrop-blur-xl border border-border rounded-[18px] p-1 mt-3 z-10">
+      <div className="flex  items-center gap-1 bg-background/95 backdrop-blur-xl border border-border rounded-[18px] p-1 mt-3 z-10">
         {MAIN_NAV.map(({ icon: Icon, name }) => (
           <button
             key={name}
-            className={`p-3 rounded-[16px] transition-all ${
+            className={`p-3  rounded-[16px] transition-all ${
               view === name ? "bg-accent" : "hover:bg-muted"
             }`}
             onClick={() => setView(view === name ? "default" : (name as any))}
           >
             <HugeiconsIcon
+            
               icon={Icon}
-              size={22}
               className={`transition-all ${
                 view === name ? "text-foreground" : "text-muted-foreground"
               }`}
