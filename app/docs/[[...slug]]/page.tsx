@@ -20,8 +20,8 @@ export default async function Page(props: {
     <div className="relative px-4 flex sm:mt-0">
       <div className="flex flex-col py-12 pb-32">
         <div className="flex flex-row items-start gap-4">
-          <div className="flex flex-1 flex-col gap-1">
-            <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight xl:text-4xl">
+          <div className="flex flex-1 flex-col gap-2">
+            <h1 className=" text-3xl font-semibold tracking-tight xl:text-4xl">
               {doc.title}
             </h1>
             {doc.description && (
@@ -31,7 +31,7 @@ export default async function Page(props: {
             )}
           </div>
         </div>
-        <div className="text-primary/80 mt-8 w-full flex-1 text-[14px] *:data-[slot=alert]:first:mt-0">
+        <div className="text-primary/80 mt-8 w-full flex-1 text-[14px] *:data-[slot=alert]:first:mt-0 prose">
           <MDX components={{ ...defaultMdxComponents }} />
         </div>
         <div className="mt-20 flex flex-col gap-8">
