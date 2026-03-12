@@ -32,6 +32,7 @@ interface PathData {
   path: string;
   totalLength: number;
   itemCenterDistances: number[];
+  itemPositions: { x: number; y: number }[];
 }
 
 function getXForDepth(depth: number, minDepth: number): number {
@@ -52,11 +53,18 @@ function getItemCenterY(index: number): number {
 }
 
 function generatePathData(toc: TocItem[]): PathData {
-  if (toc.length === 0) return { path: "", totalLength: 0, itemCenterDistances: [] };
+  if (toc.length === 0)
+    return {
+      path: "",
+      totalLength: 0,
+      itemCenterDistances: [],
+      itemPositions: [],
+    };
 
   const minDepth = Math.min(...toc.map((item) => item.depth));
   const pathParts: string[] = [];
   const itemCenterDistances: number[] = [];
+  const itemPositions: { x: number; y: number }[] = [];
 
   let currentX = getXForDepth(toc[0].depth, minDepth);
   let currentY = INITIAL_OFFSET - STARTING_MARGIN;
@@ -70,8 +78,14 @@ function generatePathData(toc: TocItem[]): PathData {
     const nextItem = toc[i + 1];
 
     const itemCenterY = getItemCenterY(i);
+    // record position at center of item for circle rendering
+    const itemX = getXForDepth(toc[i].depth, minDepth);
+    itemPositions.push({ x: itemX, y: itemCenterY + 4 });
+
     const distanceToCenter = itemCenterY - currentY;
-    itemCenterDistances.push(accumulatedLength + distanceToCenter + CENTER_OFFSET);
+    itemCenterDistances.push(
+      accumulatedLength + distanceToCenter + CENTER_OFFSET,
+    );
 
     const verticalLength = rowBottomY - currentY;
     accumulatedLength += verticalLength;
@@ -91,20 +105,34 @@ function generatePathData(toc: TocItem[]): PathData {
     }
   }
 
-  return { path: pathParts.join(" "), totalLength: accumulatedLength, itemCenterDistances };
+  return {
+    path: pathParts.join(" "),
+    totalLength: accumulatedLength,
+    itemCenterDistances,
+    itemPositions,
+  };
 }
 
 function usePathData(toc: TocItem[]) {
   return React.useMemo(() => generatePathData(toc), [toc]);
 }
 
-function getActiveDistance(activeIndex: number, itemCenterDistances: number[]): number {
-  const isValidIndex = activeIndex >= 0 && activeIndex < itemCenterDistances.length;
+function getActiveDistance(
+  activeIndex: number,
+  itemCenterDistances: number[],
+): number {
+  const isValidIndex =
+    activeIndex >= 0 && activeIndex < itemCenterDistances.length;
   return isValidIndex ? itemCenterDistances[activeIndex] : 0;
 }
 
-export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps) {
-  const { path, totalLength, itemCenterDistances } = usePathData(toc);
+export function TocIndicator({
+  toc,
+  activeIndex,
+  className,
+}: TocIndicatorProps) {
+  const { path, totalLength, itemCenterDistances, itemPositions } =
+    usePathData(toc);
 
   const activeDistance = getActiveDistance(activeIndex, itemCenterDistances);
   const isActive = activeDistance > 0;
@@ -115,12 +143,18 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
     animatedDistance.set(activeDistance);
   }, [activeDistance, animatedDistance]);
 
-  const progress = useTransform(animatedDistance, [0, totalLength || 1], [0, 1]);
+  const progress = useTransform(
+    animatedDistance,
+    [0, totalLength || 1],
+    [0, 1],
+  );
   const offsetDistancePercent = useTransform(progress, (v) => `${v * 100}%`);
 
   const startY = INITIAL_OFFSET - STARTING_MARGIN;
   const gradientY2 = useTransform(animatedDistance, (v) => startY + v);
-  const gradientY1 = useTransform(gradientY2, (y2) => Math.max(0, y2 - GRADIENT_HEIGHT));
+  const gradientY1 = useTransform(gradientY2, (y2) =>
+    Math.max(0, y2 - GRADIENT_HEIGHT),
+  );
 
   const cssOffsetPath = `path('${path}')`;
 
@@ -130,11 +164,14 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
         maskImage:
           "linear-gradient(to bottom, transparent 0px, currentColor 15px, currentColor 100%)",
       }}
-      className={cn("text-path pointer-events-none absolute h-full w-full", className)}
+      className={cn(
+        "text-ring pointer-events-none absolute h-full w-full",
+        className,
+      )}
     >
       <svg className="h-full w-full" overflow="visible">
         <defs>
-          <marker
+          {/* <marker
             id="toc-end-circle"
             markerWidth="6"
             markerHeight="6"
@@ -143,7 +180,7 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
             orient="auto"
           >
             <circle cx="3" cy="3" r="2" fill="currentColor" />
-          </marker>
+          </marker> */}
           <motion.linearGradient
             id="toc-progress-gradient"
             gradientUnits="userSpaceOnUse"
@@ -153,7 +190,7 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
             y2={gradientY2}
           >
             <stop offset="0%" stopColor="var(--primary)" stopOpacity="0" />
-            <stop offset="100%" stopColor="var(--primary)" stopOpacity="1" />
+            <stop offset="70%" stopColor="var(--primary)" stopOpacity="1" />
           </motion.linearGradient>
           <mask id="toc-mask">
             <motion.path
@@ -186,7 +223,13 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
           markerEnd="url(#toc-end-circle)"
         />
         {/* Solid path that is revealed by the mask */}
-        <path d={path} stroke="currentColor" strokeWidth="1" fill="none" mask="url(#toc-mask)" />
+        <path
+          d={path}
+          stroke="currentColor"
+          strokeWidth="1"
+          fill="none"
+          mask="url(#toc-mask)"
+        />
 
         <motion.path
           d={path}
@@ -195,13 +238,50 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
           fill="none"
           style={{ pathLength: progress }}
         />
+        {/* circles at each item position */}
+        {itemPositions.map((pos, idx) => {
+          const isActiveItem = idx === activeIndex;
+          const isCovered = idx < activeIndex;
+          const isUpcoming = idx > activeIndex;
+          const isLast = idx === toc.length - 1;
+          // skip drawing a circle for the active item (airplane will be shown instead)
+          if (isActiveItem) return null;
+          let fillColor = "currentColor";
+          let strokeColor: string | undefined = undefined;
+          let strokeWidth = 0;
+
+          if (isUpcoming) {
+            fillColor = "var(--primary-foreground)";
+            strokeColor = "currentColor";
+            strokeWidth = 1;
+          }
+          if (isCovered) {
+            fillColor = "var(--primary)";
+          }
+          if (isLast) {
+            // last item receives primary color fill
+            fillColor = "var(--primary)";
+          }
+
+          return (
+            <circle
+              key={idx}
+              cx={pos.x}
+              cy={pos.y}
+              r={3}
+              fill={fillColor}
+              stroke={strokeColor}
+              strokeWidth={strokeWidth}
+            />
+          );
+        })}
       </svg>
       <motion.div
         className="absolute top-0 left-0"
         style={{
           offsetPath: cssOffsetPath,
           offsetRotate: "0deg",
-          marginLeft: 0.2,
+          marginLeft: 0,
           marginTop: -3,
           offsetDistance: offsetDistancePercent,
           opacity: isActive ? 1 : 0,
@@ -222,7 +302,12 @@ export function TocIndicator({ toc, activeIndex, className }: TocIndicatorProps)
           </g>
           <defs>
             <clipPath id="clip0_78_315">
-              <rect width="16" height="16" fill="white" transform="matrix(1 0 0 -1 0 16)" />
+              <rect
+                width="16"
+                height="16"
+                fill="white"
+                transform="matrix(1 0 0 -1 0 16)"
+              />
             </clipPath>
           </defs>
         </svg>
