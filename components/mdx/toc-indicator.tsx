@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useSpring, useTransform } from "motion/react";
+import { motion, useSpring, useTransform, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
@@ -80,7 +80,7 @@ function generatePathData(toc: TocItem[]): PathData {
     const itemCenterY = getItemCenterY(i);
     // record position at center of item for circle rendering
     const itemX = getXForDepth(toc[i].depth, minDepth);
-    itemPositions.push({ x: itemX, y: itemCenterY + 4 });
+    itemPositions.push({ x: itemX, y: itemCenterY + 3.9 });
 
     const distanceToCenter = itemCenterY - currentY;
     itemCenterDistances.push(
@@ -239,42 +239,50 @@ export function TocIndicator({
           style={{ pathLength: progress }}
         />
         {/* circles at each item position */}
-        {itemPositions.map((pos, idx) => {
-          const isActiveItem = idx === activeIndex;
-          const isCovered = idx < activeIndex;
-          const isUpcoming = idx > activeIndex;
-          const isLast = idx === toc.length - 1;
-          // skip drawing a circle for the active item (airplane will be shown instead)
-          if (isActiveItem) return null;
-          let fillColor = "currentColor";
-          let strokeColor: string | undefined = undefined;
-          let strokeWidth = 0;
+        <AnimatePresence>
+          {itemPositions.map((pos, idx) => {
+            const isActiveItem = idx === activeIndex;
+            const isCovered = idx < activeIndex;
+            const isUpcoming = idx > activeIndex;
+            const isLast = idx === toc.length - 1;
+            // skip drawing a circle for the active item (airplane will be shown instead)
+            if (isActiveItem) return null;
+            let fillColor = "currentColor";
+            let strokeColor: string | undefined = undefined;
+            let strokeWidth = 0;
 
-          if (isUpcoming) {
-            fillColor = "var(--primary-foreground)";
-            strokeColor = "currentColor";
-            strokeWidth = 1;
-          }
-          if (isCovered) {
-            fillColor = "var(--primary)";
-          }
-          if (isLast) {
-            // last item receives primary color fill
-            fillColor = "var(--primary)";
-          }
+            if (isUpcoming) {
+              fillColor = "var(--primary-foreground)";
+              strokeColor = "currentColor";
+              strokeWidth = 1;
+            }
+            if (isCovered) {
+              fillColor = "currentColor";
+            }
+            if (isLast) {
+              fillColor = "var(--primary)";
+            }
 
-          return (
-            <circle
-              key={idx}
-              cx={pos.x}
-              cy={pos.y}
-              r={3}
-              fill={fillColor}
-              stroke={strokeColor}
-              strokeWidth={strokeWidth}
-            />
-          );
-        })}
+            return (
+              <motion.circle
+                key={idx}
+                cx={pos.x}
+                cy={pos.y}
+                r={3}
+                fill={fillColor}
+                stroke={strokeColor}
+                strokeWidth={strokeWidth}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.35 }}
+              />
+            );
+          })}
+        </AnimatePresence>
       </svg>
       <motion.div
         className="absolute top-0 left-0"
