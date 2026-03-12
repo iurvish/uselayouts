@@ -165,7 +165,7 @@ export function TocIndicator({
           "linear-gradient(to bottom, transparent 0px, currentColor 15px, currentColor 100%)",
       }}
       className={cn(
-        "text-ring pointer-events-none absolute h-full w-full",
+        "text-accent pointer-events-none absolute h-full w-full",
         className,
       )}
     >
@@ -190,7 +190,7 @@ export function TocIndicator({
             y2={gradientY2}
           >
             <stop offset="0%" stopColor="var(--primary)" stopOpacity="0" />
-            <stop offset="70%" stopColor="var(--primary)" stopOpacity="1" />
+            <stop offset="100%" stopColor="var(--primary)" stopOpacity="1" />
           </motion.linearGradient>
           <mask id="toc-mask">
             <motion.path
@@ -252,7 +252,7 @@ export function TocIndicator({
             let strokeWidth = 0;
 
             if (isUpcoming) {
-              fillColor = "var(--primary-foreground)";
+              fillColor = "var(--background)";
               strokeColor = "currentColor";
               strokeWidth = 1;
             }
@@ -271,7 +271,7 @@ export function TocIndicator({
                   cy={pos.y}
                   r={4}
                   fill="none"
-                  stroke="var(--primary)"
+                  stroke="var(--accent)"
                   strokeWidth={1}
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{
@@ -285,9 +285,9 @@ export function TocIndicator({
                   key={`${idx}-inner`}
                   cx={pos.x}
                   cy={pos.y}
-                  r={3}
-                  fill="var(--primary)"
-                  stroke="var(--primary-foreground)"
+                  r={2.5}
+                  fill="var(--primary-foreground)"
+                  stroke="var(--currentColor)"
                   strokeWidth={1}
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{
