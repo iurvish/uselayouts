@@ -263,7 +263,42 @@ export function TocIndicator({
               fillColor = "var(--primary)";
             }
 
-            return (
+            return isLast ? (
+              <>
+                <motion.circle
+                  key={`${idx}-outer`}
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={4}
+                  fill="none"
+                  stroke="var(--primary)"
+                  strokeWidth={1}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.35 }}
+                />
+                <motion.circle
+                  key={`${idx}-inner`}
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={3}
+                  fill="var(--primary)"
+                  stroke="var(--primary-foreground)"
+                  strokeWidth={1}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.35 }}
+                />
+              </>
+            ) : (
               <motion.circle
                 key={idx}
                 cx={pos.x}
