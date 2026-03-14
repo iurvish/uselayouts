@@ -18,7 +18,7 @@ export default async function Page(props: {
 
   return (
     <div className="relative px-4 flex sm:mt-0">
-      <div className="flex flex-col py-12 pb-32">
+      <div className="flex flex-col py-12 pb-32 flex-1">
         <div className="flex flex-row items-start gap-4">
           <div className="flex flex-1 flex-col gap-2">
             <h1 className=" text-3xl font-semibold tracking-tight xl:text-4xl">
@@ -38,9 +38,9 @@ export default async function Page(props: {
           <Footer />
         </div>
       </div>
-      <div className="sticky top-26 hidden h-fit self-start xl:flex">
+      <div className="sticky top-26 hidden h-fit self-start xl:flex w-64 pl-4 justify-center">
         {doc.toc?.length ? (
-          <div className="no-scrollbar w-72 overflow-y-auto px-8">
+          <div className="no-scrollbar w-72 overflow-y-auto">
             <DocsTableOfContents toc={doc.toc} />
           </div>
         ) : null}
