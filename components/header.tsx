@@ -20,7 +20,7 @@ import GithubStarButton from "./github-button";
 const menuItems = [
   { name: "Components", href: "/docs/components/3d-book" },
   { name: "Documentation", href: "/docs/introduction" },
-  { name: "Meet Creator", href: "https://urvishh.me" },
+  { name: "Meet Creator", href: "https://urvish.in" },
 ];
 
 const Header = () => {
@@ -89,7 +89,7 @@ const Header = () => {
                 <GithubStarButton />
 
                 <Link
-                  href="https://twitter.com/0xUrvish"
+                  href="https://x.com/0xUrvish"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
