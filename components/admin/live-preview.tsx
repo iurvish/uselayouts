@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { CheckCircle2Icon, Loader2Icon, XCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -8,103 +9,90 @@ type Props = {
   padding?: number;
 };
 
+type Status = "idle" | "checking" | "ok" | "error";
+
 /**
- * Admin-only approximate preview. Full DialKit preview appears on the docs
- * page after submit. This panel shows a transpile status + isolated iframe
- * attempt for simple default-export components.
+ * Admin code validation panel. Full interactive DialKit preview lives on the
+ * docs page after submit — this only confirms the TSX parses cleanly.
  */
-export function ComponentLivePreview({ code, padding = 24 }: Props) {
-  const [error, setError] = React.useState<string | null>(null);
-  const [html, setHtml] = React.useState<string>("");
+export function ComponentLivePreview({ code }: Props) {
+  const [status, setStatus] = React.useState<Status>("idle");
+  const [message, setMessage] = React.useState<string>("");
 
   React.useEffect(() => {
     let cancelled = false;
+    const timer = setTimeout(async () => {
+      if (!code.trim()) {
+        setStatus("idle");
+        setMessage("Paste component code to validate.");
+        return;
+      }
 
-    async function run() {
+      setStatus("checking");
       try {
         const Babel = (await import("@babel/standalone")).default;
-        const transformed = Babel.transform(code, {
-          presets: [
-            ["react", { runtime: "classic" }],
-            ["typescript", { isTSX: true, allExtensions: true }],
-          ],
+        Babel.transform(code, {
+          presets: [["react", { runtime: "classic" }], "typescript"],
+          plugins: ["syntax-jsx"],
           filename: "component.tsx",
-        }).code;
-
-        if (!transformed) throw new Error("Transform returned empty code");
-
-        const srcDoc = `<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <script src="https://unpkg.com/react@19.2.6/umd/react.development.js"><\/script>
-  <script src="https://unpkg.com/react-dom@19.2.6/umd/react-dom.development.js"><\/script>
-  <script src="https://cdn.tailwindcss.com"><\/script>
-  <style>
-    html, body, #root { height: 100%; margin: 0; background: #0a0a0a; color: white; }
-    body { font-family: ui-sans-serif, system-ui, sans-serif; }
-  </style>
-</head>
-<body>
-  <div id="root" style="padding:${padding}px;display:flex;align-items:center;justify-content:center;min-height:100%;box-sizing:border-box;"></div>
-  <script>
-    window.__PREVIEW_ERROR__ = null;
-    try {
-      ${transformed}
-      const Comp = typeof Example !== 'undefined' ? Example
-        : (typeof exports !== 'undefined' && exports.default)
-        || (typeof module !== 'undefined' && module.exports && module.exports.default);
-    } catch (e) {
-      window.__PREVIEW_ERROR__ = e.message;
-    }
-  <\/script>
-  <script>
-    const root = document.getElementById('root');
-    if (window.__PREVIEW_ERROR__) {
-      root.innerHTML = '<pre style="color:#f87171;white-space:pre-wrap;font-size:12px;">' + window.__PREVIEW_ERROR__ + '</pre>';
-    } else {
-      root.innerHTML = '<p style="opacity:.6;font-size:13px;text-align:center;max-width:280px">Code transforms OK. Interactive DialKit preview is available on the docs page after submit (iframe cannot load dialkit/motion modules).</p>';
-    }
-  <\/script>
-</body>
-</html>`;
-
+        });
         if (!cancelled) {
-          setHtml(srcDoc);
-          setError(null);
+          setStatus("ok");
+          setMessage(
+            "Syntax looks good. Submit to generate MDX — live DialKit preview will appear on the docs page.",
+          );
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Preview failed");
-          setHtml("");
+          setStatus("error");
+          setMessage(err instanceof Error ? err.message : "Preview failed");
         }
       }
-    }
+    }, 350);
 
-    run();
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
-  }, [code, padding]);
+  }, [code]);
 
   return (
     <div
       className={cn(
-        "relative min-h-[280px] overflow-hidden rounded-lg border bg-background",
+        "relative flex min-h-[220px] flex-col justify-center gap-3 overflow-hidden rounded-lg border bg-muted/20 p-6",
+        status === "ok" && "border-emerald-500/30",
+        status === "error" && "border-destructive/40",
       )}
     >
-      {error ? (
-        <pre className="whitespace-pre-wrap p-4 text-xs text-destructive">
-          {error}
-        </pre>
-      ) : (
-        <iframe
-          title="Component preview"
-          className="h-[320px] w-full border-0"
-          sandbox="allow-scripts"
-          srcDoc={html}
-        />
-      )}
+      <div className="flex items-start gap-3">
+        {status === "checking" && (
+          <Loader2Icon className="mt-0.5 size-5 shrink-0 animate-spin text-muted-foreground" />
+        )}
+        {status === "ok" && (
+          <CheckCircle2Icon className="mt-0.5 size-5 shrink-0 text-emerald-500" />
+        )}
+        {status === "error" && (
+          <XCircleIcon className="mt-0.5 size-5 shrink-0 text-destructive" />
+        )}
+        {status === "idle" && (
+          <div className="mt-0.5 size-5 shrink-0 rounded-full border border-dashed border-muted-foreground/40" />
+        )}
+        <div className="min-w-0 space-y-1">
+          <p className="text-sm font-medium">
+            {status === "checking" && "Validating code…"}
+            {status === "ok" && "Ready to submit"}
+            {status === "error" && "Syntax error"}
+            {status === "idle" && "Preview"}
+          </p>
+          <p className="text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap">
+            {message || "Paste component code to validate."}
+          </p>
+        </div>
+      </div>
+      <p className="text-[11px] text-muted-foreground/80">
+        Admin can&apos;t run dialkit/motion inside this panel. Use the docs
+        Preview tab after save for the real interactive preview.
+      </p>
     </div>
   );
 }

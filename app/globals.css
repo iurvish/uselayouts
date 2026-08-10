@@ -252,15 +252,16 @@
   }
 }
 
-/* Fix code block overflow in docs */
-.prose pre {
+/* Ensure fumadocs tabs / code don't blow past the dial column */
+#nd-docs-layout .prose,
+#nd-docs-layout [role="tabpanel"],
+#nd-docs-layout pre,
+#nd-docs-layout figure {
   max-width: 100%;
-  overflow-x: auto;
 }
 
-.prose {
-  max-width: 100%;
-  overflow-wrap: break-word;
+#nd-docs-layout .prose pre {
+  overflow-x: auto;
 }
 
 /* Ensure code blocks don't expand parent */

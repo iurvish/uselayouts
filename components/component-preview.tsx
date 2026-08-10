@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { isLocalImageValue } from "@/lib/admin/dial-extract";
+import { useDialPreview } from "@/components/dial-preview-context";
 
 interface ComponentPreviewProps extends React.ComponentProps<"div"> {
   name?: string;
@@ -34,6 +35,8 @@ export function ComponentPreview({
   full = false,
   ...props
 }: ComponentPreviewProps) {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const { setActive } = useDialPreview();
   const Component = React.useMemo(() => {
     if (!name) return null;
     return Index[name]?.component;
@@ -45,6 +48,40 @@ export function ComponentPreview({
 
   const [exportMessage, setExportMessage] = React.useState<string | null>(null);
   const [localImageWarning, setLocalImageWarning] = React.useState(false);
+
+  React.useEffect(() => {
+    const root = rootRef.current;
+    const panel = root?.closest('[role="tabpanel"]') as HTMLElement | null;
+
+    const sync = () => {
+      if (!panel) {
+        setActive(true);
+        return;
+      }
+      const state = panel.getAttribute("data-state");
+      const hidden =
+        panel.hasAttribute("hidden") ||
+        panel.getAttribute("aria-hidden") === "true" ||
+        state === "inactive" ||
+        getComputedStyle(panel).display === "none";
+      setActive(!hidden);
+    };
+
+    sync();
+    if (!panel) {
+      return () => setActive(false);
+    }
+
+    const observer = new MutationObserver(sync);
+    observer.observe(panel, {
+      attributes: true,
+      attributeFilter: ["data-state", "hidden", "aria-hidden", "class", "style"],
+    });
+    return () => {
+      observer.disconnect();
+      setActive(false);
+    };
+  }, [setActive]);
 
   React.useEffect(() => {
     if (!name) return;
@@ -118,8 +155,9 @@ export function ComponentPreview({
 
   return (
     <div
+      ref={rootRef}
       className={cn(
-        "relative flex w-full flex-col gap-3 not-prose text-base leading-normal text-foreground",
+        "relative flex w-full min-w-0 flex-col gap-3 not-prose text-base leading-normal text-foreground",
         className,
       )}
       {...props}

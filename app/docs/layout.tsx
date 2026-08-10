@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </div>
             </nav>
           </header>
-          <main id="nd-docs-layout" className="flex w-full min-w-0 flex-1 flex-row">
+          <main id="nd-docs-layout" className="flex w-full min-w-0 flex-1 flex-row overflow-x-clip">
             {children}
           </main>
         </SidebarInset>
