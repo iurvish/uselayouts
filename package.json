@@ -28,6 +28,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@babel/standalone": "^8.0.4",
     "@base-ui/react": "^1.0.0",
     "@hookform/resolvers": "^5.2.2",
     "@hugeicons/core-free-icons": "^2.0.0",
@@ -41,6 +42,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "dialkit": "^1.4.3",
     "fumadocs-core": "^16.2.5",
     "fumadocs-mdx": "^14.1.0",
     "fumadocs-ui": "^16.2.5",

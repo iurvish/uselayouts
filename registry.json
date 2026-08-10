@@ -81,6 +81,7 @@
       "description": "A confirmation button with smooth icon transitions.",
       "dependencies": [
         "motion",
+        "dialkit",
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",

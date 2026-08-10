@@ -1,0 +1,21 @@
+{
+  "dialConfig": {
+    "deleteText": "Delete Account",
+    "cancelText": "Cancel Deletion",
+    "countdown": [10, 3, 20, 1],
+    "deleteColor": "#FE322A",
+    "softColor": "#FFEDF1",
+    "layout": {
+      "type": "easing",
+      "duration": 0.4,
+      "ease": [0.77, 0, 0.175, 1]
+    },
+    "char": {
+      "type": "easing",
+      "duration": 0.3,
+      "ease": [0.785, 0.135, 0.15, 0.86]
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-08-10T00:00:00.000Z"
+}

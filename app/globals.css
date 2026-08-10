@@ -13,6 +13,61 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+.dialkit-inline-host {
+  --dk-panel-width: 100%;
+  --dial-glass-bg: #212121;
+  background: #212121;
+}
+
+.dialkit-inline-host > div:last-child,
+.dialkit-inline-host .dialkit-root,
+.dialkit-inline-host .dialkit-panel,
+.dialkit-inline-host .dialkit-panel-wrapper,
+.dialkit-inline-host .dialkit-panel-inner,
+.dialkit-inline-host .dialkit-panel-inline,
+.dialkit-inline-host .dialkit-folder-root {
+  height: 100% !important;
+  max-height: none !important;
+  width: 100% !important;
+}
+
+.dialkit-inline-host .dialkit-root,
+.dialkit-inline-host .dialkit-panel,
+.dialkit-inline-host .dialkit-panel-inner,
+.dialkit-inline-host .dialkit-panel-inline {
+  background: #212121 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.dialkit-inline-host .dialkit-panel-inline {
+  overflow-y: auto !important;
+  padding: 8px 10px 12px !important;
+}
+
+/* Hide DialKit folder chrome + preset/version toolbar */
+.dialkit-inline-host .dialkit-panel-toolbar,
+.dialkit-inline-host .dialkit-preset-manager,
+.dialkit-inline-host .dialkit-folder-root > .dialkit-panel-header,
+.dialkit-inline-host .dialkit-folder-root > .dialkit-folder-header {
+  display: none !important;
+}
+
+/* Keep settings visible even if DialKit marks a folder collapsed */
+.dialkit-inline-host .dialkit-folder-root > .dialkit-folder-content {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+.dialkit-inline-host .dialkit-folder-root > .dialkit-folder-content > .dialkit-folder-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

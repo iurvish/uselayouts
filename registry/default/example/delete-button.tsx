@@ -2,19 +2,37 @@
 
 import { Undo03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useDialKit } from "dialkit";
 import { motion, AnimatePresence } from "motion/react";
 import React, { useEffect, useState } from "react";
 
+export const dialConfig = {
+  deleteText: "Delete Account",
+  cancelText: "Cancel Deletion",
+  countdown: [10, 3, 20, 1],
+  deleteColor: "#FE322A",
+  softColor: "#FFEDF1",
+  layout: {
+    type: "easing",
+    duration: 0.4,
+    ease: [0.77, 0, 0.175, 1],
+  },
+  char: {
+    type: "easing",
+    duration: 0.3,
+    ease: [0.785, 0.135, 0.15, 0.86],
+  },
+} as const;
+
 const DeleteButton = () => {
+  const params = useDialKit("Delete Button", dialConfig);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(params.countdown);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (!isDeleting) return;
-
     if (count === 0) return;
-
     const timer = setTimeout(() => setCount((c) => c - 1), 1000);
     return () => clearTimeout(timer);
   }, [isDeleting, count]);
@@ -23,21 +41,17 @@ const DeleteButton = () => {
     if (isAnimating) return;
     setIsAnimating(true);
     setIsDeleting(newState);
-    if (newState) setCount(10);
-
-    // Release lock after animation completes
-    setTimeout(() => setIsAnimating(false), 400);
+    if (newState) setCount(params.countdown);
+    setTimeout(() => setIsAnimating(false), params.layout.duration * 1000);
   };
 
-  // Change Here
-  const deleteText = "Delete Account";
-  const cancelText = "Cancel Deletion";
+  const deleteText = params.deleteText;
+  const cancelText = params.cancelText;
 
   return (
     <div className="flex items-center justify-center">
       <AnimatePresence mode="popLayout" initial={false}>
         {!isDeleting ? (
-          // STATE A
           <motion.button
             key="delete"
             layoutId="deleteButton"
@@ -45,23 +59,23 @@ const DeleteButton = () => {
             whileTap={{ scale: 0.95 }}
             style={{ pointerEvents: isAnimating ? "none" : "auto" }}
             initial={{
-              backgroundColor: "#FFEDF1",
+              backgroundColor: params.softColor,
               filter: "blur(1px)",
               opacity: 1,
             }}
             animate={{
-              backgroundColor: "#FE322A",
+              backgroundColor: params.deleteColor,
               filter: "blur(0px)",
               opacity: 1,
             }}
             exit={{
-              backgroundColor: "#FFEDF1",
+              backgroundColor: params.softColor,
               filter: "blur(1px)",
               opacity: 0,
             }}
-            className="text-white px-5 py-3 rounded-full flex items-center justify-center overflow-hidden"
+            className="flex items-center justify-center overflow-hidden rounded-full px-5 py-3 text-white"
             transition={{
-              layout: { duration: 0.4, ease: [0.77, 0, 0.175, 1] },
+              layout: params.layout,
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.1, ease: "easeInOut" },
               opacity: { duration: 0.2, ease: "easeOut" },
@@ -77,14 +91,13 @@ const DeleteButton = () => {
             >
               {deleteText.split("").map((char, i) => (
                 <motion.span
-                  key={`delete-${i}`}
+                  key={`delete-${i}-${char}`}
                   initial={{ y: 20, opacity: 0, scale: 0.3 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
                   exit={{ y: -20, opacity: 0, scale: 0.3 }}
                   transition={{
-                    duration: 0.3,
+                    ...params.char,
                     delay: i * 0.005,
-                    ease: [0.785, 0.135, 0.15, 0.86],
                   }}
                   style={{ display: "inline-block", whiteSpace: "pre" }}
                 >
@@ -94,7 +107,6 @@ const DeleteButton = () => {
             </motion.span>
           </motion.button>
         ) : (
-          // STATE B
           <motion.button
             key="cancel"
             layoutId="deleteButton"
@@ -102,23 +114,23 @@ const DeleteButton = () => {
             whileTap={{ scale: 0.95 }}
             style={{ pointerEvents: isAnimating ? "none" : "auto" }}
             initial={{
-              backgroundColor: "#FE322A",
+              backgroundColor: params.deleteColor,
               filter: "blur(1px)",
               opacity: 0,
             }}
             animate={{
-              backgroundColor: "#FFEDF1",
+              backgroundColor: params.softColor,
               filter: "blur(0px)",
               opacity: 1,
             }}
             exit={{
-              backgroundColor: "#FE322A",
+              backgroundColor: params.deleteColor,
               filter: "blur(1px)",
               opacity: 0,
             }}
-            className="px-3 py-3 rounded-full flex items-center gap-2 overflow-hidden"
+            className="flex items-center gap-2 overflow-hidden rounded-full px-3 py-3"
             transition={{
-              layout: { duration: 0.4, ease: [0.77, 0, 0.175, 1] },
+              layout: params.layout,
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.2, ease: "easeInOut" },
               opacity: { duration: 0.2, ease: "easeIn" },
@@ -129,14 +141,16 @@ const DeleteButton = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.2, delay: 0.05 }}
-              className="bg-[#FE322A] p-1.5 rounded-full flex items-center justify-center shrink-0"
+              className="flex shrink-0 items-center justify-center rounded-full p-1.5"
+              style={{ backgroundColor: params.deleteColor }}
             >
               <HugeiconsIcon icon={Undo03Icon} className="h-4 w-4 text-white" />
             </motion.div>
 
             <motion.span
               layoutId="buttonText"
-              className="text-[#FE322A] font-medium flex"
+              className="flex font-medium"
+              style={{ color: params.deleteColor }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -144,14 +158,13 @@ const DeleteButton = () => {
             >
               {cancelText.split("").map((char, i) => (
                 <motion.span
-                  key={`cancel-${i}`}
+                  key={`cancel-${i}-${char}`}
                   initial={{ y: 20, opacity: 0, scale: 0.3 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
                   exit={{ y: -20, opacity: 0, scale: 0.3 }}
                   transition={{
-                    duration: 0.3,
+                    ...params.char,
                     delay: i * 0.006,
-                    ease: [0.785, 0.135, 0.15, 0.86],
                   }}
                   style={{ display: "inline-block", whiteSpace: "pre" }}
                 >
@@ -161,7 +174,8 @@ const DeleteButton = () => {
             </motion.span>
 
             <motion.div
-              className="bg-[#FE322A] text-white px-4 py-3 rounded-full text-sm font-semibold flex items-center justify-center relative overflow-hidden shrink-0 min-w-[32px]"
+              className="relative flex min-w-[32px] shrink-0 items-center justify-center overflow-hidden rounded-full px-4 py-3 text-sm font-semibold text-white"
+              style={{ backgroundColor: params.deleteColor }}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
@@ -170,17 +184,9 @@ const DeleteButton = () => {
               <AnimatePresence mode="popLayout">
                 <motion.span
                   key={count}
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                    scale: 0.8,
-                  }}
+                  initial={{ opacity: 0, y: 10, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{
-                    opacity: 0,
-                    y: -10,
-                    scale: 0.8,
-                  }}
+                  exit={{ opacity: 0, y: -10, scale: 0.8 }}
                   transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
                   className="absolute"
                 >
