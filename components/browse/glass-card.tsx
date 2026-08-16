@@ -21,6 +21,33 @@ type BrowseCardProps = {
   pinHeight?: number;
 };
 
+function CardShell({
+  item,
+  still,
+  hit = true,
+  children,
+}: {
+  item: BrowseItem;
+  still: boolean;
+  hit?: boolean;
+  children?: React.ReactNode;
+}) {
+  return (
+    <>
+      <BrowsePreview name={item.slug} still={still} />
+      {hit ? (
+        <Link
+          href={`/docs/components/${item.slug}`}
+          className="browse-card-hit"
+          aria-label={item.title}
+          draggable={false}
+        />
+      ) : null}
+      {children}
+    </>
+  );
+}
+
 export function BrowseCard({
   item,
   mediaMode,
@@ -33,15 +60,9 @@ export function BrowseCard({
 
   if (surface === "pin") {
     return (
-      <Link
-        href={`/docs/components/${item.slug}`}
-        className={cn("browse-pin", className)}
-        style={style}
-        aria-label={item.title}
-        draggable={false}
-      >
+      <article className={cn("browse-pin", className)} style={style}>
         <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
-          <BrowsePreview name={item.slug} still={still} />
+          <CardShell item={item} still={still} hit={false} />
         </div>
         <div className="browse-pin-caption">
           <h3 className="text-sm font-medium tracking-[-0.01em] text-white">{item.title}</h3>
@@ -49,22 +70,21 @@ export function BrowseCard({
             {item.category}
           </span>
         </div>
-      </Link>
+        <Link
+          href={`/docs/components/${item.slug}`}
+          className="browse-card-hit"
+          aria-label={item.title}
+          draggable={false}
+        />
+      </article>
     );
   }
 
   return (
-    <Link
-      href={`/docs/components/${item.slug}`}
-      className={cn("block size-full", className)}
-      style={style}
-      aria-label={item.title}
-      draggable={false}
-    >
-      <div className="browse-card size-full">
-        <BrowsePreview name={item.slug} still={still} />
+    <div className={cn("browse-card size-full", className)} style={style}>
+      <CardShell item={item} still={still}>
         <div className="browse-scrim" />
-        <div className="relative z-10 flex h-full flex-col justify-end p-4">
+        <div className="pointer-events-none relative z-10 flex h-full flex-col justify-end p-4">
           <div className="flex items-end justify-between gap-2">
             <h3 className="truncate text-sm font-medium leading-snug tracking-[-0.01em] text-white">
               {item.title}
@@ -74,7 +94,7 @@ export function BrowseCard({
             </span>
           </div>
         </div>
-      </div>
-    </Link>
+      </CardShell>
+    </div>
   );
 }

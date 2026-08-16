@@ -11,9 +11,9 @@ import {
   type PackageManager,
 } from "@/lib/open/package-manager";
 import { PackageManagerMark } from "@/components/open/pm-marks";
-import { OpenCopyButton } from "@/components/open/copy-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+
 export function OpenCliBar({
   registryUrl,
   manager,
@@ -24,6 +24,7 @@ export function OpenCliBar({
   onManagerChange: (manager: PackageManager) => void;
 }) {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const command = cliInstallCommand(manager, registryUrl);
 
@@ -53,12 +54,26 @@ export function OpenCliBar({
         <TooltipContent>Package manager</TooltipContent>
       </Tooltip>
 
-      <div className="open-cli-command">
-        <OpenCopyButton value={command} label="Copy install command" className="open-cli-copy">
-          <img src="/open/copy.svg" alt="" width={16} height={16} className="size-4" />
-        </OpenCopyButton>
-        <code title={command}>{command}</code>
-      </div>
+      <button
+        type="button"
+        className="open-cli-command"
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(command);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 1400);
+          } catch {
+            setCopied(false);
+          }
+        }}
+        aria-label={copied ? "Copied install command" : "Copy install command"}
+      >
+        {copied ? (
+          <span className="open-cli-copied">Copied</span>
+        ) : (
+          <code title={command}>{command}</code>
+        )}
+      </button>
 
       <AnimatePresence>
         {menuOpen ? (

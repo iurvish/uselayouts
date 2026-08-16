@@ -46,6 +46,7 @@ a:focus-visible .browse-card {
 .browse-scrim {
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
   background: linear-gradient(
     to top,
@@ -90,23 +91,24 @@ a:focus-visible .browse-card {
     transition: transform 180ms var(--ease-out);
   }
 
-  a:hover > .browse-card,
+  .browse-card:hover,
   .browse-pin:hover .browse-card {
     transform: scale(1.015);
   }
 
-  a:hover .browse-enter {
+  .browse-card:hover .browse-enter {
     opacity: 1;
     transform: none;
   }
 
-  a:active > .browse-card,
+  .browse-card:active,
   .browse-pin:active .browse-card {
     transform: scale(0.98);
   }
 
-  .canvas-viewport[data-dragging="true"] a:hover > .browse-card,
-  .canvas-viewport[data-dragging="true"] a:active > .browse-card {
+  .canvas-viewport[data-dragging="true"] .browse-card,
+  .canvas-viewport[data-dragging="true"] .browse-card:hover,
+  .canvas-viewport[data-dragging="true"] .browse-card:active {
     transform: translateZ(0);
   }
 
@@ -142,10 +144,8 @@ a:focus-visible .browse-card {
     transform: none;
   }
 
-  a:hover > .browse-card,
-  .browse-pin:hover .browse-card,
-  a:active > .browse-card,
-  .browse-pin:active .browse-card,
+  .browse-card:hover,
+  .browse-card:active,
   .browse-press:active {
     transform: none;
   }
@@ -188,7 +188,14 @@ a:focus-visible .browse-card {
   }
 }
 
+.browse-card-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
 .browse-pin {
+  position: relative;
   display: inline-block;
   width: 100%;
   margin-bottom: 22px;

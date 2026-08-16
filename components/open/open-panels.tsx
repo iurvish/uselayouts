@@ -2,15 +2,10 @@
 
 import * as React from "react";
 
-import { OpenCopyButton } from "@/components/open/copy-button";
-import { PackageManagerMark } from "@/components/open/pm-marks";
-import {
-  PACKAGE_MANAGERS,
-  cliInstallCommand,
-  manualInstallCommand,
-  type PackageManager,
-} from "@/lib/open/package-manager";
-import { cn } from "@/lib/utils";
+import { DocsCodeBlock } from "@/components/open/docs-code-block";
+import { InstallGuide } from "@/components/open/install-guide";
+import { SlidingTabs } from "@/components/open/sliding-tabs";
+import type { PackageManager } from "@/lib/open/package-manager";
 
 export function OpenCodePanel({
   usageHtml,
@@ -21,6 +16,7 @@ export function OpenCodePanel({
   dependencies,
   manager,
   onManagerChange,
+  slug,
 }: {
   usageHtml: string;
   usage: string;
@@ -30,109 +26,50 @@ export function OpenCodePanel({
   dependencies: string[];
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
+  slug: string;
 }) {
   const [tab, setTab] = React.useState<"usage" | "code">("usage");
-  const cli = cliInstallCommand(manager, registryUrl);
-  const manual = manualInstallCommand(manager, dependencies);
 
   return (
-    <div className="open-code-panel">
-      <div className="open-tabs" role="tablist" aria-label="Source">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "usage"}
-          className={cn("open-tab", tab === "usage" && "is-active")}
-          onClick={() => setTab("usage")}
-        >
-          Usage
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "code"}
-          className={cn("open-tab", tab === "code" && "is-active")}
-          onClick={() => setTab("code")}
-        >
-          Code
-        </button>
-      </div>
+    <div className="docs-panel">
+      <SlidingTabs
+        value={tab}
+        onChange={setTab}
+        layoutId="open-source-tab"
+        ariaLabel="Source"
+        options={[
+          { value: "usage", label: "Usage" },
+          { value: "code", label: "Code" },
+        ]}
+      />
 
-      <div className="open-code-frame">
-        <div className="open-code-block-bar">
-          <span>{tab === "usage" ? "page.tsx" : "component.tsx"}</span>
-          <OpenCopyButton
-            value={tab === "usage" ? usage : code}
-            label="Copy"
-            className="open-text-copy"
-          >
-            Copy
-          </OpenCopyButton>
-        </div>
-        <div
-          className="open-shiki"
-          dangerouslySetInnerHTML={{ __html: tab === "usage" ? usageHtml : codeHtml || "<pre><code>No source yet.</code></pre>" }}
-        />
-      </div>
+      <DocsCodeBlock
+        html={tab === "usage" ? usageHtml : codeHtml}
+        code={tab === "usage" ? usage : code}
+        title={tab === "usage" ? "app/page.tsx" : `components/${slug}.tsx`}
+      />
 
-      <section className="open-install">
-        <h3>Installation</h3>
-        <div className="open-pm-row" role="tablist" aria-label="Package manager">
-          {PACKAGE_MANAGERS.map((option) => (
-            <button
-              key={option}
-              type="button"
-              role="tab"
-              aria-selected={option === manager}
-              className={cn("open-pm-chip", option === manager && "is-active")}
-              onClick={() => onManagerChange(option)}
-            >
-              <PackageManagerMark manager={option} className="size-3.5" />
-              {option}
-            </button>
-          ))}
-        </div>
-
-        <div className="open-code-frame">
-          <div className="open-code-block-bar">
-            <span>CLI</span>
-            <OpenCopyButton value={cli} label="Copy" className="open-text-copy">
-              Copy
-            </OpenCopyButton>
-          </div>
-          <pre>
-            <code>{cli}</code>
-          </pre>
-        </div>
-
-        <div className="open-code-frame">
-          <div className="open-code-block-bar">
-            <span>Manual</span>
-            {manual ? (
-              <OpenCopyButton value={manual} label="Copy" className="open-text-copy">
-                Copy
-              </OpenCopyButton>
-            ) : null}
-          </div>
-          {manual ? (
-            <pre>
-              <code>{manual}</code>
-            </pre>
-          ) : (
-            <p className="open-empty">No extra packages configured for this component.</p>
-          )}
-        </div>
-      </section>
+      <InstallGuide
+        registryUrl={registryUrl}
+        dependencies={dependencies}
+        manager={manager}
+        onManagerChange={onManagerChange}
+        usageHtml={usageHtml}
+        usage={usage}
+        codeHtml={codeHtml}
+        code={code}
+        slug={slug}
+      />
     </div>
   );
 }
 
 export function OpenHintPanel({ hints }: { hints: string[] }) {
   if (hints.length === 0) {
-    return <p className="open-empty">No hints yet.</p>;
+    return <p className="docs-muted">No hints yet.</p>;
   }
   return (
-    <ul className="open-hint-list">
+    <ul className="docs-hints">
       {hints.map((hint) => (
         <li key={hint}>{hint}</li>
       ))}
@@ -143,23 +80,57 @@ export function OpenHintPanel({ hints }: { hints: string[] }) {
 export function OpenDocsPanel({
   description,
   docs,
+  slug,
+  usage,
+  usageHtml,
+  code,
+  codeHtml,
+  registryUrl,
+  dependencies,
+  manager,
+  onManagerChange,
 }: {
   description: string;
   docs: { title: string; html: string }[];
+  slug: string;
+  usage: string;
+  usageHtml: string;
+  code: string;
+  codeHtml: string;
+  registryUrl: string;
+  dependencies: string[];
+  manager: PackageManager;
+  onManagerChange: (manager: PackageManager) => void;
 }) {
+  const extra = docs.filter((section) => !/^usage$/i.test(section.title));
+
   return (
-    <div className="open-docs">
-      {description ? <p className="open-docs-lede">{description}</p> : null}
-      {docs.length === 0 ? (
-        <p className="open-empty">No additional documentation yet.</p>
-      ) : (
-        docs.map((section) => (
-          <section key={section.title}>
-            <h3>{section.title}</h3>
-            <div dangerouslySetInnerHTML={{ __html: section.html }} />
-          </section>
-        ))
-      )}
+    <div className="docs-article">
+      {description ? <p className="docs-lede">{description}</p> : null}
+
+      <InstallGuide
+        registryUrl={registryUrl}
+        dependencies={dependencies}
+        manager={manager}
+        onManagerChange={onManagerChange}
+        usageHtml={usageHtml}
+        usage={usage}
+        codeHtml={codeHtml}
+        code={code}
+        slug={slug}
+      />
+
+      <section>
+        <h2 className="docs-h2">Usage</h2>
+        <DocsCodeBlock html={usageHtml} code={usage} title="app/page.tsx" />
+      </section>
+
+      {extra.map((section) => (
+        <section key={section.title}>
+          <h2 className="docs-h2">{section.title}</h2>
+          <div className="docs-prose" dangerouslySetInnerHTML={{ __html: section.html }} />
+        </section>
+      ))}
     </div>
   );
 }
