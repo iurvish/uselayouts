@@ -39,7 +39,7 @@ export function ComponentLivePreview({ code }: Props) {
         if (!cancelled) {
           setStatus("ok");
           setMessage(
-            "Syntax looks good. Submit to generate MDX — live DialKit preview will appear on the docs page.",
+            "Syntax looks good. After submit, open the component in admin to use DialKit controls.",
           );
         }
       } catch (err) {
@@ -90,8 +90,8 @@ export function ComponentLivePreview({ code }: Props) {
         </div>
       </div>
       <p className="text-[11px] text-muted-foreground/80">
-        Admin can&apos;t run dialkit/motion inside this panel. Use the docs
-        Preview tab after save for the real interactive preview.
+        Admin can&apos;t run dialkit/motion inside this validator. Use the live
+        preview below after save.
       </p>
     </div>
   );

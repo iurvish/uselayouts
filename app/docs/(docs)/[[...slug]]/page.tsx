@@ -14,10 +14,9 @@ export default async function Page(props: {
 
   const doc = page.data;
   const MDX = page.data.body;
-  const isComponentDoc = params.slug?.[0] === "components";
 
   return (
-    <DocsPageShell showDial={isComponentDoc} toc={doc.toc}>
+    <DocsPageShell toc={doc.toc}>
       <div className="flex flex-row items-start gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <h1 className="text-3xl font-semibold tracking-tight xl:text-4xl">
@@ -41,7 +40,9 @@ export default async function Page(props: {
 }
 
 export async function generateStaticParams() {
-  return source.generateParams();
+  return source
+    .generateParams()
+    .filter((entry) => entry.slug?.[0] !== "components");
 }
 
 export async function generateMetadata(props: {

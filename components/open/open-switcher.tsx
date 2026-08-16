@@ -1,0 +1,152 @@
+"use client";
+
+/* eslint-disable @next/next/no-img-element -- static Figma marks. */
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
+
+import type { OpenNavItem } from "@/lib/open/component";
+import { cn } from "@/lib/utils";
+
+export function OpenSwitcher({
+  current,
+  items,
+}: {
+  current: OpenNavItem;
+  items: OpenNavItem[];
+}) {
+  const router = useRouter();
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [instant, setInstant] = React.useState(false);
+
+  const filtered = React.useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    if (!needle) return items;
+    return items.filter((item) => item.title.toLowerCase().includes(needle) || item.slug.includes(needle));
+  }, [items, query]);
+
+  const close = React.useCallback(() => {
+    setOpen(false);
+    setQuery("");
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onPointer = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) close();
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+    };
+    window.addEventListener("mousedown", onPointer);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("mousedown", onPointer);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, close]);
+
+  React.useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const typingInField = target && /^(INPUT|TEXTAREA)$/.test(target.tagName);
+      if (event.key === "/" && !typingInField) {
+        event.preventDefault();
+        setInstant(true);
+        setOpen(true);
+        return;
+      }
+      if (
+        !open &&
+        !typingInField &&
+        !event.metaKey &&
+        !event.ctrlKey &&
+        !event.altKey &&
+        event.key.length === 1 &&
+        /[\w-]/i.test(event.key)
+      ) {
+        setInstant(true);
+        setOpen(true);
+        setQuery(event.key);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  React.useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  function select(item: OpenNavItem) {
+    close();
+    if (item.href !== current.href) router.push(item.href);
+  }
+
+  return (
+    <div ref={rootRef} className="relative flex justify-center">
+      <button
+        type="button"
+        className="open-switcher-trigger"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        onClick={() => {
+          setInstant(false);
+          setOpen((value) => !value);
+        }}
+      >
+        <span className="truncate">{current.title}</span>
+        <img src="/open/expand.svg" alt="" width={18} height={18} className="size-[18px] shrink-0 opacity-80" />
+      </button>
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            role="listbox"
+            className="open-switcher-panel"
+            initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
+            animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
+            exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
+            transition={instant ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search components"
+              aria-label="Search components"
+              className="open-switcher-search"
+            />
+            <div className="open-switcher-list">
+              {filtered.length === 0 ? (
+                <p className="px-3 py-4 text-center text-xs text-white/35">No matches.</p>
+              ) : (
+                filtered.map((item) => {
+                  const active = item.href === current.href;
+                  return (
+                    <button
+                      key={item.slug}
+                      type="button"
+                      role="option"
+                      aria-selected={active}
+                      className={cn("open-switcher-item", active && "is-active")}
+                      onClick={() => select(item)}
+                    >
+                      {item.title}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </div>
+  );
+}

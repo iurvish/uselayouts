@@ -1,0 +1,105 @@
+"use client";
+
+import { memo, useEffect, useRef } from "react";
+import Link from "next/link";
+
+import { cn } from "@/lib/utils";
+
+export type LineNavItem = {
+  title: string;
+  href: string;
+};
+
+export type LineNavProps = {
+  className?: string;
+  items: LineNavItem[];
+  activeHref?: string;
+  scrollActiveIntoView?: boolean;
+  onItemClick?: (
+    item: LineNavItem,
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => void;
+};
+
+export function LineNav({
+  className,
+  items,
+  activeHref,
+  scrollActiveIntoView = true,
+  onItemClick,
+}: LineNavProps) {
+  const activeItemRef = useRef<HTMLAnchorElement | null>(null);
+
+  useEffect(() => {
+    if (!scrollActiveIntoView) return;
+    activeItemRef.current?.scrollIntoView({ block: "nearest" });
+  }, [activeHref, scrollActiveIntoView]);
+
+  return (
+    <nav className={cn("flex flex-col gap-2 py-3", className)} aria-label="Components">
+      {items.map((item, index) => {
+        const isActive = item.href === activeHref;
+        return (
+          <LineNavItem
+            key={item.href}
+            ref={isActive ? activeItemRef : undefined}
+            title={item.title}
+            href={item.href}
+            active={isActive}
+            isLast={index === items.length - 1}
+            onClick={onItemClick ? (event) => onItemClick(item, event) : undefined}
+          />
+        );
+      })}
+    </nav>
+  );
+}
+
+const LineNavItem = memo(function LineNavItem({
+  ref,
+  title,
+  href,
+  active = false,
+  isLast = false,
+  onClick,
+}: {
+  ref?: React.Ref<HTMLAnchorElement>;
+  title: string;
+  href: string;
+  active?: boolean;
+  isLast?: boolean;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}) {
+  return (
+    <>
+      <Link
+        ref={ref}
+        aria-current={active ? "page" : undefined}
+        className="line-nav-item group relative flex h-px items-center gap-3 after:absolute after:top-1/2 after:left-0 after:h-[28px] after:w-full after:-translate-y-1/2 after:content-['']"
+        href={href}
+        onClick={onClick}
+      >
+        <span
+          className={cn(
+            "line-nav-mark block h-px w-10 shrink-0 origin-left bg-white/20",
+            active && "is-active bg-white",
+          )}
+        />
+        <span
+          className={cn(
+            "text-sm whitespace-nowrap text-white/40 transition-colors duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "group-hover:text-white group-focus-visible:text-white group-aria-[current=page]:text-white",
+          )}
+        >
+          {title}
+        </span>
+      </Link>
+      {!isLast ? (
+        <>
+          <span className="block h-px w-6 bg-white/20" />
+          <span className="block h-px w-6 bg-white/20" />
+        </>
+      ) : null}
+    </>
+  );
+});

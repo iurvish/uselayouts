@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ExtractedControl } from "@/lib/admin/dial-extract";
 import { ComponentLivePreview } from "@/components/admin/live-preview";
+import { AdminRegistryPreview } from "@/components/admin/registry-preview";
+import { DependencyTags } from "@/components/admin/dependency-tags";
+import { extractHints } from "@/lib/open/mdx-extract";
 
 type FormState = {
   name: string;
@@ -91,7 +94,7 @@ export function ComponentEditor({
           description: data.item.description,
           code: data.code,
           dependencies: (data.item.dependencies || []).join(", "),
-          features: "",
+          features: data.mdx ? extractHints(data.mdx).join("\n") : "",
         });
         setDisabled(data.controls?.disabled ?? []);
         setDialConfig(data.controls?.dialConfig ?? {});
@@ -222,15 +225,10 @@ export function ComponentEditor({
           />
         </Field>
 
-        <Field label="Dependencies (comma separated)">
-          <input
-            className={inputClass}
-            value={form.dependencies}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, dependencies: e.target.value }))
-            }
-          />
-        </Field>
+        <DependencyTags
+          value={form.dependencies}
+          onChange={(dependencies) => setForm((f) => ({ ...f, dependencies }))}
+        />
 
         <Field label="Features (one per line)">
           <textarea
@@ -279,10 +277,17 @@ export function ComponentEditor({
             </label>
           </div>
           <ComponentLivePreview code={form.code} padding={previewPadding} />
-          <p className="mt-2 text-xs text-muted-foreground">
-            Live transpile preview for admin. After submit, docs use the
-            registry component + DialKit panel.
-          </p>
+          {mode === "edit" && initialName ? (
+            <div className="mt-4">
+              <p className="mb-2 text-sm font-medium">Live preview + DialKit</p>
+              <AdminRegistryPreview name={initialName} padding={previewPadding} />
+            </div>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">
+              After the first save, this page shows a live preview and DialKit
+              controls.
+            </p>
+          )}
         </div>
 
         <div className="rounded-xl border p-4">
