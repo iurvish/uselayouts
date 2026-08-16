@@ -75,14 +75,17 @@ const LineNavItem = memo(function LineNavItem({
       <Link
         ref={ref}
         aria-current={active ? "page" : undefined}
-        className="line-nav-item group relative flex h-px items-center gap-3 after:absolute after:top-1/2 after:left-0 after:h-[28px] after:w-full after:-translate-y-1/2 after:content-['']"
+        className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:h-7 after:w-full after:-translate-y-1/2 after:content-['']"
         href={href}
         onClick={onClick}
       >
         <span
           className={cn(
-            "line-nav-mark block h-px w-10 shrink-0 origin-left bg-white/20",
-            active && "is-active bg-white",
+            "block h-px w-10 shrink-0 origin-left scale-x-[0.6] bg-white/20 transition-[transform,background-color] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-white",
+            "group-focus-visible:scale-x-100 group-focus-visible:bg-white",
+            "motion-reduce:transition-none motion-reduce:scale-x-100",
+            active && "scale-x-100 bg-white",
           )}
         />
         <span

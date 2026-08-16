@@ -1,0 +1,23 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-08-16T09:06:20.916Z",
+  "interactionHints": {
+    "duration": 5,
+    "scale": 78,
+    "items": [
+      {
+        "id": "ffdb405b-feb0-4adf-bee6-b0911430b15f",
+        "kind": "tap",
+        "x": 48.5,
+        "y": 19.5
+      },
+      {
+        "id": "a2f5c225-5594-4338-af95-878929fddd55",
+        "kind": "tap",
+        "x": 76.7,
+        "y": 19.2
+      }
+    ]
+  }
+}

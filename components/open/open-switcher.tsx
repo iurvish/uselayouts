@@ -6,6 +6,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
+import { openPress, scrollbarMinimal } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -94,7 +95,10 @@ export function OpenSwitcher({
     <div ref={rootRef} className="relative flex justify-center">
       <button
         type="button"
-        className="open-switcher-trigger"
+        className={cn(
+          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-white/12 bg-[#030202] px-3 py-2 text-sm tracking-[-0.02em] text-[#f7f7f7]",
+          openPress,
+        )}
         aria-expanded={open}
         aria-haspopup="listbox"
         onClick={() => {
@@ -109,7 +113,7 @@ export function OpenSwitcher({
         {open ? (
           <motion.div
             role="listbox"
-            className="open-switcher-panel"
+            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-[14px] border border-white/12 bg-[#030202] p-2 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_rgba(0,0,0,0.28)]"
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
@@ -121,9 +125,9 @@ export function OpenSwitcher({
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search components"
               aria-label="Search components"
-              className="open-switcher-search"
+              className="h-9 w-full rounded-[10px] border border-white/12 bg-[#0f0f0f] px-3 text-[13px] text-[#f7f7f7] outline-none placeholder:text-[#8f8f8f]"
             />
-            <div className="open-switcher-list">
+            <div className={cn("mt-1.5 max-h-[280px] overflow-auto", scrollbarMinimal)}>
               {filtered.length === 0 ? (
                 <p className="px-3 py-4 text-center text-xs text-white/35">No matches.</p>
               ) : (
@@ -135,7 +139,11 @@ export function OpenSwitcher({
                       type="button"
                       role="option"
                       aria-selected={active}
-                      className={cn("open-switcher-item", active && "is-active")}
+                      className={cn(
+                        "flex w-full min-h-8 items-center rounded-lg px-2.5 text-left text-[13px] text-[#8f8f8f]",
+                        openPress,
+                        active && "bg-[#2e2e2e] text-[#f7f7f7]",
+                      )}
                       onClick={() => select(item)}
                     >
                       {item.title}

@@ -1,0 +1,19 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-08-16T08:29:53.970Z",
+  "previewBackground": "#bc2929",
+  "interactionHints": {
+    "duration": 3,
+    "items": [
+      {
+        "id": "e4d5befb-9bd8-4d8d-adac-6a26203490ae",
+        "kind": "drag",
+        "x": 19.5,
+        "y": 48.9,
+        "x2": 69.8,
+        "y2": 48.8
+      }
+    ]
+  }
+}

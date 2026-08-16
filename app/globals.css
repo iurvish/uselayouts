@@ -132,6 +132,8 @@
 }
 
 :root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -295,4 +297,101 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #e2e8f0;
+}
+
+/* Shiki dual-theme output (`defaultColor: false`) needs these CSS variables. */
+.dark .shiki,
+.dark .shiki span,
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+.dark .shiki,
+html.dark .shiki {
+  background: transparent !important;
+}
+
+.dark .shiki span,
+html.dark .shiki span {
+  background-color: var(--shiki-dark-bg, transparent) !important;
+}
+
+@keyframes hint-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes hint-chevron {
+  0%,
+  100% {
+    opacity: 0.14;
+  }
+  42% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes hint-scroll-nudge {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 7px;
+  }
+}
+
+@keyframes hint-drag-travel {
+  0%,
+  8% {
+    transform: translate(0, 0);
+  }
+  48%,
+  58% {
+    transform: translate(var(--hint-dx), var(--hint-dy));
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.hint-ripple {
+  animation: hint-ripple 1.35s var(--ease-out) infinite;
+}
+
+.hint-chevron {
+  animation: hint-chevron 1.05s var(--ease-in-out) infinite;
+}
+
+.hint-scroll-nudge {
+  animation: hint-scroll-nudge 1.1s var(--ease-in-out) infinite;
+}
+
+.hint-drag-travel {
+  animation: hint-drag-travel 1.15s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint-ripple {
+    animation: none;
+    opacity: 0.22;
+    transform: scale(1.45);
+  }
+
+  .hint-chevron {
+    animation: none;
+    opacity: 0.55;
+  }
+
+  .hint-scroll-nudge,
+  .hint-drag-travel {
+    animation: none;
+  }
 }

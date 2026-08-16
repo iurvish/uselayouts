@@ -8,6 +8,10 @@ import {
 } from "@/lib/admin/dial-extract";
 import { generateComponentMdx } from "@/lib/admin/generate-mdx";
 import { toSlug, toTitle } from "@/lib/admin/slug";
+import {
+  parseHintConfig,
+  type InteractionHintConfig,
+} from "@/lib/open/hints";
 
 const execAsync = promisify(exec);
 
@@ -21,6 +25,8 @@ export type ComponentControlsMeta = {
   dialConfig: Record<string, unknown>;
   disabled: string[];
   updatedAt: string;
+  previewBackground?: string;
+  interactionHints?: InteractionHintConfig;
 };
 
 export type RegistryItem = {
@@ -39,8 +45,10 @@ export type UpsertComponentInput = {
   code: string;
   dependencies?: string[];
   features?: string[];
-  dialConfig: Record<string, unknown>;
+  dialConfig?: Record<string, unknown>;
   disabledControls?: string[];
+  previewBackground?: string;
+  interactionHints?: InteractionHintConfig;
 };
 
 async function readRegistry(): Promise<{
@@ -151,21 +159,27 @@ export async function upsertComponent(input: UpsertComponentInput) {
   const title = input.title.trim() || toTitle(name);
   const description = input.description.trim();
   const disabled = input.disabledControls ?? [];
-  const filtered = filterDialConfig(input.dialConfig, disabled);
-
-  let code = ensureDialConfigInSource(input.code, filtered);
-  // Keep full dialConfig in meta; file gets filtered
-  code = ensureDialConfigInSource(code, filtered);
-
   const exampleRelative = `registry/default/example/${name}.tsx`;
   const examplePath = path.join(ROOT, exampleRelative);
   await fs.mkdir(EXAMPLE_DIR, { recursive: true });
-  await fs.writeFile(examplePath, code);
+  await fs.writeFile(examplePath, input.code);
+
+  const existingMeta = await readControls(name);
+  const background =
+    input.previewBackground !== undefined
+      ? input.previewBackground.trim() || undefined
+      : existingMeta?.previewBackground;
+  const interactionHints =
+    input.interactionHints !== undefined
+      ? parseHintConfig(input.interactionHints)
+      : existingMeta?.interactionHints;
 
   await writeControls(name, {
-    dialConfig: input.dialConfig,
+    dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
     disabled,
     updatedAt: new Date().toISOString(),
+    previewBackground: background,
+    interactionHints,
   });
 
   const mdx = generateComponentMdx({
@@ -187,7 +201,7 @@ export async function upsertComponent(input: UpsertComponentInput) {
     description,
     dependencies: input.dependencies?.length
       ? input.dependencies
-      : ["motion", "clsx", "tailwind-merge", "dialkit"],
+      : ["motion", "clsx", "tailwind-merge"],
     files: [{ path: exampleRelative, type: "registry:component" }],
   };
 
@@ -258,6 +272,8 @@ export async function updateControls(
     dialConfig: config,
     disabled,
     updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    interactionHints: existing.controls?.interactionHints,
   });
   return { name, disabled };
 }

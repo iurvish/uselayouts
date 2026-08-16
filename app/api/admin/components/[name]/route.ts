@@ -49,6 +49,8 @@ export async function PUT(request: Request, { params }: Params) {
       features: body.features,
       dialConfig: body.dialConfig,
       disabledControls: body.disabledControls,
+      previewBackground: body.previewBackground,
+      interactionHints: body.interactionHints,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {

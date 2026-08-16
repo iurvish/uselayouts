@@ -1,6 +1,6 @@
 ---
 title: 3D Book
-description: A 3D interactive book component that opens on hover or drag.
+description: An interactive 3D book component with page flip animations.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
@@ -10,7 +10,7 @@ import { ComponentPreview } from "@/components/component-preview";
 
 <Tabs items={["Preview", "Code"]}>
   <Tab value="Preview">
-    <ComponentPreview name="3d-book" />
+    <ComponentPreview name="3d-book" full />
   </Tab>
   <Tab value="Code">
     <SourceCode name="3d-book" />
@@ -28,38 +28,40 @@ import { ComponentPreview } from "@/components/component-preview";
   <Tab value="Manual">
     <Steps>
       <Step>
+        ### Install dependencies
+
+        ```bash
+        npm install motion clsx tailwind-merge
+        ```
+      </Step>
+      <Step>
         ### Copy the code
 
-        Copy the code from the **Code** tab above into `components/interactive-book.tsx`.
+        Copy the code from the **Code** tab above into `components/3d-book.tsx`.
       </Step>
       <Step>
         ### Update imports
 
-        Update the imports to match your project structure.
+        Update the import paths to match your project setup.
       </Step>
     </Steps>
-
   </Tab>
 </Tabs>
 
 ## Usage
 
 ```tsx
-import InteractiveBook from "@/components/3d-book";
+import 3dBook from "@/components/3d-book";
 
-export default function Page() {
-  return (
-    <div className="h-[500px] w-full">
-      <InteractiveBook />
-    </div>
-  );
+export default function Example() {
+  return <3dBook />;
 }
 ```
 
 ## Features
 
-- **3D Perspective**: Realistic book cover and page depth using CSS 3D transforms.
-- **Interactive**: Book opens responsively on hover or drag interaction.
-- **Performance**: Pure CSS/JS implementation without heavy WebGL dependencies.
-- **Responsive**: Adapts to container size (desktop and mobile friendly).
-- **Customizable**: Easy to swap cover art or page content.
+- 3D Perspective: Realistic book cover and page depth using CSS 3D transforms.
+- Interactive: Book opens responsively on hover or drag interaction.
+- Performance: Pure CSS/JS implementation without heavy WebGL dependencies.
+- Responsive: Adapts to container size (desktop and mobile friendly).
+- Customizable: Easy to swap cover art or page content.

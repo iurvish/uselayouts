@@ -8,7 +8,11 @@
       "type": "registry:component",
       "title": "3D Book",
       "description": "An interactive 3D book component with page flip animations.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/3d-book.tsx",
@@ -118,7 +122,11 @@
       "type": "registry:component",
       "title": "Discrete Tabs",
       "description": "A tab component with discrete sliding animations.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/discrete-tabs.tsx",
@@ -161,7 +169,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/default/example/expandable-gallery.tsx",
@@ -223,7 +233,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["input"],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/example/inline-edit.tsx",
@@ -262,7 +274,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["input"],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/example/morphing-input.tsx",
@@ -375,7 +389,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/default/example/status-button.tsx",
@@ -414,7 +430,10 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["input", "button"],
+      "registryDependencies": [
+        "input",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/default/example/stacked-list.tsx",
@@ -450,7 +469,11 @@
       "type": "registry:component",
       "title": "Fluid Expanding Grid",
       "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/fluid-expanding-grid.tsx",

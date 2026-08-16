@@ -1,14 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useState, type ComponentType } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { ExtractedControl } from "@/lib/admin/dial-extract";
 import { ComponentLivePreview } from "@/components/admin/live-preview";
-import { AdminRegistryPreview } from "@/components/admin/registry-preview";
+import { HintEditor } from "@/components/admin/hint-editor";
 import { DependencyTags } from "@/components/admin/dependency-tags";
 import { extractHints } from "@/lib/open/mdx-extract";
+import {
+  DEFAULT_HINT_CONFIG,
+  parseHintConfig,
+  type InteractionHintConfig,
+} from "@/lib/open/hints";
+import { Index } from "@/registry/__index__";
 
 type FormState = {
   name: string;
@@ -25,44 +32,18 @@ const EMPTY: FormState = {
   description: "",
   code: `"use client";
 
-import { useDialKit } from "dialkit";
 import { motion } from "motion/react";
 
-export const dialConfig = {
-  title: "Hello",
-  scale: [1, 0.8, 1.4, 0.01],
-  color: "#ffffff",
-  imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400",
-  spring: {
-    type: "spring",
-    visualDuration: 0.35,
-    bounce: 0.2,
-  },
-} as const;
-
 export default function Example() {
-  const params = useDialKit("Example", dialConfig);
-
   return (
-    <motion.div
-      className="flex flex-col items-center gap-4 p-8"
-      animate={{ scale: params.scale }}
-      transition={params.spring}
-    >
-      <img
-        src={params.imageUrl}
-        alt=""
-        className="size-24 rounded-2xl object-cover"
-      />
-      <p style={{ color: params.color }} className="text-lg font-medium">
-        {params.title}
-      </p>
+    <motion.div className="flex flex-col items-center gap-4 p-8">
+      <p className="text-lg font-medium">Hello</p>
     </motion.div>
   );
 }
 `,
-  dependencies: "motion, dialkit, clsx, tailwind-merge",
-  features: "DialKit live controls\nMotion spring animation",
+  dependencies: "motion, clsx, tailwind-merge",
+  features: "Motion-powered interactions",
 };
 
 export function ComponentEditor({
@@ -74,13 +55,11 @@ export function ComponentEditor({
 }) {
   const router = useRouter();
   const [form, setForm] = useState<FormState>(EMPTY);
-  const [controls, setControls] = useState<ExtractedControl[]>([]);
-  const [disabled, setDisabled] = useState<string[]>([]);
-  const [dialConfig, setDialConfig] = useState<Record<string, unknown>>({});
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [previewPadding, setPreviewPadding] = useState(24);
+  const [previewBackground, setPreviewBackground] = useState("");
+  const [hints, setHints] = useState<InteractionHintConfig>(DEFAULT_HINT_CONFIG);
 
   useEffect(() => {
     if (mode !== "edit" || !initialName) return;
@@ -96,41 +75,11 @@ export function ComponentEditor({
           dependencies: (data.item.dependencies || []).join(", "),
           features: data.mdx ? extractHints(data.mdx).join("\n") : "",
         });
-        setDisabled(data.controls?.disabled ?? []);
-        setDialConfig(data.controls?.dialConfig ?? {});
+        setPreviewBackground(data.controls?.previewBackground ?? "");
+        setHints(parseHintConfig(data.controls?.interactionHints));
       })
       .catch((err) => setError(err.message));
   }, [mode, initialName]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!form.code.trim()) return;
-      fetch("/api/admin/extract", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: form.code }),
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          if (!res.ok) return;
-          setControls(data.controls);
-          setDialConfig(data.dialConfig);
-        })
-        .catch(() => undefined);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [form.code]);
-
-  const leafControls = useMemo(
-    () => controls.filter((c) => c.kind !== "folder"),
-    [controls],
-  );
-
-  function toggleControl(path: string) {
-    setDisabled((prev) =>
-      prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path],
-    );
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -151,8 +100,8 @@ export function ComponentEditor({
         .split("\n")
         .map((f) => f.trim())
         .filter(Boolean),
-      dialConfig,
-      disabledControls: disabled,
+      previewBackground: previewBackground.trim() || undefined,
+      interactionHints: hints,
     };
 
     const res = await fetch(
@@ -174,11 +123,15 @@ export function ComponentEditor({
       return;
     }
 
-    setMessage(`Saved ${data.name}. MDX + registry updated.`);
+    setMessage(`Saved ${data.name}.`);
     if (mode === "create") {
       router.push(`/admin/${data.name}`);
     }
   }
+
+  const Preview = initialName
+    ? (Index[initialName]?.component as ComponentType | undefined)
+    : undefined;
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
@@ -188,8 +141,7 @@ export function ComponentEditor({
             {mode === "create" ? "New component" : `Edit ${initialName}`}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Paste component code with <code>dialConfig</code> +{" "}
-            <code>useDialKit</code>. Controls are extracted automatically.
+            Hints live on the platform preview only — they are not written into component code.
           </p>
         </div>
 
@@ -241,6 +193,24 @@ export function ComponentEditor({
           />
         </Field>
 
+        <Field label="Preview background">
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              aria-label="Preview background color"
+              className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-input bg-background p-1"
+              value={/^#[0-9a-fA-F]{6}$/.test(previewBackground) ? previewBackground : "#141414"}
+              onChange={(e) => setPreviewBackground(e.target.value)}
+            />
+            <input
+              className={inputClass}
+              placeholder="#141414"
+              value={previewBackground}
+              onChange={(e) => setPreviewBackground(e.target.value)}
+            />
+          </div>
+        </Field>
+
         <Field label="Component code">
           <textarea
             required
@@ -256,78 +226,35 @@ export function ComponentEditor({
         {message && <p className="text-sm text-emerald-600">{message}</p>}
 
         <Button type="submit" disabled={saving}>
-          {saving ? "Saving…" : "Submit · generate MDX"}
+          {saving ? "Saving…" : "Submit"}
         </Button>
       </div>
 
       <div className="space-y-4">
-        <div className="rounded-xl border bg-muted/20 p-3">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <p className="text-sm font-medium">Preview frame</p>
-            <label className="flex items-center gap-2 text-xs text-muted-foreground">
-              Padding
-              <input
-                type="range"
-                min={0}
-                max={96}
-                value={previewPadding}
-                onChange={(e) => setPreviewPadding(Number(e.target.value))}
-              />
-              <span>{previewPadding}px</span>
-            </label>
-          </div>
-          <ComponentLivePreview code={form.code} padding={previewPadding} />
-          {mode === "edit" && initialName ? (
-            <div className="mt-4">
-              <p className="mb-2 text-sm font-medium">Live preview + DialKit</p>
-              <AdminRegistryPreview name={initialName} padding={previewPadding} />
-            </div>
-          ) : (
-            <p className="mt-2 text-xs text-muted-foreground">
-              After the first save, this page shows a live preview and DialKit
-              controls.
-            </p>
-          )}
-        </div>
+        <ComponentLivePreview code={form.code} />
 
-        <div className="rounded-xl border p-4">
-          <p className="text-sm font-medium">DialKit controls</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Uncheck to cancel a control so it won&apos;t ship in the component
-            dialConfig.
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Interaction hints</p>
+          <p className="text-xs text-muted-foreground">
+            Drag points on the dotted map below. The preview only shows where they land.
           </p>
-          <ul className="mt-3 max-h-[420px] space-y-2 overflow-y-auto">
-            {leafControls.length === 0 && (
-              <li className="text-sm text-muted-foreground">
-                No controls detected yet.
-              </li>
-            )}
-            {leafControls.map((control) => {
-              const checked = !disabled.includes(control.path);
-              return (
-                <li
-                  key={control.path}
-                  className="flex items-start gap-3 rounded-lg border px-3 py-2"
-                >
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={checked}
-                    onChange={() => toggleControl(control.path)}
-                  />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium">{control.label}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {control.path} · {control.kind}
-                      {control.kind === "image"
-                        ? " · URL only on export"
-                        : ""}
-                    </p>
+          <HintEditor value={hints} onChange={setHints}>
+            {Preview ? (
+              <Suspense
+                fallback={
+                  <div data-hint-ignore="" className="flex size-24 items-center justify-center">
+                    <Loader2 className="size-5 animate-spin text-white/40" />
                   </div>
-                </li>
-              );
-            })}
-          </ul>
+                }
+              >
+                <Preview />
+              </Suspense>
+            ) : (
+              <p data-hint-ignore="" className="text-sm text-white/40">
+                Save once to preview the live component here.
+              </p>
+            )}
+          </HintEditor>
         </div>
       </div>
     </form>

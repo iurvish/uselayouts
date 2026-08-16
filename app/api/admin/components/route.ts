@@ -31,6 +31,8 @@ export async function POST(request: Request) {
       features,
       dialConfig,
       disabledControls,
+      previewBackground,
+      interactionHints,
     } = body;
 
     if (!title || !description || !code) {
@@ -50,6 +52,8 @@ export async function POST(request: Request) {
       features,
       dialConfig: dialConfig ?? extracted.dialConfig,
       disabledControls: disabledControls ?? [],
+      previewBackground,
+      interactionHints,
     });
 
     return NextResponse.json({ ok: true, ...result });

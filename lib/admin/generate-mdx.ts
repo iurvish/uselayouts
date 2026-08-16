@@ -20,7 +20,7 @@ export function generateComponentMdx({
   const featureList =
     features.length > 0
       ? features.map((f) => `- ${f}`).join("\n")
-      : `- DialKit controls for live customization\n- Motion-powered interactions`;
+      : `- Motion-powered interactions`;
 
   return `---
 title: ${title}

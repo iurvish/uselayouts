@@ -8,6 +8,7 @@ import {
   extractUsageSnippet,
   type DocSection,
 } from "@/lib/open/mdx-extract";
+import { parseHintConfig, type InteractionHintConfig } from "@/lib/open/hints";
 
 export type OpenNavItem = {
   title: string;
@@ -31,6 +32,8 @@ export type OpenComponentData = {
   code: string;
   codeHtml: string;
   docs: OpenDocSection[];
+  previewBackground?: string;
+  interactionHints: InteractionHintConfig;
 };
 
 function defaultUsage(slug: string) {
@@ -51,7 +54,7 @@ async function sectionToHtml(body: string) {
     if (match.index > last) {
       parts.push(proseToHtml(body.slice(last, match.index)));
     }
-    parts.push(await highlightCode(match[2].trim(), match[1] || "tsx"));
+    parts.push(await highlightCode(match[2].trim(), match[1] || "tsx", { showLineNumbers: false }));
     last = match.index + match[0].length;
   }
   if (last < body.length) {
@@ -125,8 +128,8 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
   );
 
   const [usageHtml, codeHtml] = await Promise.all([
-    highlightCode(usage, "tsx"),
-    code ? highlightCode(code, "tsx") : Promise.resolve(""),
+    highlightCode(usage, "tsx", { showLineNumbers: false }),
+    code ? highlightCode(code, "tsx", { showLineNumbers: false }) : Promise.resolve(""),
   ]);
 
   return {
@@ -141,5 +144,7 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     code,
     codeHtml,
     docs,
+    previewBackground: record?.controls?.previewBackground,
+    interactionHints: parseHintConfig(record?.controls?.interactionHints),
   };
 }

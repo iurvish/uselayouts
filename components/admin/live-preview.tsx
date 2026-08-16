@@ -12,8 +12,7 @@ type Props = {
 type Status = "idle" | "checking" | "ok" | "error";
 
 /**
- * Admin code validation panel. Full interactive DialKit preview lives on the
- * docs page after submit — this only confirms the TSX parses cleanly.
+ * Admin code validation panel. Confirms the TSX parses cleanly.
  */
 export function ComponentLivePreview({ code }: Props) {
   const [status, setStatus] = React.useState<Status>("idle");
@@ -38,9 +37,7 @@ export function ComponentLivePreview({ code }: Props) {
         });
         if (!cancelled) {
           setStatus("ok");
-          setMessage(
-            "Syntax looks good. After submit, open the component in admin to use DialKit controls.",
-          );
+          setMessage("Syntax looks good.");
         }
       } catch (err) {
         if (!cancelled) {

@@ -1,6 +1,6 @@
 ---
 title: Animated Collection
-description: A component to switch between List, Card, and Pack views with morphing animations.
+description: A collection of items with smooth layout transitions and animations.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
@@ -31,56 +31,36 @@ import { ComponentPreview } from "@/components/component-preview";
         ### Install dependencies
 
         ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
+        npm install motion @hugeicons/core-free-icons @hugeicons/react clsx tailwind-merge
         ```
       </Step>
       <Step>
         ### Copy the code
 
-        Copy the code from the **Code** tab above into `components/layout-switcher.tsx`.
+        Copy the code from the **Code** tab above into `components/animated-collection.tsx`.
       </Step>
       <Step>
         ### Update imports
 
-        Update the imports to match your project structure.
+        Update the import paths to match your project setup.
       </Step>
     </Steps>
-
   </Tab>
 </Tabs>
 
 ## Usage
 
-### Customizing Content
-
-You can easily swap out the items by modifying the `ITEMS` array at the top of the component file:
-
 ```tsx
-// Change Here
-const ITEMS = [
-  {
-    id: "1",
-    title: "Cinematic Horizons",
-    subtitle: "Photography",
-    idNumber: "209",
-    image: "https://...",
-    icon: Camera01Icon,
-  },
-  // ... add more items
-];
-```
+import AnimatedCollection from "@/components/animated-collection";
 
-```tsx
-import LayoutSwitcher from "@/components/layout-switcher";
-
-export default function Page() {
-  return <LayoutSwitcher />;
+export default function Example() {
+  return <AnimatedCollection />;
 }
 ```
 
 ## Features
 
-- **Morphing Layout**: Seamlessly transitions between List, Card, and Pack views.
-- **Shared Element Transitions**: Elements smoothly resize and reposition during layout changes.
-- **Pack View**: A unique "stack" or "pack" view simulation.
-- **View Toggle**: Integrated toggle switch for different layout modes.
+- Morphing Layout: Seamlessly transitions between List, Card, and Pack views.
+- Shared Element Transitions: Elements smoothly resize and reposition during layout changes.
+- Pack View: A unique "stack" or "pack" view simulation.
+- View Toggle: Integrated toggle switch for different layout modes.
