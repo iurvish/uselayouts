@@ -186,7 +186,6 @@ export async function upsertComponent(input: UpsertComponentInput) {
     name,
     title,
     description,
-    dependencies: input.dependencies,
     features: input.features,
   });
   await fs.mkdir(DOCS_DIR, { recursive: true });
@@ -279,7 +278,7 @@ export async function updateControls(
 }
 
 async function rebuildRegistry() {
-  await execAsync("npx tsx scripts/build-registry.mts", {
+  await execAsync("npm run build:registry", {
     cwd: ROOT,
   });
 }

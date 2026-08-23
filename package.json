@@ -24,7 +24,7 @@
     "start": "next start",
     "lint": "eslint",
     "build:docs": "fumadocs-mdx",
-    "build:registry": "npx tsx scripts/build-registry.mts",
+    "build:registry": "tsx scripts/build-registry.mts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
@@ -72,6 +72,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

@@ -18,11 +18,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 
 export function OpenCliBar({
-  registryUrl,
+  registryItem,
   manager,
   onManagerChange,
 }: {
-  registryUrl: string;
+  registryItem: string;
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
 }) {
@@ -30,7 +30,7 @@ export function OpenCliBar({
   const [copied, setCopied] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const command = cliInstallCommand(manager, registryUrl);
+  const command = cliInstallCommand(manager, registryItem);
 
   React.useEffect(() => {
     if (!menuOpen) return;

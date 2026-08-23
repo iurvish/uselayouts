@@ -3,56 +3,6 @@ title: Status Button
 description: A save button with animated states for idle, loading, and success.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="status-button" align="center" />
-  </Tab>
-  <Tab value="Code">
-    <SourceCode name="status-button" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/status-button.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion clsx tailwind-merge @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Install UI components
-
-        Ensure you have the `Button` component from Shadcn UI installed.
-
-        ```bash
-        npx shadcn@latest add button
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/save-button.tsx`.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
-
 ## Usage
 
 ```tsx

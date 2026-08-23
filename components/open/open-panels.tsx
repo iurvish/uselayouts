@@ -14,7 +14,7 @@ export function OpenCodePanel({
   usage,
   codeHtml,
   code,
-  registryUrl,
+  registryItem,
   dependencies,
   manager,
   onManagerChange,
@@ -26,7 +26,7 @@ export function OpenCodePanel({
   usage: string;
   codeHtml: string;
   code: string;
-  registryUrl: string;
+  registryItem: string;
   dependencies: string[];
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
@@ -59,7 +59,7 @@ export function OpenCodePanel({
       />
 
       <InstallGuide
-        registryUrl={registryUrl}
+        registryItem={registryItem}
         dependencies={dependencies}
         manager={manager}
         onManagerChange={onManagerChange}

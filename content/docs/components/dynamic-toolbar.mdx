@@ -3,52 +3,6 @@ title: Dynamic Toolbar
 description: An animated toolbar that expands to reveal additional tools with smooth spring animations.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="dynamic-toolbar" />
-  </Tab>
-  <Tab value="Code">
-    <SourceCode name="dynamic-toolbar" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/dynamic-toolbar.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/expanded-toolbar.tsx`.
-      </Step>
-      <Step>
-        ### Add the useMeasure hook
-
-        Create `hooks/use-measure.tsx` with the `useMeasure` hook for measuring element dimensions.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
-
 ## Usage
 
 ### Customizing Content

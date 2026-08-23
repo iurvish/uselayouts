@@ -11,6 +11,15 @@ const config = {
   turbopack: {
     root: __dirname,
   },
+  async redirects() {
+    return [
+      {
+        source: "/docs/components/discrete-tab",
+        destination: "/docs/components/discrete-tabs",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

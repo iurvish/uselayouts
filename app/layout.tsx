@@ -74,6 +74,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} `} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
+        suppressHydrationWarning
       >
         <RootProvider search={{ enabled: false }}>{children}</RootProvider>
         <Analytics />

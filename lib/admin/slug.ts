@@ -16,9 +16,11 @@ export function toTitle(slug: string) {
 }
 
 export function toPascal(slug: string) {
-  return slug
+  const name = slug
     .split("-")
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("");
+  if (!name) return "Component";
+  return /^[A-Za-z_]/.test(name) ? name : `Component${name}`;
 }

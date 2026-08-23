@@ -6,6 +6,12 @@ import { autoUpdate } from "@floating-ui/dom";
 
 import { cn } from "@/lib/utils";
 
+function hasOverlay(overlay?: React.ReactNode) {
+  if (overlay == null || overlay === false) return false;
+  if (Array.isArray(overlay) && overlay.length === 0) return false;
+  return true;
+}
+
 function resolveTarget(hold: HTMLElement): HTMLElement | null {
   for (const node of hold.children) {
     if (!(node instanceof HTMLElement)) continue;
@@ -90,7 +96,7 @@ export function HintOverlayFrame({
       <div ref={holdRef} className={cn("grid min-h-80 w-full place-items-center", className)}>
         {children}
       </div>
-      {ready && overlay
+      {ready && hasOverlay(overlay)
         ? createPortal(
             <div
               ref={setFloating}

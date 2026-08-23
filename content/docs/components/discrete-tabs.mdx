@@ -1,0 +1,35 @@
+---
+title: Discrete Tabs
+description: A minimal tab component with discrete animations.
+---
+
+## Usage
+
+### Customizing Content
+
+You can easily add or remove tabs by modifying the `TABS` array at the top of the component:
+
+```tsx
+// Change Here
+const TABS = [
+  { id: "Inbox", title: "Inbox", icon: Inbox },
+  { id: "Planner", title: "Planner", icon: Calendar },
+  { id: "Alerts", title: "Alerts", icon: Alert },
+];
+```
+
+```tsx
+import DiscreteTabs from "@/components/discrete-tabs";
+
+export default function Page() {
+  return <DiscreteTabs />;
+}
+```
+
+## Features
+
+- **Discrete Animations**: Subtle motion effects that provide feedback without distraction.
+- **SVG Icons**: Lightweight, scalable icons for clear visual communication.
+- **Notification Badge**: Support for unread status indicators or alerts.
+- **Visual Polish**: High-quality "shiny text" effects on active states.
+- **Minimalist Aesthetic**: Clean design suitable for modern, content-focused interfaces.

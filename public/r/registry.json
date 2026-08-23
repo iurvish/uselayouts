@@ -40,6 +40,25 @@
       ]
     },
     {
+      "name": "bento-card",
+      "type": "registry:component",
+      "title": "Bento Card",
+      "description": "An interactive bento card with animated tabs and workspace preview.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/bento-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "bottom-menu",
       "type": "registry:component",
       "title": "Bottom Menu",
@@ -56,6 +75,29 @@
         {
           "path": "registry/default/example/bottom-menu.tsx",
           "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "bucket",
+      "type": "registry:component",
+      "title": "Bucket",
+      "description": "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/bucket.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/use-mobile.ts",
+          "type": "registry:hook"
         }
       ]
     },
@@ -158,6 +200,25 @@
       ]
     },
     {
+      "name": "empty-testimonial",
+      "type": "registry:component",
+      "title": "Empty Testimonial",
+      "description": "An interactive empty state for testimonials with a playful folder animation.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/empty-testimonial.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "expandable-gallery",
       "type": "registry:component",
       "title": "Expandable Gallery",
@@ -198,6 +259,23 @@
       "files": [
         {
           "path": "registry/default/example/feature-carousel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "fluid-expanding-grid",
+      "type": "registry:component",
+      "title": "Fluid Expanding Grid",
+      "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/fluid-expanding-grid.tsx",
           "type": "registry:component"
         }
       ]
@@ -258,6 +336,25 @@
       "files": [
         {
           "path": "registry/default/example/list-item.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "magnified-bento",
+      "type": "registry:component",
+      "title": "Magnified Bento",
+      "description": "A bento card component with a draggable magnifying lens effect over scrolling chips.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/magnified-bento.tsx",
           "type": "registry:component"
         }
       ]
@@ -378,6 +475,29 @@
       ]
     },
     {
+      "name": "stacked-list",
+      "type": "registry:component",
+      "title": "Stacked List",
+      "description": "An expandable list widget with a stacked layout and smooth morphing transitions.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "input",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stacked-list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "status-button",
       "type": "registry:component",
       "title": "Status Button",
@@ -414,126 +534,6 @@
       "files": [
         {
           "path": "registry/default/example/vertical-tabs.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "stacked-list",
-      "type": "registry:component",
-      "title": "Stacked List",
-      "description": "An expandable list widget with a stacked layout and smooth morphing transitions.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "registryDependencies": [
-        "input",
-        "button"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/stacked-list.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "bucket",
-      "type": "registry:component",
-      "title": "Bucket",
-      "description": "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/bucket.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "hooks/use-mobile.ts",
-          "type": "registry:hook"
-        }
-      ]
-    },
-    {
-      "name": "fluid-expanding-grid",
-      "type": "registry:component",
-      "title": "Fluid Expanding Grid",
-      "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/fluid-expanding-grid.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "bento-card",
-      "type": "registry:component",
-      "title": "Bento Card",
-      "description": "An interactive bento card with animated tabs and workspace preview.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/bento-card.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "magnified-bento",
-      "type": "registry:component",
-      "title": "Magnified Bento",
-      "description": "A bento card component with a draggable magnifying lens effect over scrolling chips.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/magnified-bento.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "empty-testimonial",
-      "type": "registry:component",
-      "title": "Empty Testimonial",
-      "description": "An interactive empty state for testimonials with a playful folder animation.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/empty-testimonial.tsx",
           "type": "registry:component"
         }
       ]

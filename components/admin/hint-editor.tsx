@@ -119,14 +119,18 @@ export function HintEditor({
         <HintOverlayFrame
           className="overflow-hidden rounded-[14px] border bg-muted/20"
           onTargetRect={setMapBox}
-          overlay={value.items.map((item) => (
-            <HintHandles
-              key={`preview-${item.id}`}
-              item={item}
-              selected={item.id === selected?.id}
-              scale={value.scale}
-            />
-          ))}
+          overlay={
+            value.items.length > 0
+              ? value.items.map((item) => (
+                  <HintHandles
+                    key={`preview-${item.id}`}
+                    item={item}
+                    selected={item.id === selected?.id}
+                    scale={value.scale}
+                  />
+                ))
+              : null
+          }
         >
           {children}
         </HintOverlayFrame>

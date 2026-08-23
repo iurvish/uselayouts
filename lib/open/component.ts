@@ -9,6 +9,7 @@ import {
   type DocSection,
 } from "@/lib/open/mdx-extract";
 import { parseHintConfig, type InteractionHintConfig } from "@/lib/open/hints";
+import { registryItem } from "@/lib/open/package-manager";
 
 export type OpenNavItem = {
   title: string;
@@ -25,7 +26,7 @@ export type OpenComponentData = {
   title: string;
   description: string;
   dependencies: string[];
-  registryUrl: string;
+  registryItem: string;
   hints: string[];
   usage: string;
   usageHtml: string;
@@ -137,7 +138,7 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     title,
     description,
     dependencies,
-    registryUrl: `https://uselayouts.com/r/${slug}.json`,
+    registryItem: registryItem(slug),
     hints,
     usage,
     usageHtml,

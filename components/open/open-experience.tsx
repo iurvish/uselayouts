@@ -81,7 +81,7 @@ export function OpenExperience({
     usageHtml: data.usageHtml,
     code: data.code,
     codeHtml: data.codeHtml,
-    registryUrl: data.registryUrl,
+    registryItem: data.registryItem,
     dependencies: data.dependencies,
     manager,
     onManagerChange: setManager,
@@ -188,7 +188,7 @@ export function OpenExperience({
 
         <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 [&>*]:pointer-events-auto">
           <OpenCliBar
-            registryUrl={data.registryUrl}
+            registryItem={data.registryItem}
             manager={manager}
             onManagerChange={setManager}
           />

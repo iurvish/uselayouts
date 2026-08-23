@@ -39,7 +39,7 @@ export function DocsSteps({ children }: { children: React.ReactNode }) {
 }
 
 export function InstallGuide({
-  registryUrl,
+  registryItem,
   dependencies,
   manager,
   onManagerChange,
@@ -49,7 +49,7 @@ export function InstallGuide({
   code,
   slug,
 }: {
-  registryUrl: string;
+  registryItem: string;
   dependencies: string[];
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
@@ -62,10 +62,10 @@ export function InstallGuide({
   const [mode, setMode] = React.useState<"cli" | "manual">("cli");
   const file = `components/${slug}.tsx`;
   const commands = {
-    npm: cliInstallCommand("npm", registryUrl),
-    yarn: cliInstallCommand("yarn", registryUrl),
-    pnpm: cliInstallCommand("pnpm", registryUrl),
-    bun: cliInstallCommand("bun", registryUrl),
+    npm: cliInstallCommand("npm", registryItem),
+    yarn: cliInstallCommand("yarn", registryItem),
+    pnpm: cliInstallCommand("pnpm", registryItem),
+    bun: cliInstallCommand("bun", registryItem),
   };
   const manual = {
     npm: manualInstallCommand("npm", dependencies),
@@ -91,11 +91,17 @@ export function InstallGuide({
       />
 
       {mode === "cli" ? (
-        <CodeBlockCommand
-          {...commands}
-          value={manager}
-          onValueChange={onManagerChange}
-        />
+        <>
+          <p className="mb-2.5 text-[13.5px] leading-[1.6] text-[#a3a3a3] [&_code]:rounded-md [&_code]:bg-[#1c1c1c] [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-[#e8c4a8]">
+            Add <code>@uselayouts</code> to <code>registries</code> in{" "}
+            <code>components.json</code>, then run:
+          </p>
+          <CodeBlockCommand
+            {...commands}
+            value={manager}
+            onValueChange={onManagerChange}
+          />
+        </>
       ) : (
         <DocsSteps>
           <div>

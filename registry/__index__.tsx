@@ -42,6 +42,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "bento-card": {
+    name: "bento-card",
+    description: "An interactive bento card with animated tabs and workspace preview.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/bento-card.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/bento-card-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bento-card"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "bottom-menu": {
     name: "bottom-menu",
     description: "A floating bottom navigation menu with smooth interactions.",
@@ -55,6 +73,28 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/bottom-menu.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bottom-menu"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "bucket": {
+    name: "bucket",
+    description: "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/bucket.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "hooks/use-mobile.ts",
+      type: "registry:hook",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/bucket-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bucket"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -154,6 +194,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "empty-testimonial": {
+    name: "empty-testimonial",
+    description: "An interactive empty state for testimonials with a playful folder animation.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/empty-testimonial.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/empty-testimonial-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "empty-testimonial"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "expandable-gallery": {
     name: "expandable-gallery",
     description: "A photo gallery with smooth item expansion.",
@@ -189,6 +247,24 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/feature-carousel-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "feature-carousel"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "fluid-expanding-grid": {
+    name: "fluid-expanding-grid",
+    description: "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/fluid-expanding-grid.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/fluid-expanding-grid.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "fluid-expanding-grid"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -243,6 +319,24 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/list-item.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "list-item"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "magnified-bento": {
+    name: "magnified-bento",
+    description: "A bento card component with a draggable magnifying lens effect over scrolling chips.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/magnified-bento.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/magnified-bento-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "magnified-bento"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -338,6 +432,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "stacked-list": {
+    name: "stacked-list",
+    description: "An expandable list widget with a stacked layout and smooth morphing transitions.",
+    type: "registry:component",
+    registryDependencies: ["input","button"],
+    files: [{
+      path: "registry/default/example/stacked-list.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/stacked-list.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "stacked-list"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "status-button": {
     name: "status-button",
     description: "A button with animated states for idle, loading, and success.",
@@ -369,118 +481,6 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/vertical-tabs-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "vertical-tabs"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "stacked-list": {
-    name: "stacked-list",
-    description: "An expandable list widget with a stacked layout and smooth morphing transitions.",
-    type: "registry:component",
-    registryDependencies: ["input","button"],
-    files: [{
-      path: "registry/default/example/stacked-list.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/stacked-list.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "stacked-list"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "bucket": {
-    name: "bucket",
-    description: "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/bucket.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "hooks/use-mobile.ts",
-      type: "registry:hook",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/bucket-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bucket"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "fluid-expanding-grid": {
-    name: "fluid-expanding-grid",
-    description: "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/fluid-expanding-grid.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/fluid-expanding-grid.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "fluid-expanding-grid"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "bento-card": {
-    name: "bento-card",
-    description: "An interactive bento card with animated tabs and workspace preview.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/bento-card.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/bento-card-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bento-card"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "magnified-bento": {
-    name: "magnified-bento",
-    description: "A bento card component with a draggable magnifying lens effect over scrolling chips.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/magnified-bento.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/magnified-bento-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "magnified-bento"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "empty-testimonial": {
-    name: "empty-testimonial",
-    description: "An interactive empty state for testimonials with a playful folder animation.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/empty-testimonial.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/empty-testimonial-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "empty-testimonial"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

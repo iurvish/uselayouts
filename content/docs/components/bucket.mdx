@@ -3,60 +3,6 @@ title: Bucket
 description: An interactive card component with a 3D-like bucket effect and falling animated chips.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
-
-import { Suspense } from "react";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="bucket" size="lg" />
-  </Tab>
-  <Tab value="Code">
-    <Suspense
-      fallback={
-        <div className="h-[400px] w-full animate-pulse bg-fd-muted rounded-xl" />
-      }
-    >
-      <SourceCode name="bucket" />
-    </Suspense>
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/bucket.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/bucket.tsx`.
-      </Step>
-      <Step>
-        ### Add the hook
-
-        Add the `use-mobile.ts` hook to your `hooks` directory if you haven't already.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
-
 ## Usage
 
 ### Customizing Data
@@ -88,37 +34,6 @@ export default function Page() {
   );
 }
 ```
-
-## Understanding the Logic
-
-The **Bucket** component creates a sense of depth and physical interaction using a layered SVG approach and Framer Motion's exit animations.
-
-### 1. The Layered "Glass" Effect
-
-The "bucket" is not a single image, but a collection of SVG paths and `foreignObject` elements stacked on top of each other:
-
-- **Base Layer**: Defines the back and bottom of the bucket with subtle gradients.
-- **Middle Layer**: Where the active `motion.div` chip resides.
-- **Top Layer**: A translucent front cover with heavy `backdrop-blur`. This makes the chips appear as if they are falling _into_ a container.
-
-### 2. The Toss Animation
-
-The component uses `AnimatePresence` with `mode="popLayout"` to manage the lifecycle of the chips. Every 2 seconds (configurable in the `useEffect` interval), the first item is moved to the end of the array.
-
-- **Entry (`initial`)**: The chip starts high up with `opacity: 0` and drops down.
-- **Exit (`exit`)**: The chip falls further down "out" of the bucket, creating a continuous tossing effect.
-
-### 3. High-Fidelity Filters
-
-The component makes extensive use of SVG filters for:
-
-- **Inner Shadows**: Giving the container edges a rounded, 3D feel.
-- **Multi-stage Dropshadows**: Providing soft, realistic shadows for complex shapes.
-- **Dynamic Blurs**: The front face uses a high-radius blur to create a premium glassmorphism finish.
-
-### 4. Responsive Adaptation
-
-Using a custom `useIsMobile` hook, the component dynamically scales the chips and adjusts the vertical travel distance of the animations. This ensures the "toss" effect doesn't overlap with other page elements on small screens.
 
 ## Features
 

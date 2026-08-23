@@ -24,8 +24,18 @@ export const dialConfig = {
   },
 } as const;
 
+type DeleteParams = {
+  deleteText: string;
+  cancelText: string;
+  countdown: number;
+  deleteColor: string;
+  softColor: string;
+  layout: typeof dialConfig.layout;
+  char: typeof dialConfig.char;
+};
+
 const DeleteButton = () => {
-  const params = useDialKit("Delete Button", dialConfig);
+  const params = useDialKit("Delete Button", dialConfig as never) as DeleteParams;
   const [isDeleting, setIsDeleting] = useState(false);
   const [count, setCount] = useState(params.countdown);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -75,7 +85,7 @@ const DeleteButton = () => {
             }}
             className="flex items-center justify-center overflow-hidden rounded-full px-5 py-3 text-white"
             transition={{
-              layout: params.layout,
+              layout: { duration: params.layout.duration, ease: [...params.layout.ease] },
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.1, ease: "easeInOut" },
               opacity: { duration: 0.2, ease: "easeOut" },
@@ -96,7 +106,8 @@ const DeleteButton = () => {
                   animate={{ y: 0, opacity: 1, scale: 1 }}
                   exit={{ y: -20, opacity: 0, scale: 0.3 }}
                   transition={{
-                    ...params.char,
+                    duration: params.char.duration,
+                    ease: [...params.char.ease],
                     delay: i * 0.005,
                   }}
                   style={{ display: "inline-block", whiteSpace: "pre" }}
@@ -130,7 +141,7 @@ const DeleteButton = () => {
             }}
             className="flex items-center gap-2 overflow-hidden rounded-full px-3 py-3"
             transition={{
-              layout: params.layout,
+              layout: { duration: params.layout.duration, ease: [...params.layout.ease] },
               backgroundColor: { duration: 0.4, ease: "easeInOut" },
               filter: { duration: 0.2, ease: "easeInOut" },
               opacity: { duration: 0.2, ease: "easeIn" },
@@ -163,7 +174,8 @@ const DeleteButton = () => {
                   animate={{ y: 0, opacity: 1, scale: 1 }}
                   exit={{ y: -20, opacity: 0, scale: 0.3 }}
                   transition={{
-                    ...params.char,
+                    duration: params.char.duration,
+                    ease: [...params.char.ease],
                     delay: i * 0.006,
                   }}
                   style={{ display: "inline-block", whiteSpace: "pre" }}

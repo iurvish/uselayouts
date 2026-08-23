@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -94,15 +94,36 @@ export const Index: Record<string, any> = {`;
 //   )
 // }
 
+function shadcnBin() {
+  const ext = process.platform === "win32" ? ".cmd" : "";
+  return path.join(process.cwd(), "node_modules", ".bin", `shadcn${ext}`);
+}
+
 async function buildRegistry() {
   return new Promise((resolve, reject) => {
-    const process = exec(`bun x shadcn build registry.json --output public/r`);
+    const child = spawn(
+      shadcnBin(),
+      ["build", "registry.json", "--output", "public/r"],
+      {
+        cwd: process.cwd(),
+        stdio: "inherit",
+        shell: process.platform === "win32",
+      },
+    );
 
-    process.on("exit", (code) => {
+    child.on("error", (error) => {
+      reject(
+        new Error(
+          `Failed to start shadcn (${shadcnBin()}). Run npm install first. ${error.message}`,
+        ),
+      );
+    });
+
+    child.on("exit", (code) => {
       if (code === 0) {
         resolve(undefined);
       } else {
-        reject(new Error(`Process exited with code ${code}`));
+        reject(new Error(`shadcn build exited with code ${code}`));
       }
     });
   });
