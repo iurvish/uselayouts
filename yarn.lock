@@ -3307,6 +3307,11 @@ fs-extra@^11.3.1:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fsevents@~2.3.3:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
 "fumadocs-core@^15.0.0 || ^16.0.0", fumadocs-core@^16.2.5, fumadocs-core@16.14.3:
   version "16.14.3"
   resolved "https://registry.npmjs.org/fumadocs-core/-/fumadocs-core-16.14.3.tgz"

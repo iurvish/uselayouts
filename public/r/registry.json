@@ -21,6 +21,40 @@
       ]
     },
     {
+      "name": "accessible-action",
+      "type": "registry:component",
+      "title": "Accessible Action",
+      "description": "Interactive draggable card stack with 3D tilt, swipe-to-back gestures, click interactions, random rotation, and smooth spring animations.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/accessible-action.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "accordionos",
+      "type": "registry:component",
+      "title": "AccordionOS",
+      "description": "Interactive accordion showcase with animated content, image transitions, hover effects, keyboard navigation, autoplay, and responsive design.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/accordionos.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "animated-collection",
       "type": "registry:component",
       "title": "Animated Collection",
@@ -98,6 +132,74 @@
         {
           "path": "hooks/use-mobile.ts",
           "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "business-input",
+      "type": "registry:component",
+      "title": "Business Input",
+      "description": "A sleek email demo-booking form with validation, loading/success states, animations, and responsive dark/light mode support.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/business-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "card-folder",
+      "type": "registry:component",
+      "title": "Card Folder",
+      "description": "This component creates an animated folder-style card with a background image, floating 3D object, hover effects, and customizable colors and text. You can easily change the images, colors, content, and animation settings from the card props.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/card-folder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "confidential-folder",
+      "type": "registry:component",
+      "title": "Confidential Folder",
+      "description": "A smooth 3D card stack with draggable cards, tilt effects, swipe-to-back interaction, and customizable images and content.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/confidential-folder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "corner-vidoe",
+      "type": "registry:component",
+      "title": "Corner Vidoe",
+      "description": "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/corner-vidoe.tsx",
+          "type": "registry:component"
         }
       ]
     },
@@ -200,6 +302,23 @@
       ]
     },
     {
+      "name": "elevate-testimonial",
+      "type": "registry:component",
+      "title": "elevate-testimonial",
+      "description": "Abc",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/elevate-testimonial.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "empty-testimonial",
       "type": "registry:component",
       "title": "Empty Testimonial",
@@ -281,6 +400,23 @@
       ]
     },
     {
+      "name": "focus-testimonials",
+      "type": "registry:component",
+      "title": "Focus Testimonials",
+      "description": "Interactive testimonial section with hover-based focus effects, animated author tooltips, and expandable testimonials.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/focus-testimonials.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "folder-interaction",
       "type": "registry:component",
       "title": "Folder Interaction",
@@ -295,6 +431,23 @@
       "files": [
         {
           "path": "registry/default/example/folder-interaction.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "infinite-grid",
+      "type": "registry:component",
+      "title": "Infinite Grid",
+      "description": "A draggable Polaroid gallery with realistic tilt, smooth stacking, hover effects, and customizable photos and captions.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/infinite-grid.tsx",
           "type": "registry:component"
         }
       ]
@@ -336,6 +489,23 @@
       "files": [
         {
           "path": "registry/default/example/list-item.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "logoshift",
+      "type": "registry:component",
+      "title": "LogoShift",
+      "description": "Animated logo showcase with smooth transitions, hover effects, and customizable layouts.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/logoshift.tsx",
           "type": "registry:component"
         }
       ]
@@ -416,6 +586,40 @@
       ]
     },
     {
+      "name": "polaroid-drag",
+      "type": "registry:component",
+      "title": "Polaroid Drag",
+      "description": "Draggable Polaroid photo gallery with realistic tilt, stacking, smooth animations, and customizable captions, sizes, and decorations.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/polaroid-drag.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pop-tilt-cards",
+      "type": "registry:component",
+      "title": "Pop Tilt Cards",
+      "description": "Interactive tilt card deck with smooth hover animations, 3D popping effects, images, links, and customizable card styling.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/pop-tilt-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "pricing-card",
       "type": "registry:component",
       "title": "Pricing Card",
@@ -432,6 +636,23 @@
       "files": [
         {
           "path": "registry/default/example/pricing-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "rollingcardstack",
+      "type": "registry:component",
+      "title": "RollingCardStack",
+      "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/rollingcardstack.tsx",
           "type": "registry:component"
         }
       ]
@@ -534,6 +755,23 @@
       "files": [
         {
           "path": "registry/default/example/vertical-tabs.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "wheel-carousel",
+      "type": "registry:component",
+      "title": "Wheel Carousel",
+      "description": "This component creates a smooth wheel-style carousel with photos and selectable items. It supports drag, scroll, keyboard controls, snapping, momentum, themes, image crossfades, and customizable layout and colors.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/wheel-carousel.tsx",
           "type": "registry:component"
         }
       ]

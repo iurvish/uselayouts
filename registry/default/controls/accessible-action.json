@@ -1,0 +1,23 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-08-29T08:24:36.590Z",
+  "previewBackground": "#212121",
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  }
+}

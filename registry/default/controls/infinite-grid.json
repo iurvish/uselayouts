@@ -1,0 +1,27 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=85&w=1200&auto=format&fit=crop",
+    "imageUrl2": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=85&w=1200&auto=format&fit=crop",
+    "imageUrl3": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=85&w=1200&auto=format&fit=crop",
+    "imageUrl4": "https://images.unsplash.com/photo-1545454675-3531b543be5d?q=85&w=1200&auto=format&fit=crop"
+  },
+  "disabled": [],
+  "updatedAt": "2026-08-29T12:26:35.534Z",
+  "previewBackground": "#fcfcfc",
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  }
+}

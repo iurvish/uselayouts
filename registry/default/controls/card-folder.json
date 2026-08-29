@@ -1,0 +1,38 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=1200&q=95",
+    "imageUrl2": "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Sparkles.png",
+    "duration": [
+      4.8,
+      0.05,
+      14.399999999999999,
+      0.05
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-08-29T12:06:39.573Z",
+  "previewBackground": "#faf8f6",
+  "interactionHints": {
+    "duration": 2.7,
+    "scale": 80,
+    "items": [
+      {
+        "id": "537dde60-cc70-4617-a0ac-601f8ef8e35b",
+        "kind": "tap",
+        "x": 49.5,
+        "y": 32.6
+      }
+    ]
+  }
+}
