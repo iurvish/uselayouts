@@ -8,12 +8,9 @@ import { cn } from "@/lib/utils";
 import { NewDot } from "@/components/ui/new-dot";
 import { BrowsePreview } from "./browse-preview";
 
-export type MediaMode = "video" | "image";
-
 type BrowseCardProps = {
   item: BrowseItem;
   index: number;
-  mediaMode: MediaMode;
   eager?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -23,13 +20,12 @@ type BrowseCardProps = {
 
 export function BrowseCard({
   item,
-  mediaMode,
+  eager = false,
   className,
   style,
   surface = "canvas",
   pinHeight = 320,
 }: BrowseCardProps) {
-  const still = mediaMode === "image";
   const label = item.isNew ? `${item.title}, new` : item.title;
 
   if (surface === "pin") {
@@ -50,7 +46,7 @@ export function BrowseCard({
             </div>
             <div className="browse-chrome-media">
               <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
-                <BrowsePreview name={item.slug} still={still} />
+                <BrowsePreview src={item.poster} eager={eager} />
               </div>
             </div>
           </div>
@@ -67,7 +63,7 @@ export function BrowseCard({
       className={cn("browse-card-hit browse-card size-full", className)}
       style={style}
     >
-      <BrowsePreview name={item.slug} still={still} />
+      <BrowsePreview src={item.poster} eager={eager} />
     </Link>
   );
 }

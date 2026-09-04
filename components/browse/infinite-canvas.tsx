@@ -5,11 +5,10 @@ import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
 import { mediaHeight } from "@/lib/browse/media";
-import { BrowseCard, type MediaMode } from "./glass-card";
+import { BrowseCard } from "./glass-card";
 
 type InfiniteCanvasProps = {
   items: BrowseItem[];
-  mediaMode: MediaMode;
 };
 
 type TileSpec = {
@@ -60,7 +59,7 @@ function sameTiles(a: TileSpec[], b: TileSpec[]) {
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
-export function InfiniteCanvas({ items, mediaMode }: InfiniteCanvasProps) {
+export function InfiniteCanvas({ items }: InfiniteCanvasProps) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const nodes = React.useRef(new Map<string, HTMLDivElement>());
 
@@ -414,7 +413,6 @@ export function InfiniteCanvas({ items, mediaMode }: InfiniteCanvasProps) {
               <BrowseCard
                 item={item}
                 index={tile.index}
-                mediaMode={mediaMode}
                 eager
                 className="size-full"
               />

@@ -7,12 +7,10 @@ import { BrowseGrid } from "./browse-grid";
 import { BrowseHeader } from "./browse-header";
 import { BrowseToolbar, type ViewMode } from "./browse-toolbar";
 import { InfiniteCanvas } from "./infinite-canvas";
-import type { MediaMode } from "./glass-card";
 import { cn } from "@/lib/utils";
 
 export function BrowseExperience({ items }: { items: BrowseItem[] }) {
   const [viewMode, setViewMode] = React.useState<ViewMode>("grid");
-  const [mediaMode] = React.useState<MediaMode>("video");
   const [query, setQuery] = React.useState("");
   const quality = useRenderQuality();
 
@@ -61,9 +59,9 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
               </button>
             </div>
           ) : isCanvas ? (
-            <InfiniteCanvas items={filtered} mediaMode={mediaMode} />
+            <InfiniteCanvas items={filtered} />
           ) : (
-            <BrowseGrid items={filtered} mediaMode={mediaMode} />
+            <BrowseGrid items={filtered} />
           )}
         </div>
       </div>

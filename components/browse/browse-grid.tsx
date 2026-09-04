@@ -1,16 +1,10 @@
 "use client";
 
 import type { BrowseItem } from "@/lib/browse/items";
-import { BrowseCard, type MediaMode } from "./glass-card";
+import { BrowseCard } from "./glass-card";
 import { mediaHeight } from "@/lib/browse/media";
 
-export function BrowseGrid({
-  items,
-  mediaMode,
-}: {
-  items: BrowseItem[];
-  mediaMode: MediaMode;
-}) {
+export function BrowseGrid({ items }: { items: BrowseItem[] }) {
   return (
     <div className="pb-24">
       <div className="browse-masonry">
@@ -19,7 +13,6 @@ export function BrowseGrid({
             key={item.slug}
             item={item}
             index={index}
-            mediaMode={mediaMode}
             eager={index < 6}
             surface="pin"
             pinHeight={mediaHeight(index)}

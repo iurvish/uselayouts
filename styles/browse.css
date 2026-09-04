@@ -46,24 +46,16 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   pointer-events: none;
-  padding: 16px 12px;
   background: var(--background);
 }
 
-.browse-preview * {
-  pointer-events: none !important;
-  cursor: inherit !important;
-}
-
-.browse-preview--still,
-.browse-preview--still * {
-  animation-play-state: paused !important;
-  transition: none !important;
+.browse-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .browse-masonry {

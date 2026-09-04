@@ -5,7 +5,7 @@ import "@/styles/browse.css";
 export const metadata: Metadata = {
   title: "Browse",
   description:
-    "Explore every useLayouts component in a live masonry of motion previews, or switch to the infinite canvas.",
+    "Browse every useLayouts component in a masonry of preview frames, or switch to the infinite canvas.",
 };
 
 export default function BrowseLayout({
