@@ -21,6 +21,7 @@ type BrowseCardProps = {
 
 export function BrowseCard({
   item,
+  eager = false,
   className,
   style,
   surface = "canvas",
@@ -41,7 +42,7 @@ export function BrowseCard({
           </div>
           <div className="browse-chrome-media">
             <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
-              <BrowsePreview name={item.slug} background={item.background} paused={paused} />
+              <BrowsePreview poster={item.poster} video={item.video} eager={eager} paused={paused} />
             </div>
           </div>
         </div>
@@ -57,7 +58,7 @@ export function BrowseCard({
 
   return (
     <div className={cn("browse-card size-full", className)} style={style}>
-      <BrowsePreview name={item.slug} background={item.background} paused={paused} />
+      <BrowsePreview poster={item.poster} video={item.video} eager={eager} paused={paused} />
       <Link
         href={`/docs/components/${item.slug}`}
         aria-label={label}

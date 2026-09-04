@@ -54,24 +54,17 @@
   background: var(--background);
 }
 
-.browse-preview-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 16px;
-}
-
-.browse-preview[data-paused="true"] :is(*, *::before, *::after) {
-  animation-play-state: paused !important;
-}
-
-.browse-preview img {
+.browse-preview img,
+.browse-preview video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.browse-preview video {
+  position: absolute;
+  inset: 0;
 }
 
 .browse-masonry {

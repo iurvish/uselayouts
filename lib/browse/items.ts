@@ -1,4 +1,3 @@
-import { browsePreviewBackground } from "@/lib/browse/preview-backgrounds";
 import { isNewComponent } from "@/lib/open/new-components";
 
 export type BrowseItem = {
@@ -7,10 +6,41 @@ export type BrowseItem = {
   title: string;
   description: string;
   category: string;
-  /** Preview canvas color from the component's controls. */
-  background: string;
+  /** Still frame shown before/instead of the video. */
+  poster: string;
+  /** Muted loop preview. */
+  video: string;
   isNew?: boolean;
 };
+
+/**
+ * Placeholder media pools. These are swapped for Cloudflare-hosted assets once
+ * per-component previews are recorded, so every URL lives in this file only.
+ */
+const POSTERS = [
+  "photo-1506744038136-46273834b3fb",
+  "photo-1470071459604-3b5ec3a7fe05",
+  "photo-1441974231531-c6227db76b6e",
+  "photo-1493246507139-91e8fad9978e",
+  "photo-1451187580459-43490279c0fa",
+  "photo-1518837695005-2083093ee35b",
+  "photo-1500530855697-b586d89ba3ee",
+  "photo-1502082553048-f009c37129b9",
+  "photo-1483728642387-6c3bdd6c93e5",
+  "photo-1439066615861-d1af74d74000",
+  "photo-1519681393784-d120267933ba",
+  "photo-1497436072909-60f360e1d4b1",
+].map((id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=880&q=68`);
+
+const VIDEOS = [
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/samples/sea-turtle.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/dog.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/samples/cld-sample-video.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/elephants.mp4",
+  "https://videos.pexels.com/video-files/857195/857195-hd_1280_720_25fps.mp4",
+  "https://videos.pexels.com/video-files/5527786/5527786-hd_1920_1080_25fps.mp4",
+  "https://videos.pexels.com/video-files/6981411/6981411-hd_1920_1080_25fps.mp4",
+];
 
 type Seed = { slug: string; title: string; description: string; category: string };
 
@@ -57,9 +87,10 @@ const SEEDS: Seed[] = [
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
 ];
 
-export const browseItems: BrowseItem[] = SEEDS.map((seed) => ({
+export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => ({
   ...seed,
-  background: browsePreviewBackground(seed.slug),
+  poster: POSTERS[index % POSTERS.length],
+  video: VIDEOS[index % VIDEOS.length],
   isNew: isNewComponent(seed.slug),
 }));
 

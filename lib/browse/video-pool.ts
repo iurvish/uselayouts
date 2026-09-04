@@ -47,4 +47,5 @@ export function releasePlayback(video: HTMLVideoElement) {
   schedule();
 }
 
+export const PRIORITY_VISIBLE = 100;
 export const PRIORITY_HOVER = 1000;
