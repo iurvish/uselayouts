@@ -9,9 +9,10 @@ import {
 import { generateComponentMdx } from "@/lib/admin/generate-mdx";
 import { toSlug, toTitle } from "@/lib/admin/slug";
 import {
-  parseHintConfig,
-  type InteractionHintConfig,
-} from "@/lib/open/hints";
+  parsePreviewBackgrounds,
+  serializePreviewBackgrounds,
+  type PreviewBackgrounds,
+} from "@/lib/open/preview-background";
 
 const execAsync = promisify(exec);
 
@@ -25,8 +26,7 @@ export type ComponentControlsMeta = {
   dialConfig: Record<string, unknown>;
   disabled: string[];
   updatedAt: string;
-  previewBackground?: string;
-  interactionHints?: InteractionHintConfig;
+  previewBackground?: PreviewBackgrounds | string;
 };
 
 export type RegistryItem = {
@@ -47,8 +47,7 @@ export type UpsertComponentInput = {
   features?: string[];
   dialConfig?: Record<string, unknown>;
   disabledControls?: string[];
-  previewBackground?: string;
-  interactionHints?: InteractionHintConfig;
+  previewBackground?: PreviewBackgrounds | string | null;
 };
 
 async function readRegistry(): Promise<{
@@ -167,19 +166,18 @@ export async function upsertComponent(input: UpsertComponentInput) {
   const existingMeta = await readControls(name);
   const background =
     input.previewBackground !== undefined
-      ? input.previewBackground.trim() || undefined
+      ? serializePreviewBackgrounds(
+          typeof input.previewBackground === "string"
+            ? parsePreviewBackgrounds(input.previewBackground)
+            : input.previewBackground ?? {},
+        )
       : existingMeta?.previewBackground;
-  const interactionHints =
-    input.interactionHints !== undefined
-      ? parseHintConfig(input.interactionHints)
-      : existingMeta?.interactionHints;
 
   await writeControls(name, {
     dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
     disabled,
     updatedAt: new Date().toISOString(),
     previewBackground: background,
-    interactionHints,
   });
 
   const mdx = generateComponentMdx({
@@ -272,7 +270,6 @@ export async function updateControls(
     disabled,
     updatedAt: new Date().toISOString(),
     previewBackground: existing.controls?.previewBackground,
-    interactionHints: existing.controls?.interactionHints,
   });
   return { name, disabled };
 }

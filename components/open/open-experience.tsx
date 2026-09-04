@@ -12,34 +12,60 @@ import { OpenDrawer } from "@/components/open/open-drawer";
 import { OpenCodePanel } from "@/components/open/open-panels";
 import { OpenPreview } from "@/components/open/open-preview";
 import { OpenSwitcher } from "@/components/open/open-switcher";
-import { openIconBtn, scrollbarMinimal, scrollbarNone } from "@/components/open/ui";
+import { openIconBtn, openPress, scrollbarMinimal, scrollbarNone } from "@/components/open/ui";
 import { usePackageManager } from "@/components/open/use-package-manager";
 import type { OpenComponentData, OpenNavItem } from "@/lib/open/component";
+import {
+  parsePreviewBackgrounds,
+  resolvePreviewBackground,
+} from "@/lib/open/preview-background";
 import { cn } from "@/lib/utils";
 
 const SIDEBAR_WIDTH = 248;
+const PINNED_KEY = "uselayouts:open-sidebar-pinned";
+
+function readPinned() {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.sessionStorage.getItem(PINNED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writePinned(value: boolean) {
+  try {
+    window.sessionStorage.setItem(PINNED_KEY, value ? "1" : "0");
+  } catch {
+    // ignore
+  }
+}
 
 function SidebarList({
   items,
   activeHref,
   tall = false,
+  tone = "dark",
 }: {
   items: OpenNavItem[];
   activeHref: string;
   tall?: boolean;
+  tone?: "light" | "dark";
 }) {
+  const fadeFrom = tone === "dark" ? "from-[#030202]" : "from-background";
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b from-[#030202] to-transparent" />
+      <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
       <div className={cn("h-full overflow-auto px-2.5 pt-3 pr-2.5 pb-8 pl-3.5", scrollbarNone)}>
         <LineNav items={items} activeHref={activeHref} scrollActiveIntoView />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-12 bg-linear-to-t from-[#030202] to-transparent" />
+      <div className={cn("pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-12 bg-linear-to-t to-transparent", fadeFrom)} />
     </div>
   );
 }
 
-const sidebarShell = "overflow-hidden rounded-2xl border border-white/12 bg-[#030202] origin-top-left";
+const sidebarShell =
+  "overflow-hidden rounded-2xl border border-border bg-card text-card-foreground origin-top-left";
 
 export function OpenExperience({
   data,
@@ -51,7 +77,7 @@ export function OpenExperience({
   const [pinned, setPinned] = React.useState(false);
   const [peek, setPeek] = React.useState(false);
   const [panel, setPanel] = React.useState<OpenPanel>(null);
-  const [hintsPlaying, setHintsPlaying] = React.useState(false);
+  const [theme, setTheme] = React.useState<"light" | "dark">("dark");
   const [manager, setManager] = usePackageManager();
   const reduce = useReducedMotion();
   const current = navItems.find((item) => item.slug === data.slug) ?? {
@@ -59,20 +85,20 @@ export function OpenExperience({
     title: data.title,
     href: `/docs/components/${data.slug}`,
   };
-  const hasHints = data.interactionHints.items.length > 0;
+  const backgrounds = React.useMemo(
+    () => parsePreviewBackgrounds(data.previewBackground),
+    [data.previewBackground],
+  );
+  const previewBackground = resolvePreviewBackground(backgrounds, theme);
 
-  React.useEffect(() => {
-    setHintsPlaying(false);
-  }, [data.slug]);
+  React.useLayoutEffect(() => {
+    setPinned(readPinned());
+  }, []);
 
-  React.useEffect(() => {
-    if (!hintsPlaying) return;
-    const timeout = window.setTimeout(
-      () => setHintsPlaying(false),
-      data.interactionHints.duration * 1000,
-    );
-    return () => window.clearTimeout(timeout);
-  }, [hintsPlaying, data.interactionHints.duration, data.slug]);
+  function updatePinned(value: boolean) {
+    setPinned(value);
+    writePinned(value);
+  }
 
   const sharedPanel = {
     description: data.description,
@@ -102,12 +128,15 @@ export function OpenExperience({
 
   return (
     <div
-      className="dark flex h-dvh overflow-hidden bg-[#141414] text-[#f7f7f7]"
-      style={data.previewBackground ? { background: data.previewBackground } : undefined}
+      className={cn(
+        theme === "dark" ? "dark" : "light",
+        "flex h-dvh overflow-hidden bg-background text-foreground",
+      )}
+      style={{ background: previewBackground }}
     >
       {pinned ? (
         <aside
-          className="sticky top-0 z-[24] flex h-dvh shrink-0 flex-col border-r border-white/8 bg-[#121212]"
+          className="sticky top-0 z-[24] flex h-dvh shrink-0 flex-col border-r border-border bg-card"
           style={{ width: SIDEBAR_WIDTH }}
         >
           <header className="flex shrink-0 items-center px-3 pt-3 pb-1">
@@ -116,12 +145,12 @@ export function OpenExperience({
               className={openIconBtn}
               data-active="true"
               aria-label="Close sidebar"
-              onClick={() => setPinned(false)}
+              onClick={() => updatePinned(false)}
             >
               <img src="/open/sidebar.svg" alt="" width={18} height={18} className="size-[18px]" />
             </button>
           </header>
-          <SidebarList items={navItems} activeHref={current.href} />
+          <SidebarList items={navItems} activeHref={current.href} tone={theme} />
         </aside>
       ) : null}
 
@@ -139,7 +168,7 @@ export function OpenExperience({
               aria-label="Open sidebar"
               aria-expanded={peek}
               onClick={() => {
-                setPinned(true);
+                updatePinned(true);
                 setPeek(false);
               }}
             >
@@ -157,7 +186,7 @@ export function OpenExperience({
                   exit={sidebarMotion.exit}
                   transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
                 >
-                  <SidebarList items={navItems} activeHref={current.href} tall />
+                  <SidebarList items={navItems} activeHref={current.href} tall tone={theme} />
                 </motion.div>
               ) : null}
             </AnimatePresence>
@@ -167,23 +196,20 @@ export function OpenExperience({
         <header className="pointer-events-none absolute inset-x-8 top-8 z-20 grid grid-cols-[1fr_auto_1fr] items-start [&>*]:pointer-events-auto">
           <div />
           <OpenSwitcher current={current} items={navItems} />
-          <OpenActions
-            panel={panel}
-            onChange={setPanel}
-            hintActive={hintsPlaying}
-            hintDisabled={!hasHints}
-            onHint={() => setHintsPlaying((open) => !open)}
-          />
+          <div className="flex items-center justify-self-end gap-2">
+            <ThemeSegment theme={theme} onChange={setTheme} />
+            <OpenActions panel={panel} onChange={setPanel} />
+          </div>
         </header>
 
         <main
-          className={cn("grid h-dvh w-full place-items-center overflow-auto px-8 pt-28 pb-[108px]", scrollbarMinimal)}
-          style={data.previewBackground ? { background: data.previewBackground } : undefined}
+          className={cn(
+            "grid h-dvh w-full place-items-center overflow-auto px-4 pt-28 pb-[108px] sm:px-8",
+            scrollbarMinimal,
+          )}
+          style={{ background: previewBackground }}
         >
-          <OpenPreview
-            name={data.slug}
-            hints={{ config: data.interactionHints, playing: hintsPlaying }}
-          />
+          <OpenPreview name={data.slug} className="h-full w-full max-w-none" />
         </main>
 
         <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 [&>*]:pointer-events-auto">
@@ -203,6 +229,34 @@ export function OpenExperience({
           <OpenCodePanel {...sharedPanel} />
         </OpenDrawer>
       </div>
+    </div>
+  );
+}
+
+function ThemeSegment({
+  theme,
+  onChange,
+}: {
+  theme: "light" | "dark";
+  onChange: (theme: "light" | "dark") => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground">
+      {(["light", "dark"] as const).map((value) => (
+        <button
+          key={value}
+          type="button"
+          className={cn(
+            "rounded-lg px-2.5 py-1.5 text-xs font-medium capitalize",
+            openPress,
+            theme === value ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+          )}
+          aria-pressed={theme === value}
+          onClick={() => onChange(value)}
+        >
+          {value}
+        </button>
+      ))}
     </div>
   );
 }

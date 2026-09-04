@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 export function BrowseExperience({ items }: { items: BrowseItem[] }) {
   const [viewMode, setViewMode] = React.useState<ViewMode>("grid");
   const [query, setQuery] = React.useState("");
+  const [paused, setPaused] = React.useState(false);
   const quality = useRenderQuality();
 
   const filtered = React.useMemo(() => {
@@ -59,9 +60,9 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
               </button>
             </div>
           ) : isCanvas ? (
-            <InfiniteCanvas items={filtered} />
+            <InfiniteCanvas items={filtered} paused={paused} />
           ) : (
-            <BrowseGrid items={filtered} />
+            <BrowseGrid items={filtered} paused={paused} />
           )}
         </div>
       </div>
@@ -72,7 +73,12 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
         </p>
       ) : null}
 
-      <BrowseToolbar viewMode={viewMode} onViewModeChange={setViewMode} />
+      <BrowseToolbar
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        paused={paused}
+        onPausedChange={setPaused}
+      />
     </div>
   );
 }

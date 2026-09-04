@@ -4,7 +4,10 @@
   overflow: hidden;
   border-radius: 10px;
   background: var(--card);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 10%);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 10%),
+    0 1px 2px rgb(17 17 19 / 18%),
+    0 8px 20px rgb(17 17 19 / 28%);
 }
 
 .browse-chrome-title {
@@ -51,6 +54,19 @@
   background: var(--background);
 }
 
+.browse-preview-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+}
+
+.browse-preview[data-paused="true"] :is(*, *::before, *::after) {
+  animation-play-state: paused !important;
+}
+
 .browse-preview img {
   display: block;
   width: 100%;
@@ -94,6 +110,75 @@
   width: 100%;
 }
 
+.browse-dock {
+  filter: drop-shadow(0 8px 18px rgb(0 0 0 / 32%));
+}
+
+.browse-dock-modes {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 2px;
+  border-radius: 12px;
+  background: #161618;
+  box-shadow: 0 0 0 1px #35353c;
+}
+
+.browse-dock-btn,
+.browse-dock-pause {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  background: transparent;
+  transition: transform 150ms ease;
+}
+
+.browse-dock-btn {
+  border-radius: 10px;
+}
+
+.browse-dock-btn:active,
+.browse-dock-pause:active {
+  transform: scale(0.98);
+}
+
+.browse-dock-btn-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 2%) 100%),
+    #3f3f48;
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 11%);
+}
+
+.browse-dock-join {
+  display: block;
+  width: 13.787px;
+  height: 24.128px;
+  margin-right: -0.9px;
+  pointer-events: none;
+}
+
+.browse-dock-pause {
+  overflow: hidden;
+  border-radius: 10px;
+  color: #adadb7;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%),
+    #35353c;
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 11%);
+}
+
+.browse-dock-pause[aria-pressed="true"] {
+  color: #f6f6f7;
+}
+
 .canvas-viewport {
   position: absolute;
   inset: 0;
@@ -119,6 +204,13 @@
   left: 0;
   cursor: pointer;
   transform-origin: 50% 50%;
+}
+
+.canvas-tile .browse-card {
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 10%),
+    0 1px 2px rgb(17 17 19 / 18%),
+    0 8px 20px rgb(17 17 19 / 28%);
 }
 
 .canvas-tile:hover {

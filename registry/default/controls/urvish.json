@@ -1,0 +1,44 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "customBg": "#fff6ec",
+    "customText": "rgba(180, 90, 20, 0.45)",
+    "customSelected": "#b4541e",
+    "customMarker": "#e8792e",
+    "duration": [
+      0.65,
+      0.05,
+      2,
+      0.05
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-08-27T06:18:06.609Z",
+  "previewBackground": {
+    "light": "#ffffff",
+    "dark": "#FFFFFF"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": [
+      {
+        "id": "d2eb2404-31e8-4d46-ad4e-8c56ec3733b6",
+        "kind": "scroll",
+        "x": 57.4,
+        "y": 41.1,
+        "direction": "down"
+      }
+    ]
+  }
+}

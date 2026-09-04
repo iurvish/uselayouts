@@ -97,7 +97,7 @@ export function OpenSwitcher({
       <button
         type="button"
         className={cn(
-          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-white/12 bg-[#030202] px-3 py-2 text-sm tracking-[-0.02em] text-[#f7f7f7]",
+          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm tracking-[-0.02em] text-card-foreground",
           openPress,
         )}
         aria-expanded={open}
@@ -117,7 +117,7 @@ export function OpenSwitcher({
         {open ? (
           <motion.div
             role="listbox"
-            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-[14px] border border-white/12 bg-[#030202] p-2 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_rgba(0,0,0,0.28)]"
+            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-[14px] border border-border bg-card p-2 text-card-foreground shadow-lg"
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
@@ -129,11 +129,11 @@ export function OpenSwitcher({
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search components"
               aria-label="Search components"
-              className="h-9 w-full rounded-[10px] border border-white/12 bg-[#0f0f0f] px-3 text-[13px] text-[#f7f7f7] outline-none placeholder:text-[#8f8f8f]"
+              className="h-9 w-full rounded-[10px] border border-input bg-background px-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground"
             />
             <div className={cn("mt-1.5 max-h-[280px] overflow-auto", scrollbarMinimal)}>
               {filtered.length === 0 ? (
-                <p className="px-3 py-4 text-center text-xs text-white/35">No matches.</p>
+                <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
                 filtered.map((item) => {
                   const active = item.href === current.href;
@@ -144,9 +144,9 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-[13px] text-[#8f8f8f]",
+                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-[13px] text-muted-foreground",
                         openPress,
-                        active && "bg-[#2e2e2e] text-[#f7f7f7]",
+                        active && "bg-accent text-accent-foreground",
                       )}
                       onClick={() => select(item)}
                     >

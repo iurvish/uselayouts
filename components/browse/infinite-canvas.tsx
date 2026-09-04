@@ -9,6 +9,7 @@ import { BrowseCard } from "./glass-card";
 
 type InfiniteCanvasProps = {
   items: BrowseItem[];
+  paused?: boolean;
 };
 
 type TileSpec = {
@@ -59,7 +60,7 @@ function sameTiles(a: TileSpec[], b: TileSpec[]) {
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
-export function InfiniteCanvas({ items }: InfiniteCanvasProps) {
+export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const nodes = React.useRef(new Map<string, HTMLDivElement>());
 
@@ -415,6 +416,7 @@ export function InfiniteCanvas({ items }: InfiniteCanvasProps) {
                 index={tile.index}
                 eager
                 className="size-full"
+                paused={paused}
               />
             </div>
           );

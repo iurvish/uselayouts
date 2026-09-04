@@ -586,6 +586,23 @@
       ]
     },
     {
+      "name": "new-component",
+      "type": "registry:component",
+      "title": "new component",
+      "description": "hehehe",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/new-component.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "polaroid-drag",
       "type": "registry:component",
       "title": "Polaroid Drag",
@@ -644,7 +661,7 @@
       "name": "rollingcardstack",
       "type": "registry:component",
       "title": "RollingCardStack",
-      "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
+      "description": "It\u2019s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
       "dependencies": [
         "motion",
         "clsx",
@@ -653,6 +670,23 @@
       "files": [
         {
           "path": "registry/default/example/rollingcardstack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "see-the-bug",
+      "type": "registry:component",
+      "title": "See the bug",
+      "description": "dd",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/see-the-bug.tsx",
           "type": "registry:component"
         }
       ]
@@ -736,6 +770,23 @@
       "files": [
         {
           "path": "registry/default/example/status-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "urvish",
+      "type": "registry:component",
+      "title": "urvish",
+      "description": "urvish",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/urvish.tsx",
           "type": "registry:component"
         }
       ]

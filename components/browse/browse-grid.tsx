@@ -4,7 +4,7 @@ import type { BrowseItem } from "@/lib/browse/items";
 import { BrowseCard } from "./glass-card";
 import { mediaHeight } from "@/lib/browse/media";
 
-export function BrowseGrid({ items }: { items: BrowseItem[] }) {
+export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; paused?: boolean }) {
   return (
     <div className="pb-24">
       <div className="browse-masonry">
@@ -16,6 +16,7 @@ export function BrowseGrid({ items }: { items: BrowseItem[] }) {
             eager={index < 6}
             surface="pin"
             pinHeight={mediaHeight(index)}
+            paused={paused}
           />
         ))}
       </div>

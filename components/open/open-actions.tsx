@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Code2, Lightbulb } from "lucide-react";
+import { Code2 } from "lucide-react";
 
 import { openPress } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -12,32 +12,18 @@ export type OpenPanel = "code" | null;
 export function OpenActions({
   panel,
   onChange,
-  hintActive,
-  hintDisabled,
-  onHint,
 }: {
   panel: OpenPanel;
   onChange: (panel: OpenPanel) => void;
-  hintActive?: boolean;
-  hintDisabled?: boolean;
-  onHint: () => void;
 }) {
   return (
-    <div className="flex items-center justify-self-end gap-0.5 rounded-xl border border-white/12 bg-[#030202] p-1">
+    <div className="flex items-center justify-self-end gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground">
       <ActionButton
         label="Code"
         active={panel === "code"}
         onClick={() => onChange(panel === "code" ? null : "code")}
       >
         <Code2 className="size-4" strokeWidth={1.75} />
-      </ActionButton>
-      <ActionButton
-        label={hintDisabled ? "No hints yet" : hintActive ? "Hide hints" : "Hint"}
-        active={hintActive}
-        disabled={hintDisabled}
-        onClick={onHint}
-      >
-        <Lightbulb className="size-4" strokeWidth={1.75} />
       </ActionButton>
     </div>
   );
@@ -61,10 +47,10 @@ function ActionButton({
       <TooltipTrigger
         delay={0}
         className={cn(
-          "inline-flex size-9 items-center justify-center rounded-lg border-0 bg-transparent text-[#f7f7f7]",
+          "inline-flex size-9 items-center justify-center rounded-lg border-0 bg-transparent text-foreground",
           openPress,
           "disabled:cursor-not-allowed disabled:opacity-40",
-          active && "bg-[#2e2e2e]",
+          active && "bg-accent text-accent-foreground",
         )}
         aria-label={label}
         aria-pressed={active}

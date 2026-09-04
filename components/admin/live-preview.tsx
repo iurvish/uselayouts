@@ -87,8 +87,8 @@ export function ComponentLivePreview({ code }: Props) {
         </div>
       </div>
       <p className="text-[11px] text-muted-foreground/80">
-        Admin can&apos;t run dialkit/motion inside this validator. Use the live
-        preview below after save.
+        Validates syntax as you type. Dependencies are auto-detected from imports.
+        Submit once to publish the live component preview.
       </p>
     </div>
   );

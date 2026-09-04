@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4">
+        <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-4 px-4">
           <Link href="/admin" className="font-semibold tracking-tight">
             uselayouts admin
           </Link>
@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+      <main className="mx-auto max-w-[1600px] px-4 py-8">{children}</main>
     </div>
   );
 }

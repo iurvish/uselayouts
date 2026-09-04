@@ -9,8 +9,8 @@ import {
   extractUsageSnippet,
   type DocSection,
 } from "@/lib/open/mdx-extract";
-import { parseHintConfig, type InteractionHintConfig } from "@/lib/open/hints";
 import { registryItem } from "@/lib/open/package-manager";
+import type { PreviewBackgrounds } from "@/lib/open/preview-background";
 
 export type OpenNavItem = {
   title: string;
@@ -35,8 +35,7 @@ export type OpenComponentData = {
   code: string;
   codeHtml: string;
   docs: OpenDocSection[];
-  previewBackground?: string;
-  interactionHints: InteractionHintConfig;
+  previewBackground?: string | PreviewBackgrounds;
 };
 
 function defaultUsage(slug: string) {
@@ -150,6 +149,5 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     codeHtml,
     docs,
     previewBackground: record?.controls?.previewBackground,
-    interactionHints: parseHintConfig(record?.controls?.interactionHints),
   };
 }

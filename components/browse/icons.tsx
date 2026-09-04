@@ -44,6 +44,17 @@ export function GridIcon(props: IconProps) {
   );
 }
 
+export function PauseIcon(props: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden {...props}>
+      <g transform="translate(3.188 2.5)">
+        <path d="M5 13.425V1.575C5 0.45 4.62745 0 3.68627 0H1.31373C0.372549 0 0 0.45 0 1.575V13.425C0 14.55 0.372549 15 1.31373 15H3.68627C4.62745 15 5 14.55 5 13.425Z" />
+        <path d="M13.625 13.425V1.575C13.625 0.45 13.2525 0 12.3113 0H9.93873C9.00409 0 8.625 0.45 8.625 1.575V13.425C8.625 14.55 8.99755 15 9.93873 15H12.3113C13.2525 15 13.625 14.55 13.625 13.425Z" />
+      </g>
+    </svg>
+  );
+}
+
 export function SearchIcon(props: IconProps) {
   return (
     <svg

@@ -1,25 +1,35 @@
 "use client";
 
+import * as React from "react";
+import { Index } from "@/registry/__index__";
 import { cn } from "@/lib/utils";
 
 export function BrowsePreview({
-  src,
-  eager = false,
+  name,
+  background,
+  paused = false,
 }: {
-  src: string;
-  eager?: boolean;
+  name: string;
+  background?: string;
+  paused?: boolean;
 }) {
+  const Component = Index[name]?.component as React.ComponentType<{ size?: string }> | undefined;
+
   return (
-    <div className="browse-preview" aria-hidden>
-      {/* eslint-disable-next-line @next/next/no-img-element -- remote poster frames, sized by the card. */}
-      <img
-        src={src}
-        alt=""
-        loading={eager ? "eager" : "lazy"}
-        decoding="async"
-        draggable={false}
-        className="size-full object-cover"
-      />
+    <div
+      className="browse-preview"
+      aria-hidden
+      inert={true}
+      data-paused={paused || undefined}
+      style={background ? { background } : undefined}
+    >
+      {Component ? (
+        <React.Suspense fallback={null}>
+          <div className={cn("browse-preview-stage")}>
+            <Component size="sm" />
+          </div>
+        </React.Suspense>
+      ) : null}
     </div>
   );
 }

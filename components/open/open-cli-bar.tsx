@@ -44,13 +44,13 @@ export function OpenCliBar({
   return (
     <div
       ref={rootRef}
-      className="relative flex items-center gap-1 rounded-xl bg-[#242424] py-0.5 pr-0.5 pl-2 shadow-[inset_0_0.5px_0_rgba(255,255,255,0.05)]"
+      className="relative flex items-center gap-1 rounded-xl border border-border bg-card py-0.5 pr-0.5 pl-2 text-card-foreground shadow-sm"
     >
       <Tooltip>
         <TooltipTrigger
           delay={0}
           className={cn(
-            "flex h-7 items-center gap-1 rounded-2xl bg-transparent px-0.5 text-[#f7f7f7]",
+            "flex h-7 items-center gap-1 rounded-2xl bg-transparent px-0.5 text-foreground",
             openPress,
           )}
           aria-haspopup="listbox"
@@ -67,9 +67,9 @@ export function OpenCliBar({
       <motion.button
         type="button"
         className={cn(
-          "flex h-[33px] cursor-pointer items-center overflow-hidden rounded-[10px] border-[0.5px] border-[#222] bg-[#0f0f0f] px-3 text-[#8f8f8f]",
+          "flex h-[33px] cursor-pointer items-center overflow-hidden rounded-[10px] border border-border bg-background px-3 text-muted-foreground",
           openPress,
-          "hover:text-white [@media(hover:hover)_and_(pointer:fine)]:hover:text-white",
+          "hover:text-foreground",
         )}
         layout={reduce ? false : "size"}
         transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
@@ -86,7 +86,7 @@ export function OpenCliBar({
       >
         <IconSwap>
           {copied ? (
-            <IconSwapItem key="copied" className="flex items-center gap-2 text-[13px] font-medium whitespace-nowrap text-[#f7f7f7]">
+            <IconSwapItem key="copied" className="flex items-center gap-2 text-[13px] font-medium whitespace-nowrap text-foreground">
               <Check className="size-3.5" strokeWidth={1.75} />
               Copied successfully!
             </IconSwapItem>
@@ -108,7 +108,7 @@ export function OpenCliBar({
           <motion.div
             role="listbox"
             aria-label="Package managers"
-            className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-white/12 bg-[#030202] p-1"
+            className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-border bg-card p-1 text-card-foreground"
             initial={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
             animate={{ opacity: 1, transform: "scale(1) translateY(0px)" }}
             exit={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
@@ -147,9 +147,9 @@ function PmOption({
       role="option"
       aria-selected={active}
       className={cn(
-        "flex min-h-8 w-full items-center gap-2 rounded-lg px-2 text-[13px] text-[#8f8f8f]",
+        "flex min-h-8 w-full items-center gap-2 rounded-lg px-2 text-[13px] text-muted-foreground",
         openPress,
-        active && "bg-[#2e2e2e] text-[#f7f7f7]",
+        active && "bg-accent text-accent-foreground",
       )}
       onClick={onSelect}
     >
