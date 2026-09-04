@@ -89,10 +89,11 @@ const SEEDS: Seed[] = [
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => ({
   ...seed,
-  poster: POSTERS[index % POSTERS.length],
-  video: VIDEOS[index % VIDEOS.length],
+  poster: POSTERS[index % POSTERS.length]!,
+  video: VIDEOS[index % VIDEOS.length]!,
   isNew: isNewComponent(seed.slug),
 }));
+
 
 export const browseCategories = [
   "All",
