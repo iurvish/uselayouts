@@ -217,8 +217,7 @@ a:focus-visible .browse-card {
 
 .browse-pin-caption h3 {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0;
 }
 
 .browse-pin-caption span {

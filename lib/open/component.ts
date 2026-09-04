@@ -2,6 +2,7 @@ import { getComponent, listComponents } from "@/lib/admin/components-fs";
 import { toPascal } from "@/lib/admin/slug";
 import { browseItems } from "@/lib/browse/items";
 import { highlightCode } from "@/lib/open/highlight";
+import { isNewComponent } from "@/lib/open/new-components";
 import {
   extractDocSections,
   extractHints,
@@ -15,6 +16,7 @@ export type OpenNavItem = {
   title: string;
   href: string;
   slug: string;
+  isNew?: boolean;
 };
 
 export type OpenDocSection = DocSection & {
@@ -100,12 +102,14 @@ export async function getOpenNavItems(): Promise<OpenNavItem[]> {
       slug: item.name,
       title: item.title,
       href: `/docs/components/${item.name}`,
+      isNew: isNewComponent(item.name),
     }));
   }
   return browseItems.map((item) => ({
     slug: item.slug,
     title: item.title,
     href: `/docs/components/${item.slug}`,
+    isNew: item.isNew || isNewComponent(item.slug),
   }));
 }
 

@@ -3,11 +3,13 @@
 import { memo, useEffect, useRef } from "react";
 import Link from "next/link";
 
+import { NewDot } from "@/components/ui/new-dot";
 import { cn } from "@/lib/utils";
 
 export type LineNavItem = {
   title: string;
   href: string;
+  isNew?: boolean;
 };
 
 export type LineNavProps = {
@@ -46,6 +48,7 @@ export function LineNav({
             title={item.title}
             href={item.href}
             active={isActive}
+            isNew={item.isNew}
             isLast={index === items.length - 1}
             onClick={onItemClick ? (event) => onItemClick(item, event) : undefined}
           />
@@ -60,6 +63,7 @@ const LineNavItem = memo(function LineNavItem({
   title,
   href,
   active = false,
+  isNew = false,
   isLast = false,
   onClick,
 }: {
@@ -67,6 +71,7 @@ const LineNavItem = memo(function LineNavItem({
   title: string;
   href: string;
   active?: boolean;
+  isNew?: boolean;
   isLast?: boolean;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
@@ -75,6 +80,7 @@ const LineNavItem = memo(function LineNavItem({
       <Link
         ref={ref}
         aria-current={active ? "page" : undefined}
+        aria-label={isNew ? `${title}, new` : undefined}
         className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:h-7 after:w-full after:-translate-y-1/2 after:content-['']"
         href={href}
         onClick={onClick}
@@ -90,11 +96,12 @@ const LineNavItem = memo(function LineNavItem({
         />
         <span
           className={cn(
-            "text-sm whitespace-nowrap text-white/40 transition-colors duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-white/40 transition-colors duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
             "group-hover:text-white group-focus-visible:text-white group-aria-[current=page]:text-white",
           )}
         >
           {title}
+          {isNew ? <NewDot /> : null}
         </span>
       </Link>
       {!isLast ? (
