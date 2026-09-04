@@ -9,8 +9,8 @@ import Image from "next/image";
 
 const footerLinks = {
   library: [
-    { name: "Components", href: "/docs/components/3d-book", badge: "NEW" },
-    { name: "Documentation", href: "/docs/introduction" },
+    { name: "Browse", href: "/browse", badge: "NEW" },
+    { name: "Documentation", href: "/docs/installation" },
     { name: "Star on GitHub", href: "https://github.com/iurvish/uselayouts" },
   ],
 };
@@ -25,12 +25,12 @@ const Footer = () => {
             <span className="text-muted-foreground">your users will love</span>
           </h2>
 
-          <Link href="/docs/components/3d-book">
+          <Link href="/browse">
             <Button
               size="lg"
               className="rounded-full px-10 h-14 text-lg gap-2 group shadow-xl shadow-primary/10 cursor-pointer"
             >
-              Browse Components
+              Browse components
               <HugeiconsIcon
                 icon={ArrowRight01Icon}
                 size={20}

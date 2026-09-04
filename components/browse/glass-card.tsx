@@ -62,24 +62,26 @@ export function BrowseCard({
   if (surface === "pin") {
     return (
       <article className={cn("browse-pin", className)} style={style}>
-        <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
-          <CardShell item={item} still={still} hit={false} />
-        </div>
-        <div className="browse-pin-caption">
-          <h3 className="inline-flex min-w-0 items-center gap-1.5 text-sm font-medium tracking-[-0.01em] text-white">
-            <span className="truncate">{item.title}</span>
-            {item.isNew ? <NewDot /> : null}
-          </h3>
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs uppercase tracking-[0.16em] text-white/40">
-            {item.category}
-          </span>
-        </div>
         <Link
           href={`/docs/components/${item.slug}`}
-          className="browse-card-hit"
-          aria-label={item.title}
+          aria-label={item.isNew ? `${item.title}, new` : item.title}
           draggable={false}
-        />
+          className="block rounded-[10px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
+        >
+          <div className="browse-chrome">
+            <div className="browse-chrome-title">
+              <h3 className="inline-flex min-w-0 items-center gap-1.5 text-base font-normal tracking-[-0.48px] text-foreground">
+                <span className="truncate">{item.title}</span>
+                {item.isNew ? <NewDot /> : null}
+              </h3>
+            </div>
+            <div className="browse-chrome-media">
+              <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
+                <CardShell item={item} still={still} hit={false} />
+              </div>
+            </div>
+          </div>
+        </Link>
       </article>
     );
   }
@@ -90,11 +92,11 @@ export function BrowseCard({
         <div className="browse-scrim" />
         <div className="pointer-events-none relative z-10 flex h-full flex-col justify-end p-4">
           <div className="flex items-end justify-between gap-2">
-            <h3 className="inline-flex min-w-0 items-center gap-1.5 truncate text-sm font-medium leading-snug tracking-[-0.01em] text-white">
+            <h3 className="inline-flex min-w-0 items-center gap-1.5 truncate text-base font-normal tracking-[-0.48px] text-foreground">
               <span className="truncate">{item.title}</span>
               {item.isNew ? <NewDot /> : null}
             </h3>
-            <span className="browse-enter flex size-6 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
+            <span className="browse-enter flex size-6 shrink-0 items-center justify-center rounded-full border border-border bg-secondary text-foreground">
               <ArrowUpRight className="size-3" strokeWidth={2} />
             </span>
           </div>

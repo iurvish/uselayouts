@@ -18,6 +18,21 @@ const config = {
         destination: "/docs/components/discrete-tabs",
         permanent: true,
       },
+      {
+        source: "/docs/introduction",
+        destination: "/docs/installation",
+        permanent: true,
+      },
+      {
+        source: "/docs",
+        destination: "/docs/installation",
+        permanent: false,
+      },
+      {
+        source: "/gallery",
+        destination: "/browse",
+        permanent: true,
+      },
     ];
   },
   images: {

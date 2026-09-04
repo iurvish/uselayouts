@@ -65,7 +65,7 @@ const Hero = () => {
 
               <div className="mt-4 flex  items-center justify-center gap-2  lg:justify-start">
                 <Button size="lg" className="px-5 text-base rounded-full">
-                  <Link href="/docs/introduction">
+                  <Link href="/browse">
                     <span className="text-nowrap">Get Started</span>
                   </Link>
                 </Button>

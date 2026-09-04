@@ -12,12 +12,7 @@ export function BrowseGrid({
   mediaMode: MediaMode;
 }) {
   return (
-    <div className="pb-28">
-      <div className="browse-catalog-meta">
-        <p>Library</p>
-        <span>{String(items.length).padStart(2, "0")}</span>
-      </div>
-
+    <div className="pb-24">
       <div className="browse-masonry">
         {items.map((item, index) => (
           <BrowseCard
@@ -33,7 +28,7 @@ export function BrowseGrid({
       </div>
 
       {items.length === 0 ? (
-        <p className="py-24 text-center text-sm text-white/40">
+        <p className="py-24 text-center text-sm text-muted-foreground">
           Nothing matches that search yet.
         </p>
       ) : null}

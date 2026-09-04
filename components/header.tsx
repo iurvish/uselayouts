@@ -18,11 +18,10 @@ import Image from "next/image";
 import GithubStarButton from "./github-button";
 
 const menuItems = [
-  { name: "Components", href: "/docs/components/3d-book" },
-  { name: "Documentation", href: "/docs/introduction" },
+  { name: "Browse", href: "/browse" },
+  { name: "Documentation", href: "/docs/installation" },
   { name: "Meet Creator", href: "https://urvish.in" },
   { name: "Become a Sponsor", href: "https://github.com/sponsors/iurvish" },
-
 ];
 
 
