@@ -300,10 +300,12 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
       className,
       cardClassName,
       itemClassName,
+      size,
       ...props
-    },
+    }: LiquidGlassInfiniteGridProps & { size?: string },
     ref
   ) => {
+    const glassCursor = enableGlassCursor && size !== "sm";
     const containerRef = useRef<HTMLDivElement>(null);
     const gridMatrixRef = useRef<HTMLDivElement>(null);
     const singleBlockRef = useRef<HTMLDivElement>(null);
@@ -486,13 +488,13 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
       <div
         ref={ref}
         className={cn(
-          'relative w-full h-screen overflow-hidden bg-white',
-          enableGlassCursor && '[&_*]:cursor-none',
+          'infinite-grid-root relative w-full h-screen overflow-hidden bg-white',
+          glassCursor && '[&_*]:cursor-none',
           className
         )}
       >
         <style>{`
-          ${enableGlassCursor ? '* { cursor: none !important; }' : ''}
+          ${glassCursor ? '.infinite-grid-root, .infinite-grid-root * { cursor: none !important; }' : ''}
           @keyframes fluidBlob1 {
             0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
             33% { transform: translate(8vw, -6vh) scale(1.15) rotate(45deg); }
@@ -512,7 +514,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
           .animate-fluid-3 { animation: fluidBlob3 18s ease-in-out infinite alternate; }
         `}</style>
 
-        {enableGlassCursor && (
+        {glassCursor && (
           <LiquidGlassCursor isDragging={isDraggingState} isHoveringCard={isHoveringCard} />
         )}
 
@@ -524,15 +526,15 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
           className={cn(
-            'w-full h-screen overflow-hidden relative select-none bg-white cursor-none',
-            !enableGlassCursor && 'cursor-grab active:cursor-grabbing'
+            'w-full h-screen overflow-hidden relative select-none bg-white',
+            glassCursor ? 'cursor-none' : 'cursor-grab active:cursor-grabbing'
           )}
           style={{
             touchAction: 'none',
             userSelect: 'none',
             WebkitUserSelect: 'none',
             backgroundColor: '#ffffff',
-            cursor: enableGlassCursor ? 'none' : undefined,
+            cursor: glassCursor ? 'none' : undefined,
           }}
           {...props}
         >
@@ -557,7 +559,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
               transformOrigin: '50% 50%',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              cursor: enableGlassCursor ? 'none' : undefined,
+              cursor: glassCursor ? 'none' : undefined,
             }}
           >
             {matrix.map((row, rowIndex) =>
@@ -575,7 +577,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
                       alignItems: 'center',
                       gap: `${gapVw}vw`,
                       padding: '1.25vw',
-                      cursor: enableGlassCursor ? 'none' : undefined,
+                      cursor: glassCursor ? 'none' : undefined,
                     }}
                   >
                     {items.map((item) => (
@@ -588,7 +590,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
                           width: `${cardWidthVw}vw`,
                           userSelect: 'none',
                           WebkitUserSelect: 'none',
-                          cursor: enableGlassCursor ? 'none' : undefined,
+                          cursor: glassCursor ? 'none' : undefined,
                         }}
                         className={cn('select-none cursor-none', itemClassName)}
                       >

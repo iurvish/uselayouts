@@ -31,7 +31,7 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
     <div
       data-quality={quality}
       className={cn(
-        "dark flex min-h-dvh flex-col bg-background font-[family-name:var(--font-geist-sans)] text-foreground",
+        "dark flex min-h-dvh cursor-auto flex-col bg-background font-[family-name:var(--font-geist-sans)] text-foreground",
         isCanvas && "h-dvh overflow-hidden",
       )}
     >
@@ -69,7 +69,7 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
       </div>
 
       {isCanvas && !isEmpty ? (
-        <p className="browse-hint pointer-events-none absolute bottom-8 left-8 z-20 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="pointer-events-none absolute bottom-8 left-8 z-20 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
           Drag to explore
         </p>
       ) : null}

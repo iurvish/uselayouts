@@ -42,7 +42,7 @@ export function BrowseToolbar({
               aria-pressed={active}
               title={option.label}
               className={cn(
-                "browse-press relative flex items-center rounded-[10px] p-2.5",
+                "relative flex cursor-pointer items-center rounded-[10px] p-2.5",
                 active ? "text-foreground" : "text-muted-foreground",
               )}
             >

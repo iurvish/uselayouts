@@ -80,7 +80,7 @@ export function BrowseHeader({
           target="_blank"
           rel="noreferrer"
           aria-label="useLayouts on GitHub"
-          className="browse-press relative flex items-center overflow-hidden rounded-xl bg-secondary p-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
+          className="relative flex items-center overflow-hidden rounded-xl bg-secondary p-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
         >
           <span
             aria-hidden

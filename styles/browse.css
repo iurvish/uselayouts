@@ -1,8 +1,3 @@
-:root {
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-}
-
 .browse-chrome {
   display: flex;
   flex-direction: column;
@@ -32,15 +27,17 @@
   border-radius: var(--card-radius);
   background-color: var(--background);
   border: 1px solid rgb(255 255 255 / 14%);
-  transform: translateZ(0);
 }
 
 .browse-pin .browse-card {
   width: 100%;
 }
 
-a:focus-visible .browse-chrome,
-a:focus-visible .browse-card {
+.browse-pin > a {
+  cursor: pointer;
+}
+
+.browse-pin > a:focus-visible .browse-chrome {
   outline: 2px solid color-mix(in oklab, var(--foreground) 70%, transparent);
   outline-offset: 3px;
 }
@@ -60,125 +57,13 @@ a:focus-visible .browse-card {
 
 .browse-preview * {
   pointer-events: none !important;
+  cursor: inherit !important;
 }
 
 .browse-preview--still,
 .browse-preview--still * {
   animation-play-state: paused !important;
   transition: none !important;
-}
-
-.browse-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgb(0 0 0 / 70%) 0%,
-    rgb(0 0 0 / 20%) 32%,
-    rgb(0 0 0 / 0%) 55%
-  );
-}
-
-.browse-enter {
-  opacity: 0;
-  transform: translateY(4px) scale(0.95);
-  transition:
-    opacity 160ms var(--ease-out),
-    transform 160ms var(--ease-out);
-}
-
-.browse-press {
-  transition:
-    transform 140ms var(--ease-out),
-    background-color 140ms ease,
-    color 140ms ease;
-}
-
-.browse-press:active {
-  transform: scale(0.97);
-}
-
-.browse-hint {
-  opacity: 1;
-  transition: opacity 200ms var(--ease-out);
-}
-
-@starting-style {
-  .browse-hint {
-    opacity: 0;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .browse-chrome,
-  .browse-card {
-    transition: transform 180ms var(--ease-out);
-  }
-
-  .browse-pin:hover .browse-chrome {
-    transform: scale(1.015);
-  }
-
-  .browse-card:hover {
-    transform: scale(1.015);
-  }
-
-  .browse-pin:hover .browse-card {
-    transform: none;
-  }
-
-  .browse-card:hover .browse-enter {
-    opacity: 1;
-    transform: none;
-  }
-
-  .browse-pin:active .browse-chrome,
-  .browse-card:active {
-    transform: scale(0.98);
-  }
-
-  .canvas-viewport[data-dragging="true"] .browse-card,
-  .canvas-viewport[data-dragging="true"] .browse-card:hover,
-  .canvas-viewport[data-dragging="true"] .browse-card:active {
-    transform: translateZ(0);
-  }
-
-  .canvas-viewport[data-dragging="true"] .browse-enter {
-    opacity: 0;
-    transform: translateY(4px) scale(0.95);
-  }
-
-  .browse-toolbar button:not([aria-pressed="true"]):hover {
-    color: var(--foreground);
-  }
-
-  a.browse-press:hover {
-    background-color: color-mix(in oklab, var(--foreground) 6%, transparent);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .browse-video,
-  .browse-enter,
-  .browse-card,
-  .browse-chrome,
-  .browse-press,
-  .browse-hint {
-    transition-duration: 1ms;
-  }
-
-  .browse-enter {
-    transform: none;
-  }
-
-  .browse-card:hover,
-  .browse-card:active,
-  .browse-chrome,
-  .browse-press:active {
-    transform: none;
-  }
 }
 
 .browse-masonry {
@@ -202,6 +87,7 @@ a:focus-visible .browse-card {
   position: absolute;
   inset: 0;
   z-index: 3;
+  cursor: pointer;
 }
 
 .browse-pin {
@@ -239,11 +125,8 @@ a:focus-visible .browse-card {
   position: absolute;
   top: 0;
   left: 0;
-  opacity: 1;
   cursor: pointer;
   transform-origin: 50% 50%;
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
 .canvas-tile:hover {
