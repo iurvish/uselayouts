@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
 
 import { Index } from "@/registry/__index__";
 
@@ -16,21 +15,13 @@ export function OpenPreview({
 
   return (
     <div className={className ?? "grid min-h-80 w-full place-items-center"}>
-      <React.Suspense
-        fallback={
-          <div className="flex size-24 items-center justify-center text-muted-foreground">
-            <Loader2 className="size-5 animate-spin" />
-          </div>
-        }
-      >
-        {Component ? (
-          <div className="flex h-full min-h-[min(60vh,640px)] w-full items-center justify-center">
-            <Component size="lg" />
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">This component has no live preview yet.</p>
-        )}
-      </React.Suspense>
+      {Component ? (
+        <div className="flex h-full min-h-[min(60vh,640px)] w-full items-center justify-center">
+          <Component size="lg" />
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">This component has no live preview yet.</p>
+      )}
     </div>
   );
 }
