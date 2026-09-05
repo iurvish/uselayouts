@@ -38,7 +38,7 @@ export function OpenCodePanel({
   return (
     <div className="pb-7">
       {description ? (
-        <p className="mb-2 text-sm leading-[1.65] text-[#b4b4b4]">{description}</p>
+        <p className="mb-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
       ) : null}
 
       <SlidingTabs
@@ -72,11 +72,11 @@ export function OpenCodePanel({
 
       {extra.map((section) => (
         <section key={section.title}>
-          <h2 className="mt-7 mb-3.5 text-2xl font-[650] tracking-[-0.03em] text-white text-balance">
+          <h2 className="mt-7 mb-3.5 text-2xl font-semibold tracking-tight text-foreground text-balance">
             {section.title}
           </h2>
           <div
-            className="text-sm leading-[1.7] text-[#c8c8c8] [&_p]:mb-3 [&_ul]:mb-3 [&_ul]:grid [&_ul]:gap-2 [&_ul]:pl-[18px] [&_code]:rounded-md [&_code]:bg-[#1c1c1c] [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-[#e8c4a8]"
+            className="text-sm leading-relaxed text-muted-foreground [&_p]:mb-3 [&_ul]:mb-3 [&_ul]:grid [&_ul]:gap-2 [&_ul]:pl-[18px] [&_code]:rounded-md [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground"
             dangerouslySetInnerHTML={{ __html: section.html }}
           />
         </section>

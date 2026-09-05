@@ -31,7 +31,7 @@ export function SlidingTabs<T extends string>({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className="mb-4 flex w-fit rounded-[10px] border border-white/12 bg-[#030202] p-0.5"
+      className="mb-4 flex w-fit rounded-lg border border-border bg-muted p-0.5"
     >
       {options.map((option) => {
         const active = option.value === value;
@@ -42,9 +42,9 @@ export function SlidingTabs<T extends string>({
             role="tab"
             aria-selected={active}
             className={cn(
-              "relative flex min-h-8 items-center justify-center gap-1.5 rounded-lg border-0 bg-transparent px-3 text-xs font-medium tracking-[-0.02em] text-[#8f8f8f]",
+              "relative flex min-h-8 items-center justify-center gap-1.5 rounded-md border-0 bg-transparent px-3 text-xs font-medium tracking-tight text-muted-foreground",
               openPress,
-              active && "text-[#f7f7f7]",
+              active && "text-foreground",
             )}
             onClick={() => onChange(option.value)}
           >
@@ -52,7 +52,7 @@ export function SlidingTabs<T extends string>({
               <motion.span
                 layoutId={layoutId}
                 transition={spring}
-                className="absolute inset-0 rounded-lg bg-[#2e2e2e] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+                className="absolute inset-0 rounded-md bg-accent shadow-[inset_0_1px_0_color-mix(in_oklab,var(--foreground)_10%,transparent)]"
               />
             ) : null}
             {option.icon ? <span className="relative">{option.icon}</span> : null}

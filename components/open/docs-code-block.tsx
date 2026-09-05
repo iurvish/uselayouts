@@ -89,13 +89,13 @@ export function DocsCodeBlock({
         dangerouslySetInnerHTML={{ __html: html || "<pre><code>No source yet.</code></pre>" }}
       />
       {collapsible && !expanded ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[88px] bg-linear-to-t from-[#0a0a0a] to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-22 bg-linear-to-t from-background to-transparent" />
       ) : null}
       {collapsible ? (
         <div className="pointer-events-none absolute inset-x-0 bottom-2.5 z-[2] flex justify-center">
           <button
             type="button"
-            className="pointer-events-auto h-7 rounded-lg border border-white/14 bg-[#1a1a1a] px-2.5 text-xs text-[#f0f0f0] transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/8 [@media(hover:hover)_and_(pointer:fine)]:active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100"
+            className="pointer-events-auto h-7 rounded-lg border border-border bg-muted px-2.5 text-xs text-foreground transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent [@media(hover:hover)_and_(pointer:fine)]:active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100"
             onClick={() => setExpanded((open) => !open)}
           >
             {expanded ? "Collapse" : "Expand"}
@@ -107,15 +107,15 @@ export function DocsCodeBlock({
 
   if (withWrapper) {
     return (
-      <div className={cn("my-3 mb-2 rounded-[10px] bg-[#161616] p-1", wrapperClassName)}>
+      <div className={cn("my-3 mb-2 rounded-lg bg-muted p-1", wrapperClassName)}>
         <div className="flex h-7 items-center justify-between px-1">
-          <figcaption className="flex items-center gap-2 text-xs text-[#a3a3a3]" data-language={language}>
+          <figcaption className="flex items-center gap-2 text-xs text-muted-foreground" data-language={language}>
             <LanguageFileIcon className="size-3.5" />
             <span className="font-mono">{title ?? "component.tsx"}</span>
           </figcaption>
           {copyControl}
         </div>
-        <figure data-rehype-pretty-code-figure="" className="relative overflow-hidden rounded-lg border border-white/12 bg-[#0a0a0a]">
+        <figure data-rehype-pretty-code-figure="" className="relative overflow-hidden rounded-lg border border-border bg-background">
           {body}
         </figure>
       </div>
@@ -124,11 +124,11 @@ export function DocsCodeBlock({
 
   return (
     <figure
-      className="relative overflow-hidden rounded-lg border border-white/12 bg-[#0a0a0a]"
+      className="relative overflow-hidden rounded-lg border border-border bg-background"
       data-rehype-pretty-code-figure=""
     >
       {title ? (
-        <figcaption className="flex items-center gap-2 text-xs text-[#a3a3a3]" data-language={language}>
+        <figcaption className="flex items-center gap-2 text-xs text-muted-foreground" data-language={language}>
           <LanguageFileIcon className="size-3.5" />
           <span className="font-mono">{title}</span>
         </figcaption>

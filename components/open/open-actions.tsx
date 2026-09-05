@@ -50,7 +50,7 @@ function ActionButton({
           "inline-flex size-9 items-center justify-center rounded-lg border-0 bg-transparent text-foreground",
           openPress,
           "disabled:cursor-not-allowed disabled:opacity-40",
-          active && "bg-accent text-accent-foreground",
+          active && "bg-primary text-primary-foreground",
         )}
         aria-label={label}
         aria-pressed={active}
