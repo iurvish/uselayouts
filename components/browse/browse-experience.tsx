@@ -43,8 +43,9 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
         )}
       >
         <div
+          data-view={isCanvas ? "canvas" : "grid"}
           className={cn(
-            "relative min-h-0 w-full flex-1 overflow-hidden rounded-2xl bg-muted p-[18px]",
+            "relative min-h-0 w-full flex-1 overflow-hidden rounded-2xl bg-muted p-4 sm:p-[18px]",
             !isCanvas && "overflow-auto",
           )}
         >
@@ -68,7 +69,7 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
       </div>
 
       {isCanvas && !isEmpty ? (
-        <p className="pointer-events-none absolute bottom-8 left-8 z-20 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="pointer-events-none absolute bottom-24 left-8 z-20 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
           Drag to explore
         </p>
       ) : null}

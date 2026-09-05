@@ -17,8 +17,8 @@ type Option = {
 };
 
 const VIEW_OPTIONS: Option[] = [
-  { value: "grid", label: "Grid", icon: CanvasIcon },
-  { value: "canvas", label: "Canvas", icon: GridIcon },
+  { value: "grid", label: "Grid", icon: GridIcon },
+  { value: "canvas", label: "Canvas", icon: CanvasIcon },
 ];
 
 export function BrowseToolbar({
