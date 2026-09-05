@@ -3,12 +3,15 @@
 /* eslint-disable @next/next/no-img-element -- static Figma marks. */
 
 import * as React from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Globe } from "lucide-react";
 
 import { LineNav } from "@/components/line-nav";
 import { OpenActions, type OpenPanel } from "@/components/open/open-actions";
 import { OpenCliBar } from "@/components/open/open-cli-bar";
 import { OpenDrawer } from "@/components/open/open-drawer";
+import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
 import { OpenCodePanel } from "@/components/open/open-panels";
 import { OpenPreview } from "@/components/open/open-preview";
 import { OpenSwitcher } from "@/components/open/open-switcher";
@@ -16,7 +19,7 @@ import {
   SidebarHoverPreview,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPress, scrollbarMinimal, scrollbarNone } from "@/components/open/ui";
+import { openChromeShadow, openIconBtn, openPress, scrollbarMinimal, scrollbarNone } from "@/components/open/ui";
 import { usePackageManager } from "@/components/open/use-package-manager";
 import type { OpenComponentData, OpenNavItem } from "@/lib/open/component";
 import {
@@ -43,6 +46,120 @@ function writePinned(value: boolean) {
   } catch {
     // ignore
   }
+}
+
+/** Closed: thin left rail. Open/pinned: thicker filled left panel (Figma panel-left). */
+function SidebarGlyph({ open }: { open: boolean }) {
+  if (open) {
+    return (
+      <svg
+        viewBox="0 0 18 18"
+        width={18}
+        height={18}
+        className="size-[18px]"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M4.75 1.25h8.5A3.5 3.5 0 0 1 16.75 4.75v8.5a3.5 3.5 0 0 1-3.5 3.5h-8.5a3.5 3.5 0 0 1-3.5-3.5v-8.5a3.5 3.5 0 0 1 3.5-3.5Zm0 1.25c-1.243 0-2.25 1.007-2.25 2.25v8.5c0 1.243 1.007 2.25 2.25 2.25H8V2.5H4.75Zm4.5 0v13h4a2.25 2.25 0 0 0 2.25-2.25v-8.5A2.25 2.25 0 0 0 13.25 2.5h-4Z"
+        />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      viewBox="0 0 18 18"
+      width={18}
+      height={18}
+      className="size-[18px]"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect
+        x="1.25"
+        y="1.25"
+        width="15.5"
+        height="15.5"
+        rx="2.25"
+        stroke="currentColor"
+        strokeWidth="1.25"
+      />
+      <path d="M6.5 1.25V16.75" stroke="currentColor" strokeWidth="1.25" />
+    </svg>
+  );
+}
+
+function SidebarToggleIcon({ open }: { open: boolean }) {
+  return (
+    <IconSwap>
+      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[18px] items-center justify-center">
+        <SidebarGlyph open={open} />
+      </IconSwapItem>
+    </IconSwap>
+  );
+}
+
+function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
+  return (
+    <header className="flex shrink-0 flex-col gap-3 px-3.5 pt-3.5 pb-3">
+      <div className="flex items-center justify-between gap-2">
+        <Link
+          href="/browse"
+          className="flex min-w-0 items-center rounded-md outline-none focus-visible:ring-0"
+          aria-label="uselayouts browse"
+        >
+          <img
+            src="/brand/logo-wordmark.svg"
+            alt="uselayouts"
+            width={185}
+            height={48}
+            className="h-10 w-auto max-w-[185px]"
+            draggable={false}
+          />
+        </Link>
+        <button
+          type="button"
+          className={cn(openIconBtn, "size-7 rounded-[10px]")}
+          data-active="true"
+          aria-label="Close sidebar"
+          aria-pressed="true"
+          onClick={onClose}
+        >
+          <SidebarToggleIcon open />
+        </button>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+            Browse
+          </span>
+          <span className="inline-flex items-center rounded-full bg-foreground px-2 py-px text-lg font-medium tracking-tight text-background capitalize">
+            50+
+          </span>
+          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+            Carefully
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+            Crafted Components
+          </span>
+          <span
+            className={cn(
+              "inline-flex size-7 items-center justify-center rounded-md border border-border bg-secondary text-muted-foreground",
+              openChromeShadow,
+            )}
+            aria-hidden="true"
+          >
+            <Globe className="size-4" strokeWidth={1.75} />
+          </span>
+        </div>
+      </div>
+    </header>
+  );
 }
 
 function SidebarList({
@@ -163,20 +280,18 @@ export function OpenExperience({
     >
       {pinned ? (
         <aside
-          className="sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden rounded-xl border-0 bg-card text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)]"
+          className={cn(
+            "sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden",
+            sidebarShell,
+          )}
           style={{ width: SIDEBAR_WIDTH }}
         >
-          <header className="flex shrink-0 items-center border-b border-border/60 px-3 pt-3 pb-2">
-            <button
-              type="button"
-              className={openIconBtn}
-              data-active="true"
-              aria-label="Close sidebar"
-              onClick={() => updatePinned(false)}
-            >
-              <img src="/open/sidebar.svg" alt="" width={18} height={18} className="size-[18px]" />
-            </button>
-          </header>
+          <PinnedSidebarHeader
+            onClose={() => {
+              updatePinned(false);
+              setHoverPreview(null);
+            }}
+          />
           <SidebarList items={navItems} activeHref={current.href} tone={theme} />
         </aside>
       ) : null}
@@ -193,23 +308,27 @@ export function OpenExperience({
           >
             <button
               type="button"
-              className={cn(openIconBtn, "pointer-events-auto transition-[box-shadow,border-color,background-color,transform] duration-150")}
+              className={cn(
+                openIconBtn,
+                "pointer-events-auto transition-[box-shadow,border-color,background-color,transform] duration-150",
+              )}
               data-active={peek ? "true" : undefined}
-              aria-label="Open sidebar"
+              aria-label={peek ? "Pin sidebar open" : "Open sidebar"}
               aria-expanded={peek}
+              aria-pressed={false}
               onClick={() => {
                 updatePinned(true);
                 setPeek(false);
                 setHoverPreview(null);
               }}
             >
-              <img src="/open/sidebar.svg" alt="" width={18} height={18} className="size-[18px]" />
+              <SidebarToggleIcon open={peek} />
             </button>
             <AnimatePresence>
               {peek ? (
                 <motion.div
                   ref={peekPanelRef}
-                  className="pointer-events-auto absolute top-11 left-[-16px] z-24 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
+                  className="pointer-events-auto absolute top-11 left-0 z-24 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
                   style={{ width: SIDEBAR_WIDTH + 8 + 177 }}
                   initial={sidebarMotion.initial}
                   animate={sidebarMotion.animate}
