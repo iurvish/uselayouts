@@ -172,7 +172,7 @@
   /* useLayouts 2.0 — Figma Section 2 redesign */
   --background: #111113;
   --foreground: #ffffff;
-  --card: #323239;
+  --card: #303036;
   --card-foreground: #ffffff;
   --popover: #030202;
   --popover-foreground: #ffffff;
@@ -187,20 +187,20 @@
   --destructive: #ef4444;
   --border: #47474d;
   --input: #030202;
-  --ring: #3351e5;
+  --ring: #47474d;
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: #1b1c1f;
+  --sidebar: #303036;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #3351e5;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #35353c;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #47474d;
-  --sidebar-ring: #3351e5;
+  --sidebar-ring: #47474d;
 }
 
 .light {

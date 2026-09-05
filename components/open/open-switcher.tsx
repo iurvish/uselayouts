@@ -6,7 +6,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
-import { openPress, scrollbarMinimal } from "@/components/open/ui";
+import { openChromeShadow, openPress, scrollbarMinimal } from "@/components/open/ui";
 import { NewDot } from "@/components/ui/new-dot";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
@@ -97,7 +97,8 @@ export function OpenSwitcher({
       <button
         type="button"
         className={cn(
-          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm tracking-tight text-card-foreground shadow-sm",
+          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border-0 bg-secondary px-3 py-2 text-sm tracking-tight text-secondary-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
+          openChromeShadow,
           openPress,
         )}
         aria-expanded={open}
@@ -117,7 +118,7 @@ export function OpenSwitcher({
         {open ? (
           <motion.div
             role="listbox"
-            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-xl border border-border bg-card p-2 text-card-foreground shadow-lg"
+            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-xl border-0 bg-card p-2 text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)]"
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
@@ -144,7 +145,7 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-sm text-muted-foreground",
+                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-sm text-muted-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
                         openPress,
                         active && "bg-accent text-accent-foreground",
                       )}

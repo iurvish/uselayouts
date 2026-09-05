@@ -61,7 +61,7 @@ function SidebarList({
     anchor: HTMLAnchorElement | null,
   ) => void;
 }) {
-  const fadeFrom = tone === "dark" ? "from-popover" : "from-background";
+  const fadeFrom = tone === "dark" ? "from-card" : "from-background";
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
       <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
@@ -90,7 +90,7 @@ function SidebarList({
 }
 
 const sidebarShell =
-  "overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-lg origin-top-left";
+  "overflow-hidden rounded-xl border-0 bg-card text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)] origin-top-left";
 
 export function OpenExperience({
   data,
@@ -163,10 +163,10 @@ export function OpenExperience({
     >
       {pinned ? (
         <aside
-          className="sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-lg"
+          className="sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden rounded-xl border-0 bg-card text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)]"
           style={{ width: SIDEBAR_WIDTH }}
         >
-          <header className="flex shrink-0 items-center border-b border-border px-3 pt-3 pb-2">
+          <header className="flex shrink-0 items-center border-b border-border/60 px-3 pt-3 pb-2">
             <button
               type="button"
               className={openIconBtn}
@@ -295,7 +295,7 @@ function ThemeSegment({
   onChange: (theme: "light" | "dark") => void;
 }) {
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground shadow-sm">
+    <div className="inline-flex items-center gap-0.5 rounded-xl border-0 bg-secondary p-1 text-secondary-foreground shadow-[0_2px_2px_-1px_rgba(0,0,0,0.16),0_4px_4px_-2px_rgba(0,0,0,0.14),0_0_0_1px_rgba(0,0,0,0.1)]">
       {(["light", "dark"] as const).map((value) => (
         <button
           key={value}
