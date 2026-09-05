@@ -6,12 +6,10 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Globe } from "lucide-react";
 
 import { LineNav } from "@/components/line-nav";
 import { OpenActions } from "@/components/open/open-actions";
 import { OpenPanelProvider, useOpenPanel } from "@/components/open/open-panel-context";
-import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
 import { OpenSwitcher } from "@/components/open/open-switcher";
 import {
   SidebarHoverPreview,
@@ -41,21 +39,17 @@ function writePinned(value: boolean) {
   }
 }
 
-/** Paper GR-0 HH-0 panel icon (rotated when open/pinned). */
-function SidebarToggleIcon({ open }: { open: boolean }) {
+/** Figma 102:6 — same glyph for default + hover; never swap on peek. */
+function SidebarToggleIcon() {
   return (
-    <IconSwap>
-      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[18px] items-center justify-center">
-        <img
-          src={open ? "/open/sidebar-panel.svg" : "/open/sidebar.svg"}
-          alt=""
-          width={18}
-          height={18}
-          className={cn("size-[18px]", open && "rotate-180")}
-          draggable={false}
-        />
-      </IconSwapItem>
-    </IconSwap>
+    <img
+      src="/open/sidebar.svg"
+      alt=""
+      width={22}
+      height={22}
+      className="size-[22px]"
+      draggable={false}
+    />
   );
 }
 
@@ -85,9 +79,9 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           className={cn(
-            "inline-flex size-[26px] items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent p-1",
+            "inline-flex items-center overflow-hidden rounded-xl border-0 bg-transparent p-1",
             "outline-none ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0",
-            "shadow-[0_0_0_1px_hsla(0,0%,0%,0.1),0_4px_2px_hsla(0,0%,0%,0.24)]",
+            "shadow-[0_4px_2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.1)]",
             "hover:bg-transparent",
             openPressMotion,
           )}
@@ -95,14 +89,16 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
           aria-pressed="true"
           onClick={onClose}
         >
-          <img
-            src="/open/sidebar-panel.svg"
-            alt=""
-            width={15}
-            height={13}
-            className="h-[13px] w-[15px] rotate-180"
-            draggable={false}
-          />
+          <span className="inline-flex -scale-y-100 rotate-180">
+            <img
+              src="/open/sidebar-close.svg"
+              alt=""
+              width={18}
+              height={18}
+              className="size-[18px]"
+              draggable={false}
+            />
+          </span>
         </button>
       </div>
       <div className="flex flex-col items-start justify-center gap-1.5">
@@ -127,7 +123,14 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
             className="inline-flex items-center overflow-hidden rounded-[7px] border border-[hsl(240_2%_27%)] bg-[hsl(240_3%_13%)] p-1"
             aria-hidden="true"
           >
-            <Globe className="size-5 text-[hsl(240_7%_70%)]" strokeWidth={1.75} />
+            <img
+              src="/open/globe.svg"
+              alt=""
+              width={20}
+              height={20}
+              className="size-5"
+              draggable={false}
+            />
           </span>
         </div>
       </div>
@@ -299,7 +302,7 @@ function OpenExperienceShell({
                 setHoverPreview(null);
               }}
             >
-              <SidebarToggleIcon open={peek} />
+              <SidebarToggleIcon />
             </button>
             <AnimatePresence>
               {peek ? (

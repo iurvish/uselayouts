@@ -65,6 +65,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@dietrichgebert/ponytail": "^4.9.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

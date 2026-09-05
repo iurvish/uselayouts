@@ -295,6 +295,11 @@
   resolved "https://registry.npmjs.org/@date-fns/tz/-/tz-1.5.0.tgz"
   integrity sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==
 
+"@dietrichgebert/ponytail@^4.9.0":
+  version "4.9.0"
+  resolved "https://registry.npmjs.org/@dietrichgebert/ponytail/-/ponytail-4.9.0.tgz"
+  integrity sha512-OSdybtBZ3uDd5m/+zyz4h8/+BVBR9nGFhqTDmQkQb1v7k4Vfc1qql78naY64UjocdBPqR94htZEkKu2wpKTJaw==
+
 "@dotenvx/dotenvx@^1.48.4":
   version "1.51.2"
   resolved "https://registry.npmjs.org/@dotenvx/dotenvx/-/dotenvx-1.51.2.tgz"

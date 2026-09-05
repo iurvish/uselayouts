@@ -6,7 +6,7 @@ import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
-import { openChromeShadow, openPress, scrollbarMinimal } from "@/components/open/ui";
+import { openPress, openPressMotion, scrollbarMinimal } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -118,9 +118,14 @@ export function OpenSwitcher({
       <button
         type="button"
         className={cn(
-          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border-0 bg-secondary px-3 py-2 text-sm tracking-tight text-secondary-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
-          openChromeShadow,
-          openPress,
+          "relative inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2.5 overflow-hidden rounded-xl border-0 px-3 py-2.5 text-lg tracking-[-0.54px] text-white outline-none focus-visible:outline-none focus-visible:ring-0",
+          "bg-[hsl(240_6%_22%)]",
+          "shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.14),0_0_0_1px_hsla(0,0%,0%,0.1)]",
+          "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]",
+          "before:bg-[linear-gradient(180deg,transparent_30%,hsla(0,0%,0%,0.07)_100%)]",
+          "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
+          "after:shadow-[inset_0_1px_0.5px_0_hsla(0,0%,100%,0.05)]",
+          openPressMotion,
         )}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -129,8 +134,15 @@ export function OpenSwitcher({
           setOpen((value) => !value);
         }}
       >
-        <span className="truncate">{displayed.title}</span>
-        <img src="/open/expand.svg" alt="" width={18} height={18} className="size-[18px] shrink-0 opacity-80" />
+        <span className="relative truncate">{displayed.title}</span>
+        <img
+          src="/open/switcher-chevron.svg"
+          alt=""
+          width={14}
+          height={14}
+          className="relative size-[14px] shrink-0"
+          draggable={false}
+        />
       </button>
       <AnimatePresence>
         {open ? (
