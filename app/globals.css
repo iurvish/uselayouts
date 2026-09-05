@@ -102,6 +102,8 @@
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
+  --color-dropdown-foreground: var(--dropdown-foreground);
+  --color-dropdown: var(--dropdown);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --radius-sm: calc(var(--radius) - 4px);
@@ -174,7 +176,8 @@
   --foreground: hsl(0 0% 100%);
   --card: hsl(240 6% 20%);
   --card-foreground: hsl(0 0% 100%);
-  --popover: hsl(0 20% 1%);
+  /* Figma 91:4677 — shared dropdown/menu surface (#303036) */
+  --popover: hsl(240 6% 20%);
   --popover-foreground: hsl(0 0% 100%);
   --primary: hsl(230 77% 55%);
   --primary-foreground: hsl(0 0% 100%);
@@ -315,7 +318,8 @@ html.dark .shiki {
 
 .dark .shiki span,
 html.dark .shiki span {
-  background-color: var(--shiki-dark-bg, transparent) !important;
+  /* Keep token colors; never paint per-line shiki bg blocks */
+  background-color: transparent !important;
 }
 
 @keyframes hint-ripple {

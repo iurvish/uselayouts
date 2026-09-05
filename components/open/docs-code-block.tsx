@@ -46,9 +46,10 @@ export function DocsCodeBlock({
 
   const body = (
     <>
+      {/* Figma 111:2921 — py 12 on panel; lines use px 16 */}
       <div
         className={cn(
-          "h-full overflow-auto px-4 py-3 [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px]",
+          "h-full overflow-auto px-4 py-3 [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
           scrollbarMinimal,
           className,
         )}
@@ -63,7 +64,7 @@ export function DocsCodeBlock({
       <button
         type="button"
         className={cn(
-          "pointer-events-auto relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl bg-[hsl(240_3%_10%)] px-3 py-1.5 text-base text-white",
+          "pointer-events-auto relative inline-flex cursor-pointer items-center gap-2.5 overflow-hidden rounded-xl bg-[hsl(240_3%_10%)] px-3 py-1.5 text-base text-white",
           "shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.04),inset_0_-1px_0_0_rgba(255,255,255,0.1)]",
           openPressMotion,
         )}
@@ -86,11 +87,13 @@ export function DocsCodeBlock({
     return (
       <div
         className={cn(
+          /* Figma 111:2982 — outer #232328, radius 14 */
           "flex flex-col overflow-hidden rounded-[14px] bg-[hsl(240_6%_15%)]",
           compact ? "h-[286px]" : "h-[466px]",
           wrapperClassName,
         )}
       >
+        {/* Figma 111:2983 — pl 16 / pr 6 / py 10 */}
         <div className="flex shrink-0 items-center justify-between py-2.5 pr-1.5 pl-4">
           <figcaption
             className="flex items-center gap-2.5 text-base tracking-[-0.16px] text-[hsl(240_5%_69%)]"
@@ -100,6 +103,7 @@ export function DocsCodeBlock({
             <span>{title ?? "component.tsx"}</span>
           </figcaption>
         </div>
+        {/* Figma 111:3037 — p 4 around inner panel */}
         <div className="relative min-h-0 flex-1 p-1">
           <figure
             data-rehype-pretty-code-figure=""

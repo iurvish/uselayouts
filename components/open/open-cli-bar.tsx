@@ -11,7 +11,7 @@ import {
   type PackageManager,
 } from "@/lib/open/package-manager";
 import { PackageManagerMark } from "@/components/open/pm-marks";
-import { openPress } from "@/components/open/ui";
+import { openPress, openPressMotion } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -84,8 +84,8 @@ export function OpenCliBar({
           type="button"
           className={cn(
             "flex cursor-pointer items-center justify-center rounded-l-[10px] bg-[hsl(0_20%_1%)] px-2.5 py-1.5 text-[hsl(240_5%_69%)] shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
-            openPress,
-            "hover:text-foreground",
+            openPressMotion,
+            "hover:bg-[hsl(0_20%_1%)] hover:text-foreground",
           )}
           onClick={copyCommand}
           aria-label={copied ? "Copied" : "Copy install command"}
@@ -100,8 +100,9 @@ export function OpenCliBar({
         <button
           type="button"
           className={cn(
-            "flex items-center justify-center rounded-r-[9px] border-l border-[hsl(240_4%_11%)] bg-[hsl(0_20%_1%)] p-2 shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
-            openPress,
+            "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-[hsl(240_4%_11%)] bg-[hsl(240_5%_21%)] p-2 shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
+            openPressMotion,
+            "hover:bg-[hsl(240_5%_21%)]",
           )}
           onClick={copyCommand}
           aria-label={copied ? "Copied" : "Copy"}

@@ -1,10 +1,9 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- static Figma marks. */
-
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
+import { ChevronsUpDown, Search } from "lucide-react";
 
 import { openPress, openPressMotion, scrollbarMinimal } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -115,6 +114,7 @@ export function OpenSwitcher({
 
   return (
     <div ref={rootRef} className="relative flex justify-center">
+      {/* Figma 102:8 — px 12 / py 10 / gap 10 */}
       <button
         type="button"
         className={cn(
@@ -135,34 +135,36 @@ export function OpenSwitcher({
         }}
       >
         <span className="relative truncate">{displayed.title}</span>
-        <img
-          src="/open/switcher-chevron.svg"
-          alt=""
-          width={14}
-          height={14}
-          className="relative size-[14px] shrink-0"
-          draggable={false}
-        />
+        <ChevronsUpDown className="relative size-3.5 shrink-0" aria-hidden strokeWidth={1.75} />
       </button>
       <AnimatePresence>
         {open ? (
+          /* Figma 91:4677 — rounded 14, search p-12, list p-12 gap-12 */
           <motion.div
             role="listbox"
-            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-xl border-0 bg-card p-2 text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)]"
+            className="absolute top-[calc(100%+8px)] left-1/2 z-30 flex w-[min(360px,80vw)] origin-top flex-col overflow-hidden rounded-[14px] border-0 bg-popover text-popover-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25)]"
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             transition={instant ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search components"
-              aria-label="Search components"
-              className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
-            />
-            <div className={cn("mt-1.5 max-h-[280px] overflow-auto", scrollbarMinimal)}>
+            <div className="border-b border-border p-3">
+              <div className="relative flex items-center overflow-hidden rounded-[10px] bg-input px-3 py-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]">
+                <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden strokeWidth={1.75} />
+                <input
+                  ref={inputRef}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search"
+                  aria-label="Search components"
+                  className="min-w-0 flex-1 bg-transparent px-2 text-sm tracking-[-0.42px] text-muted-foreground outline-none placeholder:text-muted-foreground"
+                />
+                <kbd className="relative rounded-md bg-[hsl(240_3%_13%)] px-3 py-0.5 text-xs tracking-[-0.36px] text-muted-foreground shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.12)]">
+                  /
+                </kbd>
+              </div>
+            </div>
+            <div className={cn("flex max-h-[280px] flex-col gap-3 overflow-auto p-3", scrollbarMinimal)}>
               {filtered.length === 0 ? (
                 <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
@@ -175,9 +177,9 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-sm text-muted-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
-                        openPress,
-                        active && "bg-accent text-accent-foreground",
+                        "flex w-full items-center gap-2.5 rounded-lg px-0 text-left text-base text-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
+                        openPressMotion,
+                        active && "text-white",
                       )}
                       onMouseEnter={() => router.prefetch(item.href)}
                       onFocus={() => router.prefetch(item.href)}
