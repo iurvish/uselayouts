@@ -42,55 +42,19 @@ function writePinned(value: boolean) {
   }
 }
 
-/** Closed: thin left rail. Open/pinned: thicker filled left panel (Figma panel-left). */
-function SidebarGlyph({ open }: { open: boolean }) {
-  if (open) {
-    return (
-      <svg
-        viewBox="0 0 18 18"
-        width={18}
-        height={18}
-        className="size-[18px]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          fill="currentColor"
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M4.75 1.25h8.5A3.5 3.5 0 0 1 16.75 4.75v8.5a3.5 3.5 0 0 1-3.5 3.5h-8.5a3.5 3.5 0 0 1-3.5-3.5v-8.5a3.5 3.5 0 0 1 3.5-3.5Zm0 1.25c-1.243 0-2.25 1.007-2.25 2.25v8.5c0 1.243 1.007 2.25 2.25 2.25H8V2.5H4.75Zm4.5 0v13h4a2.25 2.25 0 0 0 2.25-2.25v-8.5A2.25 2.25 0 0 0 13.25 2.5h-4Z"
-        />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      viewBox="0 0 18 18"
-      width={18}
-      height={18}
-      className="size-[18px]"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="1.25"
-        y="1.25"
-        width="15.5"
-        height="15.5"
-        rx="2.25"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
-      <path d="M6.5 1.25V16.75" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  );
-}
-
+/** Closed: outline panel. Open/pinned: filled left rail (Figma node 102:5). */
 function SidebarToggleIcon({ open }: { open: boolean }) {
   return (
     <IconSwap>
-      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[18px] items-center justify-center">
-        <SidebarGlyph open={open} />
+      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[22px] items-center justify-center">
+        <img
+          src={open ? "/open/sidebar-open.svg" : "/open/sidebar.svg"}
+          alt=""
+          width={22}
+          height={22}
+          className="size-[22px]"
+          draggable={false}
+        />
       </IconSwapItem>
     </IconSwap>
   );
