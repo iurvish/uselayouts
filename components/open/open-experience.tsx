@@ -65,7 +65,7 @@ function SidebarList({
 }
 
 const sidebarShell =
-  "overflow-hidden rounded-2xl border border-border bg-card text-card-foreground origin-top-left";
+  "overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-lg origin-top-left";
 
 export function OpenExperience({
   data,
@@ -157,13 +157,13 @@ export function OpenExperience({
       <div className="relative min-w-0 flex-1">
         {!pinned ? (
           <div
-            className={cn("pointer-events-none absolute top-8 left-8 z-20", peek && "z-[24]")}
+            className={cn("pointer-events-none absolute top-8 left-8 z-20", peek && "z-24")}
             onMouseEnter={() => setPeek(true)}
             onMouseLeave={() => setPeek(false)}
           >
             <button
               type="button"
-              className={cn(openIconBtn, "pointer-events-auto")}
+              className={cn(openIconBtn, "pointer-events-auto transition-[box-shadow,border-color,background-color,transform] duration-150")}
               data-active={peek ? "true" : undefined}
               aria-label="Open sidebar"
               aria-expanded={peek}
@@ -179,7 +179,7 @@ export function OpenExperience({
                 <motion.div
                   className={cn(
                     sidebarShell,
-                    "pointer-events-auto absolute top-11 left-[-16px] z-[24] w-[248px] max-h-[min(70dvh,560px)] before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']",
+                    "pointer-events-auto absolute top-11 left-[-16px] z-24 w-[248px] max-h-[min(70dvh,560px)] before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']",
                   )}
                   initial={sidebarMotion.initial}
                   animate={sidebarMotion.animate}

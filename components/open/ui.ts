@@ -15,7 +15,8 @@ export const openIconBtn = cn(
   "inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-0 text-foreground shadow-sm",
   openPress,
   "disabled:cursor-not-allowed disabled:opacity-40",
-  "data-[active=true]:border-primary/40 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground",
+  "[@media(hover:hover)_and_(pointer:fine)]:hover:border-primary/30 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
+  "data-[active=true]:border-primary/40 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground data-[active=true]:shadow-[0_0_0_1px_color-mix(in_oklab,var(--primary)_35%,transparent)]",
 );
 
 export const openCopyBtn = cn(
