@@ -136,10 +136,10 @@ export function OpenExperience({
     >
       {pinned ? (
         <aside
-          className="sticky top-0 z-24 flex h-dvh shrink-0 flex-col border-r border-border bg-card shadow-sm"
+          className="sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-lg"
           style={{ width: SIDEBAR_WIDTH }}
         >
-          <header className="flex shrink-0 items-center px-3 pt-3 pb-1">
+          <header className="flex shrink-0 items-center border-b border-border px-3 pt-3 pb-2">
             <button
               type="button"
               className={openIconBtn}
