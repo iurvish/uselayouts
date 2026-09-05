@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
 import { openChromeShadow, openPress, scrollbarMinimal } from "@/components/open/ui";
-import { NewDot } from "@/components/ui/new-dot";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -108,10 +107,7 @@ export function OpenSwitcher({
           setOpen((value) => !value);
         }}
       >
-        <span className="inline-flex min-w-0 items-center gap-1.5">
-          <span className="truncate">{current.title}</span>
-          {current.isNew ? <NewDot /> : null}
-        </span>
+        <span className="truncate">{current.title}</span>
         <img src="/open/expand.svg" alt="" width={18} height={18} className="size-[18px] shrink-0 opacity-80" />
       </button>
       <AnimatePresence>
@@ -152,7 +148,6 @@ export function OpenSwitcher({
                       onClick={() => select(item)}
                     >
                       <span className="truncate">{item.title}</span>
-                      {item.isNew ? <NewDot /> : null}
                     </button>
                   );
                 })
