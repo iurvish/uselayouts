@@ -19,7 +19,7 @@ import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/u
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
-const SIDEBAR_WIDTH = 270;
+const SIDEBAR_WIDTH = 250;
 const PINNED_KEY = "uselayouts:open-sidebar-pinned";
 
 function readPinned() {
@@ -47,7 +47,7 @@ function SidebarToggleIcon() {
       alt=""
       width={22}
       height={22}
-      className="size-[22px]"
+      className="size-[22px] transition-[filter] duration-150"
       draggable={false}
     />
   );
@@ -79,10 +79,12 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           className={cn(
-            "inline-flex items-center overflow-hidden rounded-xl border-0 bg-transparent p-1",
+            "inline-flex cursor-pointer items-center overflow-hidden rounded-xl border-0 bg-transparent p-1",
             "outline-none ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0",
             "shadow-[0_4px_2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.1)]",
             "hover:bg-transparent",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:brightness-0",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:invert",
             openPressMotion,
           )}
           aria-label="Close sidebar"
@@ -95,7 +97,7 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
               alt=""
               width={18}
               height={18}
-              className="size-[18px]"
+              className="size-[18px] transition-[filter] duration-150"
               draggable={false}
             />
           </span>
@@ -260,7 +262,8 @@ function OpenExperienceShell({
     <div className="dark flex h-dvh overflow-hidden bg-[hsl(240_6%_7%)] text-foreground">
       {pinned ? (
         <aside
-          className="sticky top-0 bottom-0 z-24 flex h-dvh w-[270px] shrink-0 flex-col items-center overflow-hidden bg-[hsl(240_6%_7%)] text-foreground"
+          className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col items-center overflow-hidden bg-[hsl(240_6%_7%)] text-foreground"
+          style={{ width: SIDEBAR_WIDTH }}
           data-sidebar="pinned"
         >
           <PinnedSidebarHeader
@@ -291,7 +294,9 @@ function OpenExperienceShell({
               type="button"
               className={cn(
                 openIconBtn,
-                "pointer-events-auto p-2.5 transition-[box-shadow,border-color,background-color,transform] duration-150",
+                "pointer-events-auto cursor-pointer p-2.5 transition-[box-shadow,border-color,background-color,transform,color] duration-150",
+                "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:brightness-0",
+                "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:invert",
               )}
               data-active={peek ? "true" : undefined}
               aria-label={peek ? "Pin sidebar open" : "Open sidebar"}

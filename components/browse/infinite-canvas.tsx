@@ -4,7 +4,7 @@ import * as React from "react";
 import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
-import { mediaHeight } from "@/lib/browse/media";
+import { mediaHeight, tileHeight } from "@/lib/browse/media";
 import { BrowseCard } from "./glass-card";
 
 type InfiniteCanvasProps = {
@@ -44,7 +44,7 @@ function packColumn(col: number, count: number, gap: number) {
   const prefix = Array<number>(count + 1);
   prefix[0] = 0;
   for (let row = 0; row < count; row += 1) {
-    prefix[row + 1] = prefix[row] + mediaHeight(tileIndex(col, row, count)) + gap;
+    prefix[row + 1] = prefix[row] + tileHeight(tileIndex(col, row, count)) + gap;
   }
   return { prefix, periodH: prefix[count] };
 }
@@ -142,7 +142,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         for (let local = 0; local < count; local += 1) {
           const row = cycle * count + local;
           const index = tileIndex(col, row, count);
-          const height = mediaHeight(index);
+          const height = tileHeight(index);
           const x = col * cw + camX;
           const y = cycle * period + pack.prefix[local] + camY;
 
@@ -274,7 +274,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
       if (!didCenter.current) {
         camera.current.x = (rect.width - cardW) / 2;
-        camera.current.y = (rect.height - mediaHeight(0)) / 2;
+        camera.current.y = (rect.height - tileHeight(0)) / 2;
         didCenter.current = true;
       }
 
@@ -415,6 +415,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
                 item={item}
                 index={tile.index}
                 eager
+                surface="canvas"
+                pinHeight={mediaHeight(tile.index)}
                 className="size-full"
                 paused={paused}
               />

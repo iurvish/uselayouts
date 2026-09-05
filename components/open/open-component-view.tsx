@@ -40,7 +40,7 @@ export function OpenComponentView({
         )}
         style={{ background: previewBackground || "hsl(225 7% 11%)" }}
       >
-        <OpenPreview name={data.slug} title={data.title} />
+        <OpenPreview name={data.slug} />
       </main>
 
       <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">

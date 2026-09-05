@@ -1,15 +1,22 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- browse posters are remote stills. */
+
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronsUpDown, Search } from "lucide-react";
 
-import { openPress, openPressMotion, scrollbarMinimal } from "@/components/open/ui";
+import { scrollbarMinimal } from "@/components/open/ui";
+import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
 const TITLE_SUFFIX = " | uselayouts";
+
+/** Figma 91:4677 container shadow */
+const DROPDOWN_SHADOW =
+  "shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25)]";
 
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
@@ -114,18 +121,20 @@ export function OpenSwitcher({
 
   return (
     <div ref={rootRef} className="relative flex justify-center">
-      {/* Figma 102:8 — px 12 / py 10 / gap 10 */}
+      {/* Trigger: 16px title; L±2–3 hover/press, no scale */}
       <button
         type="button"
         className={cn(
-          "relative inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2.5 overflow-hidden rounded-xl border-0 px-3 py-2.5 text-lg tracking-[-0.54px] text-white outline-none focus-visible:outline-none focus-visible:ring-0",
+          "relative inline-flex max-w-[min(42vw,320px)] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[14px] border-0 px-3.5 py-2 text-base tracking-[-0.42px] text-white outline-none focus-visible:outline-none focus-visible:ring-0",
           "bg-[hsl(240_6%_22%)]",
+          "transition-[background-color] duration-150",
+          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(240_6%_25%)]",
+          "active:bg-[hsl(240_6%_19%)]",
           "shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.14),0_0_0_1px_hsla(0,0%,0%,0.1)]",
           "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]",
           "before:bg-[linear-gradient(180deg,transparent_30%,hsla(0,0%,0%,0.07)_100%)]",
           "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
           "after:shadow-[inset_0_1px_0.5px_0_hsla(0,0%,100%,0.05)]",
-          openPressMotion,
         )}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -135,21 +144,24 @@ export function OpenSwitcher({
         }}
       >
         <span className="relative truncate">{displayed.title}</span>
-        <ChevronsUpDown className="relative size-3.5 shrink-0" aria-hidden strokeWidth={1.75} />
+        <ChevronsUpDown className="relative size-[18px] shrink-0" aria-hidden strokeWidth={1.75} />
       </button>
       <AnimatePresence>
         {open ? (
-          /* Figma 91:4677 — rounded 14, search p-12, list p-12 gap-12 */
+          /* Figma 91:4677 — rounded 14; modest px-2.5; container shadow */
           <motion.div
             role="listbox"
-            className="absolute top-[calc(100%+8px)] left-1/2 z-30 flex w-[min(360px,80vw)] origin-top flex-col overflow-hidden rounded-[14px] border-0 bg-popover text-popover-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25)]"
+            className={cn(
+              "absolute top-[calc(100%+8px)] left-1/2 z-30 flex w-[min(320px,80vw)] origin-top flex-col overflow-hidden rounded-[14px] border-0 bg-popover text-popover-foreground",
+              DROPDOWN_SHADOW,
+            )}
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             transition={instant ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
-            <div className="border-b border-border p-3">
-              <div className="relative flex items-center overflow-hidden rounded-[10px] bg-input px-3 py-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]">
+            <div className="border-b border-border px-2.5 py-3">
+              <div className="relative flex min-h-10 items-center overflow-hidden rounded-[10px] bg-input px-3 py-2.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]">
                 <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden strokeWidth={1.75} />
                 <input
                   ref={inputRef}
@@ -159,17 +171,15 @@ export function OpenSwitcher({
                   aria-label="Search components"
                   className="min-w-0 flex-1 bg-transparent px-2 text-sm tracking-[-0.42px] text-muted-foreground outline-none placeholder:text-muted-foreground"
                 />
-                <kbd className="relative rounded-md bg-[hsl(240_3%_13%)] px-3 py-0.5 text-xs tracking-[-0.36px] text-muted-foreground shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.12)]">
-                  /
-                </kbd>
               </div>
             </div>
-            <div className={cn("flex max-h-[280px] flex-col gap-3 overflow-auto p-3", scrollbarMinimal)}>
+            <div className={cn("flex max-h-[280px] flex-col gap-0.5 overflow-auto px-2.5 py-2", scrollbarMinimal)}>
               {filtered.length === 0 ? (
-                <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
+                <p className="px-2 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
                 filtered.map((item) => {
                   const active = item.href === displayed.href;
+                  const poster = browsePoster(item.slug);
                   return (
                     <button
                       key={item.slug}
@@ -177,14 +187,41 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "flex w-full items-center gap-2.5 rounded-lg px-0 text-left text-base text-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
-                        openPressMotion,
-                        active && "text-white",
+                        "relative z-10 flex w-full cursor-pointer items-center gap-2.5 rounded-none py-1.5 text-left text-sm text-foreground outline-none",
+                        "transition-[background-color] duration-150",
+                        "focus-visible:outline-none focus-visible:ring-0",
+                        active
+                          ? cn(
+                              "bg-[hsl(240_7%_26%)] text-white",
+                              "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(240_7%_29%)]",
+                              "active:bg-[hsl(240_7%_23%)]",
+                              "focus-visible:bg-[hsl(240_7%_29%)]",
+                            )
+                          : cn(
+                              "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(240_6%_23%)]",
+                              "active:bg-[hsl(240_6%_18%)]",
+                              "focus-visible:bg-[hsl(240_6%_23%)]",
+                            ),
                       )}
                       onMouseEnter={() => router.prefetch(item.href)}
                       onFocus={() => router.prefetch(item.href)}
                       onClick={() => select(item)}
                     >
+                      {poster ? (
+                        <span
+                          className="relative shrink-0 overflow-hidden rounded-md border border-white/14 bg-muted"
+                          style={{ width: SWITCHER_THUMB.w, height: SWITCHER_THUMB.h }}
+                        >
+                          <img
+                            src={poster}
+                            alt=""
+                            width={SWITCHER_THUMB.w}
+                            height={SWITCHER_THUMB.h}
+                            className="size-full object-cover"
+                            draggable={false}
+                          />
+                        </span>
+                      ) : null}
                       <span className="truncate">{item.title}</span>
                     </button>
                   );
