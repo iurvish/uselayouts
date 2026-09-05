@@ -22,11 +22,11 @@ export function DocsSteps({ children }: { children: React.ReactNode }) {
           className={cn(
             "relative grid grid-cols-[28px_minmax(0,1fr)] gap-3.5",
             index !== items.length - 1 &&
-              "before:absolute before:top-[30px] before:bottom-[-28px] before:left-[13px] before:w-px before:bg-white/12 before:content-['']",
+              "before:absolute before:top-[30px] before:bottom-[-28px] before:left-[13px] before:w-px before:bg-border before:content-['']",
           )}
         >
           <span
-            className="z-[1] grid size-7 place-items-center rounded-full bg-[#2a2a2a] text-xs font-semibold text-white"
+            className="z-1 grid size-7 place-items-center rounded-full bg-accent text-xs font-semibold text-accent-foreground"
             aria-hidden
           >
             {index + 1}
@@ -76,7 +76,7 @@ export function InstallGuide({
 
   return (
     <section>
-      <h2 className="mt-7 mb-3.5 text-2xl font-[650] tracking-[-0.03em] text-white text-balance">
+      <h2 className="mt-7 mb-3.5 text-2xl font-semibold tracking-tight text-foreground text-balance">
         Installation
       </h2>
       <SlidingTabs
@@ -92,7 +92,7 @@ export function InstallGuide({
 
       {mode === "cli" ? (
         <>
-          <p className="mb-2.5 text-[13.5px] leading-[1.6] text-[#a3a3a3] [&_code]:rounded-md [&_code]:bg-[#1c1c1c] [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-[#e8c4a8]">
+          <p className="mb-2.5 text-sm leading-relaxed text-muted-foreground [&_code]:rounded-md [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground">
             Add <code>@uselayouts</code> to <code>registries</code> in{" "}
             <code>components.json</code>, then run:
           </p>
@@ -105,7 +105,7 @@ export function InstallGuide({
       ) : (
         <DocsSteps>
           <div>
-            <h3 className="mb-2.5 text-[15px] font-[550] tracking-[-0.02em] text-[#f4f4f4]">
+            <h3 className="mb-2.5 text-base font-medium tracking-tight text-foreground">
               Install the following dependencies:
             </h3>
             {manual[manager] ? (
@@ -115,23 +115,23 @@ export function InstallGuide({
                 onValueChange={onManagerChange}
               />
             ) : (
-              <p className="text-[13px] text-[#8f8f8f]">No extra packages configured for this component.</p>
+              <p className="text-sm text-muted-foreground">No extra packages configured for this component.</p>
             )}
           </div>
           <div>
-            <h3 className="mb-2.5 text-[15px] font-[550] tracking-[-0.02em] text-[#f4f4f4]">
+            <h3 className="mb-2.5 text-base font-medium tracking-tight text-foreground">
               Copy and paste the following code into your project.
             </h3>
-            <p className="mb-2.5 text-[13.5px] leading-[1.6] text-[#a3a3a3] [&_code]:rounded-md [&_code]:bg-[#1c1c1c] [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-[#e8c4a8]">
+            <p className="mb-2.5 text-sm leading-relaxed text-muted-foreground [&_code]:rounded-md [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground">
               Add it to <code>{file}</code>
             </p>
             <DocsCodeBlock html={codeHtml || usageHtml} code={code || usage} title={file} />
           </div>
           <div>
-            <h3 className="mb-2.5 text-[15px] font-[550] tracking-[-0.02em] text-[#f4f4f4]">
+            <h3 className="mb-2.5 text-base font-medium tracking-tight text-foreground">
               Update your import path
             </h3>
-            <p className="mb-2.5 text-[13.5px] leading-[1.6] text-[#a3a3a3]">
+            <p className="mb-2.5 text-sm leading-relaxed text-muted-foreground">
               Import the component and render it on the page.
             </p>
             <DocsCodeBlock html={usageHtml} code={usage} title="app/page.tsx" />
