@@ -67,9 +67,10 @@ export function OpenCliBar({
       <motion.button
         type="button"
         className={cn(
-          "flex h-[33px] cursor-pointer items-center overflow-hidden rounded-[10px] border border-border bg-background px-3 text-muted-foreground",
+          "flex h-[33px] cursor-pointer items-center overflow-hidden rounded-lg border border-border bg-background px-3 text-muted-foreground",
           openPress,
           "hover:text-foreground",
+          copied && "border-primary/30 bg-primary/10 text-foreground",
         )}
         layout={reduce ? false : "size"}
         transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
@@ -86,7 +87,7 @@ export function OpenCliBar({
       >
         <IconSwap>
           {copied ? (
-            <IconSwapItem key="copied" className="flex items-center gap-2 text-[13px] font-medium whitespace-nowrap text-foreground">
+            <IconSwapItem key="copied" className="flex items-center gap-2 text-sm font-medium whitespace-nowrap text-primary">
               <Check className="size-3.5" strokeWidth={1.75} />
               Copied successfully!
             </IconSwapItem>
@@ -94,7 +95,7 @@ export function OpenCliBar({
             <IconSwapItem key="command" className="flex items-center gap-2 whitespace-nowrap">
               <code
                 title={command}
-                className="block max-w-[min(42vw,420px)] truncate font-mono text-sm tracking-[-0.03em]"
+                className="block max-w-[min(42vw,420px)] truncate font-mono text-sm tracking-tight text-foreground"
               >
                 {command}
               </code>
@@ -108,7 +109,7 @@ export function OpenCliBar({
           <motion.div
             role="listbox"
             aria-label="Package managers"
-            className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-border bg-card p-1 text-card-foreground"
+            className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lg"
             initial={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
             animate={{ opacity: 1, transform: "scale(1) translateY(0px)" }}
             exit={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
@@ -147,7 +148,7 @@ function PmOption({
       role="option"
       aria-selected={active}
       className={cn(
-        "flex min-h-8 w-full items-center gap-2 rounded-lg px-2 text-[13px] text-muted-foreground",
+        "flex min-h-8 w-full items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground",
         openPress,
         active && "bg-accent text-accent-foreground",
       )}

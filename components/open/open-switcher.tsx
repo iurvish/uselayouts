@@ -117,7 +117,7 @@ export function OpenSwitcher({
         {open ? (
           <motion.div
             role="listbox"
-            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-[14px] border border-border bg-card p-2 text-card-foreground shadow-lg"
+            className="absolute top-[calc(100%+8px)] left-1/2 z-30 w-[min(360px,80vw)] origin-top rounded-xl border border-border bg-card p-2 text-card-foreground shadow-lg"
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             animate={{ opacity: 1, transform: "translateX(-50%) scale(1)" }}
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
@@ -129,7 +129,7 @@ export function OpenSwitcher({
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search components"
               aria-label="Search components"
-              className="h-9 w-full rounded-[10px] border border-input bg-background px-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground"
+              className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <div className={cn("mt-1.5 max-h-[280px] overflow-auto", scrollbarMinimal)}>
               {filtered.length === 0 ? (
@@ -144,7 +144,7 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-[13px] text-muted-foreground",
+                        "flex w-full min-h-8 items-center gap-1.5 rounded-lg px-2.5 text-left text-sm text-muted-foreground",
                         openPress,
                         active && "bg-accent text-accent-foreground",
                       )}
