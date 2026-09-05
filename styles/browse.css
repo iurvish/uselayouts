@@ -4,16 +4,16 @@
   overflow: hidden;
   border-radius: 10px;
   background: var(--card);
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 10%),
-    0 1px 2px rgb(17 17 19 / 18%),
-    0 8px 20px rgb(17 17 19 / 28%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .browse-chrome-title {
   display: flex;
   align-items: center;
   padding: 10px;
+  background: var(--card);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .browse-chrome-media {
@@ -29,7 +29,7 @@
   overflow: hidden;
   border-radius: var(--card-radius);
   background-color: var(--background);
-  border: 1px solid rgb(255 255 255 / 14%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .browse-pin .browse-card {
