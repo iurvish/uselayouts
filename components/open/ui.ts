@@ -2,13 +2,20 @@ import { cn } from "@/lib/utils";
 
 export const easeOut = "ease-[cubic-bezier(0.23,1,0.32,1)]";
 
-export const openPress = cn(
-  "transition-[transform,background-color,color,border-color,box-shadow] duration-150",
+/** Motion-only press feedback — does not change fill/text colors. */
+export const openPressMotion = cn(
+  "transition-[transform,box-shadow] duration-150",
   easeOut,
   "motion-reduce:transition-none motion-reduce:active:scale-100",
+  "[@media(hover:hover)_and_(pointer:fine)]:active:scale-[0.97]",
+);
+
+/** Default chrome press: subtle accent fill on hover. */
+export const openPress = cn(
+  openPressMotion,
+  "transition-[transform,background-color,color,border-color,box-shadow] duration-150",
   "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
   "[@media(hover:hover)_and_(pointer:fine)]:hover:text-accent-foreground",
-  "[@media(hover:hover)_and_(pointer:fine)]:active:scale-[0.97]",
 );
 
 /** Soft Figma chrome elevation (buttons / panels) — no blue ring. */
