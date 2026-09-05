@@ -4,20 +4,18 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Check } from "lucide-react";
 
 import {
   PACKAGE_MANAGERS,
   cliInstallCommand,
   type PackageManager,
 } from "@/lib/open/package-manager";
-import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
 import { PackageManagerMark } from "@/components/open/pm-marks";
 import { openPress } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-/** Figma 102:928 — package manager + command + copy */
+/** Figma 91:4608 default / 91:4640 success — package manager + command + copy */
 export function OpenCliBar({
   registryItem,
   manager,
@@ -75,7 +73,7 @@ export function OpenCliBar({
             alt=""
             width={18}
             height={18}
-            className="size-[18px] opacity-70"
+            className="size-[18px] object-contain opacity-70"
           />
         </TooltipTrigger>
         <TooltipContent>Package manager</TooltipContent>
@@ -88,31 +86,16 @@ export function OpenCliBar({
             "flex cursor-pointer items-center justify-center rounded-l-[10px] bg-[hsl(0_20%_1%)] px-2.5 py-1.5 text-[hsl(240_5%_69%)] shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
             openPress,
             "hover:text-foreground",
-            copied && "text-foreground",
           )}
           onClick={copyCommand}
-          aria-label={copied ? "Copied successfully!" : "Copy install command"}
+          aria-label={copied ? "Copied" : "Copy install command"}
         >
-          <IconSwap>
-            {copied ? (
-              <IconSwapItem
-                key="copied"
-                className="flex items-center gap-2 text-sm font-medium whitespace-nowrap text-primary"
-              >
-                <Check className="size-3.5" strokeWidth={1.75} />
-                Copied successfully!
-              </IconSwapItem>
-            ) : (
-              <IconSwapItem key="command" className="flex items-center whitespace-nowrap">
-                <code
-                  title={command}
-                  className="block max-w-[min(42vw,420px)] truncate font-mono text-sm leading-5 tracking-tight"
-                >
-                  {command}
-                </code>
-              </IconSwapItem>
-            )}
-          </IconSwap>
+          <code
+            title={command}
+            className="block max-w-[min(42vw,420px)] truncate font-mono text-sm leading-5 tracking-[-0.42px]"
+          >
+            {command}
+          </code>
         </button>
         <button
           type="button"
@@ -121,13 +104,16 @@ export function OpenCliBar({
             openPress,
           )}
           onClick={copyCommand}
-          aria-label="Copy"
+          aria-label={copied ? "Copied" : "Copy"}
         >
-          {copied ? (
-            <Check className="size-4 text-primary" strokeWidth={1.75} />
-          ) : (
-            <img src="/open/copy.svg" alt="" width={16} height={16} className="size-4 opacity-80" />
-          )}
+          {/* Figma 91:4640 — success is icon-only (green check), no toast text */}
+          <img
+            src={copied ? "/open/check.svg" : "/open/copy.svg"}
+            alt=""
+            width={16}
+            height={16}
+            className="size-4"
+          />
         </button>
       </div>
 

@@ -4,11 +4,11 @@ import * as React from "react";
 
 import { DocsCodeBlock } from "@/components/open/docs-code-block";
 import { InstallGuide } from "@/components/open/install-guide";
-import { SlidingTabs } from "@/components/open/sliding-tabs";
 import type { PackageManager } from "@/lib/open/package-manager";
 
+/** Figma 109:500 — code preview + Installation (no Usage/Code tabs) */
 export function OpenCodePanel({
-  description,
+  description: _description,
   docsContent,
   usageHtml,
   usage,
@@ -32,30 +32,11 @@ export function OpenCodePanel({
   onManagerChange: (manager: PackageManager) => void;
   slug: string;
 }) {
-  const [tab, setTab] = React.useState<"usage" | "code">("usage");
+  const file = `${slug}.tsx`;
 
   return (
-    <div className="pb-7">
-      {description ? (
-        <p className="mb-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
-      ) : null}
-
-      <SlidingTabs
-        value={tab}
-        onChange={setTab}
-        layoutId="open-source-tab"
-        ariaLabel="Source"
-        options={[
-          { value: "usage", label: "Usage" },
-          { value: "code", label: "Code" },
-        ]}
-      />
-
-      <DocsCodeBlock
-        html={tab === "usage" ? usageHtml : codeHtml}
-        code={tab === "usage" ? usage : code}
-        title={tab === "usage" ? "app/page.tsx" : `components/${slug}.tsx`}
-      />
+    <div className="flex flex-col gap-[22px] pb-4">
+      <DocsCodeBlock html={codeHtml || usageHtml} code={code || usage} title={file} />
 
       <InstallGuide
         registryItem={registryItem}
@@ -69,7 +50,7 @@ export function OpenCodePanel({
         slug={slug}
       />
 
-      {docsContent ? <div className="mt-2">{docsContent}</div> : null}
+      {docsContent ? <div className="mt-1">{docsContent}</div> : null}
     </div>
   );
 }

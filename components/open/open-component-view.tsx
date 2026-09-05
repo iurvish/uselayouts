@@ -54,7 +54,7 @@ export function OpenComponentView({
       <OpenDrawer
         open={panel === "code"}
         onClose={() => setPanel(null)}
-        title="Code"
+        title="Get this Component"
         wide
       >
         <OpenCodePanel

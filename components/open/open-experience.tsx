@@ -159,14 +159,14 @@ function SidebarList({
     surface === "sidebar"
       ? "from-sidebar"
       : surface === "background"
-        ? "from-background"
-        : "from-card";
+        ? "from-[hsl(225_7%_11%)]"
+        : "from-[hsl(240_6%_20%)]";
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
       <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
-      <div className={cn("h-full overflow-auto px-3 py-5 pb-8", scrollbarNone)}>
+      <div className={cn("h-full overflow-auto pt-2 pr-2.5 pb-8 pl-3.5", scrollbarNone)}>
         <LineNav
-          className="py-0"
+          className="py-3"
           items={items}
           activeHref={activeHref}
           onItemClick={(item) => {
@@ -191,8 +191,9 @@ function SidebarList({
   );
 }
 
+/** Figma 102:444 — floating sidebar chrome */
 const sidebarShell =
-  "overflow-hidden rounded-xl border-0 bg-card text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)] origin-top-left";
+  "overflow-hidden rounded-[14px] border-0 bg-[hsl(240_6%_20%)] text-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25)] origin-top-left";
 
 export function OpenExperience({
   navItems,

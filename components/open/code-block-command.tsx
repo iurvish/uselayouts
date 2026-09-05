@@ -1,15 +1,14 @@
 "use client";
 
-import * as React from "react";
-import { Check, Copy } from "lucide-react";
+/* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
-import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
+import * as React from "react";
+
 import { PackageManagerMark } from "@/components/open/pm-marks";
-import { openCopyBtn } from "@/components/open/ui";
+import { openPressMotion } from "@/components/open/ui";
 import {
   Tabs,
   TabsContent,
-  TabsIndicator,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
@@ -17,8 +16,10 @@ import {
   isPackageManager,
   type PackageManager,
 } from "@/lib/open/package-manager";
+import { cn } from "@/lib/utils";
 
-const COMMAND_TABS = ["pnpm", "yarn", "npm", "bun"] as const;
+/** Figma 116:3390 — bun-first package manager + $ command */
+const COMMAND_TABS = ["bun", "npm", "yarn", "pnpm"] as const;
 
 export function CodeBlockCommand({
   npm,
@@ -37,7 +38,9 @@ export function CodeBlockCommand({
 }) {
   const [copied, setCopied] = React.useState(false);
   const commands: Record<PackageManager, string> = { npm, yarn, pnpm, bun };
-  const active = COMMAND_TABS.includes(value as (typeof COMMAND_TABS)[number]) ? value : "pnpm";
+  const active = COMMAND_TABS.includes(value as (typeof COMMAND_TABS)[number])
+    ? value
+    : "bun";
   const command = commands[active];
 
   async function copy() {
@@ -57,40 +60,51 @@ export function CodeBlockCommand({
       onValueChange={(next) => {
         if (typeof next === "string" && isPackageManager(next)) onValueChange(next);
       }}
-      className="my-3 mb-5 gap-0 overflow-hidden rounded-xl border border-border bg-background"
+      className="gap-0 overflow-hidden rounded-[10px] border border-[hsl(240_4%_29%)] bg-[hsl(240_5%_21%)] shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
     >
-      <div className="flex items-center justify-between gap-2 border-b border-border px-2 py-1.5">
-        <TabsList className="relative z-0 h-8 w-fit rounded-lg bg-muted p-0.5 text-muted-foreground">
-          <TabsIndicator className="rounded-md bg-accent" />
+      <div className="flex items-center justify-between gap-2 border-b border-[hsl(240_4%_29%)] py-2 pr-2 pl-2.5">
+        <TabsList className="relative z-0 h-auto w-fit gap-1.5 rounded-none bg-transparent p-0 text-[hsl(240_0%_72%)]">
           {COMMAND_TABS.map((option) => (
             <TabsTrigger
               key={option}
               value={option}
-              className="h-7 flex-none gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground data-active:bg-transparent data-active:text-foreground data-active:shadow-none"
+              className={cn(
+                "h-auto flex-none gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm tracking-[-0.42px] text-[#b8b8b8] shadow-none",
+                "data-active:bg-white/14 data-active:text-white data-active:shadow-none",
+                openPressMotion,
+              )}
             >
-              <PackageManagerMark manager={option} className="size-3.5" />
+              {option === active ? (
+                <PackageManagerMark manager={option} className="size-4" />
+              ) : null}
               {option}
             </TabsTrigger>
           ))}
         </TabsList>
-        <button type="button" className={openCopyBtn} onClick={copy} aria-label={copied ? "Copied" : "Copy"}>
-          <IconSwap>
-            {copied ? (
-              <IconSwapItem key="copied" className="flex items-center">
-                <Check className="size-3.5" strokeWidth={1.75} />
-              </IconSwapItem>
-            ) : (
-              <IconSwapItem key="copy" className="flex items-center">
-                <Copy className="size-3.5" strokeWidth={1.75} />
-              </IconSwapItem>
-            )}
-          </IconSwap>
+        <button
+          type="button"
+          className={cn(
+            "inline-flex items-center overflow-hidden rounded-md p-1.5",
+            "shadow-[0_2px_1px_rgba(0,0,0,0.16),0_4px_2px_rgba(0,0,0,0.24),0_0_0_1px_rgba(0,0,0,0.12)]",
+            openPressMotion,
+          )}
+          onClick={copy}
+          aria-label={copied ? "Copied" : "Copy"}
+        >
+          <img
+            src={copied ? "/open/check.svg" : "/open/copy.svg"}
+            alt=""
+            width={16}
+            height={16}
+            className="size-4"
+          />
         </button>
       </div>
       {COMMAND_TABS.map((option) => (
         <TabsContent key={option} value={option} className="m-0">
-          <pre className="overflow-x-auto px-4 py-3.5 font-mono text-sm text-foreground">
-            <code>{commands[option]}</code>
+          <pre className="flex items-center gap-[13px] overflow-x-auto py-2.5 pr-1.5 pl-[15px] font-mono text-sm tracking-[-0.42px]">
+            <span className="shrink-0 text-[#b8b8b8]">$</span>
+            <code className="text-center text-[hsl(240_5%_69%)]">{commands[option]}</code>
           </pre>
         </TabsContent>
       ))}

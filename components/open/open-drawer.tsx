@@ -1,11 +1,20 @@
 "use client";
 
-import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+/* eslint-disable @next/next/no-img-element -- static Figma marks. */
 
-import { openIconBtn, scrollbarMinimal } from "@/components/open/ui";
+import * as React from "react";
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { openPressMotion, scrollbarMinimal } from "@/components/open/ui";
 import { cn } from "@/lib/utils";
 
+/** Figma 109:221 / 109:500 — floating right drawer chrome */
 export function OpenDrawer({
   open,
   onClose,
@@ -19,74 +28,47 @@ export function OpenDrawer({
   children: React.ReactNode;
   wide?: boolean;
 }) {
-  const reduce = useReducedMotion();
-
-  React.useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  React.useEffect(() => {
-    if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [open]);
-
-  const enter = reduce
-    ? { opacity: 0 }
-    : { opacity: 0, transform: "translateX(100%)" };
-  const shown = reduce
-    ? { opacity: 1 }
-    : { opacity: 1, transform: "translateX(0%)" };
-
   return (
-    <AnimatePresence>
-      {open ? (
-        <>
-          <motion.button
-            type="button"
-            aria-label="Close panel"
-            className="fixed inset-0 z-40 border-0 bg-black/40 backdrop-blur-[2px]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-            onClick={onClose}
-          />
-          <motion.aside
-            role="dialog"
-            aria-modal="true"
-            aria-label={title}
+    <Drawer
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
+      swipeDirection="right"
+      modal
+    >
+      <DrawerContent
+        className={cn(
+          "border border-white/10 bg-[hsl(240_5%_12%)] text-foreground",
+          "rounded-2xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04),0_8px_10px_-6px_rgba(0,0,0,0.1)]",
+          "data-[swipe-direction=right]:rounded-2xl data-[swipe-direction=right]:border",
+          /* Figma floating inset — beat default inset-y-0 */
+          "data-[swipe-axis=x]:top-[18px] data-[swipe-axis=x]:right-[18px] data-[swipe-axis=x]:bottom-[18px] data-[swipe-axis=x]:h-auto",
+          "[--drawer-inset:18px] [--drawer-content-width:min(460px,calc(100vw-36px))]",
+          wide && "[--drawer-content-width:min(680px,calc(100vw-36px))]",
+        )}
+      >
+        <DrawerHeader className="flex shrink-0 flex-row items-center justify-between gap-3 border-b border-[hsl(240_4%_29%)] px-4 py-2.5 text-left md:gap-3 md:text-left">
+          <DrawerTitle className="text-[20px] leading-[1.3] font-normal tracking-[-0.2px] text-white">
+            {title}
+          </DrawerTitle>
+          <DrawerClose
             className={cn(
-              "fixed top-0 right-0 z-50 flex h-dvh flex-col border-l border-border bg-popover text-popover-foreground shadow-xl",
-              wide ? "w-[min(680px,100vw)]" : "w-[min(420px,100vw)]",
+              "inline-flex size-8 items-center justify-center rounded-lg text-[hsl(240_5%_69%)]",
+              openPressMotion,
+              "outline-none focus-visible:outline-none",
             )}
-            initial={enter}
-            animate={shown}
-            exit={{ ...enter, transition: { duration: 0.16, ease: [0.23, 1, 0.32, 1] } }}
-            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+            aria-label="Close"
           >
-            <header className="flex items-center justify-between border-b border-border px-4 pt-4 pb-3">
-              <h2 className="text-sm font-medium tracking-tight text-foreground">{title}</h2>
-              <button type="button" className={openIconBtn} onClick={onClose} aria-label="Close">
-                <span aria-hidden className="text-lg leading-none">
-                  ×
-                </span>
-              </button>
-            </header>
-            <div className={cn("min-h-0 flex-1 overflow-auto px-5 pt-5 pb-8", scrollbarMinimal)}>
-              {children}
-            </div>
-          </motion.aside>
-        </>
-      ) : null}
-    </AnimatePresence>
+            <span aria-hidden className="text-lg leading-none">
+              ×
+            </span>
+          </DrawerClose>
+        </DrawerHeader>
+        <div className={cn("min-h-0 flex-1 overflow-auto px-4 py-3", scrollbarMinimal)}>
+          {children}
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }

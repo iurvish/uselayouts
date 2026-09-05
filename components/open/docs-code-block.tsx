@@ -1,27 +1,14 @@
 "use client";
 
-import * as React from "react";
-import { Check, Copy } from "lucide-react";
+/* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
-import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
-import { openCopyBtn, scrollbarMinimal } from "@/components/open/ui";
+import * as React from "react";
+
+import { openPressMotion, scrollbarMinimal } from "@/components/open/ui";
 import { stripCodeAnnotations } from "@/lib/open/strip-code-annotations";
 import { cn } from "@/lib/utils";
 
-function LanguageFileIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" className={className} aria-hidden>
-      <path
-        d="M4.2 1.5h5.1L13 5.2v8.3c0 .8-.7 1.5-1.5 1.5h-7.3c-.8 0-1.5-.7-1.5-1.5V3c0-.8.7-1.5 1.5-1.5Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-      <path d="M9.2 1.6v3.1c0 .5.4.9.9.9H13" fill="none" stroke="currentColor" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
+/** Figma 111:2982 / 120:164 — code card with floating Copy Code */
 export function DocsCodeBlock({
   html,
   code,
@@ -31,7 +18,7 @@ export function DocsCodeBlock({
   wrapperClassName,
   copyButton = true,
   withWrapper = true,
-  maxLines = 16,
+  compact = false,
 }: {
   html: string;
   code: string;
@@ -41,13 +28,11 @@ export function DocsCodeBlock({
   wrapperClassName?: string;
   copyButton?: boolean;
   withWrapper?: boolean;
-  maxLines?: number;
+  /** Shorter card for nested manual step 2 */
+  compact?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
-  const [expanded, setExpanded] = React.useState(false);
   const cleaned = stripCodeAnnotations(code);
-  const lines = cleaned.split("\n").length;
-  const collapsible = lines > maxLines;
 
   async function copy() {
     try {
@@ -59,82 +44,88 @@ export function DocsCodeBlock({
     }
   }
 
-  const copyControl = copyButton ? (
-    <button type="button" className={openCopyBtn} onClick={copy} aria-label={copied ? "Copied" : "Copy"}>
-      <IconSwap>
-        {copied ? (
-          <IconSwapItem key="copied" className="flex items-center gap-1.5">
-            <Check className="size-3.5" strokeWidth={1.75} />
-            Copied
-          </IconSwapItem>
-        ) : (
-          <IconSwapItem key="copy" className="flex items-center gap-1.5">
-            <Copy className="size-3.5" strokeWidth={1.75} />
-            Copy
-          </IconSwapItem>
-        )}
-      </IconSwap>
-    </button>
-  ) : null;
-
   const body = (
     <>
       <div
         className={cn(
-          "overflow-auto px-4 pt-3.5 pb-5 [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[12.5px] [&_.shiki]:leading-[1.7]",
+          "h-full overflow-auto px-4 py-3 [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px]",
           scrollbarMinimal,
           className,
         )}
-        style={collapsible && !expanded ? { maxHeight: maxLines * 22 } : undefined}
         dangerouslySetInnerHTML={{ __html: html || "<pre><code>No source yet.</code></pre>" }}
       />
-      {collapsible && !expanded ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-22 bg-linear-to-t from-background to-transparent" />
-      ) : null}
-      {collapsible ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-2.5 z-[2] flex justify-center">
-          <button
-            type="button"
-            className="pointer-events-auto h-7 rounded-lg border border-border bg-muted px-2.5 text-xs text-foreground transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent [@media(hover:hover)_and_(pointer:fine)]:active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100"
-            onClick={() => setExpanded((open) => !open)}
-          >
-            {expanded ? "Collapse" : "Expand"}
-          </button>
-        </div>
-      ) : null}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-[84px] bg-linear-to-t from-[hsl(240_6%_20%)] to-transparent" />
     </>
   );
 
+  const floatingCopy = copyButton ? (
+    <div className="pointer-events-none absolute inset-x-0 bottom-[17px] z-[2] flex justify-center">
+      <button
+        type="button"
+        className={cn(
+          "pointer-events-auto relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl bg-[hsl(240_3%_10%)] px-3 py-1.5 text-base text-white",
+          "shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.04),inset_0_-1px_0_0_rgba(255,255,255,0.1)]",
+          openPressMotion,
+        )}
+        onClick={copy}
+        aria-label={copied ? "Copied" : "Copy Code"}
+      >
+        <img
+          src={copied ? "/open/check.svg" : "/open/copy-white-18.svg"}
+          alt=""
+          width={18}
+          height={18}
+          className="size-[18px]"
+        />
+        <span>{copied ? "Copied" : "Copy Code"}</span>
+      </button>
+    </div>
+  ) : null;
+
   if (withWrapper) {
     return (
-      <div className={cn("my-3 mb-2 rounded-lg bg-muted p-1", wrapperClassName)}>
-        <div className="flex h-7 items-center justify-between px-1">
-          <figcaption className="flex items-center gap-2 text-xs text-muted-foreground" data-language={language}>
-            <LanguageFileIcon className="size-3.5" />
-            <span className="font-mono">{title ?? "component.tsx"}</span>
+      <div
+        className={cn(
+          "flex flex-col overflow-hidden rounded-[14px] bg-[hsl(240_6%_15%)]",
+          compact ? "h-[286px]" : "h-[466px]",
+          wrapperClassName,
+        )}
+      >
+        <div className="flex shrink-0 items-center justify-between py-2.5 pr-1.5 pl-4">
+          <figcaption
+            className="flex items-center gap-2.5 text-base tracking-[-0.16px] text-[hsl(240_5%_69%)]"
+            data-language={language}
+          >
+            <img src="/open/file.svg" alt="" width={16} height={16} className="size-4" />
+            <span>{title ?? "component.tsx"}</span>
           </figcaption>
-          {copyControl}
         </div>
-        <figure data-rehype-pretty-code-figure="" className="relative overflow-hidden rounded-lg border border-border bg-background">
-          {body}
-        </figure>
+        <div className="relative min-h-0 flex-1 p-1">
+          <figure
+            data-rehype-pretty-code-figure=""
+            className="relative h-full overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)]"
+          >
+            {body}
+            {floatingCopy}
+          </figure>
+        </div>
       </div>
     );
   }
 
   return (
     <figure
-      className="relative overflow-hidden rounded-lg border border-border bg-background"
+      className="relative overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]"
       data-rehype-pretty-code-figure=""
     >
       {title ? (
-        <figcaption className="flex items-center gap-2 text-xs text-muted-foreground" data-language={language}>
-          <LanguageFileIcon className="size-3.5" />
-          <span className="font-mono">{title}</span>
+        <figcaption className="flex items-center gap-2.5 px-4 py-2.5 text-base text-[hsl(240_5%_69%)]">
+          <img src="/open/file.svg" alt="" width={16} height={16} className="size-4" />
+          <span>{title}</span>
         </figcaption>
       ) : null}
-      {copyButton ? <div className="sticky top-0 z-10 flex h-0 justify-end">{copyControl}</div> : null}
       {body}
+      {floatingCopy}
     </figure>
   );
 }

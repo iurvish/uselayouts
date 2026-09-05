@@ -72,7 +72,8 @@ export function SidebarHoverPreview({
           role="presentation"
           aria-hidden
           className={cn(
-            "pointer-events-none absolute z-30 overflow-hidden rounded-[10px] border border-border bg-card shadow-lg",
+            /* Figma 102:961 */
+            "pointer-events-none absolute z-30 overflow-hidden rounded-[10px] border border-[hsl(240_4%_29%)] bg-[hsl(0_0%_85%)] shadow-lg",
             className,
           )}
           style={{
