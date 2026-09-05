@@ -21,6 +21,10 @@ export type LineNavProps = {
     item: LineNavItem,
     event: React.MouseEvent<HTMLAnchorElement>,
   ) => void;
+  onItemHover?: (
+    item: LineNavItem | null,
+    anchor: HTMLAnchorElement | null,
+  ) => void;
 };
 
 export function LineNav({
@@ -29,6 +33,7 @@ export function LineNav({
   activeHref,
   scrollActiveIntoView = true,
   onItemClick,
+  onItemHover,
 }: LineNavProps) {
   const activeItemRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -38,7 +43,11 @@ export function LineNav({
   }, [activeHref, scrollActiveIntoView]);
 
   return (
-    <nav className={cn("flex flex-col gap-2 py-3", className)} aria-label="Components">
+    <nav
+      className={cn("flex flex-col gap-2 py-3", className)}
+      aria-label="Components"
+      onMouseLeave={() => onItemHover?.(null, null)}
+    >
       {items.map((item, index) => {
         const isActive = item.href === activeHref;
         return (
@@ -51,6 +60,11 @@ export function LineNav({
             isNew={item.isNew}
             isLast={index === items.length - 1}
             onClick={onItemClick ? (event) => onItemClick(item, event) : undefined}
+            onHover={
+              onItemHover
+                ? (anchor) => onItemHover(anchor ? item : null, anchor)
+                : undefined
+            }
           />
         );
       })}
@@ -66,6 +80,7 @@ const LineNavItem = memo(function LineNavItem({
   isNew = false,
   isLast = false,
   onClick,
+  onHover,
 }: {
   ref?: React.Ref<HTMLAnchorElement>;
   title: string;
@@ -74,6 +89,7 @@ const LineNavItem = memo(function LineNavItem({
   isNew?: boolean;
   isLast?: boolean;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  onHover?: (anchor: HTMLAnchorElement | null) => void;
 }) {
   return (
     <>
@@ -84,6 +100,9 @@ const LineNavItem = memo(function LineNavItem({
         className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:h-7 after:w-full after:-translate-y-1/2 after:content-['']"
         href={href}
         onClick={onClick}
+        onMouseEnter={(event) => onHover?.(event.currentTarget)}
+        onFocus={(event) => onHover?.(event.currentTarget)}
+        onBlur={() => onHover?.(null)}
       >
         <span
           className={cn(
