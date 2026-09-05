@@ -6,8 +6,8 @@ export type PreviewBackgrounds = {
 const HEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 
 export const DEFAULT_PREVIEW_BACKGROUNDS = {
-  light: "#ffffff",
-  dark: "#141414",
+  light: "hsl(0 0% 100%)",
+  dark: "hsl(0 0% 8%)",
 } as const;
 
 export function isCssColor(value: string) {
