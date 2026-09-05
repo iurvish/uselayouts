@@ -17,7 +17,7 @@ import {
   SidebarHoverPreview,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openChromeShadow, openIconBtn, scrollbarNone } from "@/components/open/ui";
+import { openIconBtn, openPress, scrollbarNone } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -63,14 +63,14 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
   return (
     <header
       className={cn(
-        "flex shrink-0 flex-col gap-3 rounded-bl-2xl rounded-br-2xl bg-sidebar px-3.5 py-[15px]",
-        "shadow-[0_1px_0_0_rgba(255,255,255,0.02),0_6px_16px_-14px_rgba(0,0,0,0.06),0_4px_8px_-12px_rgba(0,0,0,0.08),0_2px_6px_-10px_rgba(0,0,0,0.1)]",
+        "flex w-full shrink-0 flex-col gap-3 overflow-hidden rounded-bl-[16px] rounded-br-[16px] bg-[hsl(240_5%_4%)] px-3.5 py-[15px]",
+        "shadow-[0_1px_0_0_hsla(0,0%,100%,0.02),0_6px_16px_-14px_hsla(0,0%,0%,0.06),0_4px_8px_-12px_hsla(0,0%,0%,0.08),0_2px_6px_-10px_hsla(0,0%,0%,0.1)]",
       )}
     >
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex w-full items-center justify-between">
         <Link
           href="/browse"
-          className="flex min-w-0 items-center rounded-md outline-none focus-visible:ring-0"
+          className="flex min-w-0 items-center outline-none focus-visible:ring-0"
           aria-label="uselayouts browse"
         >
           <img
@@ -78,45 +78,54 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
             alt="uselayouts"
             width={185}
             height={48}
-            className="h-10 w-auto max-w-[185px]"
+            className="h-12 w-[185px] max-w-[185px]"
             draggable={false}
           />
         </Link>
         <button
           type="button"
-          className={cn(openIconBtn, "size-7 rounded-[10px]")}
-          data-active="true"
+          className={cn(
+            "inline-flex items-center overflow-hidden rounded-xl p-1 text-foreground outline-none",
+            "shadow-[0_4px_2px_-1px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.1)]",
+            openPress,
+          )}
           aria-label="Close sidebar"
           aria-pressed="true"
           onClick={onClose}
         >
-          <SidebarToggleIcon open />
+          <img
+            src="/open/sidebar-open.svg"
+            alt=""
+            width={18}
+            height={18}
+            className="size-[18px] -scale-y-100 rotate-180"
+            draggable={false}
+          />
         </button>
       </div>
-      <div className="flex flex-col gap-1.5">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+      <div className="flex flex-col items-start justify-center gap-1.5">
+        <div className="flex items-center gap-1.5">
+          <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
             Browse
           </span>
-          <span className="inline-flex items-center rounded-full bg-foreground px-2 py-px text-lg font-medium tracking-tight text-background capitalize">
-            50+
+          <span className="inline-flex items-center overflow-hidden rounded-[14px] bg-white px-2 py-px">
+            <span className="bg-linear-to-b from-[hsl(240_3%_14%)] to-[hsl(240_3%_20%)] bg-clip-text text-lg leading-[1.3] font-medium tracking-[-0.54px] text-transparent capitalize">
+              50+
+            </span>
           </span>
-          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+          <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
             Carefully
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-lg font-light tracking-tight text-muted-foreground capitalize">
+          <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
             Crafted Components
           </span>
           <span
-            className={cn(
-              "inline-flex size-7 items-center justify-center rounded-md border border-border bg-secondary text-muted-foreground",
-              openChromeShadow,
-            )}
+            className="inline-flex items-center overflow-hidden rounded-[7px] border border-[hsl(240_2%_27%)] bg-[hsl(240_3%_13%)] p-1"
             aria-hidden="true"
           >
-            <Globe className="size-4" strokeWidth={1.75} />
+            <Globe className="size-5 text-[hsl(240_7%_70%)]" strokeWidth={1.75} />
           </span>
         </div>
       </div>
@@ -242,11 +251,10 @@ function OpenExperienceShell({
       };
 
   return (
-    <div className="dark flex h-dvh overflow-hidden bg-background text-foreground">
+    <div className="dark flex h-dvh overflow-hidden bg-[hsl(240_6%_7%)] text-foreground">
       {pinned ? (
         <aside
-          className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col overflow-hidden bg-background text-foreground"
-          style={{ width: SIDEBAR_WIDTH }}
+          className="sticky top-0 bottom-0 z-24 flex h-dvh w-[270px] shrink-0 flex-col items-center overflow-hidden bg-[hsl(240_6%_7%)] text-foreground"
           data-sidebar="pinned"
         >
           <PinnedSidebarHeader
@@ -263,10 +271,10 @@ function OpenExperienceShell({
         </aside>
       ) : null}
 
-      <div className="relative min-w-0 flex-1">
+      <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-[hsl(225_7%_11%)]">
         {!pinned ? (
           <div
-            className={cn("pointer-events-none absolute top-8 left-8 z-20", peek && "z-24")}
+            className={cn("pointer-events-none absolute top-[18px] left-[18px] z-20", peek && "z-24")}
             onMouseEnter={() => setPeek(true)}
             onMouseLeave={() => {
               setPeek(false);
@@ -277,7 +285,7 @@ function OpenExperienceShell({
               type="button"
               className={cn(
                 openIconBtn,
-                "pointer-events-auto transition-[box-shadow,border-color,background-color,transform] duration-150",
+                "pointer-events-auto p-2.5 transition-[box-shadow,border-color,background-color,transform] duration-150",
               )}
               data-active={peek ? "true" : undefined}
               aria-label={peek ? "Pin sidebar open" : "Open sidebar"}
@@ -333,12 +341,10 @@ function OpenExperienceShell({
           </div>
         ) : null}
 
-        <header className="pointer-events-none absolute inset-x-8 top-8 z-20 grid grid-cols-[1fr_auto_1fr] items-start *:pointer-events-auto">
-          <div />
-          <OpenSwitcher current={current} items={navItems} />
-          <div className="flex items-center justify-self-end gap-2">
-            <OpenActions panel={panel} onChange={setPanel} />
-          </div>
+        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-20 flex items-start justify-between gap-4 *:pointer-events-auto">
+          <div className={cn(!pinned && "w-10")} />
+          {!pinned ? <OpenSwitcher current={current} items={navItems} /> : <div />}
+          <OpenActions panel={panel} onChange={setPanel} />
         </header>
 
         {children}

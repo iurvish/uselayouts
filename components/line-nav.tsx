@@ -121,19 +121,19 @@ const LineNavItem = memo(function LineNavItem({
         onBlur={() => onHover?.(null)}
       >
         <motion.span
-          className="block h-px shrink-0 bg-foreground/20 transition-[background-color] ease-out group-hover:bg-foreground group-aria-[current=page]:bg-foreground"
+          className="block h-px shrink-0 bg-white/20 transition-[background-color] ease-out group-hover:bg-white group-aria-[current=page]:bg-white"
           variants={lineVariants}
           transition={lineTransition}
         />
-        <span className="inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-muted-foreground transition-[color] ease-out group-hover:text-foreground group-aria-[current=page]:text-foreground">
+        <span className="inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-white/40 transition-[color] ease-out group-hover:text-white group-aria-[current=page]:text-white">
           {title}
           {isNew ? <NewDot /> : null}
         </span>
       </MotionLink>
       {!isLast ? (
         <>
-          <span className="block h-px w-(--line-nav-width) bg-foreground/20" />
-          <span className="block h-px w-(--line-nav-width) bg-foreground/20" />
+          <span className="block h-px w-(--line-nav-width) bg-white/20" />
+          <span className="block h-px w-(--line-nav-width) bg-white/20" />
         </>
       ) : null}
     </>
