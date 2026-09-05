@@ -12,10 +12,10 @@ export const openPress = cn(
 );
 
 export const openIconBtn = cn(
-  "inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-0 text-foreground",
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-0 text-foreground shadow-sm",
   openPress,
   "disabled:cursor-not-allowed disabled:opacity-40",
-  "data-[active=true]:bg-accent data-[active=true]:text-accent-foreground",
+  "data-[active=true]:border-primary/40 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground",
 );
 
 export const openCopyBtn = cn(

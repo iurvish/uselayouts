@@ -52,7 +52,7 @@ function SidebarList({
   tall?: boolean;
   tone?: "light" | "dark";
 }) {
-  const fadeFrom = tone === "dark" ? "from-[#030202]" : "from-background";
+  const fadeFrom = tone === "dark" ? "from-popover" : "from-background";
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
       <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
@@ -136,7 +136,7 @@ export function OpenExperience({
     >
       {pinned ? (
         <aside
-          className="sticky top-0 z-[24] flex h-dvh shrink-0 flex-col border-r border-border bg-card"
+          className="sticky top-0 z-24 flex h-dvh shrink-0 flex-col border-r border-border bg-card shadow-sm"
           style={{ width: SIDEBAR_WIDTH }}
         >
           <header className="flex shrink-0 items-center px-3 pt-3 pb-1">
@@ -193,7 +193,7 @@ export function OpenExperience({
           </div>
         ) : null}
 
-        <header className="pointer-events-none absolute inset-x-8 top-8 z-20 grid grid-cols-[1fr_auto_1fr] items-start [&>*]:pointer-events-auto">
+        <header className="pointer-events-none absolute inset-x-8 top-8 z-20 grid grid-cols-[1fr_auto_1fr] items-start *:pointer-events-auto">
           <div />
           <OpenSwitcher current={current} items={navItems} />
           <div className="flex items-center justify-self-end gap-2">
@@ -212,7 +212,7 @@ export function OpenExperience({
           <OpenPreview name={data.slug} className="h-full w-full max-w-none" />
         </main>
 
-        <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 [&>*]:pointer-events-auto">
+        <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
           <OpenCliBar
             registryItem={data.registryItem}
             manager={manager}
@@ -241,7 +241,7 @@ function ThemeSegment({
   onChange: (theme: "light" | "dark") => void;
 }) {
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground">
+    <div className="inline-flex items-center gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground shadow-sm">
       {(["light", "dark"] as const).map((value) => (
         <button
           key={value}

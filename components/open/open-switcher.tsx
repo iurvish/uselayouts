@@ -97,7 +97,7 @@ export function OpenSwitcher({
       <button
         type="button"
         className={cn(
-          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm tracking-[-0.02em] text-card-foreground",
+          "inline-flex max-w-[min(42vw,360px)] items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm tracking-tight text-card-foreground shadow-sm",
           openPress,
         )}
         aria-expanded={open}

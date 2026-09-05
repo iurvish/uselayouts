@@ -17,7 +17,7 @@ export function OpenActions({
   onChange: (panel: OpenPanel) => void;
 }) {
   return (
-    <div className="flex items-center justify-self-end gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground">
+    <div className="flex items-center justify-self-end gap-0.5 rounded-xl border border-border bg-card p-1 text-card-foreground shadow-sm">
       <ActionButton
         label="Code"
         active={panel === "code"}

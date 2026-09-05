@@ -44,7 +44,7 @@ export function OpenCliBar({
   return (
     <div
       ref={rootRef}
-      className="relative flex items-center gap-1 rounded-xl border border-border bg-card py-0.5 pr-0.5 pl-2 text-card-foreground shadow-sm"
+      className="relative flex items-center gap-1 rounded-xl border border-border bg-card py-0.5 pr-0.5 pl-2 text-card-foreground shadow-md"
     >
       <Tooltip>
         <TooltipTrigger

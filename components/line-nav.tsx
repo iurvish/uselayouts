@@ -87,17 +87,17 @@ const LineNavItem = memo(function LineNavItem({
       >
         <span
           className={cn(
-            "block h-px w-10 shrink-0 origin-left scale-x-[0.6] bg-white/20 transition-[transform,background-color] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-white",
-            "group-focus-visible:scale-x-100 group-focus-visible:bg-white",
+            "block h-px w-10 shrink-0 origin-left scale-x-[0.6] bg-border transition-[transform,background-color] duration-180 ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-foreground",
+            "group-focus-visible:scale-x-100 group-focus-visible:bg-foreground",
             "motion-reduce:transition-none motion-reduce:scale-x-100",
-            active && "scale-x-100 bg-white",
+            active && "scale-x-100 bg-foreground",
           )}
         />
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-white/40 transition-colors duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "group-hover:text-white group-focus-visible:text-white group-aria-[current=page]:text-white",
+            "inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-muted-foreground transition-colors duration-160 ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "group-hover:text-foreground group-focus-visible:text-foreground group-aria-[current=page]:text-foreground",
           )}
         >
           {title}
@@ -106,8 +106,8 @@ const LineNavItem = memo(function LineNavItem({
       </Link>
       {!isLast ? (
         <>
-          <span className="block h-px w-6 bg-white/20" />
-          <span className="block h-px w-6 bg-white/20" />
+          <span className="block h-px w-6 bg-border" />
+          <span className="block h-px w-6 bg-border" />
         </>
       ) : null}
     </>
