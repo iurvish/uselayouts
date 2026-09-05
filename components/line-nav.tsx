@@ -1,31 +1,45 @@
-"use client";
+/**
+ * This component is inspired by Devouring Details and Skiper UI.
+ */
+"use client"
 
-import { memo, useEffect, useRef } from "react";
-import Link from "next/link";
+import { memo, useEffect, useRef } from "react"
+import { motion } from "motion/react"
+import { NewDot } from "@/components/ui/new-dot"
+import { cn } from "@/lib/utils"
 
-import { NewDot } from "@/components/ui/new-dot";
-import { cn } from "@/lib/utils";
+const lineVariants = {
+  normal: { width: 24 },
+  active: { width: 40 },
+  hover: { width: 40 },
+}
+
+const lineTransition = {
+  type: "spring" as const,
+  stiffness: 200,
+  damping: 20,
+}
 
 export type LineNavItem = {
-  title: string;
-  href: string;
-  isNew?: boolean;
-};
+  title: string
+  href: string
+  isNew?: boolean
+}
 
 export type LineNavProps = {
-  className?: string;
-  items: LineNavItem[];
-  activeHref?: string;
-  scrollActiveIntoView?: boolean;
+  className?: string
+  items: LineNavItem[]
+  activeHref?: string
+  scrollActiveIntoView?: boolean
   onItemClick?: (
     item: LineNavItem,
     event: React.MouseEvent<HTMLAnchorElement>,
-  ) => void;
+  ) => void
   onItemHover?: (
     item: LineNavItem | null,
     anchor: HTMLAnchorElement | null,
-  ) => void;
-};
+  ) => void
+}
 
 export function LineNav({
   className,
@@ -35,21 +49,26 @@ export function LineNav({
   onItemClick,
   onItemHover,
 }: LineNavProps) {
-  const activeItemRef = useRef<HTMLAnchorElement | null>(null);
+  const activeItemRef = useRef<HTMLAnchorElement | null>(null)
 
   useEffect(() => {
-    if (!scrollActiveIntoView) return;
-    activeItemRef.current?.scrollIntoView({ block: "nearest" });
-  }, [activeHref, scrollActiveIntoView]);
+    if (!scrollActiveIntoView) return
+    activeItemRef.current?.scrollIntoView({ block: "center" })
+  }, [activeHref, scrollActiveIntoView])
 
   return (
     <nav
-      className={cn("flex flex-col gap-2 py-3", className)}
       aria-label="Components"
+      className={cn("flex flex-col gap-2 py-5.25", className)}
+      style={
+        {
+          "--line-nav-width": `${lineVariants.normal.width}px`,
+        } as React.CSSProperties
+      }
       onMouseLeave={() => onItemHover?.(null, null)}
     >
       {items.map((item, index) => {
-        const isActive = item.href === activeHref;
+        const isActive = item.href === activeHref
         return (
           <LineNavItem
             key={item.href}
@@ -59,17 +78,19 @@ export function LineNav({
             active={isActive}
             isNew={item.isNew}
             isLast={index === items.length - 1}
-            onClick={onItemClick ? (event) => onItemClick(item, event) : undefined}
+            onClick={
+              onItemClick ? (event) => onItemClick(item, event) : undefined
+            }
             onHover={
               onItemHover
                 ? (anchor) => onItemHover(anchor ? item : null, anchor)
                 : undefined
             }
           />
-        );
+        )
       })}
     </nav>
-  );
+  )
 }
 
 const LineNavItem = memo(function LineNavItem({
@@ -82,53 +103,47 @@ const LineNavItem = memo(function LineNavItem({
   onClick,
   onHover,
 }: {
-  ref?: React.Ref<HTMLAnchorElement>;
-  title: string;
-  href: string;
-  active?: boolean;
-  isNew?: boolean;
-  isLast?: boolean;
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
-  onHover?: (anchor: HTMLAnchorElement | null) => void;
+  ref?: React.Ref<HTMLAnchorElement>
+  title: string
+  href: string
+  active?: boolean
+  isNew?: boolean
+  isLast?: boolean
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
+  onHover?: (anchor: HTMLAnchorElement | null) => void
 }) {
   return (
     <>
-      <Link
+      <motion.a
         ref={ref}
         aria-current={active ? "page" : undefined}
         aria-label={isNew ? `${title}, new` : undefined}
-        className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:h-7 after:w-full after:-translate-y-1/2 after:content-['']"
+        className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:size-full after:-translate-y-1/2 after:p-3.5 focus-visible:outline-none"
         href={href}
+        initial={false}
+        animate={active ? "active" : "normal"}
+        whileHover="hover"
         onClick={onClick}
         onMouseEnter={(event) => onHover?.(event.currentTarget)}
         onFocus={(event) => onHover?.(event.currentTarget)}
         onBlur={() => onHover?.(null)}
       >
-        <span
-          className={cn(
-            "block h-px w-10 shrink-0 origin-left scale-x-[0.6] bg-border transition-[transform,background-color] duration-180 ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-foreground",
-            "group-focus-visible:scale-x-100 group-focus-visible:bg-foreground",
-            "motion-reduce:transition-none motion-reduce:scale-x-100",
-            active && "scale-x-100 bg-foreground",
-          )}
+        <motion.span
+          className="block h-px shrink-0 bg-foreground/20 transition-[background-color] ease-out group-hover:bg-foreground group-aria-[current=page]:bg-foreground"
+          variants={lineVariants}
+          transition={lineTransition}
         />
-        <span
-          className={cn(
-            "inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-muted-foreground transition-colors duration-160 ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "group-hover:text-foreground group-focus-visible:text-foreground group-aria-[current=page]:text-foreground",
-          )}
-        >
+        <span className="inline-flex items-center gap-1.5 text-sm whitespace-nowrap text-muted-foreground transition-[color] ease-out group-hover:text-foreground group-aria-[current=page]:text-foreground">
           {title}
           {isNew ? <NewDot /> : null}
         </span>
-      </Link>
+      </motion.a>
       {!isLast ? (
         <>
-          <span className="block h-px w-6 bg-border" />
-          <span className="block h-px w-6 bg-border" />
+          <span className="block h-px w-(--line-nav-width) bg-foreground/20" />
+          <span className="block h-px w-(--line-nav-width) bg-foreground/20" />
         </>
       ) : null}
     </>
-  );
-});
+  )
+})
