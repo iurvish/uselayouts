@@ -35,15 +35,15 @@ export function OpenComponentView({
     <>
       <main
         className={cn(
-          "grid h-dvh w-full place-items-center overflow-auto px-4 pt-28 pb-[108px] sm:px-8",
+          "grid h-dvh w-full flex-1 place-items-center overflow-auto px-[18px] pt-20 pb-[108px]",
           scrollbarMinimal,
         )}
-        style={{ background: previewBackground }}
+        style={{ background: previewBackground || "hsl(225 7% 11%)" }}
       >
         <OpenPreview name={data.slug} className="h-full w-full max-w-none" />
       </main>
 
-      <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
+      <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
         <OpenCliBar
           registryItem={data.registryItem}
           manager={manager}

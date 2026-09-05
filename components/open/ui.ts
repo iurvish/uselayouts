@@ -13,18 +13,18 @@ export const openPress = cn(
 
 /** Soft Figma chrome elevation (buttons / panels) — no blue ring. */
 export const openChromeShadow = cn(
-  "shadow-[0_2px_2px_-1px_rgba(0,0,0,0.16),0_4px_4px_-2px_rgba(0,0,0,0.14),0_0_0_1px_rgba(0,0,0,0.1)]",
+  "shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.14),0_0_0_1px_hsla(0,0%,0%,0.1)]",
 );
 
 export const openIconBtn = cn(
-  "inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-0 bg-secondary p-0 text-foreground",
+  "inline-flex size-[42px] shrink-0 items-center justify-center rounded-xl border-0 bg-[hsl(240_6%_22%)] p-2.5 text-foreground",
   openChromeShadow,
   openPress,
   "outline-none focus-visible:outline-none focus-visible:ring-0",
   "disabled:cursor-not-allowed disabled:opacity-40",
   "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
   "data-[active=true]:bg-accent data-[active=true]:text-accent-foreground",
-  "data-[active=true]:shadow-[0_2px_2px_-1px_rgba(0,0,0,0.16),0_4px_4px_-2px_rgba(0,0,0,0.24),0_0_0_1px_rgba(0,0,0,0.12)]",
+  "data-[active=true]:shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.12)]",
 );
 
 export const openCopyBtn = cn(

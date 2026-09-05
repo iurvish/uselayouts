@@ -7,7 +7,7 @@ const HEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 
 export const DEFAULT_PREVIEW_BACKGROUNDS = {
   light: "hsl(0 0% 100%)",
-  dark: "hsl(0 0% 8%)",
+  dark: "hsl(225 7% 11%)",
 } as const;
 
 export function isCssColor(value: string) {
