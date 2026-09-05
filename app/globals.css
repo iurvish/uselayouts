@@ -169,15 +169,15 @@
 }
 
 .dark {
-  /* useLayouts 2.0 — Figma node 82:3690 */
+  /* useLayouts 2.0 — Figma Section 2 redesign */
   --background: #111113;
   --foreground: #ffffff;
   --card: #323239;
   --card-foreground: #ffffff;
   --popover: #030202;
   --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #111113;
+  --primary: #3351e5;
+  --primary-foreground: #ffffff;
   --secondary: #35353c;
   --secondary-foreground: #ffffff;
   --muted: #1b1c1f;
@@ -185,9 +185,9 @@
   --accent: #3f3f48;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
-  --border: rgb(255 255 255 / 10%);
+  --border: #47474d;
   --input: #030202;
-  --ring: #acacb4;
+  --ring: #3351e5;
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
@@ -195,12 +195,12 @@
   --chart-5: oklch(0.424 0.199 265.638);
   --sidebar: #1b1c1f;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #111113;
+  --sidebar-primary: #3351e5;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #35353c;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 10%);
-  --sidebar-ring: #acacb4;
+  --sidebar-border: #47474d;
+  --sidebar-ring: #3351e5;
 }
 
 .light {
