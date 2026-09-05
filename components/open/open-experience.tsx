@@ -28,7 +28,7 @@ import {
 } from "@/lib/open/preview-background";
 import { cn } from "@/lib/utils";
 
-const SIDEBAR_WIDTH = 248;
+const SIDEBAR_WIDTH = 270;
 const PINNED_KEY = "uselayouts:open-sidebar-pinned";
 
 function readPinned() {
@@ -104,7 +104,12 @@ function SidebarToggleIcon({ open }: { open: boolean }) {
 
 function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
   return (
-    <header className="flex shrink-0 flex-col gap-3 px-3.5 pt-3.5 pb-3">
+    <header
+      className={cn(
+        "flex shrink-0 flex-col gap-3 rounded-bl-2xl rounded-br-2xl bg-sidebar px-3.5 py-[15px]",
+        "shadow-[0_1px_0_0_rgba(255,255,255,0.02),0_6px_16px_-14px_rgba(0,0,0,0.06),0_4px_8px_-12px_rgba(0,0,0,0.08),0_2px_6px_-10px_rgba(0,0,0,0.1)]",
+      )}
+    >
       <div className="flex items-center justify-between gap-2">
         <Link
           href="/browse"
@@ -166,24 +171,31 @@ function SidebarList({
   items,
   activeHref,
   tall = false,
-  tone = "dark",
+  surface = "card",
   onItemHover,
 }: {
   items: OpenNavItem[];
   activeHref: string;
   tall?: boolean;
-  tone?: "light" | "dark";
+  /** Scroll fade base — peek floating card vs pinned dock column */
+  surface?: "card" | "background" | "sidebar";
   onItemHover?: (
     item: OpenNavItem | null,
     anchor: HTMLAnchorElement | null,
   ) => void;
 }) {
-  const fadeFrom = tone === "dark" ? "from-card" : "from-background";
+  const fadeFrom =
+    surface === "sidebar"
+      ? "from-sidebar"
+      : surface === "background"
+        ? "from-background"
+        : "from-card";
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
       <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
-      <div className={cn("h-full overflow-auto px-2.5 pt-3 pr-2.5 pb-8 pl-3.5", scrollbarNone)}>
+      <div className={cn("h-full overflow-auto px-3 py-5 pb-8", scrollbarNone)}>
         <LineNav
+          className="py-0"
           items={items}
           activeHref={activeHref}
           scrollActiveIntoView
@@ -280,11 +292,9 @@ export function OpenExperience({
     >
       {pinned ? (
         <aside
-          className={cn(
-            "sticky top-0 z-24 m-3 flex h-[calc(100dvh-1.5rem)] shrink-0 flex-col overflow-hidden",
-            sidebarShell,
-          )}
+          className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col overflow-hidden bg-background text-foreground"
           style={{ width: SIDEBAR_WIDTH }}
+          data-sidebar="pinned"
         >
           <PinnedSidebarHeader
             onClose={() => {
@@ -292,7 +302,11 @@ export function OpenExperience({
               setHoverPreview(null);
             }}
           />
-          <SidebarList items={navItems} activeHref={current.href} tone={theme} />
+          <SidebarList
+            items={navItems}
+            activeHref={current.href}
+            surface="background"
+          />
         </aside>
       ) : null}
 
@@ -340,7 +354,7 @@ export function OpenExperience({
                       items={navItems}
                       activeHref={current.href}
                       tall
-                      tone={theme}
+                      surface="card"
                       onItemHover={(item, anchor) => {
                         if (!item || !anchor || !peekPanelRef.current) {
                           setHoverPreview(null);

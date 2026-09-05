@@ -181,7 +181,7 @@
   --secondary: #35353c;
   --secondary-foreground: #ffffff;
   --muted: #1b1c1f;
-  --muted-foreground: #acacb4;
+  --muted-foreground: #adadb7;
   --accent: #3f3f48;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
@@ -193,7 +193,7 @@
   --chart-3: oklch(0.546 0.245 262.881);
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: #303036;
+  --sidebar: #0a0a0b;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #3351e5;
   --sidebar-primary-foreground: #ffffff;
