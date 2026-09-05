@@ -17,6 +17,7 @@ import { openPress } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
+/** Figma 102:928 — package manager + command + copy */
 export function OpenCliBar({
   registryItem,
   manager,
@@ -41,16 +42,26 @@ export function OpenCliBar({
     return () => window.removeEventListener("mousedown", onPointer);
   }, [menuOpen]);
 
+  async function copyCommand() {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   return (
     <div
       ref={rootRef}
-      className="relative flex items-center gap-1 rounded-xl border border-border bg-card py-0.5 pr-0.5 pl-2 text-card-foreground shadow-md"
+      className="relative flex items-start justify-center gap-px rounded-xl border border-[hsl(240_4%_29%)] bg-[hsl(240_5%_21%)] py-0.5 pr-0.5 pl-1 text-foreground"
     >
       <Tooltip>
         <TooltipTrigger
           delay={0}
           className={cn(
-            "flex h-7 items-center gap-1 rounded-2xl bg-transparent px-0.5 text-foreground",
+            "flex items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground",
             openPress,
           )}
           aria-haspopup="listbox"
@@ -59,50 +70,66 @@ export function OpenCliBar({
           onClick={() => setMenuOpen((open) => !open)}
         >
           <PackageManagerMark manager={manager} className="size-5" />
-          <img src="/open/expand.svg" alt="" width={18} height={18} className="size-[18px] opacity-70" />
+          <img
+            src="/open/expand.svg"
+            alt=""
+            width={18}
+            height={18}
+            className="size-[18px] opacity-70"
+          />
         </TooltipTrigger>
         <TooltipContent>Package manager</TooltipContent>
       </Tooltip>
 
-      <motion.button
-        type="button"
-        className={cn(
-          "flex h-[33px] cursor-pointer items-center overflow-hidden rounded-lg border border-border bg-background px-3 text-muted-foreground",
-          openPress,
-          "hover:text-foreground",
-          copied && "border-primary/30 bg-primary/10 text-foreground",
-        )}
-        layout={reduce ? false : "size"}
-        transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-        onClick={async () => {
-          try {
-            await navigator.clipboard.writeText(command);
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 1600);
-          } catch {
-            setCopied(false);
-          }
-        }}
-        aria-label={copied ? "Copied successfully!" : "Copy install command"}
-      >
-        <IconSwap>
-          {copied ? (
-            <IconSwapItem key="copied" className="flex items-center gap-2 text-sm font-medium whitespace-nowrap text-primary">
-              <Check className="size-3.5" strokeWidth={1.75} />
-              Copied successfully!
-            </IconSwapItem>
-          ) : (
-            <IconSwapItem key="command" className="flex items-center gap-2 whitespace-nowrap">
-              <code
-                title={command}
-                className="block max-w-[min(42vw,420px)] truncate font-mono text-sm tracking-tight text-foreground"
-              >
-                {command}
-              </code>
-            </IconSwapItem>
+      <div className="flex items-center">
+        <button
+          type="button"
+          className={cn(
+            "flex cursor-pointer items-center justify-center rounded-l-[10px] bg-[hsl(0_20%_1%)] px-2.5 py-1.5 text-[hsl(240_5%_69%)] shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
+            openPress,
+            "hover:text-foreground",
+            copied && "text-foreground",
           )}
-        </IconSwap>
-      </motion.button>
+          onClick={copyCommand}
+          aria-label={copied ? "Copied successfully!" : "Copy install command"}
+        >
+          <IconSwap>
+            {copied ? (
+              <IconSwapItem
+                key="copied"
+                className="flex items-center gap-2 text-sm font-medium whitespace-nowrap text-primary"
+              >
+                <Check className="size-3.5" strokeWidth={1.75} />
+                Copied successfully!
+              </IconSwapItem>
+            ) : (
+              <IconSwapItem key="command" className="flex items-center whitespace-nowrap">
+                <code
+                  title={command}
+                  className="block max-w-[min(42vw,420px)] truncate font-mono text-sm leading-5 tracking-tight"
+                >
+                  {command}
+                </code>
+              </IconSwapItem>
+            )}
+          </IconSwap>
+        </button>
+        <button
+          type="button"
+          className={cn(
+            "flex items-center justify-center rounded-r-[9px] border-l border-[hsl(240_4%_11%)] bg-[hsl(0_20%_1%)] p-2 shadow-[0_0.5px_0_0_hsla(0,0%,100%,0.15)]",
+            openPress,
+          )}
+          onClick={copyCommand}
+          aria-label="Copy"
+        >
+          {copied ? (
+            <Check className="size-4 text-primary" strokeWidth={1.75} />
+          ) : (
+            <img src="/open/copy.svg" alt="" width={16} height={16} className="size-4 opacity-80" />
+          )}
+        </button>
+      </div>
 
       <AnimatePresence>
         {menuOpen ? (
@@ -110,9 +137,21 @@ export function OpenCliBar({
             role="listbox"
             aria-label="Package managers"
             className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lg"
-            initial={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
-            animate={{ opacity: 1, transform: "scale(1) translateY(0px)" }}
-            exit={{ opacity: 0, transform: "scale(0.96) translateY(6px)" }}
+            initial={
+              reduce
+                ? { opacity: 0 }
+                : { opacity: 0, transform: "scale(0.96) translateY(6px)" }
+            }
+            animate={
+              reduce
+                ? { opacity: 1 }
+                : { opacity: 1, transform: "scale(1) translateY(0px)" }
+            }
+            exit={
+              reduce
+                ? { opacity: 0 }
+                : { opacity: 0, transform: "scale(0.96) translateY(6px)" }
+            }
             transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
           >
             {PACKAGE_MANAGERS.map((option) => (

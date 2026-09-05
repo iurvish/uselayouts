@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- static Figma marks. */
+
 import type { ReactNode } from "react";
 import { Code2 } from "lucide-react";
 
@@ -9,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 export type OpenPanel = "code" | null;
 
+/** Figma 102:720 — standalone primary code button */
 export function OpenActions({
   panel,
   onChange,
@@ -16,50 +19,27 @@ export function OpenActions({
   panel: OpenPanel;
   onChange: (panel: OpenPanel) => void;
 }) {
-  return (
-    <div className="flex items-center justify-self-end gap-0.5 rounded-xl border-0 bg-secondary p-1 text-secondary-foreground shadow-[0_2px_2px_-1px_rgba(0,0,0,0.16),0_4px_4px_-2px_rgba(0,0,0,0.14),0_0_0_1px_rgba(0,0,0,0.1)]">
-      <ActionButton
-        label="Code"
-        active={panel === "code"}
-        onClick={() => onChange(panel === "code" ? null : "code")}
-      >
-        <Code2 className="size-4" strokeWidth={1.75} />
-      </ActionButton>
-    </div>
-  );
-}
+  const active = panel === "code";
 
-function ActionButton({
-  label,
-  active,
-  disabled,
-  onClick,
-  children,
-}: {
-  label: string;
-  active?: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-  children: ReactNode;
-}) {
   return (
     <Tooltip>
       <TooltipTrigger
         delay={0}
         className={cn(
-          "inline-flex size-9 items-center justify-center rounded-lg border-0 bg-transparent text-foreground outline-none focus-visible:outline-none focus-visible:ring-0",
+          "relative inline-flex items-center justify-center overflow-hidden rounded-xl border-0 p-2.5 text-white outline-none",
+          "bg-[hsl(230_77%_55%)] shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.12)]",
+          "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-[inset_0_1px_0_0.2px_hsla(0,0%,100%,0.16)]",
           openPress,
-          "disabled:cursor-not-allowed disabled:opacity-40",
-          active && "bg-primary text-primary-foreground",
+          "hover:brightness-110",
+          active && "brightness-110",
         )}
-        aria-label={label}
+        aria-label="Code"
         aria-pressed={active}
-        disabled={disabled}
-        onClick={onClick}
+        onClick={() => onChange(active ? null : "code")}
       >
-        {children}
+        <Code2 className="relative size-[22px]" strokeWidth={1.75} />
       </TooltipTrigger>
-      <TooltipContent side="bottom">{label}</TooltipContent>
+      <TooltipContent side="bottom">Code</TooltipContent>
     </Tooltip>
   );
 }
