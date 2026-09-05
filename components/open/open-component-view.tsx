@@ -7,7 +7,6 @@ import { OpenCliBar } from "@/components/open/open-cli-bar";
 import { OpenDrawer } from "@/components/open/open-drawer";
 import { OpenCodePanel } from "@/components/open/open-panels";
 import { OpenPreview } from "@/components/open/open-preview";
-import { useOpenTheme } from "@/components/open/open-theme";
 import { usePackageManager } from "@/components/open/use-package-manager";
 import { scrollbarMinimal } from "@/components/open/ui";
 import type { OpenComponentData } from "@/lib/open/component";
@@ -24,14 +23,13 @@ export function OpenComponentView({
   data: OpenComponentData;
   docsContent?: React.ReactNode;
 }) {
-  const { theme } = useOpenTheme();
   const { panel, setPanel } = useOpenPanel();
   const [manager, setManager] = usePackageManager();
   const backgrounds = React.useMemo(
     () => parsePreviewBackgrounds(data.previewBackground),
     [data.previewBackground],
   );
-  const previewBackground = resolvePreviewBackground(backgrounds, theme);
+  const previewBackground = resolvePreviewBackground(backgrounds, "dark");
 
   return (
     <>

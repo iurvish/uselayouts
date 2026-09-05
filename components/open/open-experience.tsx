@@ -17,8 +17,7 @@ import {
   SidebarHoverPreview,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { OpenThemeProvider, useOpenTheme } from "@/components/open/open-theme";
-import { openChromeShadow, openIconBtn, openPress, scrollbarNone } from "@/components/open/ui";
+import { openChromeShadow, openIconBtn, scrollbarNone } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -189,11 +188,9 @@ export function OpenExperience({
   children: React.ReactNode;
 }) {
   return (
-    <OpenThemeProvider>
-      <OpenPanelProvider>
-        <OpenExperienceShell navItems={navItems}>{children}</OpenExperienceShell>
-      </OpenPanelProvider>
-    </OpenThemeProvider>
+    <OpenPanelProvider>
+      <OpenExperienceShell navItems={navItems}>{children}</OpenExperienceShell>
+    </OpenPanelProvider>
   );
 }
 
@@ -205,7 +202,6 @@ function OpenExperienceShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { theme, setTheme } = useOpenTheme();
   const { panel, setPanel } = useOpenPanel();
   const [pinned, setPinned] = React.useState(false);
   const [peek, setPeek] = React.useState(false);
@@ -246,12 +242,7 @@ function OpenExperienceShell({
       };
 
   return (
-    <div
-      className={cn(
-        theme === "dark" ? "dark" : "light",
-        "flex h-dvh overflow-hidden bg-background text-foreground",
-      )}
-    >
+    <div className="dark flex h-dvh overflow-hidden bg-background text-foreground">
       {pinned ? (
         <aside
           className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col overflow-hidden bg-background text-foreground"
@@ -346,7 +337,6 @@ function OpenExperienceShell({
           <div />
           <OpenSwitcher current={current} items={navItems} />
           <div className="flex items-center justify-self-end gap-2">
-            <ThemeSegment theme={theme} onChange={setTheme} />
             <OpenActions panel={panel} onChange={setPanel} />
           </div>
         </header>
@@ -360,32 +350,4 @@ function OpenExperienceShell({
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
   document.title = `${title} | uselayouts`;
-}
-
-function ThemeSegment({
-  theme,
-  onChange,
-}: {
-  theme: "light" | "dark";
-  onChange: (theme: "light" | "dark") => void;
-}) {
-  return (
-    <div className="inline-flex items-center gap-0.5 rounded-xl border-0 bg-secondary p-1 text-secondary-foreground shadow-[0_2px_2px_-1px_rgba(0,0,0,0.16),0_4px_4px_-2px_rgba(0,0,0,0.14),0_0_0_1px_rgba(0,0,0,0.1)]">
-      {(["light", "dark"] as const).map((value) => (
-        <button
-          key={value}
-          type="button"
-          className={cn(
-            "rounded-lg px-2.5 py-1.5 text-xs font-medium capitalize",
-            openPress,
-            theme === value ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-          )}
-          aria-pressed={theme === value}
-          onClick={() => onChange(value)}
-        >
-          {value}
-        </button>
-      ))}
-    </div>
-  );
 }
