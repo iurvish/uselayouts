@@ -26,11 +26,11 @@ export const openChromeShadow = cn(
 export const openIconBtn = cn(
   "inline-flex size-[42px] shrink-0 items-center justify-center rounded-xl border-0 bg-[hsl(240_6%_22%)] p-2.5 text-foreground",
   openChromeShadow,
-  openPress,
-  "outline-none focus-visible:outline-none focus-visible:ring-0",
+  openPressMotion,
+  "outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
   "disabled:cursor-not-allowed disabled:opacity-40",
-  "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
-  "data-[active=true]:bg-accent data-[active=true]:text-accent-foreground",
+  "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(240_6%_22%)]",
+  "data-[active=true]:bg-[hsl(240_7%_26%)] data-[active=true]:text-foreground",
   "data-[active=true]:shadow-[0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.12)]",
 );
 

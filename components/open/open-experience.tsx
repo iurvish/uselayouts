@@ -17,7 +17,7 @@ import {
   SidebarHoverPreview,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPress, scrollbarNone } from "@/components/open/ui";
+import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -41,17 +41,17 @@ function writePinned(value: boolean) {
   }
 }
 
-/** Closed: outline panel. Open/pinned: filled left rail (Figma node 102:5). */
+/** Paper GR-0 HH-0 panel icon (rotated when open/pinned). */
 function SidebarToggleIcon({ open }: { open: boolean }) {
   return (
     <IconSwap>
-      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[22px] items-center justify-center">
+      <IconSwapItem key={open ? "open" : "closed"} className="flex size-[18px] items-center justify-center">
         <img
-          src={open ? "/open/sidebar-open.svg" : "/open/sidebar.svg"}
+          src={open ? "/open/sidebar-panel.svg" : "/open/sidebar.svg"}
           alt=""
-          width={22}
-          height={22}
-          className="size-[22px]"
+          width={18}
+          height={18}
+          className={cn("size-[18px]", open && "rotate-180")}
           draggable={false}
         />
       </IconSwapItem>
@@ -85,20 +85,22 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           className={cn(
-            "inline-flex items-center overflow-hidden rounded-xl p-1 text-foreground outline-none",
-            "shadow-[0_4px_2px_-1px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.1)]",
-            openPress,
+            "inline-flex size-[26px] items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent p-1",
+            "outline-none ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0",
+            "shadow-[0_0_0_1px_hsla(0,0%,0%,0.1),0_4px_2px_hsla(0,0%,0%,0.24)]",
+            "hover:bg-transparent",
+            openPressMotion,
           )}
           aria-label="Close sidebar"
           aria-pressed="true"
           onClick={onClose}
         >
           <img
-            src="/open/sidebar-open.svg"
+            src="/open/sidebar-panel.svg"
             alt=""
-            width={18}
-            height={18}
-            className="size-[18px] -scale-y-100 rotate-180"
+            width={15}
+            height={13}
+            className="h-[13px] w-[15px] rotate-180"
             draggable={false}
           />
         </button>
