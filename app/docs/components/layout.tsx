@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 
-export default function OpenLayout({ children }: { children: ReactNode }) {
-  return children;
+import { OpenExperience } from "@/components/open/open-experience";
+import { getOpenNavItems } from "@/lib/open/component";
+
+export default async function OpenLayout({ children }: { children: ReactNode }) {
+  const navItems = await getOpenNavItems();
+  return <OpenExperience navItems={navItems}>{children}</OpenExperience>;
 }

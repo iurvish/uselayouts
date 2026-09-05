@@ -46,8 +46,3 @@ export function extractHints(mdx: string): string[] {
     .filter(Boolean);
 }
 
-export function extractDocSections(mdx: string): DocSection[] {
-  return extractMdxSections(mdx).filter(
-    (section) => !/^installation$/i.test(section.title),
-  );
-}

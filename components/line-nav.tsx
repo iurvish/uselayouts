@@ -3,10 +3,13 @@
  */
 "use client"
 
-import { memo, useEffect, useRef } from "react"
+import { memo } from "react"
+import Link from "next/link"
 import { motion } from "motion/react"
 import { NewDot } from "@/components/ui/new-dot"
 import { cn } from "@/lib/utils"
+
+const MotionLink = motion.create(Link)
 
 const lineVariants = {
   normal: { width: 24 },
@@ -30,7 +33,6 @@ export type LineNavProps = {
   className?: string
   items: LineNavItem[]
   activeHref?: string
-  scrollActiveIntoView?: boolean
   onItemClick?: (
     item: LineNavItem,
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -45,17 +47,9 @@ export function LineNav({
   className,
   items,
   activeHref,
-  scrollActiveIntoView = true,
   onItemClick,
   onItemHover,
 }: LineNavProps) {
-  const activeItemRef = useRef<HTMLAnchorElement | null>(null)
-
-  useEffect(() => {
-    if (!scrollActiveIntoView) return
-    activeItemRef.current?.scrollIntoView({ block: "center" })
-  }, [activeHref, scrollActiveIntoView])
-
   return (
     <nav
       aria-label="Components"
@@ -72,7 +66,6 @@ export function LineNav({
         return (
           <LineNavItem
             key={item.href}
-            ref={isActive ? activeItemRef : undefined}
             title={item.title}
             href={item.href}
             active={isActive}
@@ -94,7 +87,6 @@ export function LineNav({
 }
 
 const LineNavItem = memo(function LineNavItem({
-  ref,
   title,
   href,
   active = false,
@@ -103,7 +95,6 @@ const LineNavItem = memo(function LineNavItem({
   onClick,
   onHover,
 }: {
-  ref?: React.Ref<HTMLAnchorElement>
   title: string
   href: string
   active?: boolean
@@ -114,12 +105,13 @@ const LineNavItem = memo(function LineNavItem({
 }) {
   return (
     <>
-      <motion.a
-        ref={ref}
+      <MotionLink
         aria-current={active ? "page" : undefined}
         aria-label={isNew ? `${title}, new` : undefined}
         className="group relative flex h-px items-center gap-3 outline-none after:absolute after:top-1/2 after:left-0 after:size-full after:-translate-y-1/2 after:p-3.5 focus-visible:outline-none"
         href={href}
+        scroll={false}
+        prefetch
         initial={false}
         animate={active ? "active" : "normal"}
         whileHover="hover"
@@ -137,7 +129,7 @@ const LineNavItem = memo(function LineNavItem({
           {title}
           {isNew ? <NewDot /> : null}
         </span>
-      </motion.a>
+      </MotionLink>
       {!isLast ? (
         <>
           <span className="block h-px w-(--line-nav-width) bg-foreground/20" />

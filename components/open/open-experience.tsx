@@ -4,28 +4,22 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Globe } from "lucide-react";
 
 import { LineNav } from "@/components/line-nav";
-import { OpenActions, type OpenPanel } from "@/components/open/open-actions";
-import { OpenCliBar } from "@/components/open/open-cli-bar";
-import { OpenDrawer } from "@/components/open/open-drawer";
+import { OpenActions } from "@/components/open/open-actions";
+import { OpenPanelProvider, useOpenPanel } from "@/components/open/open-panel-context";
 import { IconSwap, IconSwapItem } from "@/components/open/icon-swap";
-import { OpenCodePanel } from "@/components/open/open-panels";
-import { OpenPreview } from "@/components/open/open-preview";
 import { OpenSwitcher } from "@/components/open/open-switcher";
 import {
   SidebarHoverPreview,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openChromeShadow, openIconBtn, openPress, scrollbarMinimal, scrollbarNone } from "@/components/open/ui";
-import { usePackageManager } from "@/components/open/use-package-manager";
-import type { OpenComponentData, OpenNavItem } from "@/lib/open/component";
-import {
-  parsePreviewBackgrounds,
-  resolvePreviewBackground,
-} from "@/lib/open/preview-background";
+import { OpenThemeProvider, useOpenTheme } from "@/components/open/open-theme";
+import { openChromeShadow, openIconBtn, openPress, scrollbarNone } from "@/components/open/ui";
+import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
 const SIDEBAR_WIDTH = 270;
@@ -198,7 +192,9 @@ function SidebarList({
           className="py-0"
           items={items}
           activeHref={activeHref}
-          scrollActiveIntoView
+          onItemClick={(item) => {
+            document.title = `${item.title} | uselayouts`;
+          }}
           onItemHover={
             onItemHover
               ? (item, anchor) => {
@@ -222,53 +218,56 @@ const sidebarShell =
   "overflow-hidden rounded-xl border-0 bg-card text-card-foreground shadow-[0_6px_10px_-30px_rgba(0,0,0,0.04),0_4px_6px_-10px_rgba(0,0,0,0.25),0_2px_4px_-10px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.08)] origin-top-left";
 
 export function OpenExperience({
-  data,
   navItems,
+  children,
 }: {
-  data: OpenComponentData;
   navItems: OpenNavItem[];
+  children: React.ReactNode;
 }) {
+  return (
+    <OpenThemeProvider>
+      <OpenPanelProvider>
+        <OpenExperienceShell navItems={navItems}>{children}</OpenExperienceShell>
+      </OpenPanelProvider>
+    </OpenThemeProvider>
+  );
+}
+
+function OpenExperienceShell({
+  navItems,
+  children,
+}: {
+  navItems: OpenNavItem[];
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const { theme, setTheme } = useOpenTheme();
+  const { panel, setPanel } = useOpenPanel();
   const [pinned, setPinned] = React.useState(false);
   const [peek, setPeek] = React.useState(false);
   const [hoverPreview, setHoverPreview] = React.useState<SidebarHoverTarget | null>(null);
   const peekPanelRef = React.useRef<HTMLDivElement>(null);
-  const [panel, setPanel] = React.useState<OpenPanel>(null);
-  const [theme, setTheme] = React.useState<"light" | "dark">("dark");
-  const [manager, setManager] = usePackageManager();
   const reduce = useReducedMotion();
-  const current = navItems.find((item) => item.slug === data.slug) ?? {
-    slug: data.slug,
-    title: data.title,
-    href: `/docs/components/${data.slug}`,
-  };
-  const backgrounds = React.useMemo(
-    () => parsePreviewBackgrounds(data.previewBackground),
-    [data.previewBackground],
-  );
-  const previewBackground = resolvePreviewBackground(backgrounds, theme);
+
+  const current = navItems.find((item) => item.href === pathname) ??
+    navItems[0] ?? {
+      slug: "component",
+      title: "Component",
+      href: pathname,
+    };
 
   React.useLayoutEffect(() => {
     setPinned(readPinned());
   }, []);
 
+  React.useEffect(() => {
+    setDocumentTitle(current.title);
+  }, [current.title]);
+
   function updatePinned(value: boolean) {
     setPinned(value);
     writePinned(value);
   }
-
-  const sharedPanel = {
-    description: data.description,
-    docs: data.docs,
-    usage: data.usage,
-    usageHtml: data.usageHtml,
-    code: data.code,
-    codeHtml: data.codeHtml,
-    registryItem: data.registryItem,
-    dependencies: data.dependencies,
-    manager,
-    onManagerChange: setManager,
-    slug: data.slug,
-  };
 
   const sidebarMotion = reduce
     ? {
@@ -288,7 +287,6 @@ export function OpenExperience({
         theme === "dark" ? "dark" : "light",
         "flex h-dvh overflow-hidden bg-background text-foreground",
       )}
-      style={{ background: previewBackground }}
     >
       {pinned ? (
         <aside
@@ -389,35 +387,15 @@ export function OpenExperience({
           </div>
         </header>
 
-        <main
-          className={cn(
-            "grid h-dvh w-full place-items-center overflow-auto px-4 pt-28 pb-[108px] sm:px-8",
-            scrollbarMinimal,
-          )}
-          style={{ background: previewBackground }}
-        >
-          <OpenPreview name={data.slug} className="h-full w-full max-w-none" />
-        </main>
-
-        <div className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
-          <OpenCliBar
-            registryItem={data.registryItem}
-            manager={manager}
-            onManagerChange={setManager}
-          />
-        </div>
-
-        <OpenDrawer
-          open={panel === "code"}
-          onClose={() => setPanel(null)}
-          title="Code"
-          wide
-        >
-          <OpenCodePanel {...sharedPanel} />
-        </OpenDrawer>
+        {children}
       </div>
     </div>
   );
+}
+
+function setDocumentTitle(title: string) {
+  if (typeof document === "undefined") return;
+  document.title = `${title} | uselayouts`;
 }
 
 function ThemeSegment({

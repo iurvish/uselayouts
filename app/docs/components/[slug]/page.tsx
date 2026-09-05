@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { OpenExperience } from "@/components/open/open-experience";
-import { getOpenComponent, getOpenNavItems } from "@/lib/open/component";
+import { OpenComponentView } from "@/components/open/open-component-view";
+import { getOpenMdxComponents } from "@/components/open/open-mdx";
+import {
+  getComponentDocsPage,
+  getOpenComponent,
+  getOpenNavItems,
+} from "@/lib/open/component";
 
 export default async function OpenComponentPage(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-  const [data, navItems] = await Promise.all([
-    getOpenComponent(slug),
-    getOpenNavItems(),
-  ]);
+  const data = await getOpenComponent(slug);
   if (!data) notFound();
 
-  return <OpenExperience data={data} navItems={navItems} />;
+  const docsPage = getComponentDocsPage(slug);
+  const MDX = docsPage?.data.body;
+  const docsContent = MDX ? <MDX components={getOpenMdxComponents()} /> : null;
+
+  return <OpenComponentView data={data} docsContent={docsContent} />;
 }
 
 export async function generateStaticParams() {
@@ -26,6 +32,13 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
+  const docsPage = getComponentDocsPage(slug);
+  if (docsPage) {
+    return {
+      title: docsPage.data.title,
+      description: docsPage.data.description,
+    };
+  }
   const data = await getOpenComponent(slug);
   if (!data) return { title: "Component" };
   return {

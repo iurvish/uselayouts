@@ -9,7 +9,7 @@ import type { PackageManager } from "@/lib/open/package-manager";
 
 export function OpenCodePanel({
   description,
-  docs,
+  docsContent,
   usageHtml,
   usage,
   codeHtml,
@@ -21,7 +21,7 @@ export function OpenCodePanel({
   slug,
 }: {
   description?: string;
-  docs?: { title: string; html: string }[];
+  docsContent?: React.ReactNode;
   usageHtml: string;
   usage: string;
   codeHtml: string;
@@ -33,7 +33,6 @@ export function OpenCodePanel({
   slug: string;
 }) {
   const [tab, setTab] = React.useState<"usage" | "code">("usage");
-  const extra = (docs ?? []).filter((section) => !/^usage$/i.test(section.title));
 
   return (
     <div className="pb-7">
@@ -70,17 +69,7 @@ export function OpenCodePanel({
         slug={slug}
       />
 
-      {extra.map((section) => (
-        <section key={section.title}>
-          <h2 className="mt-7 mb-3.5 text-2xl font-semibold tracking-tight text-foreground text-balance">
-            {section.title}
-          </h2>
-          <div
-            className="text-sm leading-relaxed text-muted-foreground [&_p]:mb-3 [&_ul]:mb-3 [&_ul]:grid [&_ul]:gap-2 [&_ul]:pl-[18px] [&_code]:rounded-md [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-[0.12em] [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground"
-            dangerouslySetInnerHTML={{ __html: section.html }}
-          />
-        </section>
-      ))}
+      {docsContent ? <div className="mt-2">{docsContent}</div> : null}
     </div>
   );
 }

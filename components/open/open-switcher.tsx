@@ -3,12 +3,19 @@
 /* eslint-disable @next/next/no-img-element -- static Figma marks. */
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
 import { openChromeShadow, openPress, scrollbarMinimal } from "@/components/open/ui";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
+
+const TITLE_SUFFIX = " | uselayouts";
+
+function setDocumentTitle(title: string) {
+  if (typeof document === "undefined") return;
+  document.title = `${title}${TITLE_SUFFIX}`;
+}
 
 export function OpenSwitcher({
   current,
@@ -18,11 +25,23 @@ export function OpenSwitcher({
   items: OpenNavItem[];
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const rootRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [instant, setInstant] = React.useState(false);
+  const [pending, setPending] = React.useState<OpenNavItem | null>(null);
+
+  const pathCurrent =
+    items.find((item) => item.href === pathname) ??
+    items.find((item) => item.slug === current.slug) ??
+    current;
+  const displayed = pending ?? pathCurrent;
+
+  React.useEffect(() => {
+    if (pending && pending.href === pathname) setPending(null);
+  }, [pathname, pending]);
 
   const filtered = React.useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -88,7 +107,10 @@ export function OpenSwitcher({
 
   function select(item: OpenNavItem) {
     close();
-    if (item.href !== current.href) router.push(item.href);
+    if (item.href === pathname || item.href === current.href) return;
+    setPending(item);
+    setDocumentTitle(item.title);
+    router.push(item.href, { scroll: false });
   }
 
   return (
@@ -107,7 +129,7 @@ export function OpenSwitcher({
           setOpen((value) => !value);
         }}
       >
-        <span className="truncate">{current.title}</span>
+        <span className="truncate">{displayed.title}</span>
         <img src="/open/expand.svg" alt="" width={18} height={18} className="size-[18px] shrink-0 opacity-80" />
       </button>
       <AnimatePresence>
@@ -133,7 +155,7 @@ export function OpenSwitcher({
                 <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
                 filtered.map((item) => {
-                  const active = item.href === current.href;
+                  const active = item.href === displayed.href;
                   return (
                     <button
                       key={item.slug}
@@ -145,6 +167,8 @@ export function OpenSwitcher({
                         openPress,
                         active && "bg-accent text-accent-foreground",
                       )}
+                      onMouseEnter={() => router.prefetch(item.href)}
+                      onFocus={() => router.prefetch(item.href)}
                       onClick={() => select(item)}
                     >
                       <span className="truncate">{item.title}</span>

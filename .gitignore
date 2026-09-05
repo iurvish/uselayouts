@@ -43,4 +43,7 @@ next-env.d.ts
 # fumadocs
 .source
 
+# local agent / QA scratch (do not commit)
+.cursor-agent-runs/
+
 bun.lock
