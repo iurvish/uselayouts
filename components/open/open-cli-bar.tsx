@@ -109,16 +109,19 @@ export function OpenCliBar({
           <button
             type="button"
             className={cn(
-              /* Figma 102:699 — command segment; Shiki tokens via shikiCommandSurface */
-              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[hsl(240_6%_20%)] px-2.5 py-1.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
-              "hover:bg-[hsl(240_6%_20%)]",
+              /* Figma 102:699 — command segment; Shiki tokens only (bg stays #030202) */
+              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[#030202] px-2.5 py-1.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
             aria-label={copied ? "Copied" : "Copy install command"}
             title={command}
           >
             <div
-              className={cn(shikiCommandSurface, "truncate [&_pre]:truncate [&_code]:truncate")}
+              className={cn(
+                shikiCommandSurface,
+                "overflow-hidden whitespace-nowrap [&_pre]:overflow-hidden [&_pre]:whitespace-nowrap [&_code]:whitespace-nowrap",
+              )}
               dangerouslySetInnerHTML={{
                 __html: html[manager] || `<pre><code>${command}</code></pre>`,
               }}
@@ -128,8 +131,8 @@ export function OpenCliBar({
             type="button"
             className={cn(
               /* Figma 102:701 — copy control; match command segment surface */
-              "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-solid border-[#1b1b1d] bg-[hsl(240_6%_20%)] p-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
-              "hover:bg-[hsl(240_6%_20%)]",
+              "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-solid border-[#1b1b1d] bg-[#030202] p-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
             aria-label={copied ? "Copied" : "Copy"}

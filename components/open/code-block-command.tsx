@@ -117,7 +117,7 @@ export function CodeBlockCommand({
       </div>
       {COMMAND_TABS.map((option) => (
         <TabsContent key={option} value={option} className="m-0 min-w-0">
-          <div className="relative flex min-w-0 items-center gap-[13px] overflow-hidden py-2.5 pr-1.5 pl-[15px]">
+          <div className="relative flex min-w-0 items-center gap-2 overflow-hidden px-2 py-1.5">
             <span className="shrink-0 font-mono text-[13px] leading-[19.5px] text-[#b8b8b8]">
               $
             </span>

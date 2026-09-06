@@ -77,7 +77,7 @@ function ManualDepCommand({
   }
 
   return (
-    <div className="relative flex min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-[#47474d] bg-[hsl(240_6%_20%)] p-2.5 shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]">
+    <div className="relative flex min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-[#47474d] bg-[hsl(240_6%_20%)] p-2 shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]">
       <div className="relative min-w-0 flex-1 overflow-hidden">
         <div
           className={shikiCommandSurface}

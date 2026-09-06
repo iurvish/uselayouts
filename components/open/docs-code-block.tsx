@@ -54,18 +54,20 @@ export function DocsCodeBlock({
 
   const body = (
     <>
-      {/* Figma 111:2921 — py 12 on panel; lines use px 16; no scrollbar (system accent looked like a blue stripe) */}
+      {/* Tight inset; no scrollbar (system accent looked like a blue stripe) */}
       <div
         className={cn(
-          "h-full min-w-0 overflow-auto px-4 py-3 outline-none",
-          "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:bg-transparent",
+          "h-full min-w-0 overflow-auto p-2 outline-none",
+          "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:bg-transparent [&_pre]:!px-0 [&_pre]:!py-0",
           "[&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
           scrollbarNone,
           className,
         )}
         dangerouslySetInnerHTML={{ __html: html || "<pre><code>No source yet.</code></pre>" }}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-[84px] bg-linear-to-t from-[hsl(240_6%_20%)] to-transparent" />
+      {copyButton ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-[84px] bg-linear-to-t from-[hsl(240_6%_20%)] to-transparent" />
+      ) : null}
     </>
   );
 
