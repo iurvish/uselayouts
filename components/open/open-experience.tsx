@@ -124,8 +124,9 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
           <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
             Crafted Components
           </span>
+          {/* Figma 106:12 — pad 4, radius 7, fill #202022, border #434346, icon 20 */}
           <span
-            className="inline-flex items-center overflow-hidden rounded-[7px] border border-[hsl(240_2%_27%)] bg-[hsl(240_3%_13%)] p-1"
+            className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[7px] border border-solid border-[#434346] bg-[#202022] p-[4px]"
             aria-hidden="true"
           >
             <img
@@ -266,7 +267,9 @@ function OpenExperienceShell({
 }) {
   const pathname = usePathname();
   const { panel, setPanel } = useOpenPanel();
+  const isMobile = useIsMobile();
   const [pinned, setPinned] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const [peek, setPeek] = React.useState(false);
   const [hoverPreview, setHoverPreview] = React.useState<SidebarHoverTarget | null>(null);
   const peekPanelRef = React.useRef<HTMLDivElement>(null);
@@ -287,6 +290,17 @@ function OpenExperienceShell({
     setDocumentTitle(current.title);
   }, [current.title]);
 
+  React.useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  React.useEffect(() => {
+    if (isMobile) {
+      setPeek(false);
+      setHoverPreview(null);
+    }
+  }, [isMobile]);
+
   function updatePinned(value: boolean) {
     setPinned(value);
     writePinned(value);
@@ -304,9 +318,12 @@ function OpenExperienceShell({
         exit: { opacity: 0, transform: "translateX(-8px) scale(0.98)" },
       };
 
+  const showDesktopPinned = pinned && !isMobile;
+  const showToggle = !showDesktopPinned;
+
   return (
     <div className="dark flex h-dvh overflow-hidden bg-[hsl(240_6%_7%)] text-foreground">
-      {pinned ? (
+      {showDesktopPinned ? (
         <aside
           className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col items-center overflow-hidden bg-[hsl(240_6%_7%)] text-foreground"
           style={{ width: SIDEBAR_WIDTH }}
@@ -326,14 +343,34 @@ function OpenExperienceShell({
         </aside>
       ) : null}
 
+      {/* Mobile: partial-width left sheet instead of full-bleed pinned sidebar */}
+      <Sheet open={isMobile && mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent
+          side="left"
+          showCloseButton={false}
+          className="dark flex h-full max-w-[min(262px,85vw)] flex-col gap-0 border-r border-[hsl(240_4%_29%)] bg-[hsl(240_6%_7%)] p-0 text-foreground sm:max-w-[262px]"
+          style={{ width: `min(${SIDEBAR_WIDTH}px, 85vw)` }}
+        >
+          <PinnedSidebarHeader onClose={() => setMobileOpen(false)} />
+          <SidebarList items={navItems} activeHref={current.href} surface="background" />
+        </SheetContent>
+      </Sheet>
+
       <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-[hsl(225_7%_11%)]">
-        {!pinned ? (
+        {showToggle ? (
           <div
-            className={cn("pointer-events-none absolute top-[18px] left-[18px] z-20", peek && "z-24")}
-            onMouseEnter={() => setPeek(true)}
+            className={cn(
+              "pointer-events-none absolute top-[18px] left-[18px] z-30",
+              peek && "z-40",
+            )}
+            onMouseEnter={() => {
+              if (!isMobile) setPeek(true);
+            }}
             onMouseLeave={() => {
-              setPeek(false);
-              setHoverPreview(null);
+              if (!isMobile) {
+                setPeek(false);
+                setHoverPreview(null);
+              }
             }}
           >
             <button
@@ -344,11 +381,23 @@ function OpenExperienceShell({
                 "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:brightness-0",
                 "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:invert",
               )}
-              data-active={peek ? "true" : undefined}
-              aria-label={peek ? "Pin sidebar open" : "Open sidebar"}
-              aria-expanded={peek}
+              data-active={peek || mobileOpen ? "true" : undefined}
+              aria-label={
+                isMobile
+                  ? mobileOpen
+                    ? "Close sidebar"
+                    : "Open sidebar"
+                  : peek
+                    ? "Pin sidebar open"
+                    : "Open sidebar"
+              }
+              aria-expanded={isMobile ? mobileOpen : peek}
               aria-pressed={false}
               onClick={() => {
+                if (isMobile) {
+                  setMobileOpen(true);
+                  return;
+                }
                 updatePinned(true);
                 setPeek(false);
                 setHoverPreview(null);
@@ -356,51 +405,54 @@ function OpenExperienceShell({
             >
               <SidebarToggleIcon />
             </button>
-            <AnimatePresence>
-              {peek ? (
-                <motion.div
-                  ref={peekPanelRef}
-                  className="pointer-events-auto absolute top-11 left-0 z-24 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
-                  style={{ width: SIDEBAR_WIDTH + 8 + 177 }}
-                  initial={sidebarMotion.initial}
-                  animate={sidebarMotion.animate}
-                  exit={sidebarMotion.exit}
-                  transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-                >
-                  <div className={cn(sidebarShell, "max-h-[min(70dvh,560px)]")} style={{ width: SIDEBAR_WIDTH }}>
-                    <SidebarList
-                      items={navItems}
-                      activeHref={current.href}
-                      tall
-                      surface="card"
-                      onItemHover={(item, anchor) => {
-                        if (!item || !anchor || !peekPanelRef.current) {
-                          setHoverPreview(null);
-                          return;
-                        }
-                        const panelBox = peekPanelRef.current.getBoundingClientRect();
-                        const rowBox = anchor.getBoundingClientRect();
-                        const rawTop = rowBox.top + rowBox.height / 2 - panelBox.top - 117 / 2;
-                        const maxTop = Math.max(0, panelBox.height - 117);
-                        const top = Math.min(Math.max(0, rawTop), maxTop);
-                        setHoverPreview({
-                          slug: item.slug,
-                          title: item.title,
-                          top,
-                        });
-                      }}
-                    />
-                  </div>
-                  <SidebarHoverPreview target={hoverPreview} />
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
+            {!isMobile ? (
+              <AnimatePresence>
+                {peek ? (
+                  <motion.div
+                    ref={peekPanelRef}
+                    className="pointer-events-auto absolute top-11 left-0 z-40 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
+                    style={{ width: SIDEBAR_WIDTH + 8 + 177 }}
+                    initial={sidebarMotion.initial}
+                    animate={sidebarMotion.animate}
+                    exit={sidebarMotion.exit}
+                    transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+                  >
+                    <div className={cn(sidebarShell, "max-h-[min(70dvh,560px)]")} style={{ width: SIDEBAR_WIDTH }}>
+                      <SidebarList
+                        items={navItems}
+                        activeHref={current.href}
+                        tall
+                        surface="card"
+                        onItemHover={(item, anchor) => {
+                          if (!item || !anchor || !peekPanelRef.current) {
+                            setHoverPreview(null);
+                            return;
+                          }
+                          const panelBox = peekPanelRef.current.getBoundingClientRect();
+                          const rowBox = anchor.getBoundingClientRect();
+                          const rawTop = rowBox.top + rowBox.height / 2 - panelBox.top - 117 / 2;
+                          const maxTop = Math.max(0, panelBox.height - 117);
+                          const top = Math.min(Math.max(0, rawTop), maxTop);
+                          setHoverPreview({
+                            slug: item.slug,
+                            title: item.title,
+                            top,
+                          });
+                        }}
+                      />
+                    </div>
+                    <SidebarHoverPreview target={hoverPreview} />
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            ) : null}
           </div>
         ) : null}
 
-        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-20 flex items-start justify-between gap-4 *:pointer-events-auto">
-          <div className={cn(!pinned && "w-10")} />
-          {!pinned ? <OpenSwitcher current={current} items={navItems} /> : <div />}
+        {/* z-30 beats preview chrome (z-20); stays below portaled drawers (z-50) */}
+        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-30 flex items-start justify-between gap-4 *:pointer-events-auto">
+          <div className={cn(showToggle && "w-10")} />
+          {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
           <OpenActions panel={panel} onChange={setPanel} />
         </header>
 

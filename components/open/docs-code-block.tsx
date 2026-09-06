@@ -107,7 +107,7 @@ export function DocsCodeBlock({
         <div className="relative min-h-0 flex-1 p-1">
           <figure
             data-rehype-pretty-code-figure=""
-            className="relative h-full overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)]"
+            className="relative h-full cursor-pointer overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
           >
             {body}
             {floatingCopy}
