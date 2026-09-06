@@ -509,6 +509,11 @@ html.dark .shiki span {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landing-why-progress {
+    animation: none !important;
+    width: 100% !important;
+  }
+
   .hint-ripple {
     animation: none;
     opacity: 0.22;

@@ -425,24 +425,16 @@ function FeaturesSection() {
 function WhySection() {
   const [active, setActive] = useState(0);
   const [cycle, setCycle] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(mq.matches);
-    const onChange = () => setReduceMotion(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    if (reduceMotion) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduce.matches) return;
     const id = window.setInterval(() => {
       setActive((i) => (i + 1) % whyFeatures.length);
       setCycle((c) => c + 1);
     }, WHY_INTERVAL_MS);
     return () => window.clearInterval(id);
-  }, [active, cycle, reduceMotion]);
+  }, [cycle]);
 
   const select = (i: number) => {
     setActive(i);
@@ -496,13 +488,10 @@ function WhySection() {
                     {isActive ? (
                       <span
                         key={cycle}
-                        className="absolute inset-y-0 left-0 h-full"
+                        className="landing-why-progress absolute inset-y-0 left-0 h-full"
                         style={{
                           backgroundImage: whyActiveLine,
-                          width: reduceMotion ? "100%" : undefined,
-                          animation: reduceMotion
-                            ? undefined
-                            : `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards`,
+                          animation: `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards`,
                         }}
                       />
                     ) : null}

@@ -72,8 +72,8 @@ export function DocsCodeBlock({
       {/* Figma 111:2921 — py 12 on panel; lines use px 16; no scrollbar (system accent looked like a blue stripe) */}
       <div
         className={cn(
-          "h-full min-w-0 cursor-pointer overflow-auto px-4 py-3 outline-none",
-          "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:cursor-pointer [&_pre]:overflow-x-auto [&_pre]:bg-transparent",
+          "h-full min-w-0 overflow-auto px-4 py-3 outline-none",
+          "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:bg-transparent",
           "[&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
           scrollbarNone,
           className,
@@ -134,7 +134,7 @@ export function DocsCodeBlock({
         <div className="relative min-h-0 min-w-0 flex-1 p-1">
           <figure
             data-rehype-pretty-code-figure=""
-            className="relative h-full min-w-0 cursor-pointer overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
+            className="relative h-full min-w-0 overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
           >
             {body}
             {floatingCopy}
