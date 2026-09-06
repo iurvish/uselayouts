@@ -60,6 +60,8 @@ export const scrollbarNone = cn(
 export const shikiCommandSurface = cn(
   "min-w-0 overflow-x-auto",
   "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:!bg-transparent [&_pre]:!py-0 [&_pre]:!px-0 [&_pre]:!pl-0",
-  "[&_code]:bg-transparent [&_code]:!pl-0",
-  "[&_.shiki]:!m-0 [&_.shiki]:!pl-0 [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
+  "[&_code]:bg-transparent [&_code]:!pl-0 [&_code]:!px-0",
+  /* fumadocs-ui/css/lib/shiki.css pads .line via --padding-left (~16px), not pre/code */
+  "[&_.shiki]:!m-0 [&_.shiki]:!pl-0 [&_.shiki]:![--padding-left:0px] [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
+  "[&_.line]:!pl-0 [&_.line]:!pr-0",
 );

@@ -4,7 +4,7 @@
 
 import * as React from "react";
 
-import { openPressMotion, scrollbarNone } from "@/components/open/ui";
+import { openPressMotion, scrollbarNone, shikiCommandSurface } from "@/components/open/ui";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { stripCodeAnnotations } from "@/lib/open/strip-code-annotations";
 import { cn } from "@/lib/utils";
@@ -58,8 +58,7 @@ export function DocsCodeBlock({
       <div
         className={cn(
           "h-full min-w-0 overflow-auto pt-2 pr-2 pb-2 pl-0 outline-none",
-          "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:bg-transparent [&_pre]:!px-0 [&_pre]:!py-0 [&_pre]:!pl-0",
-          "[&_code]:bg-transparent [&_code]:!pl-0 [&_.shiki]:!m-0 [&_.shiki]:!pl-0 [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
+          shikiCommandSurface,
           scrollbarNone,
           className,
         )}
