@@ -16,29 +16,37 @@ const categories = [
   {
     title: "Layouts",
     count: "20+",
-    badge: "bg-[#879F6C]",
-    blob: "bg-[#4B6D4E]",
+    image: "/landing/card-layouts.png",
+    panel: "#879F6C",
+    badgeGradient:
+      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(67.1% -0.048 0.060 / 0%) 93.5%)",
     tags: ["Hero", "Bento", "Sections", "Grid Stack"],
   },
   {
     title: "Navigation",
     count: "20+",
-    badge: "bg-[#2495D1]",
-    blob: "bg-[#3D78B6]",
+    image: "/landing/card-navigation.png",
+    panel: "#2495D1",
+    badgeGradient:
+      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(63.7% -0.069 -0.111 / 20%) 93.5%)",
     tags: ["Navbar", "Tabs", "Menu", "Sidebar", "Breadcrumbs"],
   },
   {
     title: "Interactions",
     count: "20+",
-    badge: "bg-[#BC6147]",
-    blob: "bg-[#A3472E]",
+    image: "/landing/card-interactions.png",
+    panel: "#BC6147",
+    badgeGradient:
+      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(59.5% 0.099 0.074 / 20%) 93.5%)",
     tags: ["Magnetic Hover", "Cursor reveal", "Marquee"],
   },
   {
     title: "User Interface",
     count: "20+",
-    badge: "bg-[#B6547A]",
-    blob: "bg-[#9C3A57]",
+    image: "/landing/card-user-interface.png",
+    panel: "#B6547A",
+    badgeGradient:
+      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(57.9% 0.133 -0.005 / 20%) 93.5%)",
     tags: ["Cards", "Forms", "Pricing Modal", "Testimonials"],
   },
 ];
@@ -79,6 +87,26 @@ const testimonials = [
 ];
 
 const bentoCards = Array.from({ length: 12 }, (_, i) => i);
+
+const whyFeatures = [
+  {
+    title: "Copy. Customize. Ship.",
+    description:
+      "Start with production-ready components and make them your own. No locked-down abstractions. No fighting the library.",
+  },
+  {
+    title: "Motion that means something.",
+  },
+  {
+    title: "Built to be changed.",
+  },
+  {
+    title: "Skip the blank canvas.",
+  },
+] as const;
+
+const whyActiveLine =
+  "linear-gradient(in oklab 179.04deg, oklab(43.6% -0.034 -0.138) -260%, oklab(53% 0.114 0.016) 225.3%, oklab(86.5% 0.053 0.047) 720%)";
 
 function ExploreButton({
   className,
@@ -258,65 +286,147 @@ function HeroSection() {
 
 function FeaturesSection() {
   return (
-    <section className="px-4 py-20 sm:px-8 lg:px-[120px] lg:py-28">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-[461px] space-y-4">
-          <h2 className="text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
-            Everything you need to build the interface.
+    <section className="bg-[#F5F3EE] px-4 py-16 sm:px-8 lg:px-[120px] lg:py-[100px]">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 lg:gap-14">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex max-w-[461px] flex-col gap-4">
+            <h2 className="text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
+              Everything you need to build the interface.
+            </h2>
+            <p className="text-[16px] leading-[1.5] text-[#4B565E]">
+              From foundational layouts to expressive interactions, create
+              interfaces that feel considered, not cookie-cutter.
+            </p>
+          </div>
+          <Link
+            href="/browse"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#071A31] px-3.5 py-3 text-[16px] font-medium leading-5 text-white transition-transform duration-150 ease-out active:scale-[0.98]"
+          >
+            Explore full library
+          </Link>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {categories.map((cat) => (
+            <article
+              key={cat.title}
+              className="flex flex-col gap-2.5 overflow-hidden rounded-2xl border border-[#E2E2E2] bg-white px-3 pb-6 pt-3"
+            >
+              <div className="flex flex-col gap-4">
+                <div
+                  className="relative h-[220px] overflow-hidden rounded-xl sm:h-[320px] lg:h-[430px]"
+                  style={{ backgroundColor: cat.panel }}
+                >
+                  <Image
+                    src={cat.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 768px) 100vw, 588px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex flex-col gap-4 px-2">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="inline-flex items-center justify-center rounded-full px-2 py-0.5 font-[family-name:var(--font-geist-mono)] text-[14px] font-medium leading-[18px] tracking-[-0.03em] text-white"
+                      style={{
+                        backgroundColor: cat.panel,
+                        backgroundImage: cat.badgeGradient,
+                      }}
+                    >
+                      {cat.count}
+                    </span>
+                    <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.02em] text-[#071A31]">
+                      {cat.title}
+                    </h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5">
+                    {cat.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center justify-center rounded-[6px] border border-[#E2E2E2] bg-[#F2F3F4] px-3 py-1 font-[family-name:var(--font-geist-mono)] text-[16px] leading-5 tracking-[-0.03em] text-[#3D464C]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhySection() {
+  const [active, setActive] = useState(0);
+
+  return (
+    <section className="relative overflow-hidden bg-[#1B1C1D] px-4 py-20 sm:px-8 lg:px-[120px] lg:py-[120px]">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col gap-12 lg:gap-[72px]">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <h2 className="max-w-[406px] text-[36px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[48px]">
+            Why Developers choose uselayouts
           </h2>
-          <p className="text-[16px] leading-relaxed text-[#4B565E]">
-            From foundational layouts to expressive interactions, create
-            interfaces that feel considered, not cookie-cutter.
+          <p className="max-w-[348px] text-[16px] leading-[1.5] text-white/70">
+            You shouldn&apos;t have to spend hours rebuilding the same UI
+            patterns before getting to the part that actually makes your product
+            yours.
           </p>
         </div>
-        <Link
-          href="/browse"
-          className="text-[16px] font-medium text-[#071A31] underline-offset-4 transition-opacity duration-150 hover:opacity-70 hover:underline"
-        >
-          Explore full library
-        </Link>
-      </div>
 
-      <div className="mx-auto mt-14 grid max-w-[1200px] gap-6 md:grid-cols-2">
-        {categories.map((cat) => (
-          <div
-            key={cat.title}
-            className="relative overflow-hidden rounded-2xl bg-[#F2F3F4] p-4"
-          >
-            <div
-              className={cn(
-                "pointer-events-none absolute -right-10 -top-16 size-[280px] rounded-full opacity-50 blur-[70px]",
-                cat.blob
-              )}
-              aria-hidden
-            />
-            <div className="relative flex flex-col gap-4">
-              <div className="flex items-center gap-3 px-2">
-                <span
-                  className={cn(
-                    "inline-flex h-[22px] items-center rounded-full px-2 font-[family-name:var(--font-geist-mono)] text-[14px] font-medium tracking-[-0.03em] text-white",
-                    cat.badge
-                  )}
+        <div className="flex flex-col items-stretch gap-10 lg:flex-row lg:items-center lg:gap-12">
+          <div className="flex w-full max-w-[564px] flex-col gap-8">
+            {whyFeatures.map((feature, i) => {
+              const isActive = i === active;
+              return (
+                <button
+                  key={feature.title}
+                  type="button"
+                  className="flex w-full flex-col gap-8 text-left transition-colors duration-150"
+                  onClick={() => setActive(i)}
                 >
-                  {cat.count}
-                </span>
-                <h3 className="text-[24px] font-medium tracking-[-0.02em] text-[#071A31]">
-                  {cat.title}
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2.5 px-2 pb-2">
-                {cat.tags.map((tag) => (
+                  <div className="flex flex-col gap-4">
+                    <span
+                      className={cn(
+                        "text-[20px] font-medium leading-6 tracking-[-0.02em] transition-colors duration-150",
+                        isActive ? "text-white" : "text-[#9F9F9F]"
+                      )}
+                    >
+                      {feature.title}
+                    </span>
+                    {isActive && "description" in feature && feature.description ? (
+                      <p className="max-w-[459px] text-[16px] leading-[1.5] text-white/80">
+                        {feature.description}
+                      </p>
+                    ) : null}
+                  </div>
                   <span
-                    key={tag}
-                    className="inline-flex h-[31px] items-center rounded-md bg-[#F2F3F4] px-3 font-[family-name:var(--font-geist-mono)] text-[16px] tracking-[-0.03em] text-[#3D464C] shadow-[inset_0_0_0_1px_rgba(226,226,226,1)]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+                    className="h-0.5 w-full"
+                    style={
+                      isActive
+                        ? { backgroundImage: whyActiveLine }
+                        : { backgroundColor: "#3C3C3C" }
+                    }
+                    aria-hidden
+                  />
+                </button>
+              );
+            })}
           </div>
-        ))}
+
+          <div className="relative h-[280px] w-full overflow-hidden rounded-2xl bg-[#0A1739] sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
+            <Image
+              src="/landing/why-media.png"
+              alt=""
+              fill
+              sizes="(max-width: 1024px) 100vw, 588px"
+              className="object-cover"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -469,6 +579,7 @@ export default function LandingPage() {
       <LandingNav />
       <HeroSection />
       <FeaturesSection />
+      <WhySection />
       <ToolsSection />
       <TestimonialsSection />
     </main>
