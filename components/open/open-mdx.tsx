@@ -25,15 +25,13 @@ function Heading({
   );
 }
 
-/** Fenced MDX → same Shiki + Copy Code surface as the main panel. */
+/** Fenced MDX → same Shiki surface as the main panel (no Copy Code). */
 async function OpenMdxPre({
   children,
   title,
-  componentSlug,
   "data-language": dataLanguage,
 }: ComponentPropsWithoutRef<"pre"> & {
   title?: string;
-  componentSlug?: string;
   "data-language"?: string;
 }) {
   const code = extractMdxPreText(children).replace(/\n$/, "");
@@ -51,20 +49,14 @@ async function OpenMdxPre({
         language={lang}
         title={title}
         withWrapper={false}
-        className="pb-14"
-        componentSlug={componentSlug}
+        copyButton={false}
       />
     </div>
   );
 }
 
 /** Minimal MDX map — fumadocs for compile/load, open UI for fenced code. */
-export function getOpenMdxComponents(
-  components?: MDXComponents,
-  options?: { componentSlug?: string },
-): MDXComponents {
-  const componentSlug = options?.componentSlug;
-
+export function getOpenMdxComponents(components?: MDXComponents): MDXComponents {
   return {
     h1: (props) => <Heading as="h2" {...props} />,
     h2: (props) => <Heading as="h2" {...props} />,
@@ -118,7 +110,7 @@ export function getOpenMdxComponents(
         {...props}
       />
     ),
-    pre: (props) => <OpenMdxPre componentSlug={componentSlug} {...props} />,
+    pre: (props) => <OpenMdxPre {...props} />,
     ...components,
   };
 }

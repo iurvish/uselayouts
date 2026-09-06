@@ -439,7 +439,7 @@ function OpenExperienceShell({
         <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
           <div className={cn(showToggle && "w-10")} />
           {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
-          <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />
+          <OpenActions panel={panel} onChange={setPanel} />
         </header>
 
         {children}

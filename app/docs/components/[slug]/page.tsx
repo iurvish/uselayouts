@@ -19,7 +19,7 @@ export default async function OpenComponentPage(props: {
   const docsPage = getComponentDocsPage(slug);
   const MDX = docsPage?.data.body;
   const docsContent = MDX ? (
-    <MDX components={getOpenMdxComponents(undefined, { componentSlug: slug })} />
+    <MDX components={getOpenMdxComponents()} />
   ) : null;
 
   return <OpenComponentView data={data} docsContent={docsContent} />;

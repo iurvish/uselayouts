@@ -11,6 +11,7 @@ import {
   type PackageManager,
 } from "@/lib/open/package-manager";
 import { PackageManagerMark } from "@/components/open/pm-marks";
+import { shikiCommandSurface } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { Confetti, type ConfettiRef } from "@/registry/magicui/confetti";
@@ -21,10 +22,13 @@ export function OpenCliBar({
   registryItem,
   manager,
   onManagerChange,
+  html = {},
 }: {
   registryItem: string;
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
+  /** Pre-highlighted shell HTML per manager (same Shiki surface as DocsCodeBlock). */
+  html?: Partial<Record<PackageManager, string>>;
 }) {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
@@ -105,26 +109,27 @@ export function OpenCliBar({
           <button
             type="button"
             className={cn(
-              /* Figma 102:699 — command segment */
-              "flex cursor-pointer items-center justify-center rounded-l-[10px] bg-[#030202] px-2.5 py-1.5 text-[#acacb4] shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
-              "hover:bg-[#030202] hover:text-foreground",
+              /* Figma 102:699 — command segment; Shiki tokens via shikiCommandSurface */
+              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[hsl(240_6%_20%)] px-2.5 py-1.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              "hover:bg-[hsl(240_6%_20%)]",
             )}
             onClick={copyCommand}
             aria-label={copied ? "Copied" : "Copy install command"}
+            title={command}
           >
-            <code
-              title={command}
-              className="block max-w-[min(42vw,420px)] truncate font-mono text-sm leading-5 tracking-[-0.42px]"
-            >
-              {command}
-            </code>
+            <div
+              className={cn(shikiCommandSurface, "truncate [&_pre]:truncate [&_code]:truncate")}
+              dangerouslySetInnerHTML={{
+                __html: html[manager] || `<pre><code>${command}</code></pre>`,
+              }}
+            />
           </button>
           <button
             type="button"
             className={cn(
-              /* Figma 102:701 — copy control: #030202, border-l #1b1b1d, p-8, radius 9 */
-              "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-solid border-[#1b1b1d] bg-[#030202] p-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
-              "hover:bg-[#030202]",
+              /* Figma 102:701 — copy control; match command segment surface */
+              "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-solid border-[#1b1b1d] bg-[hsl(240_6%_20%)] p-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              "hover:bg-[hsl(240_6%_20%)]",
             )}
             onClick={copyCommand}
             aria-label={copied ? "Copied" : "Copy"}

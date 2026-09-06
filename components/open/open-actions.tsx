@@ -2,11 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
-import Link from "next/link";
-import { SquarePen } from "lucide-react";
-
-import { openIconBtn, openPressMotion } from "@/components/open/ui";
-import { isDev } from "@/lib/admin/guard";
+import { openPressMotion } from "@/components/open/ui";
 import { cn } from "@/lib/utils";
 
 export type OpenPanel = "code" | null;
@@ -15,15 +11,11 @@ export type OpenPanel = "code" | null;
 export function OpenActions({
   panel,
   onChange,
-  slug,
 }: {
   panel: OpenPanel;
   onChange: (panel: OpenPanel) => void;
-  /** Current component slug — used for admin edit link in development. */
-  slug?: string;
 }) {
   const active = panel === "code";
-  const showAdminEdit = isDev() && Boolean(slug);
 
   return (
     <div className="flex items-center gap-2">
@@ -45,16 +37,6 @@ export function OpenActions({
       >
         <img src="/open/code.svg" alt="" width={22} height={22} className="size-[22px]" draggable={false} />
       </button>
-      {showAdminEdit ? (
-        <Link
-          href={`/admin/${slug}`}
-          className={cn(openIconBtn, "cursor-pointer")}
-          aria-label="Edit in admin"
-          title="Edit in admin"
-        >
-          <SquarePen className="size-[18px]" strokeWidth={1.75} />
-        </Link>
-      ) : null}
     </div>
   );
 }
