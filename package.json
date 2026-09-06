@@ -28,6 +28,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1127.0",
     "@babel/standalone": "^8.0.4",
     "@base-ui/react": "^1.8.0",
     "@floating-ui/dom": "^1.8.0",
@@ -48,6 +49,7 @@
     "cn": "^0.2.5",
     "date-fns": "^4.1.0",
     "dialkit": "^1.4.3",
+    "ffmpeg-static": "^5.3.0",
     "fumadocs-core": "16.14.3",
     "fumadocs-mdx": "^14.1.0",
     "fumadocs-ui": "16.14.3",
@@ -60,7 +62,9 @@
     "react-dom": "19.2.6",
     "react-hook-form": "^7.69.0",
     "react-use-measure": "^2.1.7",
+    "server-only": "^0.0.1",
     "shadcn": "^3.6.1",
+    "sharp": "^0.35.4",
     "shiki": "^4.4.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
@@ -71,6 +75,7 @@
     "@dietrichgebert/ponytail": "^4.9.0",
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
+    "@types/ffmpeg-static": "^5.1.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

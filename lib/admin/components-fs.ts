@@ -27,6 +27,10 @@ export type ComponentControlsMeta = {
   disabled: string[];
   updatedAt: string;
   previewBackground?: PreviewBackgrounds | string;
+  /** Cloudflare R2 CDN still (AVIF). */
+  posterUrl?: string;
+  /** Cloudflare R2 CDN muted preview MP4. */
+  videoUrl?: string;
 };
 
 export type RegistryItem = {
@@ -178,6 +182,8 @@ export async function upsertComponent(input: UpsertComponentInput) {
     disabled,
     updatedAt: new Date().toISOString(),
     previewBackground: background,
+    posterUrl: existingMeta?.posterUrl,
+    videoUrl: existingMeta?.videoUrl,
   });
 
   const mdx = generateComponentMdx({
@@ -270,8 +276,34 @@ export async function updateControls(
     disabled,
     updatedAt: new Date().toISOString(),
     previewBackground: existing.controls?.previewBackground,
+    posterUrl: existing.controls?.posterUrl,
+    videoUrl: existing.controls?.videoUrl,
   });
   return { name, disabled };
+}
+
+/** Persist browse poster/video CDN URLs on the component controls file. */
+export async function updateComponentMedia(
+  name: string,
+  media: { posterUrl: string; videoUrl?: string | null },
+) {
+  const existing = await getComponent(name);
+  if (!existing) throw new Error("Component not found");
+
+  await writeControls(name, {
+    dialConfig: existing.controls?.dialConfig ?? {},
+    disabled: existing.controls?.disabled ?? [],
+    updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? undefined,
+  });
+
+  return {
+    name,
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? null,
+  };
 }
 
 async function rebuildRegistry() {
