@@ -483,14 +483,15 @@ function ToolsSection() {
       className="relative overflow-x-hidden px-4 py-16 sm:px-8 sm:py-20 lg:px-[120px] lg:py-[100px]"
       style={landingDotPattern}
     >
-      {/* Figma 1:732 — 1000×556 orbit mask, copy centered in arc */}
-      <div className="relative mx-auto flex min-h-[480px] w-full max-w-[1000px] items-center justify-center sm:min-h-[556px]">
+      {/* Figma 1:732 — orbit inset by ~half-card so rim logos aren't clipped;
+          frame < square height; bottom fades via mask. */}
+      <div className="relative mx-auto flex min-h-[520px] w-full max-w-[1000px] items-center justify-center overflow-hidden pt-9 sm:min-h-[640px] sm:pt-12 lg:min-h-[783px] lg:pt-14">
         <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          className="pointer-events-none absolute inset-x-0 top-9 flex justify-center px-9 sm:top-12 sm:px-12 lg:top-14 lg:px-14"
           aria-hidden
         >
           <div
-            className="relative aspect-square w-[min(140%,1000px)] overflow-hidden sm:w-[min(120%,1000px)] lg:w-full"
+            className="relative aspect-square w-full"
             style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
           >
             <div className="landing-orbit-spin absolute inset-0">
@@ -538,7 +539,7 @@ function ToolsSection() {
           </div>
 
           <div
-            className="relative h-[45px] w-[min(100vw-2rem,616px)] overflow-hidden"
+            className="relative h-[45px] w-full max-w-[616px] overflow-hidden"
             style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
           >
             <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
