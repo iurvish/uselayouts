@@ -40,6 +40,8 @@
     "@number-flow/react": "^0.5.10",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@shikijs/transformers": "^4.4.3",
+    "@supabase/ssr": "^0.12.6",
+    "@supabase/supabase-js": "^2.115.0",
     "@types/mdx": "^2.0.13",
     "@vercel/analytics": "^1.6.1",
     "canvas-confetti": "^1.9.4",

@@ -5,6 +5,9 @@ import "./globals.css";
 import "@/styles/dialkit.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
+import { AuthProvider } from "@/components/auth/auth-provider";
+import { LoginDialog } from "@/components/auth/login-dialog";
+
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
@@ -76,7 +79,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
         suppressHydrationWarning
       >
-        <RootProvider search={{ enabled: false }}>{children}</RootProvider>
+        <RootProvider search={{ enabled: false }}>
+          <AuthProvider>
+            {children}
+            <LoginDialog />
+          </AuthProvider>
+        </RootProvider>
         <Analytics />
         <GoogleAnalytics gaId="G-EBGR3GK00N" />
       </body>

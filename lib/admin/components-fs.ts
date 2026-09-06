@@ -223,6 +223,20 @@ export async function upsertComponent(input: UpsertComponentInput) {
   await writeRegistry(registry);
   await rebuildRegistry();
 
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: item.title,
+      description: item.description,
+      dependencies: item.dependencies,
+      poster_url: existingMeta?.posterUrl ?? null,
+      video_url: existingMeta?.videoUrl ?? null,
+    });
+  } catch {
+    // FS remains source of truth.
+  }
+
   return { name, item };
 }
 
@@ -304,6 +318,21 @@ export async function updateComponentMedia(
     posterUrl: media.posterUrl,
     videoUrl: media.videoUrl ?? undefined,
   });
+
+  // Best-effort Supabase metadata sync (needs SUPABASE_SERVICE_ROLE_KEY).
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: existing.item.title,
+      description: existing.item.description,
+      poster_url: media.posterUrl,
+      video_url: media.videoUrl ?? null,
+      dependencies: existing.item.dependencies,
+    });
+  } catch {
+    // FS write already succeeded.
+  }
 
   return {
     name,

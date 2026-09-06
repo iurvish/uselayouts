@@ -5,6 +5,7 @@
 import * as React from "react";
 
 import { openPressMotion, scrollbarNone } from "@/components/open/ui";
+import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { stripCodeAnnotations } from "@/lib/open/strip-code-annotations";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function DocsCodeBlock({
   copyButton = true,
   withWrapper = true,
   compact = false,
+  componentSlug,
 }: {
   html: string;
   code: string;
@@ -30,13 +32,19 @@ export function DocsCodeBlock({
   withWrapper?: boolean;
   /** Shorter card for nested manual step 2 */
   compact?: boolean;
+  componentSlug?: string;
 }) {
   const [copied, setCopied] = React.useState(false);
   const cleaned = stripCodeAnnotations(code);
+  const gatedCopy = useGatedCopy({
+    componentSlug,
+    source: "code",
+  });
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(cleaned);
+      const ok = await gatedCopy(cleaned);
+      if (!ok) return;
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
     } catch {

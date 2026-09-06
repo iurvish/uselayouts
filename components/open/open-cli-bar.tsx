@@ -12,6 +12,7 @@ import {
 } from "@/lib/open/package-manager";
 import { PackageManagerMark } from "@/components/open/pm-marks";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { Confetti, type ConfettiRef } from "@/registry/magicui/confetti";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,10 @@ export function OpenCliBar({
   const confettiRef = React.useRef<ConfettiRef>(null);
   const reduce = useReducedMotion();
   const command = cliInstallCommand(manager, registryItem);
+  const gatedCopy = useGatedCopy({
+    componentSlug: registryItem,
+    source: "cli",
+  });
 
   React.useEffect(() => {
     if (!menuOpen) return;
@@ -53,7 +58,8 @@ export function OpenCliBar({
 
   async function copyCommand() {
     try {
-      await navigator.clipboard.writeText(command);
+      const ok = await gatedCopy(command);
+      if (!ok) return;
       setCopied(true);
       fireConfetti();
       window.setTimeout(() => setCopied(false), 1600);

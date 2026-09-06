@@ -16,6 +16,7 @@ import {
   isPackageManager,
   type PackageManager,
 } from "@/lib/open/package-manager";
+import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { cn } from "@/lib/utils";
 
 /** Figma 116:3395 — bun-first package manager + $ command */
@@ -28,6 +29,7 @@ export function CodeBlockCommand({
   bun,
   value,
   onValueChange,
+  componentSlug,
 }: {
   npm: string;
   yarn: string;
@@ -35,6 +37,7 @@ export function CodeBlockCommand({
   bun: string;
   value: PackageManager;
   onValueChange: (manager: PackageManager) => void;
+  componentSlug?: string;
 }) {
   const [copied, setCopied] = React.useState(false);
   const commands: Record<PackageManager, string> = { npm, yarn, pnpm, bun };
@@ -42,11 +45,16 @@ export function CodeBlockCommand({
     ? value
     : "bun";
   const command = commands[active];
+  const gatedCopy = useGatedCopy({
+    componentSlug,
+    source: "cli",
+  });
 
   async function copy() {
     if (!command) return;
     try {
-      await navigator.clipboard.writeText(command);
+      const ok = await gatedCopy(command);
+      if (!ok) return;
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1400);
     } catch {

@@ -36,7 +36,12 @@ export function OpenCodePanel({
 
   return (
     <div className="flex flex-col gap-[22px] pb-4">
-      <DocsCodeBlock html={codeHtml || usageHtml} code={code || usage} title={file} />
+      <DocsCodeBlock
+        html={codeHtml || usageHtml}
+        code={code || usage}
+        title={file}
+        componentSlug={slug}
+      />
 
       <InstallGuide
         registryItem={registryItem}

@@ -14,6 +14,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { useGatedCopy } from "@/hooks/use-gated-copy";
 import {
   cliInstallCommand,
   manualInstallCommand,
@@ -55,12 +56,23 @@ export function DocsSteps({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ManualDepCommand({ command }: { command: string }) {
+function ManualDepCommand({
+  command,
+  componentSlug,
+}: {
+  command: string;
+  componentSlug?: string;
+}) {
   const [copied, setCopied] = React.useState(false);
+  const gatedCopy = useGatedCopy({
+    componentSlug,
+    source: "manual_deps",
+  });
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(command);
+      const ok = await gatedCopy(command);
+      if (!ok) return;
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1400);
     } catch {
@@ -205,6 +217,7 @@ export function InstallGuide({
                   {...commands}
                   value={manager}
                   onValueChange={onManagerChange}
+                  componentSlug={slug}
                 />
               ) : (
                 <DocsSteps>
@@ -213,7 +226,10 @@ export function InstallGuide({
                       Install dependencies
                     </h3>
                     {manualCmd ? (
-                      <ManualDepCommand command={manualCmd} />
+                      <ManualDepCommand
+                        command={manualCmd}
+                        componentSlug={slug}
+                      />
                     ) : (
                       <p className="text-sm text-[hsl(240_5%_69%)]">
                         No extra packages configured for this component.
@@ -229,6 +245,7 @@ export function InstallGuide({
                       code={code || ""}
                       title={file}
                       compact
+                      componentSlug={slug}
                     />
                   </div>
                   <div className="flex flex-col gap-3">
