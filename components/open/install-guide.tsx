@@ -3,17 +3,11 @@
 /* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { CodeBlockCommand } from "@/components/open/code-block-command";
 import { DocsCodeBlock } from "@/components/open/docs-code-block";
 import { openPressMotion } from "@/components/open/ui";
-import {
-  Tabs,
-  TabsIndicator,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import {
   cliInstallCommand,
@@ -49,7 +43,7 @@ export function DocsSteps({ children }: { children: React.ReactNode }) {
           >
             <span className="relative">{index + 1}</span>
           </span>
-          <div>{child}</div>
+          <div className="min-w-0">{child}</div>
         </li>
       ))}
     </ol>
@@ -85,8 +79,8 @@ function ManualDepCommand({
   const rest = firstSpace === -1 ? "" : command.slice(firstSpace + 1);
 
   return (
-    <div className="relative flex items-center gap-2.5 overflow-hidden rounded-xl border border-[hsl(240_4%_29%)] bg-[hsl(240_6%_16%)] p-2.5">
-      <p className="min-w-0 flex-1 truncate text-base tracking-[-0.48px] text-[#fafafa]">
+    <div className="relative flex min-w-0 items-center gap-2.5 rounded-xl border border-[#47474d] bg-[#26262b] p-2.5">
+      <p className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-base tracking-[-0.48px] text-[#fafafa]">
         <span className="text-[#a38adf]">{pm}</span>
         {rest ? (
           <>
@@ -95,10 +89,6 @@ function ManualDepCommand({
           </>
         ) : null}
       </p>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-0 right-9 h-[43px] w-[78px] bg-linear-to-l from-[hsl(240_6%_16%)] to-transparent"
-      />
       <button
         type="button"
         className={cn("relative shrink-0 cursor-pointer", openPressMotion)}
@@ -117,7 +107,7 @@ function ManualDepCommand({
   );
 }
 
-/** Figma 117:3530 / 117:3531 / 117:3894 — Installation CLI | Manual */
+/** Paper 114-0 / 117-0 — Installation CLI | Manual */
 export function InstallGuide({
   registryItem,
   dependencies,
@@ -140,7 +130,6 @@ export function InstallGuide({
   slug: string;
 }) {
   const [mode, setMode] = React.useState<"cli" | "manual">("cli");
-  const reduce = useReducedMotion();
   const file = `${slug}.tsx`;
   const commands = {
     npm: cliInstallCommand("npm", registryItem),
@@ -151,8 +140,8 @@ export function InstallGuide({
   const manualCmd = manualInstallCommand(manager, dependencies);
 
   return (
-    <section className="flex flex-col gap-3.5">
-      <h2 className="text-lg leading-7 font-normal tracking-[-0.54px] text-white">
+    <section className="flex min-w-0 flex-col gap-3.5">
+      <h2 className="text-lg leading-7 font-normal tracking-[-0.03em] text-white">
         Installation
       </h2>
       <Tabs
@@ -160,23 +149,15 @@ export function InstallGuide({
         onValueChange={(next) => {
           if (next === "cli" || next === "manual") setMode(next);
         }}
-        className="flex flex-col gap-3"
+        className="flex min-w-0 flex-col gap-3"
       >
-        {/* Figma 114:3098 — minimal segmented control, no default accent chrome */}
+        {/* Paper 117-0 — static segmented control, no sliding indicator */}
         <TabsList
           className={cn(
-            "relative z-0 mb-0 h-auto w-fit overflow-hidden rounded-xl bg-[hsl(240_5%_9%)] p-0.5",
-            "text-[hsl(240_5%_69%)]",
+            "mb-0 h-auto w-fit gap-0 overflow-clip rounded-xl bg-[#161618] p-0.5",
+            "text-[#acacb4]",
           )}
         >
-          <TabsIndicator
-            className={cn(
-              "absolute top-0 bottom-auto left-0 -z-1 h-(--active-tab-height) w-(--active-tab-width)",
-              "translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
-              "rounded-[10px] bg-[hsl(240_7%_26%)] shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.11)]",
-              "inset-ring-0 dark:bg-[hsl(240_7%_26%)]",
-            )}
-          />
           {(
             [
               { value: "cli", label: "CLI" },
@@ -187,9 +168,9 @@ export function InstallGuide({
               key={option.value}
               value={option.value}
               className={cn(
-                "relative z-1 h-auto flex-none rounded-[10px] border-0 bg-transparent px-2.5 py-1.5 text-base font-normal tracking-[-0.48px] shadow-none",
-                "text-[hsl(240_5%_69%)] data-active:bg-transparent data-active:text-white data-active:shadow-none",
-                "dark:data-active:border-transparent dark:data-active:bg-transparent",
+                "relative z-1 h-auto flex-none rounded-[10px] border-0 bg-transparent px-2.5 py-1.5 text-base leading-5 font-normal tracking-[-0.03em] shadow-none",
+                "text-[#acacb4] data-active:bg-[#3f3f48] data-active:text-white data-active:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.11)]",
+                "dark:data-active:border-transparent dark:data-active:bg-[#3f3f48]",
                 "after:hidden",
                 openPressMotion,
               )}
@@ -199,67 +180,53 @@ export function InstallGuide({
           ))}
         </TabsList>
 
-        <div className="relative min-h-0">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={mode}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
-              animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
-              transition={
-                reduce
-                  ? { duration: 0 }
-                  : { duration: 0.2, ease: [0.23, 1, 0.32, 1] }
-              }
-            >
-              {mode === "cli" ? (
-                <CodeBlockCommand
-                  {...commands}
-                  value={manager}
-                  onValueChange={onManagerChange}
+        <div className="min-w-0">
+          {mode === "cli" ? (
+            <CodeBlockCommand
+              {...commands}
+              value={manager}
+              onValueChange={onManagerChange}
+              componentSlug={slug}
+            />
+          ) : (
+            <DocsSteps>
+              <div className="flex min-w-0 flex-col gap-3">
+                <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
+                  Install dependencies
+                </h3>
+                {manualCmd ? (
+                  <ManualDepCommand
+                    command={manualCmd}
+                    componentSlug={slug}
+                  />
+                ) : (
+                  <p className="text-sm text-[hsl(240_5%_69%)]">
+                    No extra packages configured for this component.
+                  </p>
+                )}
+              </div>
+              <div className="flex min-w-0 flex-col gap-3">
+                <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
+                  Copy the code
+                </h3>
+                <DocsCodeBlock
+                  html={codeHtml || ""}
+                  code={code || ""}
+                  title={file}
+                  compact
                   componentSlug={slug}
                 />
-              ) : (
-                <DocsSteps>
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
-                      Install dependencies
-                    </h3>
-                    {manualCmd ? (
-                      <ManualDepCommand
-                        command={manualCmd}
-                        componentSlug={slug}
-                      />
-                    ) : (
-                      <p className="text-sm text-[hsl(240_5%_69%)]">
-                        No extra packages configured for this component.
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
-                      Copy the code
-                    </h3>
-                    <DocsCodeBlock
-                      html={codeHtml || ""}
-                      code={code || ""}
-                      title={file}
-                      compact
-                      componentSlug={slug}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
-                      Update imports
-                    </h3>
-                    <p className="text-base leading-[1.3] tracking-[-0.16px] text-[hsl(240_5%_69%)]">
-                      Update the imports to match your project structure.
-                    </p>
-                  </div>
-                </DocsSteps>
-              )}
-            </motion.div>
-          </AnimatePresence>
+              </div>
+              <div className="flex flex-col gap-3">
+                <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
+                  Update imports
+                </h3>
+                <p className="text-base leading-[1.3] tracking-[-0.16px] text-[hsl(240_5%_69%)]">
+                  Update the imports to match your project structure.
+                </p>
+              </div>
+            </DocsSteps>
+          )}
         </div>
       </Tabs>
     </section>

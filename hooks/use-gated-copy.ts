@@ -26,17 +26,15 @@ export function useGatedCopy(options?: {
 
       await navigator.clipboard.writeText(text);
 
+      // Fire-and-forget: awaiting insert delayed confetti / copy feedback.
       if (isSupabaseConfigured() && user && slug) {
-        try {
-          const supabase = createClient();
-          await supabase.from("copy_events").insert({
+        void createClient()
+          .from("copy_events")
+          .insert({
             user_id: user.id,
             component_slug: slug,
             source,
           });
-        } catch {
-          // Copy already succeeded — analytics must not block UX.
-        }
       }
 
       return true;

@@ -32,33 +32,36 @@ export type ConfettiRef = Api | null;
 
 const ConfettiContext = createContext({} as Api);
 
+const DEFAULT_GLOBAL: ConfettiGlobalOptions = { resize: true, useWorker: true };
+
 const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
   const {
     options,
-    globalOptions = { resize: true, useWorker: true },
+    globalOptions = DEFAULT_GLOBAL,
     manualstart = false,
     children,
     ...rest
   } = props;
   const instanceRef = useRef<ConfettiInstance | null>(null);
+  // Keep create opts stable across renders — inline default {} remounted the
+  // canvas via callback-ref deps and reset() mid-burst (flaky confetti).
+  const globalOptionsRef = useRef(globalOptions);
+  globalOptionsRef.current = globalOptions;
 
-  const canvasRef = useCallback(
-    (node: HTMLCanvasElement | null) => {
-      if (node !== null) {
-        if (instanceRef.current) return;
-        instanceRef.current = confetti.create(node, {
-          ...globalOptions,
-          resize: true,
-        });
-      } else {
-        if (instanceRef.current) {
-          instanceRef.current.reset();
-          instanceRef.current = null;
-        }
+  const canvasRef = useCallback((node: HTMLCanvasElement | null) => {
+    if (node !== null) {
+      if (instanceRef.current) return;
+      instanceRef.current = confetti.create(node, {
+        ...globalOptionsRef.current,
+        resize: true,
+      });
+    } else {
+      if (instanceRef.current) {
+        instanceRef.current.reset();
+        instanceRef.current = null;
       }
-    },
-    [globalOptions],
-  );
+    }
+  }, []);
 
   const fire = useCallback(
     (opts: ConfettiOptions = {}) => {

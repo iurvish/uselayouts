@@ -60,8 +60,9 @@ export function OpenCliBar({
     try {
       const ok = await gatedCopy(command);
       if (!ok) return;
-      setCopied(true);
+      // Fire before setState so burst isn't racing a re-render.
       fireConfetti();
+      setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
     } catch {
       setCopied(false);

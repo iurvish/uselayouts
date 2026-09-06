@@ -51,16 +51,33 @@ const categories = [
   },
 ];
 
-const tools = [
-  { name: "React", src: "/landing/tool-react.png" },
-  { name: "Next.js", src: "/landing/tool-next.png" },
-  { name: "TypeScript", src: "/landing/tool-typescript.png" },
-  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png" },
-  { name: "Motion", src: null, mark: "M" },
-  { name: "Shadcn", src: null, mark: "◆" },
-  { name: "Framer", src: "/landing/tool-framer.png" },
-  { name: "Webflow", src: "/landing/tool-webflow.png" },
+const toolPills = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "Motion",
+  "Shadcn",
+  "Framer",
+  "Webflow",
 ] as const;
+
+/** Angles from Figma orbit (0° = top, clockwise). */
+const orbitTools = [
+  { name: "Webflow", src: "/landing/tool-webflow.png", angle: 0 },
+  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 30 },
+  { name: "Next.js", src: "/landing/tool-next.png", angle: 60 },
+  { name: "React", src: "/landing/tool-react.png", angle: 90 },
+  { name: "Framer", src: "/landing/tool-framer.png", angle: -30 },
+  { name: "Motion", src: "/landing/tool-motion.png", angle: -60 },
+  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -90 },
+] as const;
+
+const orbitCardShadow =
+  "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
+
+const pillShadow =
+  "0 0 1px rgba(97,97,97,0.1), 0 1px 1px rgba(97,97,97,0.09), 0 3px 2px rgba(97,97,97,0.05), 0 4px 2px rgba(97,97,97,0.01), 0 7px 2px rgba(97,97,97,0)";
 
 const avatars = [
   "/landing/avatar-1.png",
@@ -434,53 +451,83 @@ function WhySection() {
 
 function ToolsSection() {
   return (
-    <section className="relative overflow-hidden bg-[#1B1C1D] px-4 py-24 sm:px-8 lg:px-[120px]">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-25"
-        style={{
-          backgroundImage: "url(/landing/tool-react.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-        aria-hidden
-      />
-
-      <div className="relative z-10 mx-auto flex max-w-[520px] flex-col items-center gap-4 text-center">
-        <h2 className="text-[36px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[48px]">
-          Fits right into the way you build.
-        </h2>
-        <p className="max-w-[310px] text-[16px] leading-relaxed text-[#BABABB]">
-          Uselayouts works with the tools you already know, so you can ship
-          faster.
-        </p>
-        <ExploreButton className="mt-4" />
-      </div>
-
-      <div className="relative z-10 mx-auto mt-16 grid max-w-[720px] grid-cols-2 gap-4 sm:grid-cols-4">
-        {tools.map((tool, i) => (
+    <section className="relative overflow-hidden bg-[#F5F3EE] px-4 py-16 sm:px-8 sm:py-20 lg:px-[120px] lg:py-[100px]">
+      <div className="relative mx-auto flex min-h-[480px] w-full max-w-[1000px] items-center justify-center sm:min-h-[556px]">
+        {/* Orbit of floating tool cards — centered on the copy */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
           <div
-            key={tool.name}
-            className="flex aspect-square flex-col items-center justify-center gap-3 rounded-[10px] bg-[#F9F8F6] p-4 shadow-[inset_0_0_0_1px_#fff,0_1px_3px_rgba(102,102,102,0.1),0_6px_6px_rgba(102,102,102,0.09)]"
+            className="relative aspect-square w-[min(140%,1000px)] overflow-hidden sm:w-[min(120%,1000px)] lg:w-full"
             style={{
-              transform: `rotate(${[-8, 6, -4, 10, 5, -7, 8, -5][i]}deg)`,
+              WebkitMaskImage:
+                "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)",
+              maskImage:
+                "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)",
             }}
           >
-            {"src" in tool && tool.src ? (
-              <Image
-                src={tool.src}
-                alt={tool.name}
-                width={72}
-                height={72}
-                className="size-[72px] object-contain"
-              />
-            ) : (
-              <div className="flex size-[72px] items-center justify-center rounded-xl bg-[#1B1C1D] text-2xl font-medium text-white">
-                {"mark" in tool ? tool.mark : "?"}
-              </div>
-            )}
-            <span className="text-[13px] text-[#071A31]">{tool.name}</span>
+            {orbitTools.map((tool) => {
+              const rad = (tool.angle * Math.PI) / 180;
+              const x = 50 + Math.sin(rad) * 44.4;
+              const y = 50 - Math.cos(rad) * 44.4;
+              return (
+                <div
+                  key={tool.name}
+                  className="absolute size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
+                  style={{
+                    left: `${x}%`,
+                    top: `${y}%`,
+                    transform: `translate(-50%, -50%) rotate(${tool.angle}deg)`,
+                    boxShadow: orbitCardShadow,
+                  }}
+                >
+                  <Image
+                    src={tool.src}
+                    alt=""
+                    width={112}
+                    height={112}
+                    className="size-full object-contain p-[12%] sm:p-[14%]"
+                  />
+                </div>
+              );
+            })}
           </div>
-        ))}
+        </div>
+
+        {/* Foreground copy + pills + CTA */}
+        <div className="relative z-10 flex w-full flex-col items-center gap-8">
+          <div className="flex w-full max-w-[378px] flex-col items-center gap-4 text-center">
+            <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
+              Fits right into the way you build.
+            </h2>
+            <p className="max-w-[310px] text-[16px] leading-[1.5] text-[#4B565E]">
+              Uselayouts works with the tools you already know, so you can ship
+              faster.
+            </p>
+          </div>
+
+          <div
+            className="relative h-[45px] w-[min(100vw-2rem,616px)] overflow-hidden"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)",
+              maskImage:
+                "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)",
+            }}
+          >
+            <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
+              {toolPills.map((name) => (
+                <span
+                  key={name}
+                  className="inline-flex h-[29px] items-center justify-center rounded-[6px] bg-white px-3 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
+                  style={{ boxShadow: pillShadow }}
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <ExploreButton />
+        </div>
       </div>
     </section>
   );
