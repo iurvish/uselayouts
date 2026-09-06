@@ -435,8 +435,8 @@ function OpenExperienceShell({
           </div>
         ) : null}
 
-        {/* z-30 beats preview chrome (z-20); stays below portaled drawers (z-50) */}
-        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-30 flex items-start justify-between gap-4 *:pointer-events-auto">
+        {/* Above preview layers that escape stacking (e.g. magnified-bento lens z-40); portaled drawers still win at body */}
+        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
           <div className={cn(showToggle && "w-10")} />
           {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
           <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />

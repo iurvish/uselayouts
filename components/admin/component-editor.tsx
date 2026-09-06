@@ -535,7 +535,7 @@ export function ComponentEditor({
           </div>
         </div>
 
-        <div className="min-w-0 space-y-4 xl:sticky xl:top-20 xl:self-start">
+        <div className="min-w-0 space-y-4 xl:sticky xl:top-20 xl:max-h-[calc(100vh-5.5rem)] xl:self-start xl:overflow-y-auto xl:overscroll-contain xl:pr-1">
           <ComponentLivePreview code={form.code} />
 
           <Card size="sm" className="overflow-hidden">

@@ -78,7 +78,7 @@ export function CodeBlockCommand({
               key={option}
               value={option}
               className={cn(
-                "h-auto flex-none gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm leading-6 font-normal tracking-[-0.03em] text-[#b8b8b8] shadow-none",
+                "h-auto flex-none cursor-pointer gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm leading-6 font-normal tracking-[-0.03em] text-[#b8b8b8] shadow-none",
                 "data-active:bg-[#ffffff24] data-active:text-white data-active:shadow-none",
                 "dark:data-active:border-transparent dark:data-active:bg-[#ffffff24]",
                 "after:hidden",

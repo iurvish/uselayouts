@@ -499,6 +499,15 @@ html.dark .shiki span {
   animation: hint-drag-travel 1.15s var(--ease-in-out) infinite;
 }
 
+@keyframes landing-why-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hint-ripple {
     animation: none;

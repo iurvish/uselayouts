@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Marquee } from "@/components/ui/marquee";
 
 const navLinks = [
   { label: "Component", href: "/browse" },
@@ -137,20 +138,32 @@ const testimonials = [
 
 const bentoCards = Array.from({ length: 12 }, (_, i) => i);
 
+const WHY_INTERVAL_MS = 6000;
+
 const whyFeatures = [
   {
     title: "Copy. Customize. Ship.",
     description:
       "Start with production-ready components and make them your own. No locked-down abstractions. No fighting the library.",
+    image: "/landing/why-media.png",
   },
   {
     title: "Motion that means something.",
+    description:
+      "Every animation is purposeful — feedback, focus, and flow — not decoration for its own sake.",
+    image: "/landing/card-interactions.png",
   },
   {
     title: "Built to be changed.",
+    description:
+      "Clean, editable source you own. Swap tokens, restyle freely, and keep shipping without fighting abstractions.",
+    image: "/landing/card-layouts.png",
   },
   {
     title: "Skip the blank canvas.",
+    description:
+      "Start from patterns that already work. Less scaffolding, more product — from first commit to polished UI.",
+    image: "/landing/card-navigation.png",
   },
 ] as const;
 
@@ -411,6 +424,30 @@ function FeaturesSection() {
 
 function WhySection() {
   const [active, setActive] = useState(0);
+  const [cycle, setCycle] = useState(0);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const onChange = () => setReduceMotion(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % whyFeatures.length);
+      setCycle((c) => c + 1);
+    }, WHY_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [active, cycle, reduceMotion]);
+
+  const select = (i: number) => {
+    setActive(i);
+    setCycle((c) => c + 1);
+  };
 
   return (
     <section className="relative overflow-hidden bg-[#1B1C1D] px-4 py-20 sm:px-8 lg:px-[120px] lg:py-[120px]">
@@ -434,8 +471,8 @@ function WhySection() {
                 <button
                   key={feature.title}
                   type="button"
-                  className="flex w-full flex-col gap-8 text-left transition-colors duration-150"
-                  onClick={() => setActive(i)}
+                  className="flex w-full cursor-pointer flex-col gap-8 text-left transition-colors duration-150"
+                  onClick={() => select(i)}
                 >
                   <div className="flex flex-col gap-4">
                     <span
@@ -446,21 +483,30 @@ function WhySection() {
                     >
                       {feature.title}
                     </span>
-                    {isActive && "description" in feature && feature.description ? (
+                    {isActive ? (
                       <p className="max-w-[459px] text-[16px] leading-[1.5] text-white/80">
                         {feature.description}
                       </p>
                     ) : null}
                   </div>
                   <span
-                    className="h-0.5 w-full"
-                    style={
-                      isActive
-                        ? { backgroundImage: whyActiveLine }
-                        : { backgroundColor: "#3C3C3C" }
-                    }
+                    className="relative h-0.5 w-full overflow-hidden bg-[#3C3C3C]"
                     aria-hidden
-                  />
+                  >
+                    {isActive ? (
+                      <span
+                        key={cycle}
+                        className="absolute inset-y-0 left-0 h-full"
+                        style={{
+                          backgroundImage: whyActiveLine,
+                          width: reduceMotion ? "100%" : undefined,
+                          animation: reduceMotion
+                            ? undefined
+                            : `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards`,
+                        }}
+                      />
+                    ) : null}
+                  </span>
                 </button>
               );
             })}
@@ -468,7 +514,8 @@ function WhySection() {
 
           <div className="relative h-[280px] w-full overflow-hidden rounded-2xl bg-[#0A1739] sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
             <Image
-              src="/landing/why-media.png"
+              key={whyFeatures[active].image}
+              src={whyFeatures[active].image}
               alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 588px"
@@ -514,7 +561,7 @@ function ToolsOrbit() {
           >
             <div className="-translate-x-1/2 -translate-y-1/2">
               <div
-                className="size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
+                className="size-[96px] overflow-hidden rounded-[10px] bg-[#F9F8F6] lg:size-[112px]"
                 style={{
                   boxShadow: orbitCardShadow,
                   transform: `rotate(${-offsetDeg}deg)`,
@@ -544,17 +591,20 @@ function ToolsSection() {
       style={landingDotPattern}
     >
       {/* Figma 1:732 — orbit inset by ~half-card so rim logos aren't clipped;
-          frame < square height; bottom fades via mask. */}
+          frame < square height; bottom fades via mask.
+          Mobile: oversized orbit clipped in this frame so rim cards clear copy. */}
       <div className="relative mx-auto flex min-h-[520px] w-full max-w-[1000px] items-center justify-center overflow-hidden pt-9 sm:min-h-[640px] sm:pt-12 lg:min-h-[783px] lg:pt-14">
         <div
-          className="pointer-events-none absolute inset-x-0 top-9 flex justify-center px-9 sm:top-12 sm:px-12 lg:top-14 lg:px-14"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
           aria-hidden
         >
-          <div
-            className="relative aspect-square w-full"
-            style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
-          >
-            <ToolsOrbit />
+          <div className="absolute inset-x-0 top-9 flex justify-center sm:top-12 sm:px-12 lg:top-14 lg:px-14 max-sm:top-6">
+            <div
+              className="relative aspect-square w-full max-sm:w-[165%] sm:w-full"
+              style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
+            >
+              <ToolsOrbit />
+            </div>
           </div>
         </div>
 
@@ -570,20 +620,22 @@ function ToolsSection() {
             </p>
           </div>
 
-          <div
-            className="relative h-[45px] w-full max-w-[616px] overflow-hidden"
-            style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
-          >
-            <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
-              {toolPills.map((name) => (
-                <span
-                  key={name}
-                  className="inline-flex h-[29px] shrink-0 items-center justify-center rounded-[6px] bg-white px-3 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
-                  style={{ boxShadow: pillShadow }}
-                >
-                  {name}
-                </span>
-              ))}
+          <div className="relative w-full max-w-[616px] overflow-hidden px-1 sm:px-0">
+            <div
+              className="relative h-[45px] w-full overflow-hidden"
+              style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
+            >
+              <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
+                {toolPills.map((name) => (
+                  <span
+                    key={name}
+                    className="inline-flex h-[29px] shrink-0 items-center justify-center rounded-[6px] bg-white px-3 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
+                    style={{ boxShadow: pillShadow }}
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -660,15 +712,7 @@ function TestimonialCard({
 }
 
 function TestimonialsSection() {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-
-  const scrollByCard = (dir: -1 | 1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const card = el.querySelector("article");
-    const step = (card?.getBoundingClientRect().width ?? 550) + 24;
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
+  const [reverse, setReverse] = useState(false);
 
   return (
     <section
@@ -684,7 +728,7 @@ function TestimonialsSection() {
             type="button"
             aria-label="Previous testimonial"
             className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() => scrollByCard(-1)}
+            onClick={() => setReverse(true)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -700,7 +744,7 @@ function TestimonialsSection() {
             type="button"
             aria-label="Next testimonial"
             className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() => scrollByCard(1)}
+            onClick={() => setReverse(false)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -717,14 +761,16 @@ function TestimonialsSection() {
 
       {/* Intentional carousel peek: clip to content column, show next card edge */}
       <div className="mx-auto mt-12 max-w-[1200px] overflow-hidden">
-        <div
-          ref={scrollerRef}
-          className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        <Marquee
+          reverse={reverse}
+          pauseOnHover
+          repeat={2}
+          className="p-0 [--duration:40s] [--gap:1.5rem] motion-reduce:[&>div]:animate-none"
         >
           {testimonials.map((t, i) => (
             <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
           ))}
-        </div>
+        </Marquee>
       </div>
     </section>
   );
