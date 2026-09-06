@@ -1,6 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithoutRef } from "react";
 
+import { DocsCodeBlock } from "@/components/open/docs-code-block";
+import { highlightCode } from "@/lib/open/highlight";
+import { extractMdxPreLang, extractMdxPreText } from "@/lib/open/mdx-pre-text";
 import { cn } from "@/lib/utils";
 
 function Heading({
@@ -22,8 +25,46 @@ function Heading({
   );
 }
 
-/** Minimal MDX map — fumadocs for compile/load, custom UI only. */
-export function getOpenMdxComponents(components?: MDXComponents): MDXComponents {
+/** Fenced MDX → same Shiki + Copy Code surface as the main panel. */
+async function OpenMdxPre({
+  children,
+  title,
+  componentSlug,
+  "data-language": dataLanguage,
+}: ComponentPropsWithoutRef<"pre"> & {
+  title?: string;
+  componentSlug?: string;
+  "data-language"?: string;
+}) {
+  const code = extractMdxPreText(children).replace(/\n$/, "");
+  const lang =
+    (typeof dataLanguage === "string" && dataLanguage) ||
+    extractMdxPreLang(children) ||
+    "tsx";
+  const html = await highlightCode(code, lang, { showLineNumbers: false });
+
+  return (
+    <div className="mb-3 min-w-0">
+      <DocsCodeBlock
+        html={html}
+        code={code}
+        language={lang}
+        title={title}
+        withWrapper={false}
+        className="pb-14"
+        componentSlug={componentSlug}
+      />
+    </div>
+  );
+}
+
+/** Minimal MDX map — fumadocs for compile/load, open UI for fenced code. */
+export function getOpenMdxComponents(
+  components?: MDXComponents,
+  options?: { componentSlug?: string },
+): MDXComponents {
+  const componentSlug = options?.componentSlug;
+
   return {
     h1: (props) => <Heading as="h2" {...props} />,
     h2: (props) => <Heading as="h2" {...props} />,
@@ -77,15 +118,7 @@ export function getOpenMdxComponents(components?: MDXComponents): MDXComponents 
         {...props}
       />
     ),
-    pre: ({ className, ...props }) => (
-      <pre
-        className={cn(
-          "mb-3 overflow-x-auto rounded-xl border border-border bg-muted/60 p-3 text-[12.5px] leading-relaxed text-foreground",
-          className,
-        )}
-        {...props}
-      />
-    ),
+    pre: (props) => <OpenMdxPre componentSlug={componentSlug} {...props} />,
     ...components,
   };
 }

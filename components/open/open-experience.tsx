@@ -435,7 +435,7 @@ function OpenExperienceShell({
           </div>
         ) : null}
 
-        {/* Above preview layers that escape stacking (e.g. magnified-bento lens z-40); portaled drawers still win at body */}
+        {/* Above preview layers that escape stacking (e.g. magnified-bento lens z-40). Drawer portal is z-[110] so it covers this chrome. */}
         <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
           <div className={cn(showToggle && "w-10")} />
           {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
