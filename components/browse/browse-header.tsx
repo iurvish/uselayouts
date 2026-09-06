@@ -47,8 +47,8 @@ export function BrowseHeader({
       </Link>
 
       <div className="flex items-center gap-2.5">
-        {/* Figma 82:3700 — px 12 / py 8 / radius 12 / bg #030202 */}
-        <div className="flex w-[180px] items-center justify-between rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)] transition-[box-shadow] duration-150 ease-out focus-within:shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.28)] sm:w-[243px]">
+        {/* Figma 82:3700 — px 12 / py 8 / radius 12 / bg #030202; hidden on mobile */}
+        <div className="hidden w-[180px] items-center justify-between rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)] transition-[box-shadow] duration-150 ease-out focus-within:shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.28)] md:flex sm:w-[243px]">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <SearchIcon className="size-4 shrink-0 text-[#acacb4]" />
             <input

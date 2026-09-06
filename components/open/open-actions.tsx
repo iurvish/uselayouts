@@ -24,7 +24,7 @@ export function OpenActions({
         delay={0}
         type="button"
         className={cn(
-          "inline-flex items-center justify-center overflow-hidden rounded-xl border-0 p-2.5 text-white",
+          "inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-xl border-0 p-2.5 text-white",
           "bg-[hsl(230_77%_55%)]",
           "shadow-[inset_0_1px_0_0.2px_hsla(0,0%,100%,0.16),0_2px_2px_-1px_hsla(0,0%,0%,0.16),0_4px_4px_-2px_hsla(0,0%,0%,0.24),0_0_0_1px_hsla(0,0%,0%,0.12)]",
           "outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",

@@ -124,20 +124,6 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
           <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
             Crafted Components
           </span>
-          {/* Figma 106:12 — pad 4, radius 7, fill #202022, border #434346, icon 20 */}
-          <span
-            className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[7px] border border-solid border-[#434346] bg-[#202022] p-[4px]"
-            aria-hidden="true"
-          >
-            <img
-              src="/open/globe.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="size-5"
-              draggable={false}
-            />
-          </span>
         </div>
       </div>
     </header>
@@ -348,7 +334,7 @@ function OpenExperienceShell({
         <SheetContent
           side="left"
           showCloseButton={false}
-          className="dark flex h-full max-w-[min(262px,85vw)] flex-col gap-0 border-r border-[hsl(240_4%_29%)] bg-[hsl(240_6%_7%)] p-0 text-foreground sm:max-w-[262px]"
+          className="dark flex h-full max-w-[min(262px,85vw)] flex-col gap-0 border-r-0 bg-[hsl(240_6%_7%)] p-0 text-foreground sm:max-w-[262px]"
           style={{ width: `min(${SIDEBAR_WIDTH}px, 85vw)` }}
         >
           <PinnedSidebarHeader onClose={() => setMobileOpen(false)} />

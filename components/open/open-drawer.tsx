@@ -42,13 +42,19 @@ export function OpenDrawer({
           "border border-white/10 bg-[hsl(240_5%_12%)] text-foreground",
           "rounded-2xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04),0_8px_10px_-6px_rgba(0,0,0,0.1)]",
           "data-[swipe-direction=right]:rounded-2xl data-[swipe-direction=right]:border",
-          /* Figma floating inset — beat default inset-y-0; full-bleed on mobile */
-          "data-[swipe-axis=x]:top-[18px] data-[swipe-axis=x]:right-[18px] data-[swipe-axis=x]:bottom-[18px] data-[swipe-axis=x]:h-auto",
-          "max-md:data-[swipe-axis=x]:inset-y-0 max-md:data-[swipe-axis=x]:right-0 max-md:data-[swipe-axis=x]:left-auto max-md:rounded-none max-md:data-[swipe-direction=right]:rounded-none",
-          "[--drawer-inset:18px] [--drawer-content-width:min(460px,calc(100vw-36px))]",
-          "max-md:[--drawer-inset:0px] max-md:[--drawer-content-width:100%]",
-          wide && "[--drawer-content-width:min(680px,calc(100vw-36px))] max-md:[--drawer-content-width:100%]",
+          /* Floating inset drawer — hide edge-bleed stripe */
+          "after:hidden",
+          /* Mobile: full usable width (beats inline desktop width) */
+          "max-sm:![--drawer-content-width:calc(100vw-36px)]",
         )}
+        style={
+          {
+            /* Inline beats drawer.tsx data-[swipe-axis=x]:75% / sm:24rem */
+            "--drawer-inset": "18px",
+            /* Desktop: Figma 109:500 = 442px; non-wide stays 460 */
+            "--drawer-content-width": wide ? "442px" : "460px",
+          } as React.CSSProperties
+        }
       >
         <DrawerHeader className="flex shrink-0 flex-row items-center justify-between gap-3 border-b border-[hsl(240_4%_29%)] px-4 py-2.5 text-left md:gap-3 md:text-left">
           <DrawerTitle className="text-[20px] leading-[1.3] font-normal tracking-[-0.2px] text-white">
