@@ -62,16 +62,18 @@ const toolPills = [
   "Webflow",
 ] as const;
 
-/** Angles from design orbit (0° = top, clockwise). */
+/** Angles from Figma 1:732 (0° = top, clockwise). Radius 44.4% of 1000px orbit. */
 const orbitTools = [
   { name: "Webflow", src: "/landing/tool-webflow.png", angle: 0 },
-  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 32 },
-  { name: "Next.js", src: "/landing/tool-next.png", angle: 64 },
-  { name: "React", src: "/landing/tool-react.png", angle: 92 },
-  { name: "Framer", src: "/landing/tool-framer.png", angle: -32 },
-  { name: "Motion", src: "/landing/tool-motion.png", angle: -64 },
-  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -92 },
+  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 30 },
+  { name: "Next.js", src: "/landing/tool-next.png", angle: 60 },
+  { name: "React", src: "/landing/tool-react.png", angle: 90 },
+  { name: "Framer", src: "/landing/tool-framer.png", angle: -30 },
+  { name: "Motion", src: "/landing/tool-motion.png", angle: -60 },
+  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -90 },
 ] as const;
+
+const ORBIT_RADIUS_PCT = 44.4;
 
 const orbitCardShadow =
   "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
@@ -79,11 +81,11 @@ const orbitCardShadow =
 const pillShadow =
   "0px 0px 1px 0px rgba(97,97,97,0.1), 0px 1px 1px 0px rgba(97,97,97,0.09), 0px 3px 2px 0px rgba(97,97,97,0.05), 0px 4px 2px 0px rgba(97,97,97,0.01), 0px 7px 2px 0px rgba(97,97,97,0)";
 
-/** Figma 15:464 — measured ~18px grid, 1px #EDEAE3 on #F5F3EE */
+/** Cream page dots — larger than Figma 1px/18px so the grid reads on screen */
 const landingDotPattern = {
   backgroundColor: "#F5F3EE",
-  backgroundImage: "radial-gradient(circle, #EDEAE3 1px, transparent 1px)",
-  backgroundSize: "18px 18px",
+  backgroundImage: "radial-gradient(circle, #EDEAE3 2px, transparent 2px)",
+  backgroundSize: "22px 22px",
 } as const;
 
 const orbitMask =
@@ -478,50 +480,53 @@ function WhySection() {
 function ToolsSection() {
   return (
     <section
-      className="relative overflow-x-hidden px-4 pt-28 pb-24 sm:px-8 sm:pt-32 sm:pb-28 lg:px-[120px] lg:pt-40 lg:pb-32"
+      className="relative overflow-x-hidden px-4 py-16 sm:px-8 sm:py-20 lg:px-[120px] lg:py-[100px]"
       style={landingDotPattern}
     >
-      <div className="relative mx-auto flex min-h-[600px] w-full max-w-[920px] items-center justify-center sm:min-h-[680px]">
-        {/* Orbit sits high so the arc frames the headline */}
+      {/* Figma 1:732 — 1000×556 orbit mask, copy centered in arc */}
+      <div className="relative mx-auto flex min-h-[480px] w-full max-w-[1000px] items-center justify-center sm:min-h-[556px]">
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 flex h-[72%] items-center justify-center sm:h-[75%]"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center"
           aria-hidden
         >
           <div
-            className="relative aspect-square w-[min(100%,680px)] sm:w-[min(100%,780px)]"
+            className="relative aspect-square w-[min(140%,1000px)] overflow-hidden sm:w-[min(120%,1000px)] lg:w-full"
             style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
           >
             <div className="landing-orbit-spin absolute inset-0">
-              {orbitTools.map((tool) => (
-                <div
-                  key={tool.name}
-                  className="absolute left-1/2 top-1/2"
-                  style={{
-                    transform: `rotate(${tool.angle}deg) translateY(-40%)`,
-                  }}
-                >
-                  <div className="-translate-x-1/2 -translate-y-1/2">
-                    <div
-                      className="landing-orbit-counter size-[88px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[100px] lg:size-[112px]"
-                      style={{ boxShadow: orbitCardShadow }}
-                    >
-                      <Image
-                        src={tool.src}
-                        alt=""
-                        width={112}
-                        height={112}
-                        className="size-full object-contain p-[12%] sm:p-[14%]"
-                      />
+              {orbitTools.map((tool) => {
+                const rad = (tool.angle * Math.PI) / 180;
+                const x = 50 + Math.sin(rad) * ORBIT_RADIUS_PCT;
+                const y = 50 - Math.cos(rad) * ORBIT_RADIUS_PCT;
+                return (
+                  <div
+                    key={tool.name}
+                    className="absolute"
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                  >
+                    <div className="-translate-x-1/2 -translate-y-1/2">
+                      <div
+                        className="landing-orbit-counter size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
+                        style={{ boxShadow: orbitCardShadow }}
+                      >
+                        <Image
+                          src={tool.src}
+                          alt=""
+                          width={112}
+                          height={112}
+                          className="size-full object-contain p-[12%] sm:p-[14%]"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
 
-        {/* Foreground copy + pills + CTA — gap 32px groups, 16px title↔subtitle */}
-        <div className="relative z-10 flex w-full flex-col items-center gap-8 pt-20 sm:pt-24">
+        {/* gap 32px groups, 16px title↔subtitle — Figma 1:757 */}
+        <div className="relative z-10 flex w-full flex-col items-center gap-8">
           <div className="flex w-full max-w-[378px] flex-col items-center gap-4 text-center">
             <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
               Fits right into the way you build.
@@ -533,14 +538,14 @@ function ToolsSection() {
           </div>
 
           <div
-            className="relative left-1/2 w-[calc(100%+180px)] max-w-none -translate-x-1/2 overflow-hidden"
+            className="relative h-[45px] w-[min(100vw-2rem,616px)] overflow-hidden"
             style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
           >
-            <div className="flex items-center justify-center gap-2 whitespace-nowrap px-[90px]">
+            <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
               {toolPills.map((name) => (
                 <span
                   key={name}
-                  className="inline-flex shrink-0 items-center justify-center rounded-[6px] bg-white px-3 py-1 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
+                  className="inline-flex h-[29px] shrink-0 items-center justify-center rounded-[6px] bg-white px-3 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
                   style={{ boxShadow: pillShadow }}
                 >
                   {name}
@@ -549,7 +554,7 @@ function ToolsSection() {
             </div>
           </div>
 
-          <ExploreButton className="h-auto py-3" />
+          <ExploreButton />
         </div>
       </div>
     </section>
@@ -567,7 +572,7 @@ function TestimonialCard({
 }: (typeof testimonials)[number]) {
   return (
     <article
-      className="relative flex w-[min(100%,550px)] shrink-0 snap-start flex-col justify-between overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
+      className="relative flex min-h-[380px] w-[min(100%,550px)] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
       style={{ boxShadow: testimonialCardShadow }}
     >
       {/* Figma 23:585 — top-left specular shine */}
@@ -577,43 +582,44 @@ function TestimonialCard({
         aria-hidden
         className="pointer-events-none absolute left-[-33.85px] top-[-26.86px] h-[222.709px] w-[245.282px] max-w-none"
       />
-      <div className="relative size-16 shrink-0 overflow-hidden" aria-hidden>
-        <p
-          className="absolute left-[-28px] top-[calc(50%-84px)] select-none whitespace-nowrap font-[family-name:var(--font-geist-mono)] text-[200px] leading-none text-transparent"
-          style={{
-            backgroundImage:
-              "linear-gradient(141.5deg, #313335 25.74%, #252628 56.05%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-          }}
-        >
-          “
-        </p>
+      <div
+        className="pointer-events-none absolute left-6 top-6 select-none font-[family-name:var(--font-geist-mono)] text-[120px] leading-none text-transparent"
+        style={{
+          backgroundImage:
+            "linear-gradient(141.5deg, #313335 25.74%, #252628 56.05%)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+        }}
+        aria-hidden
+      >
+        “
       </div>
-      <div className="relative flex w-full flex-col gap-7">
+      <div className="relative mt-28 flex flex-1 flex-col justify-between gap-7">
         <p className="max-w-[404px] text-[16px] leading-[1.5] text-white">
           {quote}
         </p>
-        <div
-          className="h-px w-full opacity-20"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(to right, #fff 0 3px, transparent 3px 6px)",
-          }}
-          aria-hidden
-        />
-        <div className="flex items-center gap-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <p className="text-[16px] text-white">{name}</p>
-            <p className="text-[14px] text-[#BABABB]">{role}</p>
-          </div>
-          <Image
-            src={avatar}
-            alt=""
-            width={40}
-            height={40}
-            className="size-10 shrink-0 rounded-full object-cover"
+        <div className="flex flex-col gap-7">
+          <div
+            className="h-px w-full opacity-20"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to right, #fff 0 3px, transparent 3px 6px)",
+            }}
+            aria-hidden
           />
+          <div className="flex items-center gap-4">
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <p className="text-[16px] text-white">{name}</p>
+              <p className="text-[14px] text-[#BABABB]">{role}</p>
+            </div>
+            <Image
+              src={avatar}
+              alt=""
+              width={40}
+              height={40}
+              className="size-10 shrink-0 rounded-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </article>
