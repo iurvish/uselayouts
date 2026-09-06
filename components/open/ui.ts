@@ -55,3 +55,11 @@ export const scrollbarMinimal = cn(
 export const scrollbarNone = cn(
   "[scrollbar-width:none] [&::-webkit-scrollbar]:[display:none]",
 );
+
+/** Compact Shiki shell — same theme/token CSS as DocsCodeBlock body. */
+export const shikiCommandSurface = cn(
+  "min-w-0 overflow-x-auto",
+  "[&_pre]:m-0 [&_pre]:min-w-0 [&_pre]:overflow-x-auto [&_pre]:!bg-transparent [&_pre]:!py-0 [&_pre]:!px-0",
+  "[&_code]:bg-transparent",
+  "[&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
+);

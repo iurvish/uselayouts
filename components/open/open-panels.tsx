@@ -14,6 +14,8 @@ export function OpenCodePanel({
   usage,
   codeHtml,
   code,
+  cliHtml,
+  manualHtml,
   registryItem,
   dependencies,
   manager,
@@ -26,6 +28,8 @@ export function OpenCodePanel({
   usage: string;
   codeHtml: string;
   code: string;
+  cliHtml?: Partial<Record<PackageManager, string>>;
+  manualHtml?: Partial<Record<PackageManager, string>>;
   registryItem: string;
   dependencies: string[];
   manager: PackageManager;
@@ -52,6 +56,8 @@ export function OpenCodePanel({
         usage={usage}
         codeHtml={codeHtml}
         code={code}
+        cliHtml={cliHtml}
+        manualHtml={manualHtml}
         slug={slug}
       />
 

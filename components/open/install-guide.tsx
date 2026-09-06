@@ -6,7 +6,7 @@ import * as React from "react";
 
 import { CodeBlockCommand } from "@/components/open/code-block-command";
 import { DocsCodeBlock } from "@/components/open/docs-code-block";
-import { openPressMotion } from "@/components/open/ui";
+import { openPressMotion, shikiCommandSurface } from "@/components/open/ui";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import {
@@ -52,9 +52,11 @@ export function DocsSteps({ children }: { children: React.ReactNode }) {
 
 function ManualDepCommand({
   command,
+  html,
   componentSlug,
 }: {
   command: string;
+  html: string;
   componentSlug?: string;
 }) {
   const [copied, setCopied] = React.useState(false);
@@ -74,33 +76,33 @@ function ManualDepCommand({
     }
   }
 
-  const firstSpace = command.indexOf(" ");
-  const pm = firstSpace === -1 ? command : command.slice(0, firstSpace);
-  const rest = firstSpace === -1 ? "" : command.slice(firstSpace + 1);
-
   return (
-    <div className="relative flex min-w-0 items-center gap-2.5 rounded-xl border border-[#47474d] bg-[#26262b] p-2.5">
-      <p className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-base tracking-[-0.48px] text-[#fafafa]">
-        <span className="text-[#a38adf]">{pm}</span>
-        {rest ? (
-          <>
-            {" "}
-            <span className="text-[#9dcbff]">{rest}</span>
-          </>
-        ) : null}
-      </p>
+    <div className="relative flex min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-[#47474d] bg-[hsl(240_6%_20%)] p-2.5 shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]">
+      <div className="relative min-w-0 flex-1 overflow-hidden">
+        <div
+          className={shikiCommandSurface}
+          dangerouslySetInnerHTML={{
+            __html: html || `<pre><code>${command}</code></pre>`,
+          }}
+        />
+        {/* Same fade idea as DocsCodeBlock — right edge under the copy control */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-[hsl(240_6%_20%)] to-transparent" />
+      </div>
       <button
         type="button"
-        className={cn("relative shrink-0 cursor-pointer", openPressMotion)}
+        className={cn(
+          "relative z-[1] shrink-0 cursor-pointer rounded-md p-1",
+          openPressMotion,
+        )}
         onClick={copy}
         aria-label={copied ? "Copied" : "Copy"}
       >
         <img
-          src={copied ? "/open/check.svg" : "/open/copy-white-18.svg"}
+          src={copied ? "/open/check.svg" : "/open/copy.svg"}
           alt=""
-          width={18}
-          height={18}
-          className="size-[18px]"
+          width={14}
+          height={14}
+          className="size-3.5"
         />
       </button>
     </div>
@@ -117,6 +119,8 @@ export function InstallGuide({
   usage: _usage,
   codeHtml,
   code,
+  cliHtml,
+  manualHtml,
   slug,
 }: {
   registryItem: string;
@@ -127,6 +131,8 @@ export function InstallGuide({
   usage: string;
   codeHtml: string;
   code: string;
+  cliHtml?: Partial<Record<PackageManager, string>>;
+  manualHtml?: Partial<Record<PackageManager, string>>;
   slug: string;
 }) {
   const [mode, setMode] = React.useState<"cli" | "manual">("cli");
@@ -185,6 +191,7 @@ export function InstallGuide({
           {mode === "cli" ? (
             <CodeBlockCommand
               {...commands}
+              html={cliHtml ?? {}}
               value={manager}
               onValueChange={onManagerChange}
               componentSlug={slug}
@@ -198,6 +205,7 @@ export function InstallGuide({
                 {manualCmd ? (
                   <ManualDepCommand
                     command={manualCmd}
+                    html={manualHtml?.[manager] || ""}
                     componentSlug={slug}
                   />
                 ) : (

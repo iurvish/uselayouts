@@ -508,7 +508,24 @@ html.dark .shiki span {
   }
 }
 
+@keyframes landing-why-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.landing-why-fade {
+  animation: landing-why-fade 220ms var(--ease-out) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .landing-why-fade {
+    animation: none !important;
+  }
+
   .landing-why-progress {
     animation: none !important;
     width: 100% !important;

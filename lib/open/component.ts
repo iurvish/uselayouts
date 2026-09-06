@@ -4,7 +4,13 @@ import { browseItems } from "@/lib/browse/items";
 import { highlightCode } from "@/lib/open/highlight";
 import { isNewComponent } from "@/lib/open/new-components";
 import { extractUsageSnippet } from "@/lib/open/mdx-extract";
-import { registryItem } from "@/lib/open/package-manager";
+import {
+  cliInstallCommand,
+  manualInstallCommand,
+  PACKAGE_MANAGERS,
+  registryItem,
+  type PackageManager,
+} from "@/lib/open/package-manager";
 import type { PreviewBackgrounds } from "@/lib/open/preview-background";
 import { source } from "@/lib/source";
 
@@ -25,8 +31,33 @@ export type OpenComponentData = {
   usageHtml: string;
   code: string;
   codeHtml: string;
+  /** Shiki HTML for CLI install commands (same highlighter as codeHtml). */
+  cliHtml: Record<PackageManager, string>;
+  /** Shiki HTML for manual dep install commands. */
+  manualHtml: Record<PackageManager, string>;
   previewBackground?: string | PreviewBackgrounds;
 };
+
+async function highlightShellCommands(
+  build: (manager: PackageManager) => string,
+): Promise<Record<PackageManager, string>> {
+  // Always materialize every PackageManager key — callers index by manager.
+  const out = {
+    npm: "",
+    yarn: "",
+    pnpm: "",
+    bun: "",
+  } satisfies Record<PackageManager, string>;
+  await Promise.all(
+    PACKAGE_MANAGERS.map(async (manager) => {
+      const command = build(manager);
+      out[manager] = command
+        ? await highlightCode(command, "bash", { showLineNumbers: false })
+        : "";
+    }),
+  );
+  return out;
+}
 
 function defaultUsage(slug: string) {
   const component = toPascal(slug);
@@ -78,9 +109,12 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
   const code = record?.code ?? "";
   const usage = extractUsageSnippet(record?.mdx ?? "", defaultUsage(slug));
 
-  const [usageHtml, codeHtml] = await Promise.all([
+  const item = registryItem(slug);
+  const [usageHtml, codeHtml, cliHtml, manualHtml] = await Promise.all([
     highlightCode(usage, "tsx", { showLineNumbers: false }),
     code ? highlightCode(code, "tsx", { showLineNumbers: false }) : Promise.resolve(""),
+    highlightShellCommands((manager) => cliInstallCommand(manager, item)),
+    highlightShellCommands((manager) => manualInstallCommand(manager, dependencies)),
   ]);
 
   return {
@@ -88,11 +122,13 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     title,
     description,
     dependencies,
-    registryItem: registryItem(slug),
+    registryItem: item,
     usage,
     usageHtml,
     code,
     codeHtml,
+    cliHtml,
+    manualHtml,
     previewBackground: record?.controls?.previewBackground,
   };
 }

@@ -476,7 +476,7 @@ function WhySection() {
                       {feature.title}
                     </span>
                     {isActive ? (
-                      <p className="max-w-[459px] text-[16px] leading-[1.5] text-white/80">
+                      <p className="landing-why-fade max-w-[459px] text-[16px] leading-[1.5] text-white/80">
                         {feature.description}
                       </p>
                     ) : null}
@@ -491,7 +491,7 @@ function WhySection() {
                         className="landing-why-progress absolute inset-y-0 left-0 h-full"
                         style={{
                           backgroundImage: whyActiveLine,
-                          animation: `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards`,
+                          animation: `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards, landing-why-fade 220ms var(--ease-out) both`,
                         }}
                       />
                     ) : null}
@@ -508,7 +508,7 @@ function WhySection() {
               alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 588px"
-              className="object-cover"
+              className="landing-why-fade object-cover"
             />
           </div>
         </div>

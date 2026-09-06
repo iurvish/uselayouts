@@ -5,7 +5,7 @@
 import * as React from "react";
 
 import { PackageManagerMark } from "@/components/open/pm-marks";
-import { openPressMotion } from "@/components/open/ui";
+import { openPressMotion, shikiCommandSurface } from "@/components/open/ui";
 import {
   Tabs,
   TabsContent,
@@ -27,6 +27,7 @@ export function CodeBlockCommand({
   yarn,
   pnpm,
   bun,
+  html = {},
   value,
   onValueChange,
   componentSlug,
@@ -35,6 +36,8 @@ export function CodeBlockCommand({
   yarn: string;
   pnpm: string;
   bun: string;
+  /** Pre-highlighted shell HTML per manager; missing keys fall back to plain `commands`. */
+  html?: Partial<Record<PackageManager, string>>;
   value: PackageManager;
   onValueChange: (manager: PackageManager) => void;
   componentSlug?: string;
@@ -70,23 +73,25 @@ export function CodeBlockCommand({
       }}
       className="min-w-0 gap-0 overflow-hidden rounded-[10px] border border-[#47474d] bg-[#323239]"
     >
-      {/* Paper 11I-0 — pl 10 / pr 8 / py 8; PM pills use text-sm/6 for padding-y */}
+      {/* Paper 11I-0 — pl 10 / pr 8 / py 8; PM pills use highlighter command color */}
       <div className="flex min-w-0 items-center justify-between gap-2 border-b border-[#47474d] py-2 pr-2 pl-2.5">
-        <TabsList className="relative z-0 h-auto w-fit gap-1.5 rounded-none bg-transparent p-0 group-data-horizontal/tabs:h-auto text-[#b8b8b8]">
+        <TabsList className="relative z-0 h-auto w-fit gap-1.5 rounded-none bg-transparent p-0 group-data-horizontal/tabs:h-auto">
           {COMMAND_TABS.map((option) => (
             <TabsTrigger
               key={option}
               value={option}
               className={cn(
-                "h-auto flex-none cursor-pointer gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm leading-6 font-normal tracking-[-0.03em] text-[#b8b8b8] shadow-none",
-                "data-active:bg-[#ffffff24] data-active:text-white data-active:shadow-none",
+                "h-auto flex-none cursor-pointer gap-1 rounded-md border-0 bg-transparent px-1.5 py-px text-xs leading-5 font-normal tracking-[-0.03em] shadow-none",
+                /* Vesper dark shell-command token (same as highlightCode bash) */
+                "text-[#FFC799]/55",
+                "data-active:bg-[#ffffff24] data-active:text-[#FFC799] data-active:shadow-none",
                 "dark:data-active:border-transparent dark:data-active:bg-[#ffffff24]",
                 "after:hidden",
                 openPressMotion,
               )}
             >
               {option === active ? (
-                <PackageManagerMark manager={option} className="size-4" />
+                <PackageManagerMark manager={option} className="size-3.5" />
               ) : null}
               {option}
             </TabsTrigger>
@@ -104,21 +109,26 @@ export function CodeBlockCommand({
           <img
             src={copied ? "/open/check.svg" : "/open/copy.svg"}
             alt=""
-            width={16}
-            height={16}
-            className="size-4"
+            width={14}
+            height={14}
+            className="size-3.5"
           />
         </button>
       </div>
       {COMMAND_TABS.map((option) => (
         <TabsContent key={option} value={option} className="m-0 min-w-0">
-          {/* Paper 114-0 — pl 15 / pr 6 / py 10 */}
-          <pre className="flex min-w-0 items-center gap-[13px] overflow-x-auto py-2.5 pr-1.5 pl-[15px] font-mono text-sm tracking-[-0.42px]">
-            <span className="shrink-0 text-[#b8b8b8]">$</span>
-            <code className="min-w-0 whitespace-nowrap text-[#acacb4]">
-              {commands[option]}
-            </code>
-          </pre>
+          <div className="relative flex min-w-0 items-center gap-[13px] overflow-hidden py-2.5 pr-1.5 pl-[15px]">
+            <span className="shrink-0 font-mono text-[13px] leading-[19.5px] text-[#b8b8b8]">
+              $
+            </span>
+            <div
+              className={cn(shikiCommandSurface, "min-w-0 flex-1")}
+              dangerouslySetInnerHTML={{
+                __html: html[option] || `<pre><code>${commands[option]}</code></pre>`,
+              }}
+            />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-linear-to-l from-[#323239] to-transparent" />
+          </div>
         </TabsContent>
       ))}
     </Tabs>

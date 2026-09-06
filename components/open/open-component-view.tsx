@@ -64,6 +64,8 @@ export function OpenComponentView({
           usageHtml={data.usageHtml}
           code={data.code}
           codeHtml={data.codeHtml}
+          cliHtml={data.cliHtml}
+          manualHtml={data.manualHtml}
           registryItem={data.registryItem}
           dependencies={data.dependencies}
           manager={manager}
