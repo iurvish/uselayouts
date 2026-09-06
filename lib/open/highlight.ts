@@ -110,8 +110,8 @@ export async function highlightCode(
             : typeof rawClass === "string"
               ? rawClass
               : "shiki";
-          /* --padding-left:0 kills fumadocs .line gutter (see shiki.css); class alone loses specificity */
-          node.properties.class = `${existing} min-w-0 overflow-x-auto py-3.5 text-[.8125rem] outline-none !bg-transparent [--padding-left:0px]!`;
+          /* --padding-left:0 kills fumadocs .line gutter (see shiki.css); ! beats that rule's specificity */
+          node.properties.class = `${existing} min-w-0 overflow-x-auto text-[.8125rem] outline-none !bg-transparent ![--padding-left:0px]`;
         },
       },
       ...transformers,

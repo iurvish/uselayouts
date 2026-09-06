@@ -419,6 +419,17 @@
   background: #e2e8f0;
 }
 
+/*
+ * fumadocs-ui/css/lib/shiki.css sets --padding-left on .shiki and pads .line.
+ * Open surfaces stay flush here; call sites own insets (p-2 / py).
+ */
+.open-shiki-surface .shiki {
+  --padding-left: 0px;
+}
+.open-shiki-surface .shiki .line {
+  padding-left: 0;
+}
+
 /* Shiki dual-theme output (`defaultColor: false`) needs these CSS variables. */
 .dark .shiki,
 .dark .shiki span,

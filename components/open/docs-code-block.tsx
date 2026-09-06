@@ -54,10 +54,10 @@ export function DocsCodeBlock({
 
   const body = (
     <>
-      {/* Tight inset; no scrollbar (system accent looked like a blue stripe) */}
+      {/* Flush highlighter — insets live on the figure/chrome, not here */}
       <div
         className={cn(
-          "h-full min-w-0 overflow-auto pt-2 pr-2 pb-2 pl-0 outline-none",
+          "h-full min-w-0 overflow-auto outline-none",
           shikiCommandSurface,
           scrollbarNone,
           className,
@@ -119,7 +119,7 @@ export function DocsCodeBlock({
         <div className="relative min-h-0 min-w-0 flex-1 p-1">
           <figure
             data-rehype-pretty-code-figure=""
-            className="relative h-full min-w-0 overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
+            className="relative h-full min-w-0 overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] p-2 shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
           >
             {body}
             {floatingCopy}
@@ -140,7 +140,7 @@ export function DocsCodeBlock({
           <span className="truncate">{title}</span>
         </figcaption>
       ) : null}
-      {body}
+      <div className="p-2">{body}</div>
       {floatingCopy}
     </figure>
   );

@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
-import { Marquee } from "@/components/ui/marquee";
 
 const navLinks = [
   { label: "Component", href: "/browse" },
@@ -646,7 +645,7 @@ function TestimonialCard({
 }: (typeof testimonials)[number]) {
   return (
     <article
-      className="relative flex min-h-[380px] w-[min(100%,550px)] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
+      className="relative flex min-h-[380px] w-[min(calc(100vw-2rem),550px)] shrink-0 flex-col overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
       style={{ boxShadow: testimonialCardShadow }}
     >
       {/* Figma 23:585 — top-left specular shine */}
@@ -700,8 +699,137 @@ function TestimonialCard({
   );
 }
 
+const TESTIMONIAL_GAP_PX = 24;
+const TESTIMONIAL_LOOP_MS = 40_000;
+
 function TestimonialsSection() {
-  const [reverse, setReverse] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const reverseRef = useRef(false);
+  const ignoreScrollRef = useRef(false);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startScroll: number;
+  } | null>(null);
+  const [dragging, setDragging] = useState(false);
+
+  // Duplicate once for seamless wrap; scrollLeft resets at the midpoint.
+  const loop = [...testimonials, ...testimonials];
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let raf = 0;
+    let last = performance.now();
+
+    const halfWidth = () => scroller.scrollWidth / 2;
+
+    const wrap = () => {
+      const half = halfWidth();
+      if (half <= 0) return;
+      if (scroller.scrollLeft >= half) {
+        ignoreScrollRef.current = true;
+        scroller.scrollLeft -= half;
+        requestAnimationFrame(() => {
+          ignoreScrollRef.current = false;
+        });
+      } else if (scroller.scrollLeft <= 0) {
+        ignoreScrollRef.current = true;
+        scroller.scrollLeft += half;
+        requestAnimationFrame(() => {
+          ignoreScrollRef.current = false;
+        });
+      }
+    };
+
+    const tick = (now: number) => {
+      const dt = now - last;
+      last = now;
+      if (!pausedRef.current && !reduced.matches && !dragRef.current) {
+        const half = halfWidth();
+        if (half > 0) {
+          const delta = (half / TESTIMONIAL_LOOP_MS) * dt;
+          scroller.scrollLeft += reverseRef.current ? -delta : delta;
+          wrap();
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    const onScroll = () => {
+      if (!ignoreScrollRef.current) wrap();
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      scroller.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const pause = () => {
+    pausedRef.current = true;
+  };
+  const resume = () => {
+    if (!dragRef.current) pausedRef.current = false;
+  };
+
+  const stepPx = () => {
+    const scroller = scrollerRef.current;
+    const card = scroller?.querySelector("article");
+    return (card?.getBoundingClientRect().width ?? 550) + TESTIMONIAL_GAP_PX;
+  };
+
+  const nudge = (dir: 1 | -1) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    reverseRef.current = dir < 0;
+    pause();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scroller.scrollBy({
+      left: dir * stepPx(),
+      behavior: reduced ? "auto" : "smooth",
+    });
+    window.setTimeout(resume, reduced ? 0 : 420);
+  };
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "touch") return; // native touch scroll
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    dragRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startScroll: scroller.scrollLeft,
+    };
+    pause();
+    setDragging(true);
+    scroller.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    const scroller = scrollerRef.current;
+    if (!drag || !scroller || drag.pointerId !== e.pointerId) return;
+    scroller.scrollLeft = drag.startScroll - (e.clientX - drag.startX);
+  };
+
+  const endDrag = (e: PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    dragRef.current = null;
+    setDragging(false);
+    try {
+      scrollerRef.current?.releasePointerCapture(e.pointerId);
+    } catch {
+      /* already released */
+    }
+    if (!scrollerRef.current?.matches(":hover")) resume();
+  };
 
   return (
     <section
@@ -716,8 +844,8 @@ function TestimonialsSection() {
           <button
             type="button"
             aria-label="Previous testimonial"
-            className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() => setReverse(true)}
+            className="flex size-[45px] cursor-pointer items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
+            onClick={() => nudge(-1)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -732,8 +860,8 @@ function TestimonialsSection() {
           <button
             type="button"
             aria-label="Next testimonial"
-            className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() => setReverse(false)}
+            className="flex size-[45px] cursor-pointer items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
+            onClick={() => nudge(1)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -749,17 +877,27 @@ function TestimonialsSection() {
       </div>
 
       {/* Intentional carousel peek: clip to content column, show next card edge */}
-      <div className="mx-auto mt-12 max-w-[1200px] overflow-hidden">
-        <Marquee
-          reverse={reverse}
-          pauseOnHover
-          repeat={2}
-          className="p-0 [--duration:40s] [--gap:1.5rem] motion-reduce:[&>div]:animate-none"
-        >
-          {testimonials.map((t, i) => (
+      <div
+        ref={scrollerRef}
+        className={cn(
+          "mx-auto mt-12 max-w-[1200px] cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
+          dragging && "cursor-grabbing"
+        )}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={(e) => {
+          if (dragRef.current) endDrag(e);
+          else resume();
+        }}
+        onPointerEnter={pause}
+      >
+        <div className="flex w-max gap-6 pr-6">
+          {loop.map((t, i) => (
             <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
           ))}
-        </Marquee>
+        </div>
       </div>
     </section>
   );
