@@ -73,7 +73,7 @@ export function OpenDrawer({
             </span>
           </DrawerClose>
         </DrawerHeader>
-        <div className={cn("min-h-0 flex-1 overflow-auto px-4 py-3", scrollbarMinimal)}>
+        <div className={cn("min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-4 py-3", scrollbarMinimal)}>
           {children}
         </div>
       </DrawerContent>

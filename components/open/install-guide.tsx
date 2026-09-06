@@ -155,6 +155,7 @@ export function InstallGuide({
         <TabsList
           className={cn(
             "mb-0 h-auto w-fit gap-0 overflow-clip rounded-xl bg-[#161618] p-0.5",
+            "group-data-horizontal/tabs:h-auto",
             "text-[#acacb4]",
           )}
         >

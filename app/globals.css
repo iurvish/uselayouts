@@ -383,6 +383,39 @@ html.dark .shiki span {
   animation: hint-drag-travel 1.15s var(--ease-in-out) infinite;
 }
 
+/* Landing tools orbit: 2s spin + 2s pause (Ferris-wheel upright cards) */
+@keyframes landing-orbit-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes landing-orbit-counter {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-360deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.landing-orbit-spin {
+  animation: landing-orbit-spin 4s ease-in-out infinite;
+}
+
+.landing-orbit-counter {
+  animation: landing-orbit-counter 4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hint-ripple {
     animation: none;
@@ -397,6 +430,11 @@ html.dark .shiki span {
 
   .hint-scroll-nudge,
   .hint-drag-travel {
+    animation: none;
+  }
+
+  .landing-orbit-spin,
+  .landing-orbit-counter {
     animation: none;
   }
 }

@@ -35,7 +35,7 @@ export function OpenCodePanel({
   const file = `${slug}.tsx`;
 
   return (
-    <div className="flex flex-col gap-[22px] pb-4">
+    <div className="flex min-w-0 flex-col gap-[22px] pb-4">
       <DocsCodeBlock
         html={codeHtml || usageHtml}
         code={code || usage}

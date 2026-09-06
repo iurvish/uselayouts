@@ -19,7 +19,7 @@ import {
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { cn } from "@/lib/utils";
 
-/** Figma 116:3395 — bun-first package manager + $ command */
+/** Paper 114-0 / 11I-0 — bun-first package manager + $ command */
 const COMMAND_TABS = ["bun", "npm", "yarn", "pnpm"] as const;
 
 export function CodeBlockCommand({
@@ -68,19 +68,19 @@ export function CodeBlockCommand({
       onValueChange={(next) => {
         if (typeof next === "string" && isPackageManager(next)) onValueChange(next);
       }}
-      className="gap-0 overflow-hidden rounded-[10px] border border-[hsl(240_4%_29%)] bg-[hsl(240_5%_21%)]"
+      className="min-w-0 gap-0 overflow-hidden rounded-[10px] border border-[#47474d] bg-[#323239]"
     >
-      {/* Figma 116:3396 — pl 10 / pr 8 / py 8 */}
-      <div className="flex items-center justify-between gap-2 border-b border-[hsl(240_4%_29%)] py-2 pr-2 pl-2.5">
-        <TabsList className="relative z-0 h-auto w-fit gap-1.5 rounded-none bg-transparent p-0 text-[#b8b8b8]">
+      {/* Paper 11I-0 — pl 10 / pr 8 / py 8; PM pills use text-sm/6 for padding-y */}
+      <div className="flex min-w-0 items-center justify-between gap-2 border-b border-[#47474d] py-2 pr-2 pl-2.5">
+        <TabsList className="relative z-0 h-auto w-fit gap-1.5 rounded-none bg-transparent p-0 group-data-horizontal/tabs:h-auto text-[#b8b8b8]">
           {COMMAND_TABS.map((option) => (
             <TabsTrigger
               key={option}
               value={option}
               className={cn(
-                "h-auto flex-none gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm font-normal tracking-[-0.42px] text-[#b8b8b8] shadow-none",
-                "data-active:bg-white/14 data-active:text-white data-active:shadow-none",
-                "dark:data-active:border-transparent dark:data-active:bg-white/14",
+                "h-auto flex-none gap-1.5 rounded-md border-0 bg-transparent px-1.5 py-px text-sm leading-6 font-normal tracking-[-0.03em] text-[#b8b8b8] shadow-none",
+                "data-active:bg-[#ffffff24] data-active:text-white data-active:shadow-none",
+                "dark:data-active:border-transparent dark:data-active:bg-[#ffffff24]",
                 "after:hidden",
                 openPressMotion,
               )}
@@ -95,7 +95,7 @@ export function CodeBlockCommand({
         <button
           type="button"
           className={cn(
-            "inline-flex cursor-pointer items-center overflow-hidden rounded-md p-1.5 shadow-none",
+            "inline-flex shrink-0 cursor-pointer items-center overflow-hidden rounded-md p-1.5 shadow-none",
             openPressMotion,
           )}
           onClick={copy}
@@ -111,11 +111,13 @@ export function CodeBlockCommand({
         </button>
       </div>
       {COMMAND_TABS.map((option) => (
-        <TabsContent key={option} value={option} className="m-0">
-          {/* Figma 116:3421 — pl 15 / pr 6 / py 10 */}
-          <pre className="flex items-center gap-[13px] overflow-x-auto py-2.5 pr-1.5 pl-[15px] font-mono text-sm tracking-[-0.42px]">
+        <TabsContent key={option} value={option} className="m-0 min-w-0">
+          {/* Paper 114-0 — pl 15 / pr 6 / py 10 */}
+          <pre className="flex min-w-0 items-center gap-[13px] overflow-x-auto py-2.5 pr-1.5 pl-[15px] font-mono text-sm tracking-[-0.42px]">
             <span className="shrink-0 text-[#b8b8b8]">$</span>
-            <code className="text-center text-[hsl(240_5%_69%)]">{commands[option]}</code>
+            <code className="min-w-0 whitespace-nowrap text-[#acacb4]">
+              {commands[option]}
+            </code>
           </pre>
         </TabsContent>
       ))}

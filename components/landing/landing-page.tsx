@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -62,23 +62,35 @@ const toolPills = [
   "Webflow",
 ] as const;
 
-/** Angles from Figma orbit (0° = top, clockwise). */
+/** Angles from design orbit (0° = top, clockwise). */
 const orbitTools = [
   { name: "Webflow", src: "/landing/tool-webflow.png", angle: 0 },
-  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 30 },
-  { name: "Next.js", src: "/landing/tool-next.png", angle: 60 },
-  { name: "React", src: "/landing/tool-react.png", angle: 90 },
-  { name: "Framer", src: "/landing/tool-framer.png", angle: -30 },
-  { name: "Motion", src: "/landing/tool-motion.png", angle: -60 },
-  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -90 },
+  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 32 },
+  { name: "Next.js", src: "/landing/tool-next.png", angle: 64 },
+  { name: "React", src: "/landing/tool-react.png", angle: 92 },
+  { name: "Framer", src: "/landing/tool-framer.png", angle: -32 },
+  { name: "Motion", src: "/landing/tool-motion.png", angle: -64 },
+  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -92 },
 ] as const;
 
 const orbitCardShadow =
   "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
 
 const pillShadow =
-  "0 0 1px rgba(97,97,97,0.1), 0 1px 1px rgba(97,97,97,0.09), 0 3px 2px rgba(97,97,97,0.05), 0 4px 2px rgba(97,97,97,0.01), 0 7px 2px rgba(97,97,97,0)";
+  "0px 0px 1px 0px rgba(97,97,97,0.1), 0px 1px 1px 0px rgba(97,97,97,0.09), 0px 3px 2px 0px rgba(97,97,97,0.05), 0px 4px 2px 0px rgba(97,97,97,0.01), 0px 7px 2px 0px rgba(97,97,97,0)";
 
+/** Figma 15:464 — measured ~18px grid, 1px #EDEAE3 on #F5F3EE */
+const landingDotPattern = {
+  backgroundColor: "#F5F3EE",
+  backgroundImage: "radial-gradient(circle, #EDEAE3 1px, transparent 1px)",
+  backgroundSize: "18px 18px",
+} as const;
+
+const orbitMask =
+  "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)";
+
+const pillRowMask =
+  "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)";
 const avatars = [
   "/landing/avatar-1.png",
   "/landing/avatar-2.png",
@@ -100,6 +112,20 @@ const testimonials = [
     name: "Jack Carter",
     role: "VP of Engineering, Bloom & co",
     avatar: "/landing/avatar-1.png",
+  },
+  {
+    quote:
+      "The components look great out of the box, but the best part is how easy they are to make your own.",
+    name: "Jack Carter",
+    role: "VP of Engineering, Bloom & co",
+    avatar: "/landing/avatar-2.png",
+  },
+  {
+    quote:
+      "The components look great out of the box, but the best part is how easy they are to make your own.",
+    name: "Jack Carter",
+    role: "VP of Engineering, Bloom & co",
+    avatar: "/landing/avatar-3.png",
   },
 ];
 
@@ -451,49 +477,51 @@ function WhySection() {
 
 function ToolsSection() {
   return (
-    <section className="relative overflow-hidden bg-[#F5F3EE] px-4 py-16 sm:px-8 sm:py-20 lg:px-[120px] lg:py-[100px]">
-      <div className="relative mx-auto flex min-h-[480px] w-full max-w-[1000px] items-center justify-center sm:min-h-[556px]">
-        {/* Orbit of floating tool cards — centered on the copy */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
+    <section
+      className="relative overflow-x-hidden px-4 pt-28 pb-24 sm:px-8 sm:pt-32 sm:pb-28 lg:px-[120px] lg:pt-40 lg:pb-32"
+      style={landingDotPattern}
+    >
+      <div className="relative mx-auto flex min-h-[600px] w-full max-w-[920px] items-center justify-center sm:min-h-[680px]">
+        {/* Orbit sits high so the arc frames the headline */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 flex h-[72%] items-center justify-center sm:h-[75%]"
+          aria-hidden
+        >
           <div
-            className="relative aspect-square w-[min(140%,1000px)] overflow-hidden sm:w-[min(120%,1000px)] lg:w-full"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)",
-              maskImage:
-                "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)",
-            }}
+            className="relative aspect-square w-[min(100%,680px)] sm:w-[min(100%,780px)]"
+            style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
           >
-            {orbitTools.map((tool) => {
-              const rad = (tool.angle * Math.PI) / 180;
-              const x = 50 + Math.sin(rad) * 44.4;
-              const y = 50 - Math.cos(rad) * 44.4;
-              return (
+            <div className="landing-orbit-spin absolute inset-0">
+              {orbitTools.map((tool) => (
                 <div
                   key={tool.name}
-                  className="absolute size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
+                  className="absolute left-1/2 top-1/2"
                   style={{
-                    left: `${x}%`,
-                    top: `${y}%`,
-                    transform: `translate(-50%, -50%) rotate(${tool.angle}deg)`,
-                    boxShadow: orbitCardShadow,
+                    transform: `rotate(${tool.angle}deg) translateY(-40%)`,
                   }}
                 >
-                  <Image
-                    src={tool.src}
-                    alt=""
-                    width={112}
-                    height={112}
-                    className="size-full object-contain p-[12%] sm:p-[14%]"
-                  />
+                  <div className="-translate-x-1/2 -translate-y-1/2">
+                    <div
+                      className="landing-orbit-counter size-[88px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[100px] lg:size-[112px]"
+                      style={{ boxShadow: orbitCardShadow }}
+                    >
+                      <Image
+                        src={tool.src}
+                        alt=""
+                        width={112}
+                        height={112}
+                        className="size-full object-contain p-[12%] sm:p-[14%]"
+                      />
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Foreground copy + pills + CTA */}
-        <div className="relative z-10 flex w-full flex-col items-center gap-8">
+        {/* Foreground copy + pills + CTA — gap 32px groups, 16px title↔subtitle */}
+        <div className="relative z-10 flex w-full flex-col items-center gap-8 pt-20 sm:pt-24">
           <div className="flex w-full max-w-[378px] flex-col items-center gap-4 text-center">
             <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
               Fits right into the way you build.
@@ -505,19 +533,14 @@ function ToolsSection() {
           </div>
 
           <div
-            className="relative h-[45px] w-[min(100vw-2rem,616px)] overflow-hidden"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)",
-              maskImage:
-                "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)",
-            }}
+            className="relative left-1/2 w-[calc(100%+180px)] max-w-none -translate-x-1/2 overflow-hidden"
+            style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
           >
-            <div className="absolute left-1/2 top-2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap">
+            <div className="flex items-center justify-center gap-2 whitespace-nowrap px-[90px]">
               {toolPills.map((name) => (
                 <span
                   key={name}
-                  className="inline-flex h-[29px] items-center justify-center rounded-[6px] bg-white px-3 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
+                  className="inline-flex shrink-0 items-center justify-center rounded-[6px] bg-white px-3 py-1 font-[family-name:var(--font-geist-mono)] text-[16px] leading-none tracking-[-0.03em] text-[#3D464C]"
                   style={{ boxShadow: pillShadow }}
                 >
                   {name}
@@ -526,19 +549,93 @@ function ToolsSection() {
             </div>
           </div>
 
-          <ExploreButton />
+          <ExploreButton className="h-auto py-3" />
         </div>
       </div>
     </section>
   );
 }
 
+const testimonialCardShadow =
+  "0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.08)";
+
+function TestimonialCard({
+  quote,
+  name,
+  role,
+  avatar,
+}: (typeof testimonials)[number]) {
+  return (
+    <article
+      className="relative flex w-[min(100%,550px)] shrink-0 snap-start flex-col justify-between overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
+      style={{ boxShadow: testimonialCardShadow }}
+    >
+      {/* Figma 23:585 — top-left specular shine */}
+      <img
+        src="/landing/testimonial-shine.svg"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute left-[-33.85px] top-[-26.86px] h-[222.709px] w-[245.282px] max-w-none"
+      />
+      <div className="relative size-16 shrink-0 overflow-hidden" aria-hidden>
+        <p
+          className="absolute left-[-28px] top-[calc(50%-84px)] select-none whitespace-nowrap font-[family-name:var(--font-geist-mono)] text-[200px] leading-none text-transparent"
+          style={{
+            backgroundImage:
+              "linear-gradient(141.5deg, #313335 25.74%, #252628 56.05%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+          }}
+        >
+          “
+        </p>
+      </div>
+      <div className="relative flex w-full flex-col gap-7">
+        <p className="max-w-[404px] text-[16px] leading-[1.5] text-white">
+          {quote}
+        </p>
+        <div
+          className="h-px w-full opacity-20"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(to right, #fff 0 3px, transparent 3px 6px)",
+          }}
+          aria-hidden
+        />
+        <div className="flex items-center gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <p className="text-[16px] text-white">{name}</p>
+            <p className="text-[14px] text-[#BABABB]">{role}</p>
+          </div>
+          <Image
+            src={avatar}
+            alt=""
+            width={40}
+            height={40}
+            className="size-10 shrink-0 rounded-full object-cover"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function TestimonialsSection() {
-  const [index, setIndex] = useState(0);
-  const active = testimonials[index] ?? testimonials[0];
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const scrollByCard = (dir: -1 | 1) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.querySelector("article");
+    const step = (card?.getBoundingClientRect().width ?? 550) + 24;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
 
   return (
-    <section className="bg-[#F5F3EE] px-4 py-20 sm:px-8 lg:px-[120px] lg:py-24">
+    <section
+      className="overflow-x-hidden px-4 py-20 sm:px-8 lg:px-[120px] lg:py-24"
+      style={landingDotPattern}
+    >
       <div className="mx-auto flex max-w-[1200px] flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <h2 className="max-w-[470px] text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
           Developers are already building with it.
@@ -548,9 +645,7 @@ function TestimonialsSection() {
             type="button"
             aria-label="Previous testimonial"
             className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() =>
-              setIndex((i) => (i - 1 + testimonials.length) % testimonials.length)
-            }
+            onClick={() => scrollByCard(-1)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -566,7 +661,7 @@ function TestimonialsSection() {
             type="button"
             aria-label="Next testimonial"
             className="flex size-[45px] items-center justify-center rounded-full bg-[#F9F8F6] shadow-[inset_0_0_0_1px_#fff,0_1px_1px_rgba(97,97,97,0.09)] transition-transform duration-150 active:scale-[0.98]"
-            onClick={() => setIndex((i) => (i + 1) % testimonials.length)}
+            onClick={() => scrollByCard(1)}
           >
             <svg width="9" height="16" viewBox="0 0 9 16" fill="none" aria-hidden>
               <path
@@ -581,40 +676,16 @@ function TestimonialsSection() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-[1200px]">
-        <article className="relative max-w-[550px] overflow-hidden rounded-2xl bg-[#1B1C1D] p-6">
-          <div
-            className="pointer-events-none absolute left-6 top-6 select-none font-[family-name:var(--font-geist-mono)] text-[120px] leading-none text-transparent"
-            style={{
-              backgroundImage:
-                "linear-gradient(141.5deg, #313335 25.74%, #252628 56.05%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-            }}
-            aria-hidden
-          >
-            “
-          </div>
-          <div className="relative mt-28 flex flex-col gap-7">
-            <p className="max-w-[404px] text-[16px] leading-relaxed text-white">
-              {active.quote}
-            </p>
-            <div className="h-px w-full bg-[repeating-linear-gradient(to_right,#fff_0_3px,transparent_3px_6px)] opacity-20" />
-            <div className="flex items-center gap-4">
-              <Image
-                src={active.avatar}
-                alt=""
-                width={41}
-                height={41}
-                className="size-[41px] rounded-full object-cover"
-              />
-              <div>
-                <p className="text-[16px] text-white">{active.name}</p>
-                <p className="text-[14px] text-[#BABABB]">{active.role}</p>
-              </div>
-            </div>
-          </div>
-        </article>
+      {/* Intentional carousel peek: clip to content column, show next card edge */}
+      <div className="mx-auto mt-12 max-w-[1200px] overflow-hidden">
+        <div
+          ref={scrollerRef}
+          className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {testimonials.map((t, i) => (
+            <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
+          ))}
+        </div>
       </div>
     </section>
   );
