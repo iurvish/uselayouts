@@ -110,7 +110,7 @@ export function OpenCliBar({
             type="button"
             className={cn(
               /* Figma 102:699 — command segment; Shiki tokens only (bg stays #030202) */
-              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[#030202] px-2.5 py-1.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[#030202] py-1.5 pr-2.5 pl-0 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
               "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
