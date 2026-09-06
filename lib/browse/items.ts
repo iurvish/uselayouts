@@ -1,4 +1,5 @@
 import { isNewComponent } from "@/lib/open/new-components";
+import browseMedia from "@/registry/default/browse-media.json";
 
 export type BrowseItem = {
   /** Registry name, also the docs slug. */
@@ -8,14 +9,14 @@ export type BrowseItem = {
   category: string;
   /** Still frame shown before/instead of the video. */
   poster: string;
-  /** Muted loop preview. */
+  /** Muted loop preview (empty string = image only). */
   video: string;
   isNew?: boolean;
 };
 
 /**
- * Placeholder media pools. These are swapped for Cloudflare-hosted assets once
- * per-component previews are recorded, so every URL lives in this file only.
+ * Placeholder media pools. Per-component Cloudflare R2 URLs in
+ * `registry/default/browse-media.json` override these once uploaded from admin.
  */
 const POSTERS = [
   "photo-1506744038136-46273834b3fb",
@@ -43,6 +44,9 @@ const VIDEOS = [
 ];
 
 type Seed = { slug: string; title: string; description: string; category: string };
+type MediaOverride = { posterUrl?: string; videoUrl?: string };
+
+const MEDIA_OVERRIDES = browseMedia as Record<string, MediaOverride>;
 
 const SEEDS: Seed[] = [
   { slug: "3d-book", title: "3D Book", description: "Page flips with real depth.", category: "Display" },
@@ -87,13 +91,15 @@ const SEEDS: Seed[] = [
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
 ];
 
-export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => ({
-  ...seed,
-  poster: POSTERS[index % POSTERS.length]!,
-  video: VIDEOS[index % VIDEOS.length]!,
-  isNew: isNewComponent(seed.slug),
-}));
-
+export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {
+  const override = MEDIA_OVERRIDES[seed.slug];
+  return {
+    ...seed,
+    poster: override?.posterUrl ?? POSTERS[index % POSTERS.length]!,
+    video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
+    isNew: isNewComponent(seed.slug),
+  };
+});
 
 export const browseCategories = [
   "All",

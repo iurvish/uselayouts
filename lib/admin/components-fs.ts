@@ -299,6 +299,12 @@ export async function updateComponentMedia(
     videoUrl: media.videoUrl ?? undefined,
   });
 
+  const { writeBrowseMediaOverride } = await import("@/lib/browse/browse-media-map");
+  await writeBrowseMediaOverride(name, {
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? undefined,
+  });
+
   return {
     name,
     posterUrl: media.posterUrl,

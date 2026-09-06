@@ -1,0 +1,1 @@
+I'll implement the new landing page and remove the old one — delegating that to a background agent now.

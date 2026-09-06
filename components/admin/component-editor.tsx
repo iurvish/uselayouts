@@ -64,6 +64,11 @@ export function ComponentEditor({
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark");
   const [previewKey, setPreviewKey] = useState(0);
   const [depsLocked, setDepsLocked] = useState(false);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
 
   useEffect(() => {
     if (mode !== "edit" || !initialName) return;
@@ -83,6 +88,8 @@ export function ComponentEditor({
         const backgrounds = parsePreviewBackgrounds(data.controls?.previewBackground);
         setPreviewBgLight(backgrounds.light ?? DEFAULT_PREVIEW_BACKGROUNDS.light);
         setPreviewBgDark(backgrounds.dark ?? DEFAULT_PREVIEW_BACKGROUNDS.dark);
+        setPosterUrl(data.controls?.posterUrl ?? null);
+        setVideoUrl(data.controls?.videoUrl ?? null);
       })
       .catch((err) => setError(err.message));
   }, [mode, initialName]);
@@ -182,7 +189,47 @@ export function ComponentEditor({
     }
   }
 
+  async function handleMediaUpload() {
+    const slug = initialName || form.name.trim();
+    if (!slug) {
+      setError("Save the component first, then upload browse media.");
+      return;
+    }
+    if (!imageFile && !videoFile) {
+      setError("Choose an image and/or video to upload.");
+      return;
+    }
+
+    setUploadingMedia(true);
+    setError(null);
+    setMessage(null);
+
+    const body = new FormData();
+    if (imageFile) body.append("image", imageFile);
+    if (videoFile) body.append("video", videoFile);
+
+    const res = await fetch(`/api/admin/components/${slug}/media`, {
+      method: "POST",
+      body,
+    });
+    const data = await res.json();
+    setUploadingMedia(false);
+
+    if (!res.ok) {
+      setError(data.error || "Media upload failed");
+      return;
+    }
+
+    setPosterUrl(data.posterUrl ?? null);
+    setVideoUrl(data.videoUrl ?? null);
+    setImageFile(null);
+    setVideoFile(null);
+    setMessage("Browse media uploaded to R2.");
+    router.refresh();
+  }
+
   const previewName = initialName || form.name.trim() || undefined;
+  const mediaSlug = mode === "edit" ? initialName : undefined;
   const Preview = previewName
     ? (Index[previewName]?.component as ComponentType<{ size?: string }> | undefined)
     : undefined;
@@ -272,6 +319,64 @@ export function ComponentEditor({
               onChange={setPreviewBgDark}
             />
           </div>
+        </div>
+
+        <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-3">
+          <p className="text-sm font-medium">Browse card media</p>
+          <p className="text-xs text-muted-foreground">
+            Upload an image poster and/or video to Cloudflare R2. Video is re-encoded
+            (H.264, ≤1080p). Cards play the video and show the image when paused.
+          </p>
+          {!mediaSlug ? (
+            <p className="text-xs text-muted-foreground">
+              Save the component first, then upload media from the edit page.
+            </p>
+          ) : (
+            <>
+              <div className="grid gap-3">
+                <label className="block space-y-1.5">
+                  <span className="text-xs font-medium text-muted-foreground">Poster image</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="block w-full text-xs file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary-foreground"
+                    onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+                <label className="block space-y-1.5">
+                  <span className="text-xs font-medium text-muted-foreground">Preview video</span>
+                  <input
+                    type="file"
+                    accept="video/*"
+                    className="block w-full text-xs file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary-foreground"
+                    onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+              </div>
+              {(posterUrl || videoUrl) && (
+                <div className="space-y-1 break-all text-[11px] text-muted-foreground">
+                  {posterUrl && <p>Poster: {posterUrl}</p>}
+                  {videoUrl && <p>Video: {videoUrl}</p>}
+                </div>
+              )}
+              {posterUrl && (
+                // eslint-disable-next-line @next/next/no-img-element -- admin preview of CDN poster
+                <img
+                  src={posterUrl}
+                  alt=""
+                  className="h-28 w-full rounded-lg border border-border object-cover"
+                />
+              )}
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={uploadingMedia || (!imageFile && !videoFile)}
+                onClick={handleMediaUpload}
+              >
+                {uploadingMedia ? "Uploading…" : "Upload to R2"}
+              </Button>
+            </>
+          )}
         </div>
 
         <Field label="Component code">

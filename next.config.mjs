@@ -54,6 +54,27 @@ const config = {
         protocol: "https",
         hostname: "raw.githubusercontent.com",
       },
+      // Cloudflare R2 public CDN (from R2_PUBLIC_URL when set)
+      ...(process.env.R2_PUBLIC_URL
+        ? (() => {
+            try {
+              const { hostname, protocol } = new URL(process.env.R2_PUBLIC_URL);
+              return [
+                {
+                  protocol: protocol.replace(":", "") || "https",
+                  hostname,
+                },
+              ];
+            } catch {
+              return [];
+            }
+          })()
+        : [
+            {
+              protocol: "https",
+              hostname: "*.r2.dev",
+            },
+          ]),
     ],
   },
 };
