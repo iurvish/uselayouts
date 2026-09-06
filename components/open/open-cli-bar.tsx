@@ -59,7 +59,7 @@ export function OpenCliBar({
         <TooltipTrigger
           delay={0}
           className={cn(
-            "flex items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground",
+            "flex cursor-pointer items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground",
             openPress,
           )}
           aria-haspopup="listbox"
@@ -123,7 +123,7 @@ export function OpenCliBar({
           <motion.div
             role="listbox"
             aria-label="Package managers"
-            className="absolute right-0 bottom-[calc(100%+8px)] left-0 w-44 origin-bottom-left rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lg"
+            className="absolute right-0 bottom-[calc(100%+8px)] left-0 flex w-44 origin-bottom-left flex-col gap-1 rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lg"
             initial={
               reduce
                 ? { opacity: 0 }
@@ -174,7 +174,7 @@ function PmOption({
       role="option"
       aria-selected={active}
       className={cn(
-        "flex min-h-8 w-full items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground",
+        "flex min-h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground",
         openPress,
         active && "bg-accent text-accent-foreground",
       )}

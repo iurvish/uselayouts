@@ -4,7 +4,7 @@
 
 import * as React from "react";
 
-import { openPressMotion, scrollbarMinimal } from "@/components/open/ui";
+import { openPressMotion, scrollbarNone } from "@/components/open/ui";
 import { stripCodeAnnotations } from "@/lib/open/strip-code-annotations";
 import { cn } from "@/lib/utils";
 
@@ -46,11 +46,11 @@ export function DocsCodeBlock({
 
   const body = (
     <>
-      {/* Figma 111:2921 — py 12 on panel; lines use px 16 */}
+      {/* Figma 111:2921 — py 12 on panel; lines use px 16; no scrollbar (system accent looked like a blue stripe) */}
       <div
         className={cn(
-          "h-full overflow-auto px-4 py-3 [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
-          scrollbarMinimal,
+          "h-full cursor-pointer overflow-auto px-4 py-3 outline-none [&_pre]:cursor-pointer [&_pre]:bg-transparent [&_code]:bg-transparent [&_.shiki]:bg-transparent [&_.shiki]:font-mono [&_.shiki]:text-[13px] [&_.shiki]:leading-[19.5px] [&_.shiki_span]:!bg-transparent",
+          scrollbarNone,
           className,
         )}
         dangerouslySetInnerHTML={{ __html: html || "<pre><code>No source yet.</code></pre>" }}

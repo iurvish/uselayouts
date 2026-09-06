@@ -47,9 +47,10 @@ export function BrowseHeader({
       </Link>
 
       <div className="flex items-center gap-2.5">
-        <div className="flex w-[180px] items-center justify-between rounded-xl bg-popover px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)] transition-[box-shadow] duration-150 ease-out focus-within:shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.28)] sm:w-[243px]">
+        {/* Figma 82:3700 — px 12 / py 8 / radius 12 / bg #030202 */}
+        <div className="flex w-[180px] items-center justify-between rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)] transition-[box-shadow] duration-150 ease-out focus-within:shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.28)] sm:w-[243px]">
           <div className="flex min-w-0 flex-1 items-center gap-2">
-            <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
+            <SearchIcon className="size-4 shrink-0 text-[#acacb4]" />
             <input
               ref={inputRef}
               value={query}
@@ -65,11 +66,11 @@ export function BrowseHeader({
               type="search"
               placeholder="Search"
               aria-label="Search components"
-              className="min-w-0 flex-1 bg-transparent text-sm tracking-[-0.42px] text-foreground outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden"
+              className="min-w-0 flex-1 bg-transparent text-sm tracking-[-0.42px] text-[#acacb4] outline-none placeholder:text-[#acacb4] [&::-webkit-search-cancel-button]:hidden"
             />
           </div>
           {focused || query ? null : (
-            <kbd className="relative flex shrink-0 items-center justify-center rounded-md bg-[#212121] px-3 py-0.5 font-sans text-xs tracking-[-0.36px] text-muted-foreground shadow-[inset_0px_0.5px_0px_0px_rgba(255,255,255,0.12)]">
+            <kbd className="relative flex shrink-0 items-center justify-center rounded-[6px] bg-[#212121] px-3 py-0.5 font-sans text-xs tracking-[-0.36px] text-[#adadb7] shadow-[inset_0px_0.5px_0px_0px_rgba(255,255,255,0.12)]">
               /
             </kbd>
           )}

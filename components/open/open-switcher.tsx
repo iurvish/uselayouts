@@ -120,7 +120,7 @@ export function OpenSwitcher({
   }
 
   return (
-    <div ref={rootRef} className="relative flex justify-center">
+    <div ref={rootRef} className={cn("relative flex justify-center", open && "z-[999999999]")}>
       {/* Trigger: 16px title; L±2–3 hover/press, no scale */}
       <button
         type="button"
@@ -152,7 +152,7 @@ export function OpenSwitcher({
           <motion.div
             role="listbox"
             className={cn(
-              "absolute top-[calc(100%+8px)] left-1/2 z-30 flex w-[min(320px,80vw)] origin-top flex-col overflow-hidden rounded-[14px] border-0 bg-popover text-popover-foreground",
+              "absolute top-[calc(100%+8px)] left-1/2 z-[999999999] flex w-[min(320px,80vw)] origin-top flex-col overflow-hidden rounded-[14px] border-0 bg-popover text-popover-foreground",
               DROPDOWN_SHADOW,
             )}
             initial={instant ? false : { opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
@@ -160,16 +160,17 @@ export function OpenSwitcher({
             exit={{ opacity: 0, transform: "translateX(-50%) scale(0.96)" }}
             transition={instant ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
-            <div className="border-b border-border px-2.5 py-3">
-              <div className="relative flex min-h-10 items-center overflow-hidden rounded-[10px] bg-input px-3 py-2.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]">
-                <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden strokeWidth={1.75} />
+            {/* Figma 82:3700 search — same padding/radius/height; no `/` kbd; hidden on mobile */}
+            <div className="hidden border-b border-border px-2.5 py-3 md:block">
+              <div className="relative flex items-center gap-2 overflow-hidden rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)]">
+                <Search className="size-4 shrink-0 text-[#acacb4]" aria-hidden strokeWidth={1.75} />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search"
                   aria-label="Search components"
-                  className="min-w-0 flex-1 bg-transparent px-2 text-sm tracking-[-0.42px] text-muted-foreground outline-none placeholder:text-muted-foreground"
+                  className="min-w-0 flex-1 bg-transparent text-sm tracking-[-0.42px] text-[#acacb4] outline-none placeholder:text-[#acacb4]"
                 />
               </div>
             </div>

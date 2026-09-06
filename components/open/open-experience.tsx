@@ -16,11 +16,14 @@ import {
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
 import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/ui";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
-const SIDEBAR_WIDTH = 250;
+const SIDEBAR_WIDTH = 262;
 const PINNED_KEY = "uselayouts:open-sidebar-pinned";
+const SCROLL_EDGE_EPS = 1;
 
 function readPinned() {
   if (typeof window === "undefined") return false;
@@ -157,16 +160,52 @@ function SidebarList({
     anchor: HTMLAnchorElement | null,
   ) => void;
 }) {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [showTop, setShowTop] = React.useState(false);
+  const [showBottom, setShowBottom] = React.useState(false);
+
+  // Match panel bg exactly — pinned dock hsl(240 6% 7%), floating card hsl(240 6% 20%)
   const fadeFrom =
-    surface === "sidebar"
-      ? "from-sidebar"
-      : surface === "background"
-        ? "from-[hsl(225_7%_11%)]"
-        : "from-[hsl(240_6%_20%)]";
+    surface === "sidebar" || surface === "background"
+      ? "from-[hsl(240_6%_7%)]"
+      : "from-[hsl(240_6%_20%)]";
+
+  React.useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const { scrollTop, clientHeight, scrollHeight } = el;
+      setShowTop(scrollTop > 0);
+      setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
+    };
+
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    const child = el.firstElementChild;
+    if (child) ro.observe(child);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [items]);
+
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
-      <div className={cn("pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent", fadeFrom)} />
-      <div className={cn("h-full overflow-auto pt-2 pr-2.5 pb-8 pl-3.5", scrollbarNone)}>
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-0 z-[2] h-12 bg-linear-to-b to-transparent transition-opacity duration-150",
+          fadeFrom,
+          showTop ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden={!showTop}
+      />
+      <div
+        ref={scrollRef}
+        className={cn("h-full overflow-auto pt-2 pr-2.5 pb-8 pl-3.5", scrollbarNone)}
+      >
         <LineNav
           className="py-3"
           items={items}
@@ -188,7 +227,14 @@ function SidebarList({
           }
         />
       </div>
-      <div className={cn("pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-12 bg-linear-to-t to-transparent", fadeFrom)} />
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-12 bg-linear-to-t to-transparent transition-opacity duration-150",
+          fadeFrom,
+          showBottom ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden={!showBottom}
+      />
     </div>
   );
 }
