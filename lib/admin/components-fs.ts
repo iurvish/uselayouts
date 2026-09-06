@@ -341,6 +341,61 @@ export async function updateComponentMedia(
   };
 }
 
+/** Clear poster and/or video from controls + browse map. */
+export async function clearComponentMedia(
+  name: string,
+  opts: { poster?: boolean; video?: boolean },
+) {
+  const existing = await getComponent(name);
+  if (!existing) throw new Error("Component not found");
+
+  const clearPoster = Boolean(opts.poster);
+  const clearVideo = Boolean(opts.video);
+  const nextPoster = clearPoster ? undefined : existing.controls?.posterUrl;
+  const nextVideo = clearVideo ? undefined : existing.controls?.videoUrl;
+
+  await writeControls(name, {
+    dialConfig: existing.controls?.dialConfig ?? {},
+    disabled: existing.controls?.disabled ?? [],
+    updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    posterUrl: nextPoster,
+    videoUrl: nextVideo,
+  });
+
+  const { writeBrowseMediaOverride, clearBrowseMediaOverride } = await import(
+    "@/lib/browse/browse-media-map"
+  );
+  if (!nextPoster) {
+    await clearBrowseMediaOverride(name, { poster: true, video: true });
+  } else {
+    await writeBrowseMediaOverride(name, {
+      posterUrl: nextPoster,
+      videoUrl: nextVideo,
+    });
+  }
+
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: existing.item.title,
+      description: existing.item.description,
+      poster_url: nextPoster ?? null,
+      video_url: nextVideo ?? null,
+      dependencies: existing.item.dependencies,
+    });
+  } catch {
+    // FS write already succeeded.
+  }
+
+  return {
+    name,
+    posterUrl: nextPoster ?? null,
+    videoUrl: nextVideo ?? null,
+  };
+}
+
 async function rebuildRegistry() {
   await execAsync("npm run build:registry", {
     cwd: ROOT,

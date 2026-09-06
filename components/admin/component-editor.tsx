@@ -1,13 +1,29 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState, type ComponentType } from "react";
+import {
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ImageIcon,
+  Loader2,
+  Sparkles,
+  Upload,
+  VideoIcon,
+  X,
+} from "lucide-react";
 
 import { ComponentLivePreview } from "@/components/admin/live-preview";
 import { DependencyTags } from "@/components/admin/dependency-tags";
-import { detectComponentName, detectDependencies } from "@/lib/admin/detect-code";
+import { detectDependencies } from "@/lib/admin/detect-code";
+import { generateComponentCopy } from "@/lib/admin/generate-copy";
 import { extractHints } from "@/lib/open/mdx-extract";
 import {
   DEFAULT_PREVIEW_BACKGROUNDS,
@@ -56,7 +72,7 @@ export default function Example() {
 }
 `,
   dependencies: "motion, clsx, tailwind-merge",
-  features: "Motion-powered interactions",
+  features: "",
 };
 
 export function ComponentEditor({
@@ -76,11 +92,16 @@ export function ComponentEditor({
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark");
   const [previewKey, setPreviewKey] = useState(0);
   const [depsLocked, setDepsLocked] = useState(false);
+  const [copyLocked, setCopyLocked] = useState(false);
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [removingMedia, setRemovingMedia] = useState<"poster" | "video" | null>(null);
+
+  const imagePreviewUrl = useObjectUrl(imageFile);
+  const videoPreviewUrl = useObjectUrl(videoFile);
 
   useEffect(() => {
     if (mode !== "edit" || !initialName) return;
@@ -97,6 +118,7 @@ export function ComponentEditor({
           features: data.mdx ? extractHints(data.mdx).join("\n") : "",
         });
         setDepsLocked(true);
+        setCopyLocked(true);
         const backgrounds = parsePreviewBackgrounds(data.controls?.previewBackground);
         setPreviewBgLight(backgrounds.light ?? DEFAULT_PREVIEW_BACKGROUNDS.light);
         setPreviewBgDark(backgrounds.dark ?? DEFAULT_PREVIEW_BACKGROUNDS.dark);
@@ -129,13 +151,22 @@ export function ComponentEditor({
   }, [form.code, depsLocked, mode]);
 
   useEffect(() => {
-    if (mode !== "create") return;
-    if (form.title.trim()) return;
-    const detected = detectComponentName(form.code);
-    if (!detected) return;
-    const title = detected.replace(/([a-z])([A-Z])/g, "$1 $2");
-    setForm((current) => ({ ...current, title }));
-  }, [form.code, form.title, mode]);
+    if (mode !== "create" || copyLocked) return;
+    const timer = window.setTimeout(() => {
+      const generated = generateComponentCopy(form.code);
+      setForm((current) => ({
+        ...current,
+        title: current.title.trim() ? current.title : generated.title,
+        description: current.description.trim()
+          ? current.description
+          : generated.description,
+        features: current.features.trim()
+          ? current.features
+          : generated.features.join("\n"),
+      }));
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [form.code, mode, copyLocked]);
 
   const activePreviewBackground = useMemo(
     () =>
@@ -145,6 +176,24 @@ export function ComponentEditor({
       ),
     [previewBgLight, previewBgDark, previewTheme],
   );
+
+  function applyGeneratedCopy(force = false) {
+    const generated = generateComponentCopy(form.code);
+    setForm((current) => ({
+      ...current,
+      title: force || !current.title.trim() ? generated.title : current.title,
+      description:
+        force || !current.description.trim()
+          ? generated.description
+          : current.description,
+      features:
+        force || !current.features.trim()
+          ? generated.features.join("\n")
+          : current.features,
+    }));
+    setCopyLocked(true);
+    setMessage("Generated brief title, description, and features.");
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -193,6 +242,7 @@ export function ComponentEditor({
     setMessage(`Saved ${data.name}.`);
     setPreviewKey((key) => key + 1);
     setDepsLocked(true);
+    setCopyLocked(true);
     router.refresh();
     if (mode === "create") {
       router.push(`/admin/${data.name}`);
@@ -238,11 +288,52 @@ export function ComponentEditor({
     router.refresh();
   }
 
+  async function handleRemoveMedia(kind: "poster" | "video") {
+    const slug = initialName || form.name.trim();
+    if (!slug) return;
+
+    if (kind === "poster" && imageFile) {
+      setImageFile(null);
+      return;
+    }
+    if (kind === "video" && videoFile) {
+      setVideoFile(null);
+      return;
+    }
+
+    setRemovingMedia(kind);
+    setError(null);
+    setMessage(null);
+
+    const res = await fetch(`/api/admin/components/${slug}/media`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        kind === "poster" ? { poster: true, video: false } : { poster: false, video: true },
+      ),
+    });
+    const data = await res.json();
+    setRemovingMedia(null);
+
+    if (!res.ok) {
+      setError(data.error || "Could not remove media");
+      return;
+    }
+
+    setPosterUrl(data.posterUrl ?? null);
+    setVideoUrl(data.videoUrl ?? null);
+    setMessage(kind === "poster" ? "Poster removed." : "Video removed.");
+    router.refresh();
+  }
+
   const previewName = initialName || form.name.trim() || undefined;
   const mediaSlug = mode === "edit" ? initialName : undefined;
   const Preview = previewName
     ? (Index[previewName]?.component as ComponentType<{ size?: string }> | undefined)
     : undefined;
+
+  const showPoster = imagePreviewUrl || posterUrl;
+  const showVideo = videoPreviewUrl || videoUrl;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -264,7 +355,7 @@ export function ComponentEditor({
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {mode === "create"
-                ? "Paste source — title and dependencies auto-detect. Save once to publish the live preview."
+                ? "Paste source — copy and dependencies auto-fill. Save once to publish the live preview."
                 : `Editing ${initialName}`}
             </p>
           </div>
@@ -300,9 +391,20 @@ export function ComponentEditor({
       <div className="grid gap-6 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
         <div className="space-y-4">
           <Card size="sm">
-            <CardHeader>
-              <CardTitle>Basics</CardTitle>
-              <CardDescription>Name and copy shown on browse / open.</CardDescription>
+            <CardHeader className="flex-row items-start justify-between gap-3 space-y-0">
+              <div>
+                <CardTitle>Basics</CardTitle>
+                <CardDescription>Name and copy shown on browse / open.</CardDescription>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => applyGeneratedCopy(true)}
+              >
+                <Sparkles data-icon="inline-start" />
+                Generate
+              </Button>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -310,7 +412,10 @@ export function ComponentEditor({
                   <Input
                     required
                     value={form.title}
-                    onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                    onChange={(e) => {
+                      setCopyLocked(true);
+                      setForm((f) => ({ ...f, title: e.target.value }));
+                    }}
                   />
                 </Field>
                 <Field label="Slug">
@@ -327,7 +432,10 @@ export function ComponentEditor({
                   required
                   rows={2}
                   value={form.description}
-                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                  onChange={(e) => {
+                    setCopyLocked(true);
+                    setForm((f) => ({ ...f, description: e.target.value }));
+                  }}
                 />
               </Field>
             </CardContent>
@@ -354,14 +462,21 @@ export function ComponentEditor({
           <Card size="sm">
             <CardHeader>
               <CardTitle>Features</CardTitle>
-              <CardDescription>One perk per line — used when generating MDX.</CardDescription>
+              <CardDescription>
+                One perk per line — include a “Where to use” line when you can.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
-                rows={3}
-                placeholder={"Motion-powered interactions\nAccessible keyboard support"}
+                rows={4}
+                placeholder={
+                  "Motion-powered interactions\nAccessible keyboard support\nWhere to use: Landing pages and product demos"
+                }
                 value={form.features}
-                onChange={(e) => setForm((f) => ({ ...f, features: e.target.value }))}
+                onChange={(e) => {
+                  setCopyLocked(true);
+                  setForm((f) => ({ ...f, features: e.target.value }));
+                }}
               />
             </CardContent>
           </Card>
@@ -391,65 +506,6 @@ export function ComponentEditor({
 
           <Card size="sm">
             <CardHeader>
-              <CardTitle>Browse media</CardTitle>
-              <CardDescription>
-                Poster + video for browse cards (R2). Video is re-encoded H.264 ≤1080p.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {!mediaSlug ? (
-                <p className="text-sm text-muted-foreground">
-                  Save the component first, then upload media from the edit page.
-                </p>
-              ) : (
-                <>
-                  <div className="grid gap-4">
-                    <Field label="Poster image">
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        className="h-auto py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-primary-foreground"
-                        onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-                      />
-                    </Field>
-                    <Field label="Preview video">
-                      <Input
-                        type="file"
-                        accept="video/*"
-                        className="h-auto py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-primary-foreground"
-                        onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
-                      />
-                    </Field>
-                  </div>
-                  {(posterUrl || videoUrl) && (
-                    <div className="space-y-1 break-all rounded-lg bg-muted/50 px-3 py-2 text-[11px] text-muted-foreground">
-                      {posterUrl && <p>Poster: {posterUrl}</p>}
-                      {videoUrl && <p>Video: {videoUrl}</p>}
-                    </div>
-                  )}
-                  {posterUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element -- admin preview of CDN poster
-                    <img
-                      src={posterUrl}
-                      alt=""
-                      className="h-28 w-full rounded-lg border border-border object-cover"
-                    />
-                  )}
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    disabled={uploadingMedia || (!imageFile && !videoFile)}
-                    onClick={handleMediaUpload}
-                  >
-                    {uploadingMedia ? "Uploading…" : "Upload to R2"}
-                  </Button>
-                </>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card size="sm">
-            <CardHeader>
               <CardTitle>Source</CardTitle>
               <CardDescription>Component TSX written to the registry on save.</CardDescription>
             </CardHeader>
@@ -462,6 +518,7 @@ export function ComponentEditor({
                 value={form.code}
                 onChange={(e) => {
                   setDepsLocked(false);
+                  if (mode === "create") setCopyLocked(false);
                   setForm((f) => ({ ...f, code: e.target.value }));
                 }}
               />
@@ -508,7 +565,7 @@ export function ComponentEditor({
             <Separator />
             <div
               className={cn(
-                "component-showcase flex min-h-[min(60vh,560px)] items-center justify-center overflow-hidden text-foreground",
+                "component-showcase flex min-h-[min(52vh,480px)] items-center justify-center overflow-hidden text-foreground",
                 previewTheme === "dark" ? "dark" : "light",
               )}
               style={{ background: activePreviewBackground }}
@@ -532,9 +589,202 @@ export function ComponentEditor({
               )}
             </div>
           </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Browse media</CardTitle>
+              <CardDescription>
+                Poster + video for browse cards. Preview before upload.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {!mediaSlug ? (
+                <p className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-8 text-center text-sm text-muted-foreground">
+                  Save the component first, then add browse media here.
+                </p>
+              ) : (
+                <>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <MediaSlot
+                      label="Image"
+                      icon={<ImageIcon className="size-5" />}
+                      accept="image/*"
+                      hasMedia={Boolean(showPoster)}
+                      removing={removingMedia === "poster"}
+                      onPick={(file) => setImageFile(file)}
+                      onRemove={() => handleRemoveMedia("poster")}
+                    >
+                      {imagePreviewUrl || posterUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- admin local/CDN preview
+                        <img
+                          src={imagePreviewUrl || posterUrl || ""}
+                          alt=""
+                          className="absolute inset-0 size-full object-cover"
+                        />
+                      ) : null}
+                    </MediaSlot>
+
+                    <MediaSlot
+                      label="Video"
+                      icon={<VideoIcon className="size-5" />}
+                      accept="video/*"
+                      hasMedia={Boolean(showVideo)}
+                      removing={removingMedia === "video"}
+                      onPick={(file) => setVideoFile(file)}
+                      onRemove={() => handleRemoveMedia("video")}
+                    >
+                      {videoPreviewUrl || videoUrl ? (
+                        <video
+                          src={videoPreviewUrl || videoUrl || ""}
+                          muted
+                          playsInline
+                          loop
+                          autoPlay
+                          className="absolute inset-0 size-full object-cover"
+                        />
+                      ) : null}
+                    </MediaSlot>
+                  </div>
+
+                  {(imageFile || videoFile) && (
+                    <p className="text-center text-xs text-muted-foreground">
+                      {imageFile ? imageFile.name : null}
+                      {imageFile && videoFile ? " · " : null}
+                      {videoFile ? videoFile.name : null}
+                    </p>
+                  )}
+
+                  <div className="flex justify-center pt-1">
+                    <Button
+                      type="button"
+                      disabled={uploadingMedia || (!imageFile && !videoFile)}
+                      onClick={handleMediaUpload}
+                    >
+                      {uploadingMedia ? (
+                        <>
+                          <Loader2 data-icon="inline-start" className="animate-spin" />
+                          Uploading…
+                        </>
+                      ) : (
+                        <>
+                          <Upload data-icon="inline-start" />
+                          Upload to R2
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </form>
+  );
+}
+
+function useObjectUrl(file: File | null) {
+  const [url, setUrl] = useState<string | null>(null);
+  const prev = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (prev.current) URL.revokeObjectURL(prev.current);
+    if (!file) {
+      prev.current = null;
+      setUrl(null);
+      return;
+    }
+    const next = URL.createObjectURL(file);
+    prev.current = next;
+    setUrl(next);
+    return () => {
+      URL.revokeObjectURL(next);
+    };
+  }, [file]);
+
+  return url;
+}
+
+function MediaSlot({
+  label,
+  icon,
+  accept,
+  hasMedia,
+  removing,
+  onPick,
+  onRemove,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  accept: string;
+  hasMedia: boolean;
+  removing: boolean;
+  onPick: (file: File) => void;
+  onRemove: () => void;
+  children?: React.ReactNode;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div className="relative overflow-hidden rounded-xl border border-border bg-muted/20">
+      <div className="relative aspect-[4/3]">
+        {hasMedia ? (
+          children
+        ) : (
+          <button
+            type="button"
+            className="flex size-full flex-col items-center justify-center gap-2 px-3 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+            onClick={() => inputRef.current?.click()}
+          >
+            {icon}
+            <span className="text-xs font-medium">{label}</span>
+            <span className="text-[11px] text-muted-foreground">Click to choose</span>
+          </button>
+        )}
+
+        {hasMedia ? (
+          <>
+            <button
+              type="button"
+              className="absolute inset-0 z-0"
+              aria-label={`Replace ${label.toLowerCase()}`}
+              onClick={() => inputRef.current?.click()}
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/50 to-transparent px-2 pb-2 pt-8">
+              <p className="text-[11px] font-medium text-white">{label}</p>
+            </div>
+            <button
+              type="button"
+              aria-label={`Remove ${label.toLowerCase()}`}
+              disabled={removing}
+              className="absolute top-2 right-2 z-20 inline-flex size-7 items-center justify-center rounded-md border border-border bg-background/95 text-foreground shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+            >
+              {removing ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <X className="size-3.5" />
+              )}
+            </button>
+          </>
+        ) : null}
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        className="sr-only"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) onPick(file);
+          e.target.value = "";
+        }}
+      />
+    </div>
   );
 }
 

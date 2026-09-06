@@ -32,3 +32,22 @@ export async function writeBrowseMediaOverride(
   await fs.writeFile(MEDIA_MAP_PATH, JSON.stringify(map, null, 2) + "\n");
   return map;
 }
+
+export async function clearBrowseMediaOverride(
+  slug: string,
+  opts: { poster?: boolean; video?: boolean } = { poster: true, video: true },
+): Promise<BrowseMediaMap> {
+  const map = await readBrowseMediaMap();
+  const current = map[slug];
+  if (!current) return map;
+
+  if (opts.poster) {
+    delete map[slug];
+  } else if (opts.video && current) {
+    map[slug] = { posterUrl: current.posterUrl };
+  }
+
+  await fs.mkdir(path.dirname(MEDIA_MAP_PATH), { recursive: true });
+  await fs.writeFile(MEDIA_MAP_PATH, JSON.stringify(map, null, 2) + "\n");
+  return map;
+}

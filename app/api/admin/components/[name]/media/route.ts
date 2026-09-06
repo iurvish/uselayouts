@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 
 import { assertDevOnly } from "@/lib/admin/guard";
-import { getComponent, updateComponentMedia } from "@/lib/admin/components-fs";
+import {
+  clearComponentMedia,
+  getComponent,
+  updateComponentMedia,
+} from "@/lib/admin/components-fs";
 import { processComponentMedia } from "@/lib/media/process-component-media";
 import { r2Configured } from "@/lib/r2/client";
 
@@ -90,6 +94,35 @@ export async function POST(request: Request, { params }: Params) {
       : message.includes("Missing R2")
         ? 503
         : 500;
+    return NextResponse.json({ error: message }, { status });
+  }
+}
+
+export async function DELETE(request: Request, { params }: Params) {
+  try {
+    assertDevOnly();
+    const { name } = await params;
+    const component = await getComponent(name);
+    if (!component) {
+      return NextResponse.json({ error: "Component not found" }, { status: 404 });
+    }
+
+    const body = (await request.json().catch(() => ({}))) as {
+      poster?: boolean;
+      video?: boolean;
+    };
+
+    // Explicit flags; omit both → clear everything.
+    const clearAll = body.poster === undefined && body.video === undefined;
+    const result = await clearComponentMedia(name, {
+      poster: clearAll || body.poster === true,
+      video: clearAll || body.video === true,
+    });
+
+    return NextResponse.json({ ok: true, ...result });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Remove failed";
+    const status = message.includes("development") ? 403 : 500;
     return NextResponse.json({ error: message }, { status });
   }
 }
