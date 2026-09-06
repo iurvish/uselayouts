@@ -25,7 +25,7 @@ function LiveMiniPreview({ slug }: { slug: string }) {
     | undefined;
   if (!Component) return null;
   return (
-    <div className="absolute inset-0 grid place-items-center overflow-hidden bg-background">
+    <div className="component-showcase dark absolute inset-0 grid place-items-center overflow-hidden bg-background text-foreground">
       <div className="pointer-events-none origin-center scale-[0.38]">
         <React.Suspense fallback={null}>
           <Component size="sm" />

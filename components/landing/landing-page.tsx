@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -74,6 +74,10 @@ const orbitTools = [
 ] as const;
 
 const ORBIT_RADIUS_PCT = 44.4;
+/** Card spacing on the Figma arc — one slot per tick. */
+const ORBIT_SLOT_DEG = 30;
+const ORBIT_STEP_MS = 2000;
+const ORBIT_MOVE_MS = 280;
 
 const orbitCardShadow =
   "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
@@ -89,7 +93,7 @@ const landingDotPattern = {
 } as const;
 
 const orbitMask =
-  "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)";
+  "linear-gradient(180deg, #d9d9d9 48%, rgba(217,217,217,0.45) 68%, transparent 86%)";
 
 const pillRowMask =
   "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)";
@@ -477,6 +481,62 @@ function WhySection() {
   );
 }
 
+function ToolsOrbit() {
+  const [offsetDeg, setOffsetDeg] = useState(0);
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduce.matches) return;
+    const id = window.setInterval(
+      () => setOffsetDeg((d) => d + ORBIT_SLOT_DEG),
+      ORBIT_STEP_MS,
+    );
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        transform: `rotate(${offsetDeg}deg)`,
+        transition: `transform ${ORBIT_MOVE_MS}ms ease-out`,
+      }}
+    >
+      {orbitTools.map((tool) => {
+        const rad = (tool.angle * Math.PI) / 180;
+        const x = 50 + Math.sin(rad) * ORBIT_RADIUS_PCT;
+        const y = 50 - Math.cos(rad) * ORBIT_RADIUS_PCT;
+        return (
+          <div
+            key={tool.name}
+            className="absolute"
+            style={{ left: `${x}%`, top: `${y}%` }}
+          >
+            <div className="-translate-x-1/2 -translate-y-1/2">
+              <div
+                className="size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
+                style={{
+                  boxShadow: orbitCardShadow,
+                  transform: `rotate(${-offsetDeg}deg)`,
+                  transition: `transform ${ORBIT_MOVE_MS}ms ease-out`,
+                }}
+              >
+                <Image
+                  src={tool.src}
+                  alt=""
+                  width={112}
+                  height={112}
+                  className="size-full object-contain p-[12%] sm:p-[14%]"
+                />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ToolsSection() {
   return (
     <section
@@ -494,35 +554,7 @@ function ToolsSection() {
             className="relative aspect-square w-full"
             style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
           >
-            <div className="landing-orbit-spin absolute inset-0">
-              {orbitTools.map((tool) => {
-                const rad = (tool.angle * Math.PI) / 180;
-                const x = 50 + Math.sin(rad) * ORBIT_RADIUS_PCT;
-                const y = 50 - Math.cos(rad) * ORBIT_RADIUS_PCT;
-                return (
-                  <div
-                    key={tool.name}
-                    className="absolute"
-                    style={{ left: `${x}%`, top: `${y}%` }}
-                  >
-                    <div className="-translate-x-1/2 -translate-y-1/2">
-                      <div
-                        className="landing-orbit-counter size-[72px] overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[96px] lg:size-[112px]"
-                        style={{ boxShadow: orbitCardShadow }}
-                      >
-                        <Image
-                          src={tool.src}
-                          alt=""
-                          width={112}
-                          height={112}
-                          className="size-full object-contain p-[12%] sm:p-[14%]"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <ToolsOrbit />
           </div>
         </div>
 

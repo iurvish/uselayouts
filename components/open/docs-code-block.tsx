@@ -3,9 +3,12 @@
 /* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
 import * as React from "react";
+import Link from "next/link";
+import { SquarePen } from "lucide-react";
 
 import { openPressMotion, scrollbarNone } from "@/components/open/ui";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
+import { isDev } from "@/lib/admin/guard";
 import { stripCodeAnnotations } from "@/lib/open/strip-code-annotations";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +43,7 @@ export function DocsCodeBlock({
     componentSlug,
     source: "code",
   });
+  const showAdminEdit = isDev() && Boolean(componentSlug);
 
   async function copy() {
     try {
@@ -51,6 +55,17 @@ export function DocsCodeBlock({
       setCopied(false);
     }
   }
+
+  const adminEditLink = showAdminEdit ? (
+    <Link
+      href={`/admin/${componentSlug}`}
+      className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-[hsl(240_5%_69%)] transition-colors hover:bg-white/5 hover:text-white"
+      aria-label="Edit in admin"
+      title="Edit in admin"
+    >
+      <SquarePen className="size-4" strokeWidth={1.75} />
+    </Link>
+  ) : null;
 
   const body = (
     <>
@@ -113,6 +128,7 @@ export function DocsCodeBlock({
             <img src="/open/file.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
             <span className="truncate">{title ?? "component.tsx"}</span>
           </figcaption>
+          {adminEditLink}
         </div>
         {/* Figma 111:3037 — p 4 around inner panel */}
         <div className="relative min-h-0 min-w-0 flex-1 p-1">
@@ -134,10 +150,15 @@ export function DocsCodeBlock({
       data-rehype-pretty-code-figure=""
     >
       {title ? (
-        <figcaption className="flex items-center gap-2.5 px-4 py-2.5 text-base text-[hsl(240_5%_69%)]">
-          <img src="/open/file.svg" alt="" width={16} height={16} className="size-4" />
-          <span>{title}</span>
-        </figcaption>
+        <div className="flex items-center justify-between gap-2 pr-1.5">
+          <figcaption className="flex min-w-0 items-center gap-2.5 px-4 py-2.5 text-base text-[hsl(240_5%_69%)]">
+            <img src="/open/file.svg" alt="" width={16} height={16} className="size-4" />
+            <span className="truncate">{title}</span>
+          </figcaption>
+          {adminEditLink}
+        </div>
+      ) : adminEditLink ? (
+        <div className="flex justify-end px-1.5 py-1">{adminEditLink}</div>
       ) : null}
       {body}
       {floatingCopy}

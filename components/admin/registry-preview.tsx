@@ -17,7 +17,9 @@ export function AdminRegistryPreview({
 
   return (
     <div
-      className={cn("relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-lg border bg-muted/30")}
+      className={cn(
+        "component-showcase relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-lg border border-border bg-background text-foreground",
+      )}
       style={{ padding }}
     >
       <React.Suspense fallback={<Loader2 className="size-5 animate-spin text-muted-foreground" />}>

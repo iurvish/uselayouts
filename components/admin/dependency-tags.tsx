@@ -3,12 +3,13 @@
 import * as React from "react";
 import { X } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   parseDependencyTag,
   serializeDependencyTag,
 } from "@/lib/open/package-manager";
-import { cn } from "@/lib/utils";
 
 export function DependencyTags({
   value,
@@ -52,47 +53,49 @@ export function DependencyTags({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Dependencies</span>
+        <span className="text-sm font-medium">Packages</span>
         <Tooltip>
           <TooltipTrigger
             type="button"
-            className="inline-flex size-5 items-center justify-center rounded-full border text-[11px] text-muted-foreground"
+            className="inline-flex size-5 items-center justify-center rounded-full border border-border text-[11px] text-muted-foreground"
             aria-label="About dependencies"
           >
             ?
           </TooltipTrigger>
           <TooltipContent>
-            External packages this component needs. Key is the package name, value is an optional version. Manual install on the public page uses these.
+            External packages this component needs. Manual install on the public page uses these.
           </TooltipContent>
         </Tooltip>
       </div>
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <span
-            key={tag.name}
-            className="inline-flex items-center gap-1 rounded-full border bg-muted/40 py-1 pr-1 pl-2.5 text-xs"
-          >
-            <span className="font-medium">{tag.name}</span>
-            {tag.version ? <span className="text-muted-foreground">{tag.version}</span> : null}
-            <button
-              type="button"
-              className="grid size-5 place-items-center rounded-full hover:bg-background"
-              onClick={() => remove(tag.name)}
-              aria-label={`Remove ${tag.name}`}
+      {tags.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag.name}
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 py-1 pr-1 pl-2.5 text-xs"
             >
-              <X className="size-3" />
-            </button>
-          </span>
-        ))}
-      </div>
+              <span className="font-medium">{tag.name}</span>
+              {tag.version ? (
+                <span className="text-muted-foreground">{tag.version}</span>
+              ) : null}
+              <button
+                type="button"
+                className="grid size-5 place-items-center rounded-full hover:bg-background"
+                onClick={() => remove(tag.name)}
+                aria-label={`Remove ${tag.name}`}
+              >
+                <X className="size-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">No packages yet — add one or paste code.</p>
+      )}
       <div className="grid grid-cols-[1.4fr_0.8fr_auto] gap-2">
-        <input
-          className={cn(
-            "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none",
-            "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
-          )}
+        <Input
           placeholder="Package (motion)"
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -103,12 +106,8 @@ export function DependencyTags({
             }
           }}
         />
-        <input
-          className={cn(
-            "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none",
-            "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
-          )}
-          placeholder="Version (optional)"
+        <Input
+          placeholder="Version"
           value={version}
           onChange={(event) => setVersion(event.target.value)}
           onKeyDown={(event) => {
@@ -118,13 +117,9 @@ export function DependencyTags({
             }
           }}
         />
-        <button
-          type="button"
-          onClick={commit}
-          className="rounded-lg border px-3 text-sm hover:bg-muted"
-        >
+        <Button type="button" variant="outline" onClick={commit}>
           Add
-        </button>
+        </Button>
       </div>
     </div>
   );

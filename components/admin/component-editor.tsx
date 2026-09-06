@@ -1,11 +1,10 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState, type ComponentType } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { ComponentLivePreview } from "@/components/admin/live-preview";
 import { DependencyTags } from "@/components/admin/dependency-tags";
 import { detectComponentName, detectDependencies } from "@/lib/admin/detect-code";
@@ -17,6 +16,19 @@ import {
   serializePreviewBackgrounds,
 } from "@/lib/open/preview-background";
 import { Index } from "@/registry/__index__";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 type FormState = {
   name: string;
@@ -94,7 +106,6 @@ export function ComponentEditor({
       .catch((err) => setError(err.message));
   }, [mode, initialName]);
 
-  // Auto-detect package imports from pasted / edited source.
   useEffect(() => {
     if (depsLocked && mode === "edit") return;
     const timer = window.setTimeout(() => {
@@ -117,7 +128,6 @@ export function ComponentEditor({
     return () => window.clearTimeout(timer);
   }, [form.code, depsLocked, mode]);
 
-  // Auto-fill title from exported component name when empty.
   useEffect(() => {
     if (mode !== "create") return;
     if (form.title.trim()) return;
@@ -235,227 +245,293 @@ export function ComponentEditor({
     : undefined;
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-8 xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
-      <div className="space-y-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {mode === "create" ? "New component" : `Edit ${initialName}`}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Paste component code — dependencies and title are auto-detected. Save once to publish the live preview.
-          </p>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Title">
-            <input
-              required
-              className={inputClass}
-              value={form.title}
-              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-            />
-          </Field>
-          <Field label="Slug (optional)">
-            <input
-              className={inputClass}
-              placeholder="auto-from-title"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              disabled={mode === "edit"}
-            />
-          </Field>
-        </div>
-
-        <Field label="Description">
-          <textarea
-            required
-            rows={2}
-            className={inputClass}
-            value={form.description}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, description: e.target.value }))
-            }
-          />
-        </Field>
-
-        <DependencyTags
-          value={form.dependencies}
-          onChange={(dependencies) => {
-            setDepsLocked(true);
-            setForm((f) => ({ ...f, dependencies }));
-          }}
-        />
-        <p className="-mt-2 text-[11px] text-muted-foreground">
-          Auto-detected from imports. Edit anytime to lock the list.
-        </p>
-
-        <Field label="Features (one per line)">
-          <textarea
-            rows={3}
-            className={inputClass}
-            value={form.features}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, features: e.target.value }))
-            }
-          />
-        </Field>
-
-        <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-3">
-          <p className="text-sm font-medium">Preview backgrounds</p>
-          <p className="text-xs text-muted-foreground">
-            Separate colors for light and dark open-page themes.
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <ColorField
-              label="Light"
-              value={previewBgLight}
-              fallback={DEFAULT_PREVIEW_BACKGROUNDS.light}
-              onChange={setPreviewBgLight}
-            />
-            <ColorField
-              label="Dark"
-              value={previewBgDark}
-              fallback={DEFAULT_PREVIEW_BACKGROUNDS.dark}
-              onChange={setPreviewBgDark}
-            />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <Link
+            href="/admin"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "-ml-2 w-fit text-muted-foreground",
+            )}
+          >
+            <ArrowLeft data-icon="inline-start" />
+            All components
+          </Link>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {mode === "create" ? "New component" : form.title || initialName}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {mode === "create"
+                ? "Paste source — title and dependencies auto-detect. Save once to publish the live preview."
+                : `Editing ${initialName}`}
+            </p>
           </div>
         </div>
-
-        <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-3">
-          <p className="text-sm font-medium">Browse card media</p>
-          <p className="text-xs text-muted-foreground">
-            Upload an image poster and/or video to Cloudflare R2. Video is re-encoded
-            (H.264, ≤1080p). Cards play the video and show the image when paused.
-          </p>
-          {!mediaSlug ? (
-            <p className="text-xs text-muted-foreground">
-              Save the component first, then upload media from the edit page.
-            </p>
-          ) : (
-            <>
-              <div className="grid gap-3">
-                <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-muted-foreground">Poster image</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="block w-full text-xs file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary-foreground"
-                    onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-                  />
-                </label>
-                <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-muted-foreground">Preview video</span>
-                  <input
-                    type="file"
-                    accept="video/*"
-                    className="block w-full text-xs file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary-foreground"
-                    onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
-                  />
-                </label>
-              </div>
-              {(posterUrl || videoUrl) && (
-                <div className="space-y-1 break-all text-[11px] text-muted-foreground">
-                  {posterUrl && <p>Poster: {posterUrl}</p>}
-                  {videoUrl && <p>Video: {videoUrl}</p>}
-                </div>
-              )}
-              {posterUrl && (
-                // eslint-disable-next-line @next/next/no-img-element -- admin preview of CDN poster
-                <img
-                  src={posterUrl}
-                  alt=""
-                  className="h-28 w-full rounded-lg border border-border object-cover"
-                />
-              )}
-              <Button
-                type="button"
-                variant="secondary"
-                disabled={uploadingMedia || (!imageFile && !videoFile)}
-                onClick={handleMediaUpload}
-              >
-                {uploadingMedia ? "Uploading…" : "Upload to R2"}
-              </Button>
-            </>
-          )}
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {mode === "edit" && initialName ? (
+            <Link
+              href={`/docs/components/${initialName}`}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            >
+              View open page
+            </Link>
+          ) : null}
+          <Button type="submit" disabled={saving}>
+            {saving ? "Saving…" : mode === "create" ? "Create" : "Save changes"}
+          </Button>
         </div>
-
-        <Field label="Component code">
-          <textarea
-            required
-            rows={22}
-            spellCheck={false}
-            className={cn(inputClass, "font-mono text-xs leading-relaxed")}
-            value={form.code}
-            onChange={(e) => {
-              setDepsLocked(false);
-              setForm((f) => ({ ...f, code: e.target.value }));
-            }}
-          />
-        </Field>
-
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        {message && <p className="text-sm text-emerald-600">{message}</p>}
-
-        <Button type="submit" disabled={saving}>
-          {saving ? "Saving…" : "Submit"}
-        </Button>
       </div>
 
-      <div className="min-w-0 space-y-4">
-        <ComponentLivePreview code={form.code} />
+      {(error || message) && (
+        <div
+          className={cn(
+            "rounded-lg border px-3 py-2 text-sm",
+            error
+              ? "border-destructive/30 bg-destructive/5 text-destructive"
+              : "border-emerald-500/30 bg-emerald-500/5 text-emerald-700",
+          )}
+        >
+          {error || message}
+        </div>
+      )}
 
-        <div className="space-y-2">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <p className="text-sm font-medium">Live component preview</p>
-              <p className="text-xs text-muted-foreground">
-                Shows the published registry component after save.
-              </p>
-            </div>
-            <div className="inline-flex rounded-full border border-border bg-background p-1">
-              {(["light", "dark"] as const).map((theme) => (
-                <button
-                  key={theme}
-                  type="button"
-                  className={cn(
-                    "rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors",
-                    previewTheme === theme
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                  onClick={() => setPreviewTheme(theme)}
-                >
-                  {theme}
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+        <div className="space-y-4">
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Basics</CardTitle>
+              <CardDescription>Name and copy shown on browse / open.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Title">
+                  <Input
+                    required
+                    value={form.title}
+                    onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                  />
+                </Field>
+                <Field label="Slug">
+                  <Input
+                    placeholder="auto-from-title"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    disabled={mode === "edit"}
+                  />
+                </Field>
+              </div>
+              <Field label="Description">
+                <Textarea
+                  required
+                  rows={2}
+                  value={form.description}
+                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                />
+              </Field>
+            </CardContent>
+          </Card>
 
-          <div
-            className={cn(
-              "flex min-h-[min(70vh,720px)] items-center justify-center overflow-hidden rounded-[14px] border border-border",
-              previewTheme === "dark" ? "dark" : "light",
-            )}
-            style={{ background: activePreviewBackground }}
-          >
-            {Preview ? (
-              <Suspense
-                fallback={
-                  <div className="flex size-24 items-center justify-center">
-                    <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Dependencies</CardTitle>
+              <CardDescription>
+                Auto-detected from imports. Edit to lock the list.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DependencyTags
+                value={form.dependencies}
+                onChange={(dependencies) => {
+                  setDepsLocked(true);
+                  setForm((f) => ({ ...f, dependencies }));
+                }}
+              />
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Features</CardTitle>
+              <CardDescription>One perk per line — used when generating MDX.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                rows={3}
+                placeholder={"Motion-powered interactions\nAccessible keyboard support"}
+                value={form.features}
+                onChange={(e) => setForm((f) => ({ ...f, features: e.target.value }))}
+              />
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Preview backgrounds</CardTitle>
+              <CardDescription>Light and dark colors for the open-page canvas.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <ColorField
+                  label="Light"
+                  value={previewBgLight}
+                  fallback={DEFAULT_PREVIEW_BACKGROUNDS.light}
+                  onChange={setPreviewBgLight}
+                />
+                <ColorField
+                  label="Dark"
+                  value={previewBgDark}
+                  fallback={DEFAULT_PREVIEW_BACKGROUNDS.dark}
+                  onChange={setPreviewBgDark}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Browse media</CardTitle>
+              <CardDescription>
+                Poster + video for browse cards (R2). Video is re-encoded H.264 ≤1080p.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {!mediaSlug ? (
+                <p className="text-sm text-muted-foreground">
+                  Save the component first, then upload media from the edit page.
+                </p>
+              ) : (
+                <>
+                  <div className="grid gap-4">
+                    <Field label="Poster image">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        className="h-auto py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-primary-foreground"
+                        onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+                      />
+                    </Field>
+                    <Field label="Preview video">
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        className="h-auto py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-primary-foreground"
+                        onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
+                      />
+                    </Field>
                   </div>
-                }
-              >
-                <div key={previewKey} className="flex h-full w-full items-center justify-center p-4">
-                  <Preview size="lg" />
-                </div>
-              </Suspense>
-            ) : (
-              <p className="max-w-sm px-6 text-center text-sm text-muted-foreground">
-                Paste your component code and click Submit once. The live preview appears here automatically after save.
-              </p>
-            )}
+                  {(posterUrl || videoUrl) && (
+                    <div className="space-y-1 break-all rounded-lg bg-muted/50 px-3 py-2 text-[11px] text-muted-foreground">
+                      {posterUrl && <p>Poster: {posterUrl}</p>}
+                      {videoUrl && <p>Video: {videoUrl}</p>}
+                    </div>
+                  )}
+                  {posterUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element -- admin preview of CDN poster
+                    <img
+                      src={posterUrl}
+                      alt=""
+                      className="h-28 w-full rounded-lg border border-border object-cover"
+                    />
+                  )}
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    disabled={uploadingMedia || (!imageFile && !videoFile)}
+                    onClick={handleMediaUpload}
+                  >
+                    {uploadingMedia ? "Uploading…" : "Upload to R2"}
+                  </Button>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Source</CardTitle>
+              <CardDescription>Component TSX written to the registry on save.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                required
+                rows={18}
+                spellCheck={false}
+                className="min-h-[280px] font-mono text-xs leading-relaxed md:text-xs"
+                value={form.code}
+                onChange={(e) => {
+                  setDepsLocked(false);
+                  setForm((f) => ({ ...f, code: e.target.value }));
+                }}
+              />
+            </CardContent>
+          </Card>
+
+          <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur">
+            <p className="text-xs text-muted-foreground">
+              {mode === "create" ? "Creates files + MDX locally." : "Writes files in place."}
+            </p>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving…" : mode === "create" ? "Create" : "Save changes"}
+            </Button>
           </div>
+        </div>
+
+        <div className="min-w-0 space-y-4 xl:sticky xl:top-20 xl:self-start">
+          <ComponentLivePreview code={form.code} />
+
+          <Card size="sm" className="overflow-hidden">
+            <CardHeader className="flex-row items-start justify-between gap-3 space-y-0">
+              <div>
+                <CardTitle>Live preview</CardTitle>
+                <CardDescription>Published registry component after save.</CardDescription>
+              </div>
+              <div className="inline-flex rounded-lg border border-border bg-muted/40 p-0.5">
+                {(["light", "dark"] as const).map((theme) => (
+                  <button
+                    key={theme}
+                    type="button"
+                    className={cn(
+                      "rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors",
+                      previewTheme === theme
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                    onClick={() => setPreviewTheme(theme)}
+                  >
+                    {theme}
+                  </button>
+                ))}
+              </div>
+            </CardHeader>
+            <Separator />
+            <div
+              className={cn(
+                "component-showcase flex min-h-[min(60vh,560px)] items-center justify-center overflow-hidden text-foreground",
+                previewTheme === "dark" ? "dark" : "light",
+              )}
+              style={{ background: activePreviewBackground }}
+            >
+              {Preview ? (
+                <Suspense
+                  fallback={
+                    <div className="flex size-24 items-center justify-center">
+                      <Loader2 className="size-5 animate-spin text-muted-foreground" />
+                    </div>
+                  }
+                >
+                  <div key={previewKey} className="flex h-full w-full items-center justify-center p-4">
+                    <Preview size="lg" />
+                  </div>
+                </Suspense>
+              ) : (
+                <p className="max-w-sm px-6 text-center text-sm text-muted-foreground">
+                  Paste code and save once. The live preview appears here after publish.
+                </p>
+              )}
+            </div>
+          </Card>
         </div>
       </div>
     </form>
@@ -475,24 +551,24 @@ function ColorField({
 }) {
   const colorValue = /^#[0-9a-fA-F]{6}$/.test(value) ? value : fallback;
   return (
-    <label className="block space-y-1.5">
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
+    <div className="space-y-1.5">
+      <Label className="text-xs text-muted-foreground">{label}</Label>
       <div className="flex items-center gap-2">
         <input
           type="color"
           aria-label={`${label} preview background`}
-          className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-input bg-background p-1"
+          className="h-8 w-10 shrink-0 cursor-pointer rounded-lg border border-input bg-card p-0.5"
           value={colorValue}
           onChange={(e) => onChange(e.target.value)}
         />
-        <input
-          className={inputClass}
+        <Input
+          className="font-mono text-xs"
           placeholder={fallback}
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
       </div>
-    </label>
+    </div>
   );
 }
 
@@ -504,12 +580,9 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block space-y-1.5">
-      <span className="text-sm font-medium">{label}</span>
+    <div className="space-y-1.5">
+      <Label>{label}</Label>
       {children}
-    </label>
+    </div>
   );
 }
-
-const inputClass =
-  "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
