@@ -274,45 +274,49 @@ export function ScrollStackDeck({
     restDelta: 0.0001,
   });
 
+  const showIntro = Boolean(title || subtitle || scrollIndicatorText);
+
   return (
     <div
       className={`min-h-screen w-full bg-[#F4F6F8] font-sans text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white ${className}`}
     >
-      <section className="flex w-full flex-col items-center justify-center px-4 py-16 text-center">
-        <div className="flex max-w-3xl flex-col items-center gap-5">
-          <div className="flex flex-col items-center gap-2.5">
-            <h1 className="m-0 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
-              {title}
-            </h1>
-            <p className="m-0 max-w-2xl text-xl font-normal leading-relaxed tracking-tight text-neutral-600 sm:text-2xl">
-              {subtitle}
-            </p>
-          </div>
+      {showIntro ? (
+        <section className="flex w-full flex-col items-center justify-center px-4 py-16 text-center">
+          <div className="flex max-w-3xl flex-col items-center gap-5">
+            <div className="flex flex-col items-center gap-2.5">
+              <h1 className="m-0 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+                {title}
+              </h1>
+              <p className="m-0 max-w-2xl text-xl font-normal leading-relaxed tracking-tight text-neutral-600 sm:text-2xl">
+                {subtitle}
+              </p>
+            </div>
 
-          <div className="mt-2 flex items-center justify-center gap-2.5">
-            <span className="text-lg font-normal leading-relaxed tracking-tight text-neutral-600 sm:text-xl">
-              {scrollIndicatorText}
-            </span>
-            <motion.svg
-              animate={{ y: [0, 5, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 1.8,
-                ease: "easeInOut",
-              }}
-              className="h-6 w-6 text-black"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 4.75v13.5M6.75 13.75l5.25 5.5 5.25-5.5" />
-            </motion.svg>
+            <div className="mt-2 flex items-center justify-center gap-2.5">
+              <span className="text-lg font-normal leading-relaxed tracking-tight text-neutral-600 sm:text-xl">
+                {scrollIndicatorText}
+              </span>
+              <motion.svg
+                animate={{ y: [0, 5, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.8,
+                  ease: "easeInOut",
+                }}
+                className="h-6 w-6 text-black"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 4.75v13.5M6.75 13.75l5.25 5.5 5.25-5.5" />
+              </motion.svg>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section
         ref={containerRef}
