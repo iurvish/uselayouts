@@ -17,8 +17,6 @@ export interface CardStackItem {
 }
 
 export interface CardStackProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string;
-  subtitle?: string;
   items?: CardStackItem[];
   cardWidth?: number | string;
   cardHeight?: number | string;
@@ -27,7 +25,6 @@ export interface CardStackProps extends React.HTMLAttributes<HTMLDivElement> {
   sendToBackOnClick?: boolean;
   maxVisible?: number;
   cardClassName?: string;
-  headerClassName?: string;
   onSwipe?: (item: CardStackItem, index: number) => void;
 }
 
@@ -103,7 +100,7 @@ const DraggableCardWrapper: React.FC<DraggableCardWrapperProps> = ({
 
   return (
     <motion.div
-      className="absolute top-0 left-0 cursor-grab select-none touch-none active:cursor-grabbing"
+      className="absolute inset-0 cursor-grab select-none touch-none active:cursor-grabbing"
       style={{
         x,
         y,
@@ -125,16 +122,13 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
   (
     {
       items = DEFAULT_CARDS,
-      title = "Swipe & Explore",
-      subtitle = "Drag or click to cycle through the stack",
-      cardWidth = 300,
-      cardHeight = 300,
+      cardWidth,
+      cardHeight,
       sensitivity = 180,
       randomRotation = true,
       sendToBackOnClick = true,
       maxVisible = 5,
       cardClassName,
-      headerClassName,
       className,
       onSwipe,
       ...props
@@ -166,42 +160,33 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
     };
 
     const visibleDeck = deck.slice(0, maxVisible);
+    const width =
+      cardWidth == null
+        ? undefined
+        : typeof cardWidth === "number"
+          ? `${cardWidth}px`
+          : cardWidth;
+    const height =
+      cardHeight == null
+        ? undefined
+        : typeof cardHeight === "number"
+          ? `${cardHeight}px`
+          : cardHeight;
 
     return (
-      <div className="flex flex-col items-center justify-center gap-6">
-        {(title || subtitle) && (
-          <div
-            className={cn(
-              "flex flex-col items-center text-center gap-1 select-none",
-              headerClassName
-            )}
-          >
-            {title && (
-              <h3 className="text-xl font-medium tracking-tight text-white/90 sm:text-2xl">
-                {title}
-              </h3>
-            )}
-            {subtitle && (
-              <p className="text-xs text-white/50 sm:text-sm">
-                {subtitle}
-              </p>
-            )}
-          </div>
+      <div
+        ref={ref}
+        className={cn(
+          "relative aspect-square w-[min(18.75rem,100%)] [perspective:600px]",
+          className
         )}
-
-        <div
-          ref={ref}
-          className={cn(
-            "relative flex items-center justify-center [perspective:600px]",
-            className
-          )}
-          style={{
-            width: typeof cardWidth === "number" ? `${cardWidth}px` : cardWidth,
-            height: typeof cardHeight === "number" ? `${cardHeight}px` : cardHeight,
-          }}
-          {...props}
-        >
-          {visibleDeck.map((item, index) => {
+        style={{
+          ...(width ? { width } : {}),
+          ...(height ? { height } : width ? { height: width } : {}),
+        }}
+        {...props}
+      >
+        {visibleDeck.map((item, index) => {
             const offset = rotationOffsets[index] ?? 0;
             const rotateZ = (visibleDeck.length - index - 1) * 4 + offset;
             const scale = 1 + index * 0.06 - visibleDeck.length * 0.06;
@@ -230,13 +215,9 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
                     stiffness: 260,
                     damping: 20,
                   }}
-                  style={{
-                    width: typeof cardWidth === "number" ? `${cardWidth}px` : cardWidth,
-                    height: typeof cardHeight === "number" ? `${cardHeight}px` : cardHeight,
-                    background: cardBg,
-                  }}
+                  style={{ background: cardBg }}
                   className={cn(
-                    "relative overflow-hidden rounded-[20px] border-4 border-white shadow-2xl transition-shadow hover:shadow-3xl",
+                    "relative size-full overflow-hidden rounded-[20px] border-4 border-white shadow-2xl max-sm:rounded-2xl max-sm:border-2",
                     cardClassName
                   )}
                 >
@@ -245,7 +226,6 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
               </DraggableCardWrapper>
             );
           })}
-        </div>
       </div>
     );
   }
@@ -255,17 +235,8 @@ CardStack.displayName = "CardStack";
 
 export default function App() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center overflow-hidden bg-[#212121]">
-      <CardStack
-        title="Swipe & Explore"
-        subtitle="Drag or click to cycle through the stack"
-        items={DEFAULT_CARDS}
-        cardWidth={300}
-        cardHeight={300}
-        sensitivity={180}
-        randomRotation={true}
-        sendToBackOnClick={true}
-      />
+    <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden">
+      <CardStack items={DEFAULT_CARDS} />
     </div>
   );
 }

@@ -390,11 +390,11 @@ export function AccordionOS({
 
                     <div className="accordion-os-title-wrapper">
                       <span className="accordion-os-title-text">{item.title}</span>
-                      {item.badge && (
-                        <span className={`accordion-os-pill-badge ${isOpen ? "accordion-os-pill-badge-active" : ""}`}>
+                      {isOpen && item.badge ? (
+                        <span className="accordion-os-pill-badge accordion-os-pill-badge-active">
                           {item.badge}
                         </span>
-                      )}
+                      ) : null}
                     </div>
                   </div>
 
@@ -549,9 +549,10 @@ export function AccordionOS({
         .accordion-os-root {
           box-sizing: border-box;
           margin: 0 auto;
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
           user-select: none;
           perspective: 1200px;
+          container-type: inline-size;
         }
 
         .accordion-os-card {
@@ -564,11 +565,6 @@ export function AccordionOS({
           border-radius: 36px;
           padding: 24px;
           overflow: hidden;
-          box-shadow:
-            0 24px 48px -12px rgba(0, 0, 0, 0.08),
-            0 4px 16px -2px rgba(0, 0, 0, 0.03),
-            inset 0 0 0 1px rgba(255, 255, 255, 0.8),
-            inset 0 1px 2px rgba(255, 255, 255, 0.9);
           width: 100%;
           box-sizing: border-box;
         }
@@ -617,8 +613,7 @@ export function AccordionOS({
           padding: 13px 18px;
           cursor: pointer;
           border: 1px solid rgba(255, 255, 255, 0.7);
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
-          transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+          transition: background-color 0.25s ease, border-color 0.25s ease;
           outline: none;
           box-sizing: border-box;
         }
@@ -626,7 +621,6 @@ export function AccordionOS({
         .accordion-os-pill:hover {
           border-color: rgba(0, 0, 0, 0.12);
           background-color: rgba(255, 255, 255, 0.92);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
         }
 
         .accordion-os-pill:focus-visible {
@@ -637,7 +631,6 @@ export function AccordionOS({
           width: 290px;
           background-color: rgba(255, 255, 255, 0.9);
           border-color: rgba(0, 0, 0, 0.1);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         .accordion-os-title-stack {
@@ -719,14 +712,13 @@ export function AccordionOS({
         .accordion-os-nav-stack {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
           background: rgba(255, 255, 255, 0.65);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
-          padding: 4px 6px;
+          padding: 4px 2px;
           border-radius: 100px;
           border: 1px solid rgba(0, 0, 0, 0.05);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
         .accordion-os-nav-btn {
@@ -804,14 +796,14 @@ export function AccordionOS({
           z-index: 10;
         }
 
-        @media (max-width: 768px) {
+        @container (max-width: 640px) {
           .accordion-os-card {
             flex-direction: column;
             justify-content: flex-start;
             height: auto !important;
-            min-height: 560px;
-            padding: 18px;
-            border-radius: 28px;
+            min-height: min(560px, 100%);
+            padding: 14px;
+            border-radius: 24px;
           }
 
           .accordion-os-sidebar {
@@ -821,6 +813,8 @@ export function AccordionOS({
 
           .accordion-os-pill {
             max-width: 100%;
+            padding: 11px 14px;
+            border-radius: 18px;
           }
 
           .accordion-os-pill-open {
@@ -828,9 +822,36 @@ export function AccordionOS({
             max-width: 100%;
           }
 
+          .accordion-os-title-text {
+            font-size: 14px;
+            white-space: normal;
+          }
+
           .accordion-os-bottom-deck {
             margin-top: 18px;
             margin-bottom: 12px;
+          }
+
+          .accordion-os-image,
+          .accordion-os-vignette-overlay {
+            border-radius: 24px;
+          }
+        }
+
+        @container (max-width: 420px) {
+          .accordion-os-card {
+            padding: 10px;
+            border-radius: 20px;
+            min-height: 480px;
+          }
+
+          .accordion-os-items-stack {
+            gap: 8px;
+          }
+
+          .accordion-os-image,
+          .accordion-os-vignette-overlay {
+            border-radius: 20px;
           }
         }
       ` }} />
@@ -845,16 +866,15 @@ export function AccordionOS({
 export default function Page() {
   return (
     <TooltipProvider delayDuration={0}>
-      <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#f0f2f5" }}>
+      <div className="flex h-full w-full min-w-0 items-center justify-center overflow-auto p-4">
         <AccordionOS
-          containerWidth={840}
+          containerWidth="min(52.5rem, 100%)"
           containerHeight={520}
-          autoPlay={true}
+          autoPlay
           autoPlayInterval={3500}
-          pauseOnHover={true}
-          onItemChange={(idx) => console.log("Active slide:", idx)}
+          pauseOnHover
         />
-      </main>
+      </div>
     </TooltipProvider>
   );
 }

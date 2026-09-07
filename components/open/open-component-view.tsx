@@ -35,7 +35,7 @@ export function OpenComponentView({
     <>
       <main
         className={cn(
-          "grid h-dvh w-full flex-1 place-items-center overflow-auto px-[18px] pt-20 pb-[108px]",
+          "grid h-dvh w-full min-w-0 flex-1 place-items-center overflow-auto px-[18px] pt-20 pb-[108px]",
           scrollbarMinimal,
         )}
         style={{ background: previewBackground || "hsl(225 7% 11%)" }}
