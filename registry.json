@@ -136,23 +136,6 @@
       ]
     },
     {
-      "name": "business-input",
-      "type": "registry:component",
-      "title": "Business Input",
-      "description": "A sleek email demo-booking form with validation, loading/success states, animations, and responsive dark/light mode support.",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/business-input.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "card-folder",
       "type": "registry:component",
       "title": "Card Folder",

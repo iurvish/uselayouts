@@ -77,7 +77,6 @@ const SEEDS: Seed[] = [
   { slug: "empty-testimonial", title: "Empty Testimonial", description: "An empty state worth keeping.", category: "Display" },
   { slug: "accessible-action", title: "Accessible Action", description: "A card stack you can tilt and swipe.", category: "Display" },
   { slug: "accordionos", title: "AccordionOS", description: "Accordions with image transitions.", category: "Display" },
-  { slug: "business-input", title: "Business Input", description: "A booking form that finishes cleanly.", category: "Input" },
   { slug: "card-folder", title: "Card Folder", description: "A folder card with hover depth.", category: "Display" },
   { slug: "confidential-folder", title: "Confidential Folder", description: "A 3D stack you can drag through.", category: "Display" },
   { slug: "corner-vidoe", title: "Corner Video", description: "A player that morphs from the corner.", category: "Display" },

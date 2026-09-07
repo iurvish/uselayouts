@@ -2,7 +2,6 @@
 export const NEW_COMPONENT_SLUGS = new Set([
   "accessible-action",
   "accordionos",
-  "business-input",
   "card-folder",
   "confidential-folder",
   "corner-vidoe",

@@ -23,8 +23,13 @@ export function PreviewHint({
   className?: string;
 }) {
   return (
-    <div className={cn("flex w-full min-w-0 flex-col items-center", className)}>
-      <div className="flex max-w-full flex-col items-center gap-[18px] px-4">
+    <div
+      className={cn(
+        "grid h-full w-full min-w-0 grid-rows-[auto_1fr] justify-items-center",
+        className,
+      )}
+    >
+      <div className="flex max-w-full flex-col items-center gap-[18px] px-4 pt-1">
         <div className="flex max-w-full flex-col items-center gap-2 text-center">
           <p className="text-balance font-[family-name:var(--font-geist-sans)] text-base tracking-[-0.03em] text-white">
             {heading}
@@ -37,7 +42,9 @@ export function PreviewHint({
         </div>
         <HintConnector />
       </div>
-      {children}
+      <div className="flex min-h-0 w-full items-center justify-center">
+        {children}
+      </div>
     </div>
   );
 }

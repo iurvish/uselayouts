@@ -13,6 +13,7 @@ export interface CardStackItem {
   id?: string | number;
   color?: string;
   bg?: string;
+  image?: string;
   content?: React.ReactNode;
 }
 
@@ -28,26 +29,34 @@ export interface CardStackProps extends React.HTMLAttributes<HTMLDivElement> {
   onSwipe?: (item: CardStackItem, index: number) => void;
 }
 
+const CARD_IMG =
+  "auto=format&fit=crop&w=800&q=80";
+
 export const DEFAULT_CARDS: CardStackItem[] = [
   {
     id: "card-0",
-    color: "#6366f1",
+    color: "#2c2018",
+    image: `https://images.unsplash.com/photo-1715196372160-31ba56b1a2f9?${CARD_IMG}`,
   },
   {
     id: "card-1",
-    color: "#ec4899",
+    color: "#2a2418",
+    image: `https://images.unsplash.com/photo-1725598942850-264692e08148?${CARD_IMG}`,
   },
   {
     id: "card-2",
-    color: "#3b82f6",
+    color: "#3a2418",
+    image: `https://images.unsplash.com/photo-1771926623926-a644527a40dc?${CARD_IMG}`,
   },
   {
     id: "card-3",
-    color: "#10b981",
+    color: "#1c2a24",
+    image: `https://images.unsplash.com/photo-1768078557733-f3fb33926de0?${CARD_IMG}`,
   },
   {
     id: "card-4",
-    color: "#f59e0b",
+    color: "#1a2e1a",
+    image: `https://images.unsplash.com/photo-1765660463147-ffe356af64c6?${CARD_IMG}`,
   },
 ];
 
@@ -221,7 +230,16 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
                     cardClassName
                   )}
                 >
-                  {item.content ? item.content : null}
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt=""
+                      draggable={false}
+                      className="pointer-events-none size-full object-cover"
+                    />
+                  ) : item.content ? (
+                    item.content
+                  ) : null}
                 </motion.div>
               </DraggableCardWrapper>
             );

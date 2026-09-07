@@ -136,24 +136,6 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "business-input": {
-    name: "business-input",
-    description: "A sleek email demo-booking form with validation, loading/success states, animations, and responsive dark/light mode support.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/business-input.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/business-input.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "business-input"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
   "card-folder": {
     name: "card-folder",
     description: "This component creates an animated folder-style card with a background image, floating 3D object, hover effects, and customizable colors and text. You can easily change the images, colors, content, and animation settings from the card props.",

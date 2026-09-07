@@ -5,7 +5,7 @@ import { CardStack, DEFAULT_CARDS } from "@/registry/default/example/accessible-
 
 export default function AccessibleActionDemo() {
   return (
-    <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden">
+    <div className="h-full w-full min-w-0 overflow-hidden">
       <PreviewHint
         heading="Swipe & Explore"
         description="Drag or click to cycle through the stack"
