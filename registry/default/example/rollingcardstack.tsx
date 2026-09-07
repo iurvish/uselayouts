@@ -21,7 +21,6 @@ export interface CardItem {
   image: string;
   accentColor?: string;
   icon?: React.ReactNode;
-  tag?: string;
 }
 
 export interface RollingCardStackProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -83,21 +82,6 @@ const ArrowUpRightIcon = () => (
   </svg>
 );
 
-const MonitorIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-    <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" />
-    <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" />
-  </svg>
-);
-
-const PhoneIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="5" y="2" width="14" height="20" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-    <line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2.5" strokeLinecap="round" />
-  </svg>
-);
-
 // ==========================================
 // 4. DEFAULT DATASET
 // ==========================================
@@ -105,7 +89,6 @@ export const DEFAULT_CARDS: CardItem[] = [
   {
     id: "spatial-design",
     caption: "Spatial Architecture",
-    tag: "Minimalist Space",
     title: "Sculpting digital calm",
     description:
       "Craft intentional spaces through minimalist geometry, tactile typography, and harmonious micro-interactions.",
@@ -117,7 +100,6 @@ export const DEFAULT_CARDS: CardItem[] = [
   {
     id: "neural-intelligence",
     caption: "Neural Synthesis",
-    tag: "AI Inference",
     title: "Autonomous creative engine",
     description:
       "Synthesize complex datasets into high-fidelity generative interfaces with ultra-low latency inference models.",
@@ -129,7 +111,6 @@ export const DEFAULT_CARDS: CardItem[] = [
   {
     id: "quantum-computing",
     caption: "Quantum Pipeline",
-    tag: "High Speed",
     title: "Pure algorithmic speed",
     description:
       "Accelerate mission-critical workflows with quantum-inspired parallel execution and effortless state caching.",
@@ -141,7 +122,6 @@ export const DEFAULT_CARDS: CardItem[] = [
   {
     id: "organic-materials",
     caption: "Fluid Dynamics",
-    tag: "Kinetic Physics",
     title: "Tactile motion & balance",
     description:
       "Experience natural kinetic inertia designed to mimic liquid viscosity and frictionless physics across every viewport.",
@@ -261,22 +241,20 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
                 type="button"
                 onClick={() => setDevice("desktop")}
                 className={cn(
-                  "relative z-20 w-1/2 h-full flex items-center justify-center gap-1.5 text-xs font-semibold tracking-tight transition-colors duration-200",
+                  "relative z-20 w-1/2 h-full flex items-center justify-center text-xs font-semibold tracking-tight transition-colors duration-200",
                   device === "desktop" ? "text-neutral-950" : "text-neutral-300 hover:text-white"
                 )}
               >
-                <MonitorIcon />
                 Desktop
               </button>
               <button
                 type="button"
                 onClick={() => setDevice("mobile")}
                 className={cn(
-                  "relative z-20 w-1/2 h-full flex items-center justify-center gap-1.5 text-xs font-semibold tracking-tight transition-colors duration-200",
+                  "relative z-20 w-1/2 h-full flex items-center justify-center text-xs font-semibold tracking-tight transition-colors duration-200",
                   device === "mobile" ? "text-neutral-950" : "text-neutral-300 hover:text-white"
                 )}
               >
-                <PhoneIcon />
                 Mobile
               </button>
             </div>
@@ -383,17 +361,9 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
                       </span>
                     </div>
 
-                    {/* Tag Badge & Index Counter */}
-                    <div className="flex items-center gap-2">
-                      {card.tag && (
-                        <span className="hidden sm:inline-flex items-center text-xs font-medium text-neutral-600 bg-[#EFEFEA] px-2.5 py-0.5 rounded-full border border-black/5">
-                          {card.tag}
-                        </span>
-                      )}
-                      <span className="text-xs font-mono font-medium text-neutral-400">
-                        0{index + 1}
-                      </span>
-                    </div>
+                    <span className="text-xs font-mono font-medium text-neutral-400">
+                      0{index + 1}
+                    </span>
                   </div>
 
                   {/* Card Content Body */}
