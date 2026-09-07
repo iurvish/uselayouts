@@ -147,7 +147,7 @@ export const Index: Record<string, any> = {
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/card-folder.tsx")
+      const mod = await import("@/registry/default/demo/card-folder-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "card-folder"
       return { default: mod.default || mod[exportName] }
     }),
@@ -183,7 +183,7 @@ export const Index: Record<string, any> = {
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/corner-vidoe.tsx")
+      const mod = await import("@/registry/default/demo/corner-vidoe-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "corner-vidoe"
       return { default: mod.default || mod[exportName] }
     }),

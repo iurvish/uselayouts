@@ -124,18 +124,23 @@ function CornerPlayer({
   const openW = isEnlarged ? 280 : 180;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50">
+    <div className="fixed right-4 bottom-4 z-50">
       {/* One continuous shell — video stays mounted so minimize never blanks */}
       <motion.div
         layout
         transition={{ duration: 0.4, ease: EASE }}
+        style={{
+          originX: 1,
+          originY: 1,
+          borderRadius: isOpen ? "16px" : "22px",
+        }}
         animate={{
-          width: isOpen ? openW : "auto",
-          height: isOpen ? openH : 44,
-          borderRadius: isOpen ? 16 : 999,
+          width: isOpen ? `${openW}px` : "auto",
+          height: isOpen ? `${openH}px` : "44px",
+          borderRadius: isOpen ? "16px" : "22px",
           backgroundColor: isOpen ? "#E0F2FE" : "#BAE6FD",
         }}
-        className="relative overflow-hidden shadow-lg shadow-sky-200/50"
+        className="relative overflow-hidden shadow-lg shadow-black/40"
       >
         <motion.div
           aria-hidden={!isOpen}
@@ -185,7 +190,19 @@ function CornerPlayer({
                 className="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-sky-950"
                 aria-label={isMuted ? "Unmute" : "Mute"}
               >
-                {isMuted ? "🔇" : "🔊"}
+                {isMuted ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M11 5 6 9H2v6h4l5 4z" />
+                    <line x1="22" y1="9" x2="16" y2="15" />
+                    <line x1="16" y1="9" x2="22" y2="15" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M11 5 6 9H2v6h4l5 4z" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                  </svg>
+                )}
               </button>
               <button
                 type="button"
@@ -193,10 +210,24 @@ function CornerPlayer({
                   e.stopPropagation();
                   setIsEnlarged((v) => !v);
                 }}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-xs text-sky-950"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-sky-950"
                 aria-label={isEnlarged ? "Shrink" : "Enlarge"}
               >
-                {isEnlarged ? "↘" : "↗"}
+                {isEnlarged ? (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <polyline points="4 14 10 14 10 20" />
+                    <polyline points="20 10 14 10 14 4" />
+                    <line x1="14" y1="10" x2="21" y2="3" />
+                    <line x1="3" y1="21" x2="10" y2="14" />
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <polyline points="15 3 21 3 21 9" />
+                    <polyline points="9 21 3 21 3 15" />
+                    <line x1="21" y1="3" x2="14" y2="10" />
+                    <line x1="3" y1="21" x2="10" y2="14" />
+                  </svg>
+                )}
               </button>
             </div>
             <button
@@ -205,7 +236,10 @@ function CornerPlayer({
               className="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-sky-950"
               aria-label="Close"
             >
-              ✕
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
             </button>
           </div>
 
@@ -266,18 +300,7 @@ function CornerPlayer({
 
 export default function CornerVideoPlayer() {
   return (
-    <section className="relative bg-[#F3F0FA] py-16">
-      <div className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-        <p className="mb-3 text-sm font-medium tracking-widest text-violet-400 uppercase">
-          Studio preview
-        </p>
-        <h2 className="mb-4 text-4xl font-semibold tracking-tight text-violet-950 sm:text-5xl">
-          Corner player with a smooth morph
-        </h2>
-        <p className="max-w-xl text-lg text-violet-600/80">
-          Close collapses into a pill without a blank flash. Hover for mute, enlarge, and scrub.
-        </p>
-      </div>
+    <section className="relative h-full min-h-[28rem] w-full bg-[hsl(240_6%_7%)]">
       <CornerPlayer />
     </section>
   );

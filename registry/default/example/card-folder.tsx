@@ -7,7 +7,7 @@ interface FolderCardItem {
   number: string;
   title: string;
   description: string;
-  bgImage: string;
+  bgImage?: string;
   characterImage: string;
   folderColor: string;
   borderColor: string;
@@ -15,6 +15,9 @@ interface FolderCardItem {
   subTextColor?: string;
   href?: string;
 }
+
+const OBJECT =
+  "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis";
 
 const DEMO_CARDS: FolderCardItem[] = [
   {
@@ -26,24 +29,18 @@ const DEMO_CARDS: FolderCardItem[] = [
     borderColor: "#D4C4F5",
     textColor: "#3B2F63",
     subTextColor: "rgba(59, 47, 99, 0.65)",
-    bgImage:
-      "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&q=85",
-    characterImage:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=85",
+    characterImage: `${OBJECT}/Activities/Artist%20Palette.png`,
   },
   {
     id: "02",
     number: "02",
-    title: "Sprint Notes",
-    description: "Weekly rituals for focused builders.",
+    title: "Shot List",
+    description: "Campaign stills, ready to file.",
     folderColor: "#FFE8D6",
     borderColor: "#FFD4B8",
     textColor: "#5C3D2E",
     subTextColor: "rgba(92, 61, 46, 0.65)",
-    bgImage:
-      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1200&q=85",
-    characterImage:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=85",
+    characterImage: `${OBJECT}/Objects/Camera.png`,
   },
   {
     id: "03",
@@ -54,24 +51,7 @@ const DEMO_CARDS: FolderCardItem[] = [
     borderColor: "#B8EBCE",
     textColor: "#1F4D38",
     subTextColor: "rgba(31, 77, 56, 0.65)",
-    bgImage:
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=85",
-    characterImage:
-      "https://images.unsplash.com/photo-1618004912476-29818d81ae2e?auto=format&fit=crop&w=600&q=85",
-  },
-  {
-    id: "04",
-    number: "04",
-    title: "Cloud Brief",
-    description: "Research snapshots for fast alignment.",
-    folderColor: "#D6EBFF",
-    borderColor: "#B8D9F5",
-    textColor: "#1E3A5F",
-    subTextColor: "rgba(30, 58, 95, 0.65)",
-    bgImage:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=85",
-    characterImage:
-      "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=600&q=85",
+    characterImage: `${OBJECT}/Animals/Potted%20Plant.png`,
   },
 ];
 
@@ -111,29 +91,27 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
         }}
         initial="initial"
         whileHover="hover"
-        whileTap={{ scale: 0.98 }}
         animate="initial"
       >
-        <motion.div
-          className="absolute inset-0 z-0 transform-gpu overflow-hidden will-change-[transform]"
-          variants={{
-            initial: { scale: 1 },
-            hover: { scale: 1.09 },
+        <div
+          className="absolute inset-0 z-0 overflow-hidden"
+          style={{
+            background: `linear-gradient(180deg, ${card.borderColor}, ${card.folderColor})`,
           }}
-          transition={gpuSpringTransition}
         >
-          <img
-            src={card.bgImage}
-            alt={card.title}
-            decoding="async"
-            loading="eager"
-            className="pointer-events-none h-full w-full transform-gpu select-none object-cover"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35" />
-        </motion.div>
+          {card.bgImage ? (
+            <img
+              src={card.bgImage}
+              alt=""
+              decoding="async"
+              loading="eager"
+              className="pointer-events-none h-full w-full select-none object-cover"
+            />
+          ) : null}
+        </div>
 
         <motion.div
-          className="pointer-events-none absolute left-1/2 top-[130px] z-10 w-[230px] -translate-x-1/2 transform-gpu will-change-[transform]"
+          className="pointer-events-none absolute left-1/2 top-[130px] z-10 flex w-[230px] -translate-x-1/2 justify-center transform-gpu will-change-[transform]"
           variants={{
             initial: { y: 0, scale: 0.96 },
             hover: { y: -72, scale: 1.08 },
@@ -147,14 +125,14 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="flex w-full items-center justify-center"
+            className="flex items-center justify-center"
           >
             <img
               src={card.characterImage}
               alt=""
               decoding="async"
               loading="eager"
-              className="pointer-events-none h-auto w-full transform-gpu select-none object-contain brightness-105 contrast-125 drop-shadow-[0_24px_28px_rgba(0,0,0,0.35)] grayscale"
+              className="pointer-events-none h-44 w-auto max-w-[180px] transform-gpu select-none object-contain drop-shadow-[0_18px_24px_rgba(0,0,0,0.2)]"
             />
           </motion.div>
         </motion.div>
@@ -210,17 +188,17 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
         </motion.div>
 
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col gap-0.5 p-5 pb-[22px]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col gap-3 p-5 pb-[22px]"
           style={{ color: textColor }}
         >
           <h3
-            className="select-none font-sans text-base font-semibold leading-tight tracking-tight"
+            className="select-none font-sans text-base font-semibold leading-7 tracking-tight"
             style={{ color: textColor }}
           >
             {card.title}
           </h3>
           <p
-            className="select-none font-sans text-sm font-normal leading-snug opacity-80"
+            className="select-none font-sans text-sm font-normal leading-relaxed opacity-80"
             style={{ color: subTextColor }}
           >
             {card.description}
@@ -233,19 +211,7 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
 
 export default function FolderCards() {
   return (
-    <section className="flex min-h-screen w-full flex-col items-center justify-center bg-[#FAF8F5] px-6 py-16">
-      <div className="mb-12 max-w-2xl text-center">
-        <p className="text-sm font-medium tracking-wide text-neutral-500">
-          Project folders
-        </p>
-        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">
-          Hover to peek inside
-        </h2>
-        <p className="mt-3 text-base text-neutral-600">
-          A playful filing system for design ops, research, and launch work.
-        </p>
-      </div>
-
+    <section className="flex h-full w-full items-center justify-center px-6 py-8">
       <div className="flex flex-wrap items-center justify-center gap-8">
         {DEMO_CARDS.map((card) => (
           <FolderPeek key={card.id} card={card} />

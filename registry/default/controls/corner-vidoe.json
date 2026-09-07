@@ -20,7 +20,7 @@
   },
   "disabled": [],
   "updatedAt": "2026-08-29T06:00:05.403Z",
-  "previewBackground": "#f3f0fa",
+  "previewBackground": "hsl(240 6% 7%)",
   "interactionHints": {
     "duration": 3,
     "scale": 70,
