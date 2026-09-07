@@ -41,11 +41,11 @@ export function PreviewHint({
         className,
       )}
     >
-      <div className="flex max-w-full flex-col items-center gap-[18px] px-4 pt-1">
-        <div className="flex max-w-full flex-col items-center gap-2 text-center">
+      <div className="flex max-w-full flex-col items-center gap-8 px-4 pt-1">
+        <div className="flex max-w-full flex-col items-center gap-1 text-center">
           <p
             className={cn(
-              "text-balance font-[family-name:var(--font-geist-sans)] text-base tracking-[-0.03em]",
+              "text-balance font-[family-name:var(--font-geist-sans)] text-lg tracking-[-0.03em]",
               tone === "light" ? "text-neutral-900" : "text-white",
             )}
           >

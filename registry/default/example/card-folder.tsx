@@ -29,6 +29,8 @@ const DEMO_CARDS: FolderCardItem[] = [
     borderColor: "#D4C4F5",
     textColor: "#3B2F63",
     subTextColor: "rgba(59, 47, 99, 0.65)",
+    bgImage:
+      "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&q=85",
     characterImage: `${OBJECT}/Activities/Artist%20Palette.png`,
   },
   {
@@ -40,6 +42,8 @@ const DEMO_CARDS: FolderCardItem[] = [
     borderColor: "#FFD4B8",
     textColor: "#5C3D2E",
     subTextColor: "rgba(92, 61, 46, 0.65)",
+    bgImage:
+      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1200&q=85",
     characterImage: `${OBJECT}/Objects/Camera.png`,
   },
   {
@@ -51,6 +55,8 @@ const DEMO_CARDS: FolderCardItem[] = [
     borderColor: "#B8EBCE",
     textColor: "#1F4D38",
     subTextColor: "rgba(31, 77, 56, 0.65)",
+    bgImage:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=85",
     characterImage: `${OBJECT}/Animals/Potted%20Plant.png`,
   },
 ];
@@ -71,15 +77,6 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
 
   return (
     <div className="relative isolate h-[400px] w-[300px] shrink-0">
-      <motion.div
-        className="pointer-events-none absolute inset-0 transform-gpu rounded-[32px] shadow-[0_28px_56px_-12px_rgba(0,0,0,0.25)] will-change-[opacity]"
-        variants={{
-          initial: { opacity: 0.3 },
-          hover: { opacity: 1 },
-        }}
-        transition={gpuSpringTransition}
-      />
-
       <Component
         {...(card.href
           ? { href: card.href, target: "_blank", rel: "noopener noreferrer" }
@@ -93,11 +90,13 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
         whileHover="hover"
         animate="initial"
       >
-        <div
-          className="absolute inset-0 z-0 overflow-hidden"
-          style={{
-            background: `linear-gradient(180deg, ${card.borderColor}, ${card.folderColor})`,
+        <motion.div
+          className="absolute inset-0 z-0 overflow-hidden transform-gpu will-change-[transform]"
+          variants={{
+            initial: { scale: 1 },
+            hover: { scale: 1.09 },
           }}
+          transition={gpuSpringTransition}
         >
           {card.bgImage ? (
             <img
@@ -108,7 +107,7 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
               className="pointer-events-none h-full w-full select-none object-cover"
             />
           ) : null}
-        </div>
+        </motion.div>
 
         <motion.div
           className="pointer-events-none absolute left-1/2 top-[130px] z-10 flex w-[230px] -translate-x-1/2 justify-center transform-gpu will-change-[transform]"
@@ -188,7 +187,7 @@ function FolderPeek({ card }: { card: FolderCardItem }) {
         </motion.div>
 
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col gap-3 p-5 pb-[22px]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col gap-2 p-5 pb-[22px]"
           style={{ color: textColor }}
         >
           <h3
