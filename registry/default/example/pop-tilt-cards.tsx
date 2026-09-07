@@ -46,22 +46,33 @@ export default function PopTiltCards() {
   const containerHeight = CARD_HEIGHT + POP_HEIGHT + 40;
 
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center bg-[#F4F6F8] px-6 py-8">
+    <section className="flex h-full w-full min-w-0 flex-col items-center justify-center overflow-x-hidden bg-[#F4F6F8] px-4 py-8 md:px-6">
       <div
-        className="relative flex select-none items-end justify-center [perspective:1200px]"
-        style={{
-          width: `${containerWidth}px`,
-          height: `${containerHeight}px`,
-        }}
-        onMouseLeave={() => setHoveredIndex(null)}
+        className="flex w-full min-w-0 justify-center [container-type:inline-size]"
+        style={{ maxWidth: containerWidth }}
       >
         <div
-          className="relative bottom-5"
+          className="relative w-full overflow-hidden"
           style={{
-            width: `${containerWidth}px`,
-            height: `${CARD_HEIGHT}px`,
+            height: `calc(${containerHeight}px * min(1, 100cqi / ${containerWidth}px))`,
           }}
         >
+          <div
+            className="relative mx-auto flex select-none items-end justify-center [perspective:1200px] [transform-origin:top_center]"
+            style={{
+              width: `${containerWidth}px`,
+              height: `${containerHeight}px`,
+              transform: `scale(min(1, calc(100cqi / ${containerWidth}px)))`,
+            }}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <div
+              className="relative bottom-5"
+              style={{
+                width: `${containerWidth}px`,
+                height: `${CARD_HEIGHT}px`,
+              }}
+            >
           {CARDS.map((card, index) => {
             let targetX = index * CARD_OFFSET;
             let targetY = 0;
@@ -99,6 +110,7 @@ export default function PopTiltCards() {
                   zIndex,
                 }}
                 onMouseEnter={() => setHoveredIndex(index)}
+                onClick={() => setHoveredIndex(index)}
               >
                 <motion.div
                   className="absolute left-0 top-0 flex cursor-pointer flex-col items-start justify-start overflow-hidden rounded-xl p-4 [transform-origin:50%_90%] will-change-transform"
@@ -140,7 +152,9 @@ export default function PopTiltCards() {
                 </motion.div>
               </div>
             );
-          })}
+            })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

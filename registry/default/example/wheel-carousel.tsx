@@ -93,44 +93,31 @@ const THEME_PRESETS = {
     bg: '#09090b',
     text: 'rgba(255, 255, 255, 0.35)',
     sel: '#fafafa',
-    marker: '#f59e0b',
+    marker: '#22c55e',
     panel: '#18181b',
   },
   light: {
     bg: '#ffffff',
     text: 'rgba(9, 9, 11, 0.28)',
     sel: '#09090b',
-    marker: '#f59e0b',
+    marker: '#22c55e',
     panel: '#f4f4f5',
   },
 };
 
-export const Badge: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (
-  <div
-    className={cn(
-      'inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wider uppercase transition-colors',
-      'border-border/60 bg-background/80 text-foreground backdrop-blur-md shadow-sm',
-      className
-    )}
-    {...props}
-  />
-);
-
 interface PhotoCardProps {
   image?: string;
   label?: string;
-  category?: string;
   aspect: PhotoAspect;
   radius: number;
   widthPercent: number;
   crossfade?: number;
   panel: string;
-  isDark: boolean;
   mode?: string;
 }
 
 const PhotoCard = memo<PhotoCardProps>(
-  ({ image, label, category, aspect, radius, widthPercent, crossfade = 0.45, panel, isDark, mode }) => {
+  ({ image, label, aspect, radius, widthPercent, crossfade = 0.45, panel, mode }) => {
     const [currentImage, setCurrentImage] = useState<string | undefined>(image);
     const [prevImage, setPrevImage] = useState<string | undefined>(undefined);
     const [isCrossfading, setIsCrossfading] = useState<boolean>(false);
@@ -164,93 +151,62 @@ const PhotoCard = memo<PhotoCardProps>(
         }}
       >
         <div
-          className={cn(
-            'relative w-full max-h-full overflow-hidden p-1.5 transition-all duration-500 backdrop-blur-2xl',
-            mode === 'dark'
-              ? 'bg-zinc-900/60 border border-zinc-800/80 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/10'
-              : mode === 'custom'
-              ? 'bg-[#fff6ec]/75 border border-[#e8792e]/20 shadow-[0_20px_50px_-12px_rgba(180,84,30,0.15)] ring-1 ring-[#e8792e]/10'
-              : 'bg-white/60 border border-zinc-200/80 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] ring-1 ring-black/5'
-          )}
+          className="relative w-full max-h-full overflow-hidden"
           style={{
-            borderRadius: radius + 6,
+            borderRadius: radius,
             aspectRatio: aspect,
+            background: panel,
+            border:
+              mode === 'dark'
+                ? '1px solid rgba(255, 255, 255, 0.1)'
+                : mode === 'custom'
+                ? '1px solid rgba(232, 121, 46, 0.18)'
+                : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow:
+              mode === 'dark'
+                ? '0 16px 40px -16px rgba(0, 0, 0, 0.65)'
+                : '0 12px 32px -12px rgba(0, 0, 0, 0.12)',
             transform: 'translate3d(0, 0, 0)',
             backfaceVisibility: 'hidden',
-            willChange: 'transform',
           }}
         >
-          <div
-            className="relative w-full h-full overflow-hidden transition-colors duration-500"
-            style={{
-              borderRadius: radius,
-              background: panel,
-            }}
-          >
-            {prevImage && (
-              <img
-                src={prevImage}
-                alt=""
-                decoding="async"
-                loading="eager"
-                className={cn(
-                  'absolute inset-0 w-full h-full object-cover transition-all',
-                  isCrossfading ? 'opacity-0 scale-95 blur-md' : 'opacity-100 scale-100 blur-0'
-                )}
-                style={{
-                  transitionDuration: `${crossfade}s`,
-                  transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                  willChange: 'transform, opacity, filter',
-                }}
-              />
-            )}
+          {prevImage && (
+            <img
+              src={prevImage}
+              alt=""
+              decoding="async"
+              loading="eager"
+              className={cn(
+                'absolute inset-0 w-full h-full object-cover transition-all',
+                isCrossfading ? 'opacity-0 scale-95 blur-md' : 'opacity-100 scale-100 blur-0'
+              )}
+              style={{
+                transitionDuration: `${crossfade}s`,
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'transform, opacity, filter',
+              }}
+            />
+          )}
 
-            {currentImage ? (
-              <img
-                src={currentImage}
-                alt={label || '4K Minimal Spatial Photography'}
-                decoding="async"
-                loading="eager"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  animation: isCrossfading
-                    ? `liquidPhotoEnter ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1)`
-                    : 'none',
-                  willChange: 'transform, opacity, filter',
-                }}
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-end p-6 text-muted-foreground bg-gradient-to-br from-zinc-900 to-zinc-950 text-sm">
-                {label}
-              </div>
-            )}
-
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-
-            {isCrossfading && (
-              <div
-                className="absolute -inset-1/4 pointer-events-none mix-blend-screen bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.3)_0%,rgba(255,255,255,0.08)_45%,transparent_70%)]"
-                style={{
-                  animation: `liquidWavePulse ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-                }}
-              />
-            )}
-
-            {category && (
-              <div className="absolute bottom-3 left-3 pointer-events-none">
-                <Badge
-                  className={cn(
-                    'shadow-sm',
-                    isDark
-                      ? 'bg-zinc-950/80 border-zinc-800 text-zinc-200'
-                      : 'bg-white/90 border-zinc-200 text-zinc-900'
-                  )}
-                >
-                  {category}
-                </Badge>
-              </div>
-            )}
-          </div>
+          {currentImage ? (
+            <img
+              src={currentImage}
+              alt={label || 'Carousel view'}
+              decoding="async"
+              loading="eager"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                animation: isCrossfading
+                  ? `liquidPhotoEnter ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1)`
+                  : 'none',
+                willChange: 'transform, opacity, filter',
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-end p-6 text-muted-foreground bg-gradient-to-br from-zinc-900 to-zinc-950 text-sm">
+              {label}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -286,8 +242,8 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       selectedColor,
       showMarker = true,
       markerColor,
-      markerSize = 16,
-      markerGap = 22,
+      markerSize = 22,
+      markerGap = 28,
       background,
       scrollSpeed = 0.007,
       dragSpeed = 0.016,
@@ -312,7 +268,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             bg: background || '#fff6ec',
             text: textColor || 'rgba(180, 90, 20, 0.45)',
             sel: selectedColor || '#b4541e',
-            marker: markerColor || '#e8792e',
+            marker: markerColor || '#22c55e',
             panel: background || '#fff6ec',
           }
         : THEME_PRESETS[mode] || THEME_PRESETS.light;
@@ -663,7 +619,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className="flex h-full items-stretch select-none touch-none outline-none cursor-grab active:cursor-grabbing"
+          className="flex h-full items-stretch justify-center select-none touch-none outline-none cursor-grab active:cursor-grabbing"
           style={{
             flexDirection: photoSide === 'right' ? 'row-reverse' : 'row',
             gap,
@@ -671,22 +627,30 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             contain: 'layout size',
           }}
         >
+          <style>{`
+            @keyframes liquidPhotoEnter {
+              0% { opacity: 0; transform: scale(1.06) translateY(6px); filter: blur(12px) contrast(1.1); }
+              60% { filter: blur(2px) contrast(1.03); }
+              100% { opacity: 1; transform: scale(1) translateY(0px); filter: blur(0px) contrast(1); }
+            }
+          `}</style>
           <PhotoCard
             image={activeItem?.image}
             label={activeItem?.label}
-            category={activeItem?.category}
             aspect={photoAspect}
             radius={photoRadius}
             widthPercent={photoWidth}
             crossfade={crossfade}
             panel={theme.panel}
-            isDark={mode === 'dark'}
             mode={mode}
           />
 
           <div
-            className="relative flex-1 h-full overflow-hidden"
+            className="relative h-full overflow-hidden"
             style={{
+              flex: '0 1 420px',
+              width: '420px',
+              maxWidth: '52%',
               WebkitMaskImage: maskValue,
               maskImage: maskValue,
               WebkitMaskComposite: edgeFade ? 'source-in' : undefined,
@@ -696,25 +660,29 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           >
             {showMarker && (
               <div
-                className="absolute top-1/2 pointer-events-none"
+                className="absolute top-1/2 pointer-events-none flex items-center justify-center"
                 style={{
                   left: `calc(${apexInset}% - ${markerGap}px)`,
-                  width: 5,
+                  width: markerSize,
                   height: markerSize,
-                  marginLeft: -5,
+                  marginLeft: -markerSize,
                   transform: 'translate3d(0, -50%, 0)',
-                  borderRadius: 2,
+                  borderRadius: 5,
                   background: theme.marker,
                   flexShrink: 0,
                   boxShadow: `
-                    0 0 24px ${theme.marker}80,
-                    0 2px 8px ${theme.marker}50,
-                    inset 0 1.5px 2px rgba(255,255,255,0.9),
-                    inset 0 -1.5px 2px rgba(0,0,0,0.3)
+                    0 0 22px ${theme.marker}70,
+                    0 2px 8px ${theme.marker}45,
+                    inset 0 1px 1px rgba(255,255,255,0.55),
+                    inset 0 -1px 1px rgba(0,0,0,0.25)
                   `,
                   transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
                 }}
-              />
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M3.2 1.6v6.8L8.2 5z" fill="#fff" />
+                </svg>
+              </div>
             )}
 
             {list.map((item, index) => {
@@ -760,7 +728,7 @@ export const WheelCarouselDemo: React.FC = () => {
   const customBg = '#fff6ec';
   const customText = 'rgba(180, 90, 20, 0.45)';
   const customSelected = '#b4541e';
-  const customMarker = '#e8792e';
+  const customMarker = '#22c55e';
 
   const currentBgColor =
     mode === 'dark' ? '#09090b' : mode === 'custom' ? customBg : '#ffffff';
@@ -786,7 +754,7 @@ export const WheelCarouselDemo: React.FC = () => {
 
   return (
     <div
-      className="relative w-screen h-screen flex flex-col overflow-hidden transition-colors duration-500 font-sans"
+      className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden transition-colors duration-500 font-sans"
       style={{ backgroundColor: currentBgColor }}
     >
       <div
@@ -826,8 +794,8 @@ export const WheelCarouselDemo: React.FC = () => {
           visibleItems={7}
           apexInset={34}
           showMarker={true}
-          markerSize={16}
-          markerGap={22}
+          markerSize={22}
+          markerGap={28}
           scrollSpeed={0.007}
           dragSpeed={0.016}
           snap={true}
@@ -838,7 +806,7 @@ export const WheelCarouselDemo: React.FC = () => {
           textColor={customText}
           selectedColor={customSelected}
           markerColor={customMarker}
-          style={{ width: '1000px', height: '100%', maxHeight: '900px' }}
+          style={{ width: '100%', height: '100%', maxWidth: '960px' }}
         />
       </div>
 
