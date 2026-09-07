@@ -52,13 +52,13 @@ export default function PopTiltCards() {
         style={{ maxWidth: containerWidth }}
       >
         <div
-          className="relative w-full overflow-hidden"
+          className="relative flex w-full justify-center"
           style={{
             height: `calc(${containerHeight}px * min(1, 100cqi / ${containerWidth}px))`,
           }}
         >
           <div
-            className="relative mx-auto flex select-none items-end justify-center [perspective:1200px] [transform-origin:top_center]"
+            className="relative flex shrink-0 select-none items-end justify-center [perspective:1200px] [transform-origin:top_center]"
             style={{
               width: `${containerWidth}px`,
               height: `${containerHeight}px`,
@@ -73,86 +73,86 @@ export default function PopTiltCards() {
                 height: `${CARD_HEIGHT}px`,
               }}
             >
-          {CARDS.map((card, index) => {
-            let targetX = index * CARD_OFFSET;
-            let targetY = 0;
-            let targetRotate = 0;
-            let targetScale = 1;
-            let zIndex = index + 1;
+              {CARDS.map((card, index) => {
+                let targetX = index * CARD_OFFSET;
+                let targetY = 0;
+                let targetRotate = 0;
+                let targetScale = 1;
+                let zIndex = index + 1;
 
-            if (hoveredIndex !== null) {
-              if (index < hoveredIndex) {
-                targetRotate = TILT_ANGLE;
-                targetX = index * CARD_OFFSET;
-              } else if (index === hoveredIndex) {
-                targetRotate = 0;
-                targetY = -POP_HEIGHT;
-                targetScale = 1.02;
-                targetX = index * CARD_OFFSET;
-                zIndex = 50;
-              } else {
-                targetRotate = -TILT_ANGLE;
-                targetX = index * CARD_OFFSET + HOVER_SPREAD;
-              }
-            }
+                if (hoveredIndex !== null) {
+                  if (index < hoveredIndex) {
+                    targetRotate = TILT_ANGLE;
+                    targetX = index * CARD_OFFSET;
+                  } else if (index === hoveredIndex) {
+                    targetRotate = 0;
+                    targetY = -POP_HEIGHT;
+                    targetScale = 1.02;
+                    targetX = index * CARD_OFFSET;
+                    zIndex = 50;
+                  } else {
+                    targetRotate = -TILT_ANGLE;
+                    targetX = index * CARD_OFFSET + HOVER_SPREAD;
+                  }
+                }
 
-            const isHovered = hoveredIndex === index;
+                const isHovered = hoveredIndex === index;
 
-            return (
-              // Hit target stays put; visual layer moves. Prevents hover thrash when the card pops up.
-              <div
-                key={card.id}
-                className="absolute left-0 top-0"
-                style={{
-                  width: `${CARD_WIDTH}px`,
-                  height: `${CARD_HEIGHT}px`,
-                  transform: `translateX(${index * CARD_OFFSET}px)`,
-                  zIndex,
-                }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onClick={() => setHoveredIndex(index)}
-              >
-                <motion.div
-                  className="absolute left-0 top-0 flex cursor-pointer flex-col items-start justify-start overflow-hidden rounded-xl p-4 [transform-origin:50%_90%] will-change-transform"
-                  style={{
-                    width: `${CARD_WIDTH}px`,
-                    height: `${CARD_HEIGHT}px`,
-                    backgroundColor: card.bgColor,
-                    // Overlapping deck: heavy shadows stack badly
-                    boxShadow: isHovered
-                      ? "0 6px 16px -8px rgba(0, 0, 0, 0.1)"
-                      : "none",
-                  }}
-                  animate={{
-                    // Relative to the static hit slot so neighbors can still spread
-                    x: targetX - index * CARD_OFFSET,
-                    y: targetY,
-                    rotate: targetRotate,
-                    scale: targetScale,
-                  }}
-                  transition={HOVER_SPRING}
-                >
-                  <div className="relative z-[2] flex items-center justify-center pointer-events-none">
-                    <span
-                      className="inline-block whitespace-nowrap text-3xl font-semibold tracking-tight [text-orientation:mixed] [writing-mode:vertical-rl]"
-                      style={{ color: card.textColor }}
-                    >
-                      {card.title}
-                    </span>
-                  </div>
-
+                return (
+                  // Hit target stays put; visual layer moves. Prevents hover thrash when the card pops up.
                   <div
-                    className="pointer-events-none absolute inset-0 z-[4] rounded-[inherit] border transition-[border-color] duration-200"
+                    key={card.id}
+                    className="absolute left-0 top-0"
                     style={{
-                      borderColor: isHovered
-                        ? "rgba(255,255,255,0.55)"
-                        : "rgba(255,255,255,0.35)",
+                      width: `${CARD_WIDTH}px`,
+                      height: `${CARD_HEIGHT}px`,
+                      transform: `translateX(${index * CARD_OFFSET}px)`,
+                      zIndex,
                     }}
-                  />
-                </motion.div>
-              </div>
-            );
-            })}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onClick={() => setHoveredIndex(index)}
+                  >
+                    <motion.div
+                      className="absolute left-0 top-0 flex cursor-pointer flex-col items-start justify-start overflow-hidden rounded-xl p-4 [transform-origin:50%_90%] will-change-transform"
+                      style={{
+                        width: `${CARD_WIDTH}px`,
+                        height: `${CARD_HEIGHT}px`,
+                        backgroundColor: card.bgColor,
+                        // Overlapping deck: heavy shadows stack badly
+                        boxShadow: isHovered
+                          ? "0 6px 16px -8px rgba(0, 0, 0, 0.1)"
+                          : "none",
+                      }}
+                      animate={{
+                        // Relative to the static hit slot so neighbors can still spread
+                        x: targetX - index * CARD_OFFSET,
+                        y: targetY,
+                        rotate: targetRotate,
+                        scale: targetScale,
+                      }}
+                      transition={HOVER_SPRING}
+                    >
+                      <div className="relative z-[2] flex items-center justify-center pointer-events-none">
+                        <span
+                          className="inline-block whitespace-nowrap text-3xl font-semibold tracking-tight [text-orientation:mixed] [writing-mode:vertical-rl]"
+                          style={{ color: card.textColor }}
+                        >
+                          {card.title}
+                        </span>
+                      </div>
+
+                      <div
+                        className="pointer-events-none absolute inset-0 z-[4] rounded-[inherit] border transition-[border-color] duration-200"
+                        style={{
+                          borderColor: isHovered
+                            ? "rgba(255,255,255,0.55)"
+                            : "rgba(255,255,255,0.35)",
+                        }}
+                      />
+                    </motion.div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

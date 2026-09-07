@@ -611,6 +611,13 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           ...style,
         }}
       >
+        <style>{`
+          @keyframes liquidPhotoEnter {
+            0% { opacity: 0; transform: scale(1.06) translateY(6px); filter: blur(12px) contrast(1.1); }
+            60% { filter: blur(2px) contrast(1.03); }
+            100% { opacity: 1; transform: scale(1) translateY(0px); filter: blur(0px) contrast(1); }
+          }
+        `}</style>
         <div
           ref={containerRef}
           tabIndex={0}
@@ -627,13 +634,6 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             contain: 'layout size',
           }}
         >
-          <style>{`
-            @keyframes liquidPhotoEnter {
-              0% { opacity: 0; transform: scale(1.06) translateY(6px); filter: blur(12px) contrast(1.1); }
-              60% { filter: blur(2px) contrast(1.03); }
-              100% { opacity: 1; transform: scale(1) translateY(0px); filter: blur(0px) contrast(1); }
-            }
-          `}</style>
           <PhotoCard
             image={activeItem?.image}
             label={activeItem?.label}
