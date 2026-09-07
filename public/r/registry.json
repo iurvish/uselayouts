@@ -569,6 +569,24 @@
       ]
     },
     {
+      "name": "perspective-text-scroll",
+      "type": "registry:component",
+      "title": "Perspective Text Scroll",
+      "description": "A polished example interaction built with React and Motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/perspective-text-scroll.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "polaroid-drag",
       "type": "registry:component",
       "title": "Polaroid Drag",

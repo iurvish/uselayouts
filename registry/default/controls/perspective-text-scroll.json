@@ -1,0 +1,23 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "backgroundColor": "#F7F4F2",
+    "textColor": "#7B9E87"
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-07T17:50:02.134Z",
+  "previewBackground": {
+    "light": "#f7f4f2",
+    "dark": "#f7f4f2"
+  }
+}

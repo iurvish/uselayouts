@@ -93,14 +93,14 @@ const THEME_PRESETS = {
     bg: '#09090b',
     text: 'rgba(255, 255, 255, 0.35)',
     sel: '#fafafa',
-    marker: '#3b82f6',
+    marker: '#f59e0b',
     panel: '#18181b',
   },
   light: {
     bg: '#ffffff',
     text: 'rgba(9, 9, 11, 0.28)',
     sel: '#09090b',
-    marker: '#2563eb',
+    marker: '#f59e0b',
     panel: '#f4f4f5',
   },
 };
@@ -320,7 +320,6 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
     const startingIndex = ((Math.round(initialIndex) % total) + total) % total;
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const markerRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const rotPos = useRef<number>(startingIndex);
     const velocity = useRef<number>(0);
@@ -379,21 +378,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
     }, []);
 
     const applyTransforms = useCallback(
-      (currentRot: number, currentVelocity: number) => {
+      (currentRot: number, _currentVelocity: number) => {
         const { total: count, radius: r, spacing: sp, visibleItems: vis, apexInset: apex, theme: th } =
           configRef.current;
-
-        if (markerRef.current) {
-          const v = currentVelocity;
-          const absV = Math.abs(v);
-          const stretchY = 1 + Math.min(absV * 18, 1.35);
-          const squishX = 1 / Math.sqrt(stretchY);
-          const translateYOffset = v * 35;
-
-          markerRef.current.style.transform = `translate3d(0, -50%, 0) translateY(${translateYOffset.toFixed(2)}px) scale(${squishX.toFixed(3)}, ${stretchY.toFixed(3)})`;
-          markerRef.current.style.borderRadius =
-            absV > 0.005 ? (v > 0 ? '50% 50% 65% 65%' : '65% 65% 50% 50%') : '50%';
-        }
 
         for (let i = 0; i < count; i++) {
           const el = itemRefs.current[i];
@@ -709,22 +696,23 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           >
             {showMarker && (
               <div
-                ref={markerRef}
-                className="absolute top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300"
+                className="absolute top-1/2 pointer-events-none"
                 style={{
                   left: `calc(${apexInset}% - ${markerGap}px)`,
-                  width: markerSize,
+                  width: 5,
                   height: markerSize,
-                  marginLeft: -markerSize,
+                  marginLeft: -5,
+                  transform: 'translate3d(0, -50%, 0)',
+                  borderRadius: 2,
                   background: theme.marker,
-                  borderRadius: '50%',
+                  flexShrink: 0,
                   boxShadow: `
                     0 0 24px ${theme.marker}80,
                     0 2px 8px ${theme.marker}50,
                     inset 0 1.5px 2px rgba(255,255,255,0.9),
                     inset 0 -1.5px 2px rgba(0,0,0,0.3)
                   `,
-                  willChange: 'transform, border-radius, background-color',
+                  transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
                 }}
               />
             )}

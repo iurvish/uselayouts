@@ -540,6 +540,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "perspective-text-scroll": {
+    name: "perspective-text-scroll",
+    description: "A polished example interaction built with React and Motion.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/perspective-text-scroll.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/perspective-text-scroll.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "perspective-text-scroll"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "polaroid-drag": {
     name: "polaroid-drag",
     description: "Draggable Polaroid photo gallery with realistic tilt, stacking, smooth animations, and customizable captions, sizes, and decorations.",

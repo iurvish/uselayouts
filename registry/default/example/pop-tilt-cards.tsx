@@ -46,7 +46,7 @@ export default function PopTiltCards() {
   const containerHeight = CARD_HEIGHT + POP_HEIGHT + 40;
 
   return (
-    <section className="flex min-h-screen w-full flex-col items-center justify-center bg-[#F4F6F8] px-6 py-16">
+    <section className="flex h-full w-full flex-col items-center justify-center bg-[#F4F6F8] px-6 py-8">
       <div
         className="relative flex select-none items-end justify-center [perspective:1200px]"
         style={{
