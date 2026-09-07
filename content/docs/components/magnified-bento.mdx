@@ -1,27 +1,19 @@
 ---
 title: Magnified Bento
-description: A bento card component with an interactive magnifying glass reveal effect.
+description: A bento tile of scrolling skill chips with a glass lens you drag to magnify what’s under it.
 ---
+
+## Features
+
+- **Marquee rows**: Three lines of chips drift in opposite directions — Discovery, Launch, Security, and the rest.
+- **Draggable lens**: A circular glass follows the pointer and magnifies the chips underneath.
+- **Dual layer**: The magnified copy stays locked to the same chips, so it never drifts out of register.
+- **Card chrome**: Title and a short line sit under the window — “Intelligent Workflows.”
+- **Lens shine**: Highlights on the glass so it reads as a real loupe.
 
 ## Usage
 
-### Customizing Content
-
-To change the chips, modify the `TAG_ROWS` array at the top of the component:
-
-```tsx
-// change here
-const TAG_ROWS = [
-  [
-    { id: "1", icon: Search01Icon, label: "Discovery" },
-    { id: "2", icon: UserGroupIcon, label: "Client Review" },
-    // ... add more items
-  ],
-  // ... add more rows
-];
-```
-
-### Basic Implementation
+This is a feature illustration, not a search UI. Edit `TAG_ROWS` and the title/description in `CONFIG`. Needs pointer drag (or hover) and a card-sized well. Don’t cover it with other interactive layers.
 
 ```tsx
 import MagnifiedBento from "@/components/magnified-bento";
@@ -35,10 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Interactive Magnification**: Draggable lens with high-fidelity reveal effects.
-- **Synchronized Layers**: Dual-layer animation that stays perfectly aligned.
-- **Glassmorphism**: Subtle highlights and shadows on the lens for realism.
-- **Infinite Scroll**: Multi-row chip animations moving in opposite directions.
-- **Easy Customization**: Centrally managed data and config objects for rapid editing.
+- Agency or studio capability tiles
+- SaaS “workflow” bento grids
+- Skills or services marketing
+- Product pages about search or tagging
+- Landing feature rows

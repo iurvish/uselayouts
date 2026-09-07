@@ -1,9 +1,19 @@
 ---
 title: AccordionOS
-description: Interactive accordion showcase with animated content, image transitions, hover effects, keyboard navigation, autoplay, and responsive design.
+description: A numbered accordion that swaps a large image as each row opens, with optional autoplay.
 ---
 
+## Features
+
+- **One row at a time**: Opening a claim collapses the others so the story stays focused.
+- **Image crossfade**: The big still on the side updates with the active row — not a tiny thumbnail.
+- **Numbered badges**: 01–05 sit beside titles so the sequence feels like a product tour.
+- **Autoplay with pause**: It can walk the list on its own, then stop when you hover.
+- **Keyboard stepping**: Arrow through rows without hunting for the mouse.
+
 ## Usage
+
+Best with 4–6 items that each have a title, a short claim, and a photo. Needs a wide layout so the image and the list can sit side by side. Pause-on-hover is already there — leave autoplay on for a homepage, off for a docs-style page.
 
 ```tsx
 import Accordionos from "@/components/accordionos";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Homepage feature tours with photography
+- Agency capability sections
+- Product “how it works” blocks
+- Architecture or interior case studies
+- Conference or festival lineups

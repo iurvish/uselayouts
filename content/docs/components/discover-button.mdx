@@ -1,22 +1,19 @@
 ---
 title: Discover Button
-description: A search and filter component with expanding search bar.
+description: A round search control that stretches into a field, sitting beside Popular and Favorites chips.
 ---
+
+## Features
+
+- **Search that grows**: Click the magnifier and the pill expands into a real text field.
+- **Category chips**: Popular and Favorites sit beside it with their own color and icon.
+- **Blur on collapse**: The input width, opacity, and blur ease together so it doesn’t snap shut.
+- **Close affordance**: An X appears once you’re searching so you can tuck it back.
+- **One-row chrome**: Search + filters share a single toolbar height.
 
 ## Usage
 
-### Customizing Content
-
-Adjust the navigation items by modifying the `TABS` array at the top of the file:
-
-```tsx
-// Change Here
-const TABS = [
-  { id: "popular", label: "Popular", icon: Fire02Icon, color: "text-red-500", ... },
-  { id: "favorites", label: "Favorites", icon: FavouriteIcon, color: "text-gray-900", ... },
-  // ...
-];
-```
+Drop it in a header or a browse toolbar. You’ll edit the `TABS` array for extra categories. Needs a row that’s allowed to grow — don’t pin it to a fixed 40px width. Pair it with a results list; this is the control, not the grid.
 
 ```tsx
 import DiscoverButton from "@/components/discover-button";
@@ -26,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Expandable Search**: Button expands into a fully functional search bar on click.
-- **Category Filters**: Integrated tab navigation for quick category filtering.
-- **Compact Design**: efficient use of screen space by hiding complex controls until needed.
-- **Focus Management**: Automatically handles focus states for search input.
-- **Keyboard Accessible**: Fully navigable via keyboard.
+- Marketplace or catalog headers
+- Recipe, music, or photo browse bars
+- Community “discover” pages
+- Docs or help search with topic chips
+- App store–style explore screens

@@ -650,7 +650,7 @@ export const Index: Record<string, any> = {
   },
   "scroll-stack-deck": {
     name: "scroll-stack-deck",
-    description: "A scroll-driven project showcase where cards stack, scale, and settle as you move through the page.",
+    description: "Scroll-linked project cards that pin in the viewport and stack, scale, and settle as you move down the page.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{

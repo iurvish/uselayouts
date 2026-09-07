@@ -1,9 +1,19 @@
 ---
 title: RollingCardStack
-description: It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content
+description: A rolling pile of case-study cards — swipe, tap, or autoplay, with a desktop/mobile layout switch.
 ---
 
+## Features
+
+- **Stacked widths**: Cards behind get narrower and offset so the pile feels like a deck, not a carousel.
+- **Swipe the top**: Drag the front card sideways to go next or previous.
+- **Desktop / mobile toggle**: A pill switches the stage so you can preview both layouts.
+- **Autoplay with pause**: It can advance on a timer and rest while you hover.
+- **Caption, title, still**: Each card is a small case study, not a nameless image.
+
 ## Usage
+
+Pass a few case studies with image, title, and a line of copy. Needs a tall stage (~545px). Swipe on the top card; click the ones behind to jump. Keyboard and pagination exist if you leave them on. This is a showcase, not a blog index.
 
 ```tsx
 import Rollingcardstack from "@/components/rollingcardstack";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Agency case-study heroes
+- Product story decks
+- Portfolio featured work
+- Conference talk lineups
+- Brand campaign recaps

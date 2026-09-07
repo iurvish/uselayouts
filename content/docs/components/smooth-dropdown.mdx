@@ -1,22 +1,19 @@
 ---
 title: Smooth Dropdown
-description: A morphing menu interaction with smooth animations.
+description: A round trigger that morphs into a menu — items stagger in, the shell resizes, click outside to close.
 ---
+
+## Features
+
+- **Shape morph**: The button becomes the menu without a pop-in overlay.
+- **Staggered rows**: Profile, Upgrade, and the rest arrive in sequence.
+- **Active and hover**: The current row is obvious; hover doesn’t fight it.
+- **Outside click**: The menu collapses when you click away.
+- **Spring, not fade**: Height and items share one physical motion.
 
 ## Usage
 
-### Customizing Content
-
-Modify the `menuItems` array to customize your dropdown options:
-
-```tsx
-// Change Here
-const menuItems = [
-  { id: "profile", label: "Profile", icon: UserIcon },
-  { id: "upgrade", label: "Upgrade", icon: CreditCardIcon },
-  // ...
-];
-```
+Use it as an account or overflow menu. Edit `menuItems` for labels and icons. Needs a click and a little space below the trigger. Don’t nest it in a overflow:hidden parent or the morph will clip. Wire rows to real routes.
 
 ```tsx
 import MenuInteraction from "@/components/smooth-dropdown";
@@ -30,10 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Morphing Background**: The menu container morphs shape smoothly to fit changing content.
-- **Staggered Animations**: List items animate in sequentially for a polished feel.
-- **Active States**: Clear visual indicators for active and hovered items.
-- **Outside Click Handling**: Automatically closes the menu when clicking outside.
-- **Spring Physics**: Uses spring animations for natural, non-linear motion.
+- Account menus in a header
+- Upgrade / billing overflow
+- Compact app toolbars
+- Mobile more-menus
+- Prototype nav without a full dropdown library

@@ -1,9 +1,19 @@
 ---
 title: 3D Book
-description: An interactive 3D book component with page flip animations.
+description: A hardcover notebook that opens in perspective as you drag or hover across the spine.
 ---
 
+## Features
+
+- **Page fan**: Fifteen sheets rotate from the same left hinge, each at a slightly wider angle.
+- **Cover follow**: The red Notebook cover tracks your pointer from closed to fully open.
+- **Spine lighting**: Inset highlights and a dotted back cover sell the thickness of a real book.
+- **Drag or hover**: Pointer drag on touch; hover-to-open on desktop. Release and it closes.
+- **No WebGL**: CSS 3D transforms only — light enough to drop on a marketing page.
+
 ## Usage
+
+Give it a quiet stage and a bit of width. The book reads as a prop, not a reader — swap the cover color and title for a product, a journal, or a case-study object. Pointer tracking needs a hover or drag surface, so skip it in a cramped sidebar.
 
 ```tsx
 import Book from "@/components/3d-book";
@@ -13,10 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- 3D Perspective: Realistic book cover and page depth using CSS 3D transforms.
-- Interactive: Book opens responsively on hover or drag interaction.
-- Performance: Pure CSS/JS implementation without heavy WebGL dependencies.
-- Responsive: Adapts to container size (desktop and mobile friendly).
-- Customizable: Easy to swap cover art or page content.
+- A hero object for a notebook, planner, or publishing brand
+- Case-study “open the brief” moments on an agency site
+- About pages that want a tactile artifact instead of a screenshot
+- Product pages for journals, sketchbooks, or print editions
+- Portfolio splash screens that need one memorable 3D prop

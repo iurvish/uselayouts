@@ -1,47 +1,19 @@
 ---
 title: Bottom Menu
-description: A dynamic bottom menu with expanding submenus and theme switching.
+description: A compact dock that expands into search, notes, notifications, profile, and theme.
 ---
+
+## Features
+
+- **Collapsed dock**: Five icons sit in a pill until you pick one.
+- **Expanding trays**: Home, search, alerts, profile, and theme each open their own little menu.
+- **Measured height**: The tray grows with `useMeasure` so it doesn’t jump when content changes.
+- **Theme switcher**: Light, dark, and system live in the last slot.
+- **Click outside to close**: The dock tucks back down when you tap away.
 
 ## Usage
 
-### Customizing Content
-
-You can easily customize the menu items by modifying the arrays at the top of the file:
-
-```tsx
-// Change Here
-const HOME_ITEMS = [
-  { icon: PencilEdit02Icon, text: "Note" },
-  { icon: Mic01Icon, text: "Voice" },
-  // ...
-];
-
-const NOTIFICATION_TYPES = ["Messages", "System Alerts"];
-```
-
-#### Submenu Content
-
-You can define the layout and elements of each submenu within the `content` useMemo:
-
-```tsx
-const content = useMemo(() => {
-  switch (view) {
-    case "home":
-      return (
-        <div className="space-y-0.5 min-w-[210px] p-[6px] py-0.5">
-          {HOME_ITEMS.map(({ icon: Icon, text }) => (
-            <button key={text} className="...">
-              <HugeiconsIcon icon={Icon} size={20} />
-              <span>{text}</span>
-            </button>
-          ))}
-        </div>
-      );
-    // Add more cases for other views...
-  }
-}, [view]);
-```
+Park it at the bottom of a phone-width layout or a floating demo. You’ll edit the `HOME_ITEMS` / nav arrays for labels and icons. Needs a bit of vertical room for the expanded tray. Not a full app shell — think composer, not navigation bar.
 
 ```tsx
 import BottomMenu from "@/components/bottom-menu";
@@ -51,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Expandable Submenus**: Menus expand smoothly to reveal options using spring physics.
-- **Theme Switching**: Built-in support for dark and light mode toggling.
-- **Responsive Design**: Adapts gracefully to different screen sizes.
-- **Smooth Animations**: Powered by `framer-motion` for fluid, organic transitions.
-- **Keyboard Navigation**: Accessible menu items with focus states.
+- Mobile app marketing pages
+- Note, voice, or capture composers
+- Prototype shells for a consumer app
+- Settings previews (theme, profile)
+- Floating action menus on a landing demo

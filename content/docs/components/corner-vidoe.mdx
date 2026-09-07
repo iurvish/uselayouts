@@ -1,9 +1,19 @@
 ---
 title: Corner Vidoe
-description: A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.
+description: A tiny corner player that morphs open, with mute, enlarge, and a scrub bar on hover.
 ---
 
+## Features
+
+- **Corner morph**: Starts as a small picture-in-picture, then eases into a larger player.
+- **Always-on loop**: Autoplay and mute by default so it can sit on a page without blasting audio.
+- **Hover chrome**: Play, mute, and enlarge fade in when you hover the frame.
+- **Scrub bar**: Drag the progress track to seek; time stamps sit beside it.
+- **Enlarge toggle**: Stretch it toward a more generous size without leaving the page.
+
 ## Usage
+
+Point it at a short muted clip (studio tour, product loop, behind-the-scenes). Needs a video URL and a poster. Park it in a corner or a dedicated preview well — it’s a PiP, not a full-bleed hero. Keep sound off until the visitor unmutes.
 
 ```tsx
 import CornerVidoe from "@/components/corner-vidoe";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Product pages with a studio or factory tour
+- Landing heroes that want motion without a giant video
+- Case studies with a B-roll loop
+- Docs or changelog pages with a quick demo
+- Portfolio sites with a showreel in the corner

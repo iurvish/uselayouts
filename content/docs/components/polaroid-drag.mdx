@@ -1,9 +1,19 @@
 ---
 title: Polaroid Drag
-description: Draggable Polaroid photo gallery with realistic tilt, stacking, smooth animations, and customizable captions, sizes, and decorations.
+description: Instant prints you can drag around a table — they tilt with velocity, stack, and pick up tape or a pin.
 ---
 
+## Features
+
+- **Desk of prints**: White borders, handwritten captions, slight rotation out of the box.
+- **Drag with tilt**: Cards lean into the flick, then settle.
+- **Bring to front**: The print you grab jumps above the others.
+- **Tape and pin**: Optional washi and a thumbtack so some shots feel stuck to the wall.
+- **Arena constraints**: Drag stays inside the gallery so prints don’t fly off-canvas.
+
 ## Usage
+
+Compose a few `PolaroidCard`s inside the gallery. You need photos and short captions. This is a playground, not a lightbox — people rearrange, they don’t zoom. Give it a large, light stage. Skip it in a tight column.
 
 ```tsx
 import PolaroidDrag from "@/components/polaroid-drag";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Photography portfolios
+- Wedding or travel recaps
+- Brand mood boards
+- About-the-team photo walls
+- Event microsites

@@ -1,25 +1,19 @@
 ---
 title: Expandable Gallery
-description: A stacked photo gallery that expands into a grid view on interaction.
+description: A messy photo pile that opens into a tidy grid when you explore.
 ---
+
+## Features
+
+- **Scattered stack**: Three photos sit rotated and overlapping, like prints on a desk.
+- **Explore to grid**: Click through and the pile lays out into a full gallery.
+- **Shared layout**: Images keep their identity as they travel from stack to cell.
+- **Hover lift**: Individual prints respond before you commit to the grid.
+- **Outside click**: Click away and it can fold back to the pile.
 
 ## Usage
 
-### Customizing Content
-
-Swap out the images by modifying the `PHOTOS` array at the top of the component file:
-
-```tsx
-// Change Here
-const PHOTOS = [
-  {
-    id: "photo-1",
-    src: "https://images.unsplash.com...",
-    alt: "Image Description",
-  },
-  // ...
-];
-```
+Swap the `PHOTOS` array — you want at least a handful of stills. Needs a click and a reasonably wide stage. Collapsed, it’s a teaser; expanded, it’s the gallery. Don’t nest it in a tiny card.
 
 ```tsx
 import ExpandableGallery from "@/components/expandable-gallery";
@@ -29,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Stacked Initial State**: Photos start in a playful, rotated stack.
-- **Expand to Grid**: Expands into a full grid view on click or "Explore" action.
-- **Smooth Expansion**: Transitions smoothly between stack and grid layouts using `LayoutGroup`.
-- **Hover Effects**: Interactive hover states for both stack and grid items.
-- **Featured Items**: Highlights primary items in the collapsed stack view.
+- Studio or photographer homepages
+- Product lookbooks
+- Wedding or event recaps
+- Architecture project covers
+- Case-study image openers

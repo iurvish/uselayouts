@@ -1,27 +1,19 @@
 ---
 title: Feature Carousel
-description: A horizontal scrolling carousel of features with synchronized image updates and floating chips.
+description: Floating chips on one side, a big photo on the other — pick a feature and the picture follows.
 ---
+
+## Features
+
+- **Chip rail**: Labels like Sustainable Sourcing and Cloud Ready sit as floating pills.
+- **Synced still**: The large image card updates to match the selected chip.
+- **Scroll into view**: The active chip is brought into the rail so you never lose it.
+- **Auto-play, then pause**: It cycles on its own and stops when you hover.
+- **Icon + one-liner**: Each feature has a glyph and a short description under the photo.
 
 ## Usage
 
-### Customizing Content
-
-Adjust the `FEATURES` array to change the icons, images, and descriptions:
-
-```tsx
-// Change Here
-const FEATURES = [
-  {
-    id: "sustainable",
-    label: "Sustainable Sourcing",
-    icon: Pizza04Icon,
-    image: "https://images.unsplash.com...",
-    description: "Ethically sourced ingredients.",
-  },
-  // ...
-];
-```
+Fill the `FEATURES` array with label, icon, image, and a sentence. Needs a two-column-ish layout (chips + picture). Autoplay is nice on a homepage; pause it on a pricing page where people are comparing. Eight items is plenty — more and the rail gets long.
 
 ```tsx
 import FeatureCarousel from "@/components/feature-carousel";
@@ -31,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Floating Chips**: Interactive feature chips that float on the left/top.
-- **Scroll Tracking**: Automatically scrolls to the active feature.
-- **Synchronized Visuals**: Updates the central image card based on the selected feature.
-- **Auto-play**: Automatically cycles through features (pauses on hover).
-- **Smooth Animations**: Uses spring physics for smooth transitions.
+- Product marketing feature tours
+- Brand story pages
+- Food, travel, or lifestyle brand sites
+- SaaS “platform” sections
+- Conference or festival highlights

@@ -1,24 +1,19 @@
 ---
 title: Filter Interaction
-description: An animated filter selector with morphing container and staggered list animations.
+description: Two round buttons — filter and current pick — that morph into a staggered checklist.
 ---
+
+## Features
+
+- **Twin circles**: A filter glyph beside the selected type (tasks, events, reminders…).
+- **Morphing panel**: The filter button becomes a list via a shared `layoutId`.
+- **Staggered rows**: Options slide in one after another, not all at once.
+- **Check on the pick**: The active row gets a filled tick.
+- **Icon as summary**: When the list closes, the right circle still shows what you chose.
 
 ## Usage
 
-### Customizing Content
-
-You can easily add or remove filter options by modifying the `filterKeys` array:
-
-```tsx
-// Change Here
-export const filterKeys = [
-  {
-    name: "tasks",
-    icon: FolderIcon,
-  },
-  // ...
-];
-```
+Use it as a compact filter, not a full faceted search. Edit `filterKeys` for names and icons. Needs a click and a little space for the 72px panel. Pair it with a list that actually filters — this is the control.
 
 ```tsx
 import FilterInteraction from "@/components/filter-interaction";
@@ -32,11 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Shared layout animation** - Morphing container using Framer Motion's `layoutId`
-- **Staggered list items** - Each filter option animates in with a calculated delay
-- **Selection indicator** - Checkmark appears on selected item with primary color
-- **Two-button design** - Filter button and selected value displayed side by side
-- **Spring physics** - Natural-feeling animations with configurable bounce and duration
-- **Hover states** - Subtle accent background on hover for better feedback
+- Calendar or planner toolbars
+- Task apps (tasks, meetings, celebrations)
+- Mobile filter sheets
+- Dashboard widget headers
+- Notification type pickers

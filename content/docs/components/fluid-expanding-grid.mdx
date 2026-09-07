@@ -1,26 +1,19 @@
 ---
 title: Fluid Expanding Grid
-description: A responsive gallery grid that fluidly shifts and expands items using motion layout.
+description: A photo grid where clicking one image makes it take the row while neighbors slide aside.
 ---
+
+## Features
+
+- **One expands, others yield**: Highlands, Crimson, Deep Sea — click one and it owns the row.
+- **Row reshuffle**: Neighbors drop to the next row instead of overlapping.
+- **Color wash**: Each cell carries an accent that eases in with the photo.
+- **Title overlay**: Name and subtitle sit on the still once it’s open.
+- **Layout animation**: Cells morph with motion layout, not a hard reflow.
 
 ## Usage
 
-### Customizing Content
-
-You can customize the items by modifying the `ITEMS` array in the component file:
-
-```tsx
-const ITEMS = [
-  {
-    id: "grassy",
-    title: "Highlands",
-    subtitle: "Golden fields under the giant",
-    image: "https://images.unsplash.com/...",
-    color: "#84cc16",
-  },
-  // ...
-];
-```
+Works with a small set of images (three or four). Click to expand; clicking the already-solo item does nothing — that’s on purpose. Give it a full-width gallery well. Swap `ITEMS` for your own titles, subtitles, and photos.
 
 ```tsx
 import FluidExpandingGrid from "@/components/fluid-expanding-grid";
@@ -30,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Fluid Grid Transitions**: Items automatically shift between rows to accommodate expanded content.
-- **Responsive Layout**: Uses a smart grid system that adapts to both mobile and desktop screens.
-- **Premium Mask Effects**: Smooth image mask and background color transitions on selection.
-- **Motion-Engineered**: Leverages Framer Motion's `layout` properties for physics-based animations.
-- **High Interaction Bar**: Clean hover states and tactile click feedback.
+- Travel or landscape galleries
+- Editorial photo essays
+- Product family pages
+- Architecture project grids
+- Mood-board marketing sections

@@ -1,9 +1,19 @@
 ---
 title: Editorial Deck
-description: A stacked editorial story deck. Drag the front card and it springs back into the pile.
+description: A stack of story cards — drag the front piece and it springs back into the pile.
 ---
 
+## Features
+
+- **Magazine covers**: Date, headline, photo, and a tinted field on each card.
+- **Drag to cycle**: Swipe the front story off; it flies and lands at the back of the stack.
+- **Depth scale**: Cards behind sit a little smaller and lower so the pile reads as a deck.
+- **Spring settle**: No vanish — the motion is a physical hand-off.
+- **Optional intro**: Title and subtitle above the deck (“Drag to flip through stories”).
+
 ## Usage
+
+Give it 4–6 stories with images and short titles. Needs a drag surface and a bit of empty space around the pile. Reduced-motion is respected. This is browsing, not reading — link out from the front card if you want the full article.
 
 ```tsx
 import EditorialDeck from "@/components/editorial-deck";
@@ -13,8 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Drag or swipe the front story to send it to the back
-- Spring settle into the stack — no pop or vanish
-- Optional title and subtitle (hidden when empty)
+- Blog or magazine homepages
+- Newsroom “latest” modules
+- Agency journal sections
+- Product changelog stories
+- Culture or editorial landing pages

@@ -1,46 +1,19 @@
 ---
 title: Multi Step Form
-description: A dynamic, animated multi-step form with validation and progress tracking.
+description: A project-setup wizard that steps through details, team, and extras with a height that follows the fields.
 ---
+
+## Features
+
+- **Stepped card**: Title and description change per step; Next / Back sit in the footer.
+- **Measured height**: The card grows with the fields so you don’t get a jump cut.
+- **Direction-aware slide**: Forward and back animate opposite ways.
+- **Real form stack**: React Hook Form + Zod, date picker, tags, mood, and a toast on finish.
+- **Progress in the chrome**: You always know which step you’re on.
 
 ## Usage
 
-### Customizing Content
-
-You can easily update the step titles and descriptions by modifying the `stepTitles` array inside the component:
-
-```tsx
-// Change Here
-const stepTitles = [
-  {
-    title: "Create New Project",
-    description: "Start by providing the essential details.",
-  },
-  // ...
-];
-```
-
-#### Step Content
-
-The actual form fields for each step are defined in the `content` useMemo block. You can add or modify fields here:
-
-```tsx
-const content = useMemo(() => {
-  switch (currentStep) {
-    case 0:
-      return (
-        <div className="space-y-6 py-4">
-          <Field>
-            <FieldLabel htmlFor="project-name">Project Name</FieldLabel>
-            <Input id="project-name" {...form.register("project-name")} />
-          </Field>
-          {/* Add more fields for Step 1 */}
-        </div>
-      );
-    // Add more cases for each step index...
-  }
-}, [currentStep, form]);
-```
+This is a full wizard, not a single input. Replace `stepTitles` and the `content` switch with your fields. Give it a medium column (`max-w-xl`). Validation is already wired — hook submit to your API instead of the demo toast.
 
 ```tsx
 import MultiStepForm from "@/components/multi-step-form";
@@ -54,11 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Progress Tracking**: Clear visual indication of the current step and overall progress.
-- **Animated Transitions**: Smooth spring-based animations between steps using Framer Motion.
-- **Form Validation**: Integrated with React Hook Form and Zod for robust client-side validation.
-- **Responsive Height**: Automatically adjusts its height based on the content of each step.
-- **Customizable**: Easily add or remove steps to fit your workflow.
-- **Interactive Elements**: Includes a custom tag input and mood selector.
+- Create-project flows
+- Onboarding questionnaires
+- Request-a-quote forms
+- Hiring or application wizards
+- Settings that are too long for one screen

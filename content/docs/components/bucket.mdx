@@ -1,27 +1,19 @@
 ---
 title: Bucket
-description: An interactive card component with a 3D-like bucket effect and falling animated chips.
+description: A glass hopper that tosses feature chips in, one after another, like a catch tray.
 ---
+
+## Features
+
+- **Falling chips**: Each card drops into the bucket, then the next one follows on a loop.
+- **Layered SVG bowl**: The hopper is a real shape with blur and depth — not a rounded rectangle.
+- **Icon + claim**: Production Ready, Fluid Motion, Accessible, Modern Design — short and readable in the chip.
+- **Continuous cycle**: Every two seconds the front chip rotates out so the bucket never sits still.
+- **No 3D engine**: Motion and SVG give you the toss without WebGL.
 
 ## Usage
 
-### Customizing Data
-
-You can customize the initial chips shown in the bucket by modifying the `INITIAL_CHIPS` array:
-
-```tsx
-const INITIAL_CHIPS = [
-  {
-    id: 1,
-    title: "Production Ready",
-    description: "Fully type-safe and tested",
-    icon: SecurityCheckIcon,
-  },
-  // ... add more items
-];
-```
-
-### Basic Implementation
+Use it as a feature explainer, not a form. Swap `INITIAL_CHIPS` for your own titles, lines, and icons. Give it a wide, short stage (it wants landscape). Autoplay is the point — don’t put it next to something that also loops.
 
 ```tsx
 import Bucket from "@/components/bucket";
@@ -35,10 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Continuous Tossing**: Smooth, looping animation that keeps the user engaged.
-- **Layered Depth**: True z-axis feel without using a 3D engine.
-- **Premium Aesthetics**: Glassmorphism, tailored gradients, and high-spec icons.
-- **Performance Optimized**: Uses CSS-accelerated SVG properties and motion values.
-- **Flexible Content**: Easily swappable titles, descriptions, and icons.
+- Homepage “what you get” moments
+- Launch pages that need motion without a video
+- Developer-tool marketing (type-safe, fast, accessible)
+- Conference booth loops
+- About-the-product sections above the fold

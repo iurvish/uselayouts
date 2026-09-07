@@ -41,7 +41,7 @@ export function PreviewHint({
         className,
       )}
     >
-      <div className="flex max-w-full flex-col items-center gap-8 px-4 pt-1">
+      <div className="flex max-w-full flex-col items-center gap-8 px-4 pt-20">
         <div className="flex max-w-full flex-col items-center gap-1 text-center">
           <p
             className={cn(

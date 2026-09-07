@@ -1,31 +1,19 @@
 ---
 title: Stacked List
-description: An expandable list widget with a stacked layout and smooth morphing transitions.
+description: A people widget — a short stack of members that morphs into a searchable directory.
 ---
+
+## Features
+
+- **Stacked preview**: A few avatars and names sit as the collapsed widget.
+- **Morph to directory**: Expand and the rest of the team slides out of the same card.
+- **Search in both states**: Filter without leaving the widget.
+- **Role badges**: PM, designer, data, creator — color-coded.
+- **Online ticks**: Presence on the preview so it feels like a live team.
 
 ## Usage
 
-### Customizing Content
-
-The component is designed to be highly flexible. You can represent any type of list (members, files, projects, etc.) by updating the `ALL_MEMBERS` array:
-
-```tsx
-// Change Here
-const ALL_MEMBERS = [
-  {
-    id: "01",
-    name: "Oliver Smith",
-    status: "Online",
-    online: true,
-    role: "Project Manager",
-    roleType: "pm",
-    avatar: "https://...",
-  },
-  // ... add more members
-];
-```
-
-The component automatically filters `ACTIVE_MEMBERS` for the primary view and uses `ALL_MEMBERS` for the expandable list view.
+Point `ALL_MEMBERS` at your people (name, role, avatar, status). The collapsed view shows actives; expand for everyone. Needs a medium card width. Wire search and add to your data — the demo is local. Happy in a sidebar or a project header.
 
 ```tsx
 import StackedList from "@/components/stacked-list";
@@ -35,11 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Stacked Layout**: A unique interaction where a secondary directory "morphs" out from the bottom of the main view.
-- **Micro-animations**: Staggered entry animations for list items and smooth layout transitions using Framer Motion.
-- **Searchable**: Integrated search functionality in both the expanded and collapsed states.
-- **Categorization**: Support for different item categories with custom badges and icons.
-- **Responsive Design**: Handles long text and varying screen sizes with elegant truncations and flexible layouts.
-- **Interactive UI**: Hover states, active indicators, and satisfying spring-based animations.
+- Project or workspace sidebars
+- Team widgets on a dashboard
+- Invite / members settings
+- Community directories
+- “Who’s on this file” panels

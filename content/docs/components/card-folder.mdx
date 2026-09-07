@@ -1,9 +1,19 @@
 ---
 title: Card Folder
-description: This component creates an animated folder-style card with a background image, floating 3D object, hover effects, and customizable colors and text. You can easily change the images, colors, content, and animation settings from the card props.
+description: A pastel folder card that lifts on hover, with a floating object and a photo peeking behind.
 ---
 
+## Features
+
+- **Folder tab**: Numbered 01, 02, 03 cards sit like file folders, not generic tiles.
+- **Hover lift**: The folder comes forward; a 3D object (palette, camera, plant) floats above it.
+- **Photo peek**: A background still shows through the folder body so each card has a scene.
+- **Tinted paper**: Soft lilac, peach, and mint fills with matching type colors.
+- **Optional link**: The whole card can be an `<a>` if you pass `href`.
+
 ## Usage
+
+Three cards in a row is the intended look. You’ll change titles, folder colors, Unsplash stills, and the emoji object. Needs hover (or a tap equivalent) and a tall-ish card height. Don’t stack too many — three folders already tell the story.
 
 ```tsx
 import CardFolder from "@/components/card-folder";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Studio service or offering cards
+- Case-study indexes
+- Product category tiles
+- Mood-board or campaign “shot lists”
+- Landing grids that want objects, not icons

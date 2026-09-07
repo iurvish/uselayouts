@@ -172,28 +172,33 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
     const isInitialized = useRef(false);
 
     const measureAndCenter = useCallback(() => {
-      if (singleBlockRef.current) {
-        const rect = singleBlockRef.current.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          blockDim.current = { w: rect.width, h: rect.height };
+      const block = singleBlockRef.current;
+      const container = containerRef.current;
+      if (!block || !container) return;
+      const rect = block.getBoundingClientRect();
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      if (rect.width > 0 && rect.height > 0 && cw > 0 && ch > 0) {
+        blockDim.current = { w: rect.width, h: rect.height };
 
-          if (!isInitialized.current) {
-            const initX = -rect.width + (window.innerWidth - rect.width) / 2;
-            const initY = -rect.height + (window.innerHeight - rect.height) / 2;
-            currentPos.current = { x: initX, y: initY };
-            targetPos.current = { x: initX, y: initY };
-            if (gridMatrixRef.current) {
-              gridMatrixRef.current.style.transform = `translate3d(${initX.toFixed(2)}px, ${initY.toFixed(2)}px, 0)`;
-            }
-            isInitialized.current = true;
+        if (!isInitialized.current) {
+          const initX = -rect.width + (cw - rect.width) / 2;
+          const initY = -rect.height + (ch - rect.height) / 2;
+          currentPos.current = { x: initX, y: initY };
+          targetPos.current = { x: initX, y: initY };
+          if (gridMatrixRef.current) {
+            gridMatrixRef.current.style.transform = `translate3d(${initX.toFixed(2)}px, ${initY.toFixed(2)}px, 0)`;
           }
+          isInitialized.current = true;
         }
       }
     }, []);
 
     useEffect(() => {
       measureAndCenter();
-      window.addEventListener('resize', measureAndCenter);
+      const container = containerRef.current;
+      const ro = container ? new ResizeObserver(measureAndCenter) : null;
+      if (container && ro) ro.observe(container);
 
       let rafId: number;
 
@@ -250,7 +255,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
 
       return () => {
         cancelAnimationFrame(rafId);
-        window.removeEventListener('resize', measureAndCenter);
+        ro?.disconnect();
       };
     }, [measureAndCenter]);
 
@@ -332,7 +337,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
     return (
       <div
         ref={ref}
-        className={cn('infinite-grid-root relative w-full h-screen overflow-hidden bg-white', className)}
+        className={cn('infinite-grid-root relative h-full min-h-dvh w-full overflow-hidden bg-white', className)}
       >
         <style>{`
           @keyframes fluidBlob1 {
@@ -361,7 +366,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className="w-full h-screen overflow-hidden relative select-none bg-white cursor-grab active:cursor-grabbing"
+          className="relative h-full w-full cursor-grab overflow-hidden select-none bg-white active:cursor-grabbing"
           style={{
             touchAction: 'none',
             userSelect: 'none',

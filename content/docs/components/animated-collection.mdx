@@ -1,9 +1,19 @@
 ---
 title: Animated Collection
-description: A collection of items with smooth layout transitions and animations.
+description: A collection of artworks that morph between list, card, and packed-stack views.
 ---
 
+## Features
+
+- **Three layouts**: List, card grid, and a tight “pack” stack — same items, different posture.
+- **Shared-element morph**: Titles, images, and IDs slide into their new slots instead of blinking.
+- **Segmented toggle**: A small pill switch at the top makes the mode change feel like a camera, not a reload.
+- **Artwork cells**: Each piece carries a photo, category, and catalog number.
+- **Snappy springs**: Layout changes settle fast so browsing never feels sluggish.
+
 ## Usage
+
+Drop it where someone is browsing a set of things they own or curate. You need a few items with images and titles; the toggle is built in. Give it a medium-width column — too narrow and the pack view crowds, too wide and the list looks lost.
 
 ```tsx
 import AnimatedCollection from "@/components/animated-collection";
@@ -13,9 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Morphing Layout: Seamlessly transitions between List, Card, and Pack views.
-- Shared Element Transitions: Elements smoothly resize and reposition during layout changes.
-- Pack View: A unique "stack" or "pack" view simulation.
-- View Toggle: Integrated toggle switch for different layout modes.
+- Collector or gallery “my collection” pages
+- Music, ticket, or merch libraries
+- Design-system galleries of tokens or shots
+- Marketplace saved-items views
+- Portfolio indexes that want a view switcher

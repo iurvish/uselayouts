@@ -1,9 +1,19 @@
 ---
 title: dd
-description: d
+description: A testimonial stage — a large portrait, a quote that types in word by word, stats, and a thumbnail rail that auto-rotates.
 ---
 
+## Features
+
+- **Word-by-word quote**: The line doesn’t fade in as a block — each word lifts and sharpens.
+- **Portrait lockup**: A full-bleed face sits beside the copy so the person is the product.
+- **Stat pair**: Two metrics under the quote (conversion, onboarding, velocity).
+- **Thumbnail rail**: Portraits stack on the side; the active one is the current story.
+- **Auto-rotate**: Five-second cycle, with a spring so the rail doesn’t jump.
+
 ## Usage
+
+This wants a wide, editorial layout — photo + quote, not a tiny card. Swap the `TESTIMONIALS` array (name, role, quote, stats, photo). Autoplay is on; pause it if the page already has motion. Best on a homepage or case-study closer.
 
 ```tsx
 import Dd from "@/components/dd";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Homepage social proof with photography
+- Case-study outros
+- Pricing pages that need a face, not a logo wall
+- Agency client stories
+- Launch pages with a few strong quotes

@@ -678,7 +678,7 @@
       "name": "scroll-stack-deck",
       "type": "registry:component",
       "title": "Scroll Stack Deck",
-      "description": "A scroll-driven project showcase where cards stack, scale, and settle as you move through the page.",
+      "description": "Scroll-linked project cards that pin in the viewport and stack, scale, and settle as you move down the page.",
       "dependencies": [
         "lenis",
         "motion",

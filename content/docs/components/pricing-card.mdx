@@ -1,28 +1,19 @@
 ---
 title: Pricing Card
-description: A focused pricing card layout with clear hierarchy, period switching, and animated price transitions.
+description: A narrow plan picker with monthly/yearly toggle, rolling prices, and a popular badge.
 ---
+
+## Features
+
+- **Period toggle**: Monthly and yearly share a sliding highlight.
+- **Rolling numbers**: Prices tick with NumberFlow instead of snapping.
+- **Plan select**: Plus / Pro / etc. get a border and check when chosen.
+- **Feature lists**: Short bullets under each plan — space, recovery, the usual.
+- **Popular tag**: One plan can wear the badge without extra layout.
 
 ## Usage
 
-### Customizing Content
-
-Update the `plans` array to set your own pricing and features:
-
-```tsx
-// Change Here
-const plans = [
-  {
-    id: "plus",
-    name: "Plus",
-    description: "solo",
-    monthlyPrice: 8.99,
-    yearlyPrice: 6.99,
-    features: ["1TB Space", "30 days recovery"],
-  },
-  // ...
-];
-```
+Edit the `plans` array for names, prices, and bullets. Keep the column around 320–384px — it’s a card, not a full pricing table. Wire the CTA to checkout. Yearly should be the cheaper unit price if you want the toggle to feel honest.
 
 ```tsx
 import PricingCard from "@/components/pricing-card";
@@ -36,11 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Period Switching**: Seamlessly toggle between monthly and yearly billing with shared layout animations.
-- **Animated Pricing**: Utilizes `NumberFlow` for smooth, high-quality transitions between price points.
-- **Interactive Selection**: Plan selection is highlighted with animated borders and checkmarks.
-- **Responsive Layout**: Designed to look great on both mobile and desktop within a 320px-384px container.
-- **Modern Aesthetic**: Minimalist UI with subtle shadows, rounded corners, and premium typography.
-- **Popular Choice Badge**: Easily highlight specific plans with a "Popular" tag.
+- SaaS pricing pages
+- Waitlist or upgrade modals
+- Billing settings
+- Product marketing mid-page
+- Comparison sections next to a FAQ

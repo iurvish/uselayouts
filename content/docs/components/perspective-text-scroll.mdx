@@ -1,9 +1,19 @@
 ---
 title: Perspective Text Scroll
-description: A polished example interaction built with React and Motion.
+description: A long paragraph that tilts through 3D as you scroll — it rises, squares up, then falls away.
 ---
 
+## Features
+
+- **Scroll-linked 3D**: RotateX, translateY, and translateZ follow a progress curve, not a CSS keyframe loop.
+- **Soft follow**: Progress is lerped so the type doesn’t stutter on a trackpad.
+- **Enter and exit**: Copy fades in from below, sits readable in the middle, then recedes.
+- **Scroll parent aware**: Works inside a nested scroller, not only the window.
+- **Editorial type**: One block of design-system copy — no cards, no chrome.
+
 ## Usage
+
+This needs vertical scroll. Put it in a tall section and let the page move; a short viewport won’t show the arc. Swap the paragraph for your manifesto, about copy, or a product belief. Color is set on the block — change it to match the page.
 
 ```tsx
 import PerspectiveTextScroll from "@/components/perspective-text-scroll";
@@ -13,9 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-first interaction with restrained timing
-- Drop-in React component for modern product UIs
-- Motion-powered interactions that stay under 300ms feel
-- Where to use: Marketing pages, product demos, and design systems
+- About or manifesto pages
+- Brand story mid-scroll
+- Case-study openers
+- Design-system marketing
+- Editorial longform breaks

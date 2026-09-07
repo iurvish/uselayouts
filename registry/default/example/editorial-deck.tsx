@@ -54,18 +54,39 @@ export const DEFAULT_CARDS: EditorialDeckCard[] = [
   },
 ];
 
-const STACK_Y = 12;
-const STACK_SCALE = 0.04;
+const STACK_Y = 16;
+const STACK_SCALE = 0.07;
 const SWIPE = 90;
 const SETTLE = {
   type: "spring" as const,
-  stiffness: 460,
-  damping: 34,
+  stiffness: 340,
+  damping: 28,
+  mass: 0.8,
+};
+const FLY = {
+  type: "spring" as const,
+  stiffness: 280,
+  damping: 24,
   mass: 0.9,
 };
 
 function rotateOrder(prev: number[], from: number) {
   return [...prev.slice(from), ...prev.slice(0, from)];
+}
+
+/** Stable per-id rest pose — SSR/hydration safe, no Math.random(). */
+function cardPose(id: string) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = (h << 5) - h + id.charCodeAt(i);
+    h |= 0;
+  }
+  const u = Math.abs(h);
+  const mag = 3.2 + (u % 48) / 10;
+  return {
+    rotateZ: (u & 1 ? 1 : -1) * mag,
+    x: ((u % 17) - 8) * 1.35,
+  };
 }
 
 export interface EditorialDeckProps {
@@ -84,8 +105,10 @@ export function EditorialDeck({
   const reduceMotion = useReducedMotion() ?? false;
   const [order, setOrder] = useState(() => cards.map((_, i) => i));
   const [fly, setFly] = useState(false);
+  const [peel, setPeel] = useState(0);
   const flying = useRef(false);
   const flyStarted = useRef(0);
+  const releaseVx = useRef(0);
 
   const lastDepth = cards.length - 1;
   const showIntro = Boolean(title || subtitle);
@@ -94,6 +117,7 @@ export function EditorialDeck({
     if (!flying.current) return;
     if (Date.now() - flyStarted.current < 200) return;
     flying.current = false;
+    releaseVx.current = 0;
     setOrder((prev) => rotateOrder(prev, 1));
     setFly(false);
   };
@@ -107,12 +131,20 @@ export function EditorialDeck({
     flying.current = true;
     flyStarted.current = Date.now();
     setFly(true);
-    window.setTimeout(commitBack, 360);
+    window.setTimeout(commitBack, 520);
+  };
+
+  const onDrag = (_: unknown, info: PanInfo) => {
+    setPeel(info.offset.x);
+    releaseVx.current = info.velocity.x;
   };
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
-    if (info.offset.x < -SWIPE || info.velocity.x < -450) sendToBack();
-    else if (info.offset.x > SWIPE || info.velocity.x > 450) sendToBack();
+    releaseVx.current = info.velocity.x;
+    const commit =
+      Math.abs(info.offset.x) > SWIPE || Math.abs(info.velocity.x) > 450;
+    setPeel(0);
+    if (commit) sendToBack();
   };
 
   return (
@@ -136,7 +168,12 @@ export function EditorialDeck({
 
       <div
         className="relative w-full max-w-3xl"
-        style={{ perspective: 1400, height: "min(32rem, 65vh)" }}
+        style={{
+          perspective: 850,
+          perspectiveOrigin: "50% 40%",
+          height: "min(32rem, 65vh)",
+          transformStyle: "preserve-3d",
+        }}
       >
         {order
           .slice()
@@ -148,22 +185,39 @@ export function EditorialDeck({
             const depth = isFlying ? lastDepth : fly && restDepth > 0 ? restDepth - 1 : restDepth;
             const c = cards[cardIndex]!;
             const canDrag = isFront && !fly;
+            const pose = cardPose(c.id);
+            const peeling = canDrag && peel !== 0;
+            const peelX = canDrag && !reduceMotion ? peel : 0;
+            const dragShrink = Math.min(Math.abs(peelX) / 220, 0.24);
+            const tilt3d = reduceMotion ? 0 : 1;
 
             return (
               <motion.article
                 key={c.id}
                 drag={canDrag ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.16}
-                whileDrag={{ scale: 0.97 }}
+                dragElastic={reduceMotion ? 0.12 : 0.52}
+                onDrag={canDrag ? onDrag : undefined}
                 onDragEnd={canDrag ? onDragEnd : undefined}
                 initial={false}
                 animate={{
-                  x: 0,
+                  x: pose.x,
                   y: depth * STACK_Y,
-                  scale: 1 - depth * STACK_SCALE,
+                  scale: 1 - depth * STACK_SCALE - dragShrink,
+                  rotateZ: pose.rotateZ + peelX * 0.1,
+                  rotateY: peelX * -0.06 * tilt3d,
+                  rotateX:
+                    tilt3d *
+                    (depth * 4 +
+                      (isFlying ? 8 : Math.min(Math.abs(peelX) / 18, 12))),
                 }}
-                transition={SETTLE}
+                transition={
+                  peeling
+                    ? { duration: 0, x: SETTLE }
+                    : isFlying
+                      ? { ...FLY, x: { ...FLY, velocity: releaseVx.current } }
+                      : SETTLE
+                }
                 onAnimationComplete={() => {
                   if (isFlying) commitBack();
                 }}
@@ -179,6 +233,8 @@ export function EditorialDeck({
                   boxShadow: isFront
                     ? "0 8px 24px -12px rgba(0,0,0,0.14), 0 2px 6px -2px rgba(0,0,0,0.05)"
                     : "0 2px 8px -6px rgba(0,0,0,0.08)",
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "50% 50%",
                 }}
               >
                 <div className="relative h-48 w-full shrink-0 p-4 md:h-auto md:w-[46%] md:p-5">

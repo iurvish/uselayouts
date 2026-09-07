@@ -1,22 +1,19 @@
 ---
 title: Dynamic Toolbar
-description: An animated toolbar that expands to reveal additional tools with smooth spring animations.
+description: An icon strip that resizes as you page between primary tools and a second set.
 ---
+
+## Features
+
+- **Two trays**: Inbox, Messages, Paint, Tags on the first page; Image, Archive, Reload, Delete on the second.
+- **Width follows content**: Measured bounds so the pill grows and shrinks instead of leaving empty space.
+- **Blur on the seam**: Edge icons soften during the swap so the cut doesn’t feel harsh.
+- **Pager arrows**: Left/right move between the two tool sets.
+- **Danger sits last**: Delete is red and lives on the overflow page, not in the first glance.
 
 ## Usage
 
-### Customizing Content
-
-You can easily modify the available tools by updating the `primaryTools` and `secondaryTools` arrays at the top of the file:
-
-```tsx
-// Change Here
-const primaryTools = [
-  { icon: InboxIcon, label: "Inbox" },
-  { icon: Message01Icon, label: "Messages" },
-  // ...
-];
-```
+Treat it like a floating editor bar. Swap the `primaryTools` / `secondaryTools` arrays. Needs a short, wide stage and enough height so the arrows don’t collide. Wire each icon to an action — the demo is visual only.
 
 ```tsx
 import ExpandedToolbar from "@/components/dynamic-toolbar";
@@ -30,9 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Spring animations** - Smooth, natural-feeling transitions using Framer Motion springs
-- **Dynamic width** - Toolbar width adjusts based on the active panel using `useMeasure`
-- **Blur effect** - Icons blur when transitioning between panels for a polished feel
-- **Two-panel design** - Primary and secondary tool sets with navigation buttons
+- Canvas or design-tool chrome
+- Email or notes editors
+- Image annotation bars
+- Admin “quick actions” strips
+- Prototype app shells

@@ -1,22 +1,19 @@
 ---
 title: Discrete Tabs
-description: A minimal tab component with discrete animations.
+description: Quiet icon tabs that expand to a label, with a brief shine when one becomes active.
 ---
+
+## Features
+
+- **Icon, then name**: Inactive tabs stay compact; the active one grows to show Inbox, Planner, or Alerts.
+- **Shared layout**: The pill slides with a spring so neighboring tabs don’t jump.
+- **Shine on select**: A short highlight flashes across the active tab, then it’s gone.
+- **Custom glyphs**: Inbox, calendar, and bell are inline SVGs — easy to swap.
+- **No underline circus**: Motion is the indicator; you don’t need a second chrome bar.
 
 ## Usage
 
-### Customizing Content
-
-You can easily add or remove tabs by modifying the `TABS` array at the top of the component:
-
-```tsx
-// Change Here
-const TABS = [
-  { id: "Inbox", title: "Inbox", icon: Inbox },
-  { id: "Planner", title: "Planner", icon: Calendar },
-  { id: "Alerts", title: "Alerts", icon: Alert },
-];
-```
+Use it as a small mode switch, not a page of content. Three tabs is the sweet spot. Put the panels yourself underneath — this only handles the control. Fine in a toolbar, a settings header, or a mail-style app chrome.
 
 ```tsx
 import DiscreteTabs from "@/components/discrete-tabs";
@@ -26,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Discrete Animations**: Subtle motion effects that provide feedback without distraction.
-- **SVG Icons**: Lightweight, scalable icons for clear visual communication.
-- **Notification Badge**: Support for unread status indicators or alerts.
-- **Visual Polish**: High-quality "shiny text" effects on active states.
-- **Minimalist Aesthetic**: Clean design suitable for modern, content-focused interfaces.
+- Mail or inbox toolbars
+- Planner vs alerts vs inbox in a productivity app
+- Compact settings headers
+- Mobile app top chrome
+- Dashboard section switches

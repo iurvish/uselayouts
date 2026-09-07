@@ -13,17 +13,30 @@ export function OpenPreview({
   className?: string;
 }) {
   const Component = Index[name]?.component as React.ComponentType<{ size?: string }> | undefined;
+  // Tall sticky demos that scroll <main> must size to content, not the viewport.
+  const fill = name !== "perspective-text-scroll";
+  // This demo is its own scrollport (`overflow-y-auto`). min-h-0 stops the
+  // 5×110vh track from inflating this grid item so <main> never becomes the scroller.
+  const nestedPageScroll = name === "scroll-stack-deck";
 
   return (
     <div
       className={cn(
         // no min-h-full: that overrides grid min-height:auto and clips tall sticky demos
         "component-showcase dark grid w-full min-w-0 text-foreground",
+        fill ? "h-full" : "h-max",
+        nestedPageScroll && "min-h-0",
         className,
       )}
     >
       {Component ? (
-        <div className="flex w-full min-w-0 items-[safe_center] justify-center">
+        <div
+          className={cn(
+            "flex w-full min-w-0 items-[safe_center] justify-center",
+            fill && "h-full",
+            nestedPageScroll && "min-h-0",
+          )}
+        >
           <Component size="lg" />
         </div>
       ) : (

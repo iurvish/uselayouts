@@ -1,9 +1,19 @@
 ---
 title: LogoShift
-description: Animated logo showcase with smooth transitions, hover effects, and customizable layouts.
+description: A grid of brand marks that take turns sliding, fading, or flipping into the next logo.
 ---
 
+## Features
+
+- **Column shuffle**: Each cell cycles its own stack of logos on a timer.
+- **Staggered ripple**: Columns don’t all change at once — a small delay walks across the grid.
+- **Three motions**: Vertical slide, fade, or flip — pick one language.
+- **Pause on hover**: Rest the grid while someone is reading a mark.
+- **Layout variants**: Grid, cards, glass, or minimal cells.
+
 ## Usage
+
+Drop it as a “used by” or partner wall. Pass columns of SVG marks or image URLs. Interval and stagger are props. Keep the grid wide enough that logos stay legible; don’t put tiny wordmarks in a four-column crush.
 
 ```tsx
 import Logoshift from "@/components/logoshift";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Homepage logo walls
+- Pricing “trusted by” rows
+- Partner or integration pages
+- Conference sponsor grids
+- Case-study client lists

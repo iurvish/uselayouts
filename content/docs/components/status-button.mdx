@@ -1,9 +1,19 @@
 ---
 title: Status Button
-description: A save button with animated states for idle, loading, and success.
+description: A save button whose letters morph through Save → Saving → Saved, with a small status pip.
 ---
 
+## Features
+
+- **Three states**: Idle, loading, success in one control.
+- **Letter morph**: Characters blur and scale as the word changes — not a spinner-only trick.
+- **Corner pip**: A small indicator appears while it’s working or done.
+- **Disabled mid-flight**: You can’t double-submit while it’s saving.
+- **Back to idle**: After success it returns so you can save again.
+
 ## Usage
+
+Call it on a real save. Replace the timeouts with your request: idle → loading on click, success when the server answers. Keep the label short (Save / Saving / Saved). Sit it in a form footer or an editor chrome.
 
 ```tsx
 import { SaveButton } from "@/components/status-button";
@@ -13,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Multi-state**: Handles Idle, Loading, and Success states in a single component.
-- **Text Morphing**: Smooth character-level transitions for label changes.
-- **Visual Feedback**: Icons and colors update dynamically to reflect current status.
-- **Interaction Safety**: Disabled state during loading prevents duplicate submissions.
-- **Accessibility**: ARIA-friendly state management.
+- Settings save bars
+- Document or canvas editors
+- Profile forms
+- Admin consoles
+- Checkout “place order” if you keep the three words honest

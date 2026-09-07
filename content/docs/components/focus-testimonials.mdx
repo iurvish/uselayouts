@@ -1,9 +1,19 @@
 ---
 title: Focus Testimonials
-description: Interactive testimonial section with hover-based focus effects, animated author tooltips, and expandable testimonials.
+description: A row of avatars — hover one and that quote comes forward, with a name tooltip that follows.
 ---
 
+## Features
+
+- **Focus by hover**: Dim the others, bring one voice to the front.
+- **Author tooltip**: Name, role, and company float near the pointer.
+- **Expand for more**: A control reveals additional quotes beyond the first row.
+- **Quote stays readable**: The line of copy is the hero; avatars are the index.
+- **Click isn’t required**: Desktop hover does the work; expansion covers extra names.
+
 ## Usage
+
+You need a set of quotes with avatars, names, and companies. Hover is the main interaction, so it’s happiest on desktop marketing pages. Swap `INITIAL_TESTIMONIALS` / extra lists. Don’t put it in a tiny column — the row of faces needs to breathe.
 
 ```tsx
 import FocusTestimonials from "@/components/focus-testimonials";
@@ -13,6 +23,10 @@ export default function Example() {
 }
 ```
 
-## Features
+## Where to use
 
-- Motion-powered interactions
+- Homepage social proof
+- Pricing pages under the plans
+- Case-study outros
+- Agency client walls
+- Launch pages with a few strong quotes

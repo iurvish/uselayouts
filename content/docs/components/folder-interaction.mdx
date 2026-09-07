@@ -1,9 +1,19 @@
 ---
 title: Folder Interaction
-description: An interactive 3D folder animation that opens to reveal documents with spring physics.
+description: A dark folder you click to open — three documents fan out, then the flap folds back down.
 ---
 
+## Features
+
+- **Click to open**: One tap flips the folder flap on the X axis.
+- **Document fan**: Three pages spring to the left, center, and right with a little stagger.
+- **Inset lighting**: The pocket has an inner shadow so it reads as a real sleeve.
+- **Frosted front**: The flap uses blur and a custom SVG silhouette.
+- **Click again to close**: Papers tuck back in; the flap drops.
+
 ## Usage
+
+A single object, not a file manager. Drop it as a visual for docs, decks, or “what’s in the brief.” Needs a click and a medium square of space. Swap the inner page content if you want real titles on the sheets.
 
 ```tsx
 import FolderInteraction from "@/components/folder-interaction";
@@ -17,10 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **3D folder opening** - Realistic folder flip animation with perspective
-- **Document fan-out** - Three documents spread out with staggered spring animations
-- **Glassmorphism** - Frosted glass effect on the folder front using backdrop blur
-- **Click to toggle** - Simple click interaction to open/close the folder
-- **SVG folder design** - Custom SVG folder shape with gradient fills
+- Docs or resource hubs
+- Agency “the brief” moments
+- File-product marketing
+- Onboarding that introduces a packet of assets
+- About pages with a tactile object

@@ -1,22 +1,19 @@
 ---
 title: Morphing Input
-description: An input field with an animated placeholder and toggleable icon switch.
+description: A search field whose placeholder letters flip, and whose icon toggles the mode — search vs generate.
 ---
+
+## Features
+
+- **Letter-by-letter placeholder**: “Search anything…” and “Generate Image” enter with a tiny 3D flip.
+- **Icon as mode**: Tap the leading icon to cycle presets.
+- **Submit still there**: An arrow on the right for the actual query.
+- **Empty vs typed**: Placeholder animation only while the field is empty.
+- **Compact bar**: One rounded field, not a whole command palette.
 
 ## Usage
 
-### Customizing Content
-
-Adjust the placeholder text and icons by modifying the `placeholderOptions` array:
-
-```tsx
-// Change Here
-const placeholderOptions = [
-  { id: 1, placeholder: "Search anything...", icon: SparklesIcon },
-  { id: 2, placeholder: "Generate Image", icon: Album02Icon },
-  // ...
-];
-```
+Use it as a prompt or search control. Edit `placeholderOptions` for extra modes. Needs a click on the icon to switch; typing is a normal input. Sit it in a header or an AI bar. Don’t auto-play the placeholder while someone’s mid-sentence.
 
 ```tsx
 import InputSwitch from "@/components/morphing-input";
@@ -26,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Mode Switch**: Toggles between specific preset inputs (e.g., Search, Image Gen) and free text.
-- **Animated Placeholder**: Placeholder text animates character-by-character.
-- **Search/Command Ready**: Ideal for command palettes or multi-purpose search bars.
-- **Compact to Detailed**: Expands to show more controls or details when active.
-- **Icon Integration**: Visual icons clearly denote the current input mode.
+- AI prompt bars
+- Site search in the header
+- Image-gen or mixed-mode tools
+- Docs command-style search
+- Product demos of a “one box” UI
