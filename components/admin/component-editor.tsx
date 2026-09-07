@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type ComponentType,
+  type CSSProperties,
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -89,6 +90,7 @@ export function ComponentEditor({
   const [error, setError] = useState<string | null>(null);
   const [previewBgLight, setPreviewBgLight] = useState<string>(DEFAULT_PREVIEW_BACKGROUNDS.light);
   const [previewBgDark, setPreviewBgDark] = useState<string>(DEFAULT_PREVIEW_BACKGROUNDS.dark);
+  const [hintTop, setHintTop] = useState(80);
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark");
   const [previewKey, setPreviewKey] = useState(0);
   const [depsLocked, setDepsLocked] = useState(false);
@@ -122,6 +124,9 @@ export function ComponentEditor({
         const backgrounds = parsePreviewBackgrounds(data.controls?.previewBackground);
         setPreviewBgLight(backgrounds.light ?? DEFAULT_PREVIEW_BACKGROUNDS.light);
         setPreviewBgDark(backgrounds.dark ?? DEFAULT_PREVIEW_BACKGROUNDS.dark);
+        const loadedHint =
+          typeof data.controls?.hintTop === "number" ? data.controls.hintTop : 80;
+        setHintTop(Math.min(200, Math.max(0, Math.round(loadedHint))));
         setPosterUrl(data.controls?.posterUrl ?? null);
         setVideoUrl(data.controls?.videoUrl ?? null);
       })
@@ -218,6 +223,7 @@ export function ComponentEditor({
         light: previewBgLight,
         dark: previewBgDark,
       }),
+      hintTop,
     };
 
     const res = await fetch(
@@ -486,7 +492,7 @@ export function ComponentEditor({
               <CardTitle>Preview backgrounds</CardTitle>
               <CardDescription>Light and dark colors for the open-page canvas.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <ColorField
                   label="Light"
@@ -499,6 +505,24 @@ export function ComponentEditor({
                   value={previewBgDark}
                   fallback={DEFAULT_PREVIEW_BACKGROUNDS.dark}
                   onChange={setPreviewBgDark}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <Label className="text-xs text-muted-foreground">Hint top</Label>
+                  <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                    {hintTop}px
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={200}
+                  step={1}
+                  value={hintTop}
+                  aria-label="Preview hint top offset"
+                  className="h-8 w-full cursor-pointer accent-foreground"
+                  onChange={(e) => setHintTop(Number(e.target.value))}
                 />
               </div>
             </CardContent>
@@ -568,7 +592,12 @@ export function ComponentEditor({
                 "component-showcase flex min-h-[min(52vh,480px)] items-center justify-center overflow-hidden text-foreground",
                 previewTheme === "dark" ? "dark" : "light",
               )}
-              style={{ background: activePreviewBackground }}
+              style={
+                {
+                  background: activePreviewBackground,
+                  "--preview-hint-top": `${hintTop}px`,
+                } as CSSProperties
+              }
             >
               {Preview ? (
                 <Suspense

@@ -68,7 +68,10 @@ function HintOverlay({
 
   return (
     <div ref={ref} className="pointer-events-none sticky top-0 z-[1] h-0 w-full">
-      <div className="absolute inset-x-0 top-0 flex flex-col items-center gap-8 px-4 pt-20">
+      <div
+        className="absolute inset-x-0 top-0 flex flex-col items-center gap-8 px-4"
+        style={{ paddingTop: "var(--preview-hint-top, 80px)" }}
+      >
         <div className="flex max-w-full flex-col items-center gap-1 text-center">
           <p
             className={cn(

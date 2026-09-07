@@ -8,9 +8,11 @@ import { cn } from "@/lib/utils";
 export function OpenPreview({
   name,
   className,
+  hintTop,
 }: {
   name: string;
   className?: string;
+  hintTop?: number;
 }) {
   const Component = Index[name]?.component as React.ComponentType<{ size?: string }> | undefined;
   // Tall sticky demos that scroll <main> must size to content, not the viewport.
@@ -28,6 +30,11 @@ export function OpenPreview({
         nestedPageScroll && "min-h-0",
         className,
       )}
+      style={
+        hintTop != null
+          ? ({ "--preview-hint-top": `${hintTop}px` } as React.CSSProperties)
+          : undefined
+      }
     >
       {Component ? (
         <div

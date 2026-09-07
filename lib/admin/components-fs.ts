@@ -31,6 +31,8 @@ export type ComponentControlsMeta = {
   posterUrl?: string;
   /** Cloudflare R2 CDN muted preview MP4. */
   videoUrl?: string;
+  /** PreviewHint overlay padding-top in px. Default 80 (`pt-20`). */
+  hintTop?: number;
 };
 
 export type RegistryItem = {
@@ -52,6 +54,7 @@ export type UpsertComponentInput = {
   dialConfig?: Record<string, unknown>;
   disabledControls?: string[];
   previewBackground?: PreviewBackgrounds | string | null;
+  hintTop?: number | null;
 };
 
 async function readRegistry(): Promise<{
@@ -128,10 +131,18 @@ export async function readControls(
 
 async function writeControls(name: string, meta: ComponentControlsMeta) {
   await fs.mkdir(CONTROLS_DIR, { recursive: true });
+  const existing = await readControls(name);
   await fs.writeFile(
     path.join(CONTROLS_DIR, `${name}.json`),
-    JSON.stringify(meta, null, 2) + "\n",
+    JSON.stringify({ ...existing, ...meta }, null, 2) + "\n",
   );
+}
+
+export function clampHintTop(value: unknown): number | undefined {
+  if (value == null || value === "") return undefined;
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return Math.min(200, Math.max(0, Math.round(n)));
 }
 
 function flattenKeys(
@@ -177,6 +188,7 @@ export async function upsertComponent(input: UpsertComponentInput) {
         )
       : existingMeta?.previewBackground;
 
+  const hintTop = clampHintTop(input.hintTop);
   await writeControls(name, {
     dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
     disabled,
@@ -184,6 +196,7 @@ export async function upsertComponent(input: UpsertComponentInput) {
     previewBackground: background,
     posterUrl: existingMeta?.posterUrl,
     videoUrl: existingMeta?.videoUrl,
+    ...(hintTop !== undefined ? { hintTop } : {}),
   });
 
   const mdx = generateComponentMdx({

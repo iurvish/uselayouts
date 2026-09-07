@@ -1,4 +1,4 @@
-import { getComponent, listComponents } from "@/lib/admin/components-fs";
+import { clampHintTop, getComponent, listComponents } from "@/lib/admin/components-fs";
 import { toPascal } from "@/lib/admin/slug";
 import { browseItems } from "@/lib/browse/items";
 import { highlightCode } from "@/lib/open/highlight";
@@ -36,6 +36,8 @@ export type OpenComponentData = {
   /** Shiki HTML for manual dep install commands. */
   manualHtml: Record<PackageManager, string>;
   previewBackground?: string | PreviewBackgrounds;
+  /** PreviewHint overlay padding-top in px. Omit = 80. */
+  hintTop?: number;
 };
 
 async function highlightShellCommands(
@@ -130,5 +132,6 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     cliHtml,
     manualHtml,
     previewBackground: record?.controls?.previewBackground,
+    hintTop: clampHintTop(record?.controls?.hintTop),
   };
 }

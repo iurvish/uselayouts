@@ -54,8 +54,9 @@ export const DEFAULT_CARDS: EditorialDeckCard[] = [
   },
 ];
 
-const STACK_Y = 20;
-const STACK_SCALE = 0.035;
+const STACK_Y = 10;
+const STACK_SCALE = 0.045;
+const STACK_PEEK = 2;
 const SWIPE = 90;
 const SETTLE = {
   type: "spring" as const,
@@ -97,6 +98,7 @@ export function EditorialDeck({
 
   const lastDepth = cards.length - 1;
   const showIntro = Boolean(title || subtitle);
+  const peek = Math.min(lastDepth, STACK_PEEK);
 
   const commitBack = () => {
     if (!flying.current) return;
@@ -134,7 +136,7 @@ export function EditorialDeck({
 
   return (
     <section
-      className={`flex w-full flex-col items-center justify-center bg-[#F7F4F0] px-4 py-12 ${className}`}
+      className={`flex h-full min-h-0 w-full flex-1 flex-col items-center justify-center bg-[#F7F4F0] px-6 ${className}`}
     >
       {showIntro ? (
         <div className="mb-8 text-center">
@@ -152,17 +154,8 @@ export function EditorialDeck({
       ) : null}
 
       <div
-        className="relative w-full max-w-3xl"
-        style={{
-          height: "min(32rem, 65vh)",
-          ...(peel !== 0 || fly
-            ? {
-                perspective: 850,
-                perspectiveOrigin: "50% 40%",
-                transformStyle: "preserve-3d" as const,
-              }
-            : {}),
-        }}
+        className="relative w-full max-w-2xl"
+        style={{ height: `calc(20rem + ${peek * STACK_Y}px)` }}
       >
         {order
           .slice()
@@ -171,13 +164,17 @@ export function EditorialDeck({
             const restDepth = lastDepth - revI;
             const isFront = restDepth === 0;
             const isFlying = isFront && fly;
-            const depth = isFlying ? lastDepth : fly && restDepth > 0 ? restDepth - 1 : restDepth;
+            const depth = isFlying
+              ? lastDepth
+              : fly && restDepth > 0
+                ? restDepth - 1
+                : restDepth;
+            const vis = Math.min(depth, STACK_PEEK);
             const c = cards[cardIndex]!;
             const canDrag = isFront && !fly;
             const peeling = canDrag && peel !== 0;
             const peelX = canDrag && !reduceMotion ? peel : 0;
-            const dragShrink = Math.min(Math.abs(peelX) / 220, 0.24);
-            const live3d = !reduceMotion && (peeling || isFlying);
+            const dragShrink = Math.min(Math.abs(peelX) / 280, 0.12);
 
             return (
               <motion.article
@@ -190,11 +187,9 @@ export function EditorialDeck({
                 initial={false}
                 animate={{
                   x: 0,
-                  y: depth * STACK_Y,
-                  scale: 1 - depth * STACK_SCALE - dragShrink,
-                  rotateZ: peelX * 0.1,
-                  rotateY: live3d ? peelX * -0.06 : 0,
-                  rotateX: live3d ? Math.min(Math.abs(peelX) / 18, 12) : 0,
+                  y: vis * STACK_Y,
+                  scale: 1 - vis * STACK_SCALE - dragShrink,
+                  rotate: peelX * 0.06,
                 }}
                 transition={
                   peeling
@@ -206,7 +201,7 @@ export function EditorialDeck({
                 onAnimationComplete={() => {
                   if (isFlying) commitBack();
                 }}
-                className={`absolute inset-0 flex flex-col touch-none overflow-hidden rounded-[1.5rem] ring-1 ring-inset ring-black/5 md:flex-row ${
+                className={`absolute inset-x-0 top-0 flex h-72 flex-col touch-none overflow-hidden rounded-[1.5rem] ring-1 ring-inset ring-black/5 md:h-80 md:flex-row ${
                   canDrag
                     ? "cursor-grab active:cursor-grabbing"
                     : "pointer-events-none"
@@ -218,10 +213,9 @@ export function EditorialDeck({
                   boxShadow: isFront
                     ? "0 8px 24px -12px rgba(0,0,0,0.14), 0 2px 6px -2px rgba(0,0,0,0.05)"
                     : "0 2px 8px -6px rgba(0,0,0,0.08)",
-                  transformStyle: live3d ? "preserve-3d" : undefined,
                 }}
               >
-                <div className="relative h-48 w-full shrink-0 p-4 md:h-auto md:w-[46%] md:p-5">
+                <div className="relative h-36 w-full shrink-0 p-4 md:h-auto md:w-[46%] md:p-5">
                   <div className="h-full overflow-hidden rounded-2xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -232,7 +226,7 @@ export function EditorialDeck({
                     />
                   </div>
                 </div>
-                <div className="flex flex-1 flex-col justify-center gap-3 border-t border-black/10 px-7 py-7 md:border-l md:border-t-0 md:px-10 md:py-10">
+                <div className="flex flex-1 flex-col justify-center gap-3 border-t border-black/10 px-7 py-6 md:border-l md:border-t-0 md:px-10 md:py-8">
                   <p className="text-[13px] font-medium tracking-[0.06em] text-neutral-500">
                     {c.date}
                   </p>

@@ -50,6 +50,7 @@ export async function PUT(request: Request, { params }: Params) {
       dialConfig: body.dialConfig,
       disabledControls: body.disabledControls,
       previewBackground: body.previewBackground,
+      hintTop: body.hintTop,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
