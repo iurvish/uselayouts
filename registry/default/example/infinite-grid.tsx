@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback, forwardRef } from 'react';
+import React, { useRef, useEffect, useCallback, forwardRef } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -22,7 +22,6 @@ export interface LiquidGlassInfiniteGridProps extends React.HTMLAttributes<HTMLD
   columns?: number;
   gapVw?: number;
   cardWidthVw?: number;
-  enableGlassCursor?: boolean;
   enableLiquidBlobs?: boolean;
   onItemClick?: (item: GridItem) => void;
   cardClassName?: string;
@@ -80,137 +79,18 @@ export const DEFAULT_GRID_ITEMS: GridItem[] = [
   },
 ];
 
-export interface LiquidGlassCursorProps extends React.HTMLAttributes<HTMLDivElement> {
-  isDragging?: boolean;
-  isHoveringCard?: boolean;
-}
-
-export const LiquidGlassCursor = forwardRef<HTMLDivElement, LiquidGlassCursorProps>(
-  ({ isDragging = false, isHoveringCard = false, className, ...props }, ref) => {
-    const cursorOrbRef = useRef<HTMLDivElement>(null);
-    const cursorDotRef = useRef<HTMLDivElement>(null);
-    const current = useRef({ x: -100, y: -100 });
-    const target = useRef({ x: -100, y: -100 });
-    const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-      if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) return;
-
-      const handlePointerMove = (e: PointerEvent) => {
-        target.current.x = e.clientX;
-        target.current.y = e.clientY;
-        if (!visible) setVisible(true);
-
-        if (cursorDotRef.current) {
-          cursorDotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-        }
-      };
-
-      const handlePointerLeave = () => setVisible(false);
-      const handlePointerEnter = () => setVisible(true);
-
-      window.addEventListener('pointermove', handlePointerMove, { passive: true });
-      document.addEventListener('pointerleave', handlePointerLeave);
-      document.addEventListener('pointerenter', handlePointerEnter);
-
-      let rafId: number;
-      const loop = () => {
-        current.current.x += (target.current.x - current.current.x) * 0.35;
-        current.current.y += (target.current.y - current.current.y) * 0.35;
-
-        if (cursorOrbRef.current) {
-          cursorOrbRef.current.style.transform = `translate3d(${current.current.x}px, ${current.current.y}px, 0) translate(-50%, -50%)`;
-        }
-
-        rafId = requestAnimationFrame(loop);
-      };
-
-      rafId = requestAnimationFrame(loop);
-
-      return () => {
-        cancelAnimationFrame(rafId);
-        window.removeEventListener('pointermove', handlePointerMove);
-        document.removeEventListener('pointerleave', handlePointerLeave);
-        document.removeEventListener('pointerenter', handlePointerEnter);
-      };
-    }, [visible]);
-
-    if (!visible) return null;
-
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'fixed inset-0 pointer-events-none z-50 overflow-hidden select-none transition-opacity duration-150',
-          visible ? 'opacity-100' : 'opacity-0',
-          className
-        )}
-        {...props}
-      >
-        <div
-          ref={cursorOrbRef}
-          className={cn(
-            'absolute top-0 left-0 rounded-full flex items-center justify-center pointer-events-none transition-[width,height,background-color,border-color,transform] duration-200 ease-out',
-            isDragging
-              ? 'w-16 h-16 bg-neutral-900/18 border-[1.5px] border-neutral-700/50 shadow-[0_12px_32px_rgba(0,0,0,0.14)]'
-              : isHoveringCard
-              ? 'w-14 h-14 bg-neutral-800/14 border-[1.5px] border-neutral-600/40 shadow-[0_8px_26px_rgba(0,0,0,0.1)] scale-105'
-              : 'w-11 h-11 bg-neutral-800/10 border border-neutral-400/50 shadow-[0_6px_20px_rgba(0,0,0,0.08)]'
-          )}
-          style={{
-            backdropFilter: 'blur(10px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-            boxShadow: isDragging
-              ? '0 12px 32px rgba(0, 0, 0, 0.14), inset 0 0 10px rgba(255, 255, 255, 0.6)'
-              : '0 6px 20px rgba(0, 0, 0, 0.08), inset 0 0 8px rgba(255, 255, 255, 0.5)',
-            willChange: 'transform',
-          }}
-        >
-          <div className="absolute top-1.5 left-2 w-3 h-1 rounded-full bg-white/70 -rotate-30" />
-          {isDragging && (
-            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-900 font-bold">
-              PAN
-            </span>
-          )}
-        </div>
-
-        <div
-          ref={cursorDotRef}
-          className={cn(
-            'absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none transition-all duration-150',
-            isDragging
-              ? 'w-2.5 h-2.5 bg-black shadow-[0_0_8px_rgba(0,0,0,0.4)]'
-              : isHoveringCard
-              ? 'w-2 h-2 bg-black shadow-[0_0_6px_rgba(0,0,0,0.3)]'
-              : 'w-1.5 h-1.5 bg-black/90'
-          )}
-          style={{ willChange: 'transform' }}
-        />
-      </div>
-    );
-  }
-);
-LiquidGlassCursor.displayName = 'LiquidGlassCursor';
-
 export interface LiquidGlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: GridItem;
   aspectRatio?: string;
   imageClassName?: string;
-  onHoverChange?: (hovering: boolean) => void;
 }
 
 export const LiquidGlassCard = forwardRef<HTMLDivElement, LiquidGlassCardProps>(
-  ({ item, className, imageClassName, aspectRatio = '1 / 1', onHoverChange, ...props }, ref) => {
+  ({ item, className, imageClassName, aspectRatio = '1 / 1', ...props }, ref) => {
     return (
       <div
         ref={ref}
-        onMouseEnter={() => onHoverChange?.(true)}
-        onMouseLeave={() => onHoverChange?.(false)}
-        className={cn(
-          'group flex flex-col items-center gap-[18px] w-full select-none cursor-none',
-          className
-        )}
-        style={{ cursor: 'none' }}
+        className={cn('group flex flex-col items-center gap-[18px] w-full select-none', className)}
         {...props}
       >
         {item.customContent ? (
@@ -218,58 +98,30 @@ export const LiquidGlassCard = forwardRef<HTMLDivElement, LiquidGlassCardProps>(
         ) : (
           <>
             <div
-              className={cn(
-                'relative w-full aspect-square overflow-hidden rounded-[24px] p-6 flex items-center justify-center cursor-none',
-                'bg-neutral-50/70 hover:bg-neutral-100/80',
-                'backdrop-blur-xl backdrop-saturate-200 border border-neutral-200/80',
-                'shadow-[0_10px_30px_-8px_rgba(0,0,0,0.04)]',
-                'transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015] hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.08)]'
-              )}
-              style={{
-                aspectRatio,
-                cursor: 'none',
-              }}
+              className="relative w-full aspect-square overflow-hidden flex items-center justify-center"
+              style={{ aspectRatio }}
             >
-              <div
-                className="absolute inset-0 pointer-events-none rounded-[24px] opacity-70 transition-opacity duration-300 group-hover:opacity-100"
-                style={{
-                  background:
-                    'radial-gradient(ellipse at 25% 15%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 45%, transparent 70%)',
-                }}
-              />
-
-              <div
-                className="absolute bottom-0 inset-x-4 h-[1px] pointer-events-none opacity-40"
-                style={{
-                  background:
-                    'linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)',
-                }}
-              />
-
-              <div className="relative w-full h-full flex items-center justify-center bg-transparent pointer-events-none">
-                {item.imageUrl && (
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    fetchPriority="high"
-                    decoding="async"
-                    draggable={false}
-                    className={cn(
-                      'w-full h-full object-contain object-center select-none pointer-events-none transition-transform duration-300 group-hover:scale-105',
-                      imageClassName
-                    )}
-                    style={{
-                      filter:
-                        'grayscale(100%) contrast(108%) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.12))',
-                      mixBlendMode: 'multiply',
-                      backgroundColor: 'transparent',
-                    }}
-                  />
-                )}
-              </div>
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  fetchPriority="high"
+                  decoding="async"
+                  draggable={false}
+                  className={cn(
+                    'w-full h-full object-contain object-center select-none pointer-events-none transition-transform duration-200 ease-out group-hover:scale-105',
+                    imageClassName
+                  )}
+                  style={{
+                    filter:
+                      'grayscale(100%) contrast(108%) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.12))',
+                    mixBlendMode: 'multiply',
+                  }}
+                />
+              )}
             </div>
 
-            <div className="flex flex-col items-center w-full text-center pointer-events-none bg-transparent">
+            <div className="flex flex-col items-center w-full text-center pointer-events-none">
               <p className="font-mono text-[13px] leading-[1.2em] font-medium uppercase tracking-tight text-neutral-950">
                 {item.title}
               </p>
@@ -294,18 +146,16 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
       columns = 4,
       gapVw = 2.5,
       cardWidthVw = 24,
-      enableGlassCursor = true,
       enableLiquidBlobs = true,
       onItemClick,
       className,
       cardClassName,
       itemClassName,
-      size,
+      size: _size,
       ...props
     }: LiquidGlassInfiniteGridProps & { size?: string },
     ref
   ) => {
-    const glassCursor = enableGlassCursor && size !== "sm";
     const containerRef = useRef<HTMLDivElement>(null);
     const gridMatrixRef = useRef<HTMLDivElement>(null);
     const singleBlockRef = useRef<HTMLDivElement>(null);
@@ -316,8 +166,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
     const blockDim = useRef({ w: 0, h: 0 });
 
     const isDragging = useRef(false);
-    const [isDraggingState, setIsDraggingState] = useState(false);
-    const [isHoveringCard, setIsHoveringCard] = useState(false);
     const dragStart = useRef({ x: 0, y: 0 });
     const dragStartTarget = useRef({ x: 0, y: 0 });
     const lastPointer = useRef({ x: 0, y: 0, time: 0 });
@@ -411,7 +259,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
       if (e.button !== 0 && e.pointerType === 'mouse') return;
 
       isDragging.current = true;
-      setIsDraggingState(true);
       dragDistance.current = 0;
       dragStart.current = { x: e.clientX, y: e.clientY };
       dragStartTarget.current = { ...targetPos.current };
@@ -450,7 +297,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
     const handlePointerUp = (e: React.PointerEvent) => {
       if (!isDragging.current) return;
       isDragging.current = false;
-      setIsDraggingState(false);
 
       if (containerRef.current && containerRef.current.hasPointerCapture(e.pointerId)) {
         containerRef.current.releasePointerCapture(e.pointerId);
@@ -487,14 +333,9 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
     return (
       <div
         ref={ref}
-        className={cn(
-          'infinite-grid-root relative w-full h-screen overflow-hidden bg-white',
-          glassCursor && '[&_*]:cursor-none',
-          className
-        )}
+        className={cn('infinite-grid-root relative w-full h-screen overflow-hidden bg-white', className)}
       >
         <style>{`
-          ${glassCursor ? '.infinite-grid-root, .infinite-grid-root * { cursor: none !important; }' : ''}
           @keyframes fluidBlob1 {
             0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
             33% { transform: translate(8vw, -6vh) scale(1.15) rotate(45deg); }
@@ -514,10 +355,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
           .animate-fluid-3 { animation: fluidBlob3 18s ease-in-out infinite alternate; }
         `}</style>
 
-        {glassCursor && (
-          <LiquidGlassCursor isDragging={isDraggingState} isHoveringCard={isHoveringCard} />
-        )}
-
         <section
           ref={containerRef}
           tabIndex={0}
@@ -525,16 +362,12 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className={cn(
-            'w-full h-screen overflow-hidden relative select-none bg-white',
-            glassCursor ? 'cursor-none' : 'cursor-grab active:cursor-grabbing'
-          )}
+          className="w-full h-screen overflow-hidden relative select-none bg-white cursor-grab active:cursor-grabbing"
           style={{
             touchAction: 'none',
             userSelect: 'none',
             WebkitUserSelect: 'none',
             backgroundColor: '#ffffff',
-            cursor: glassCursor ? 'none' : undefined,
           }}
           {...props}
         >
@@ -548,7 +381,7 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
 
           <div
             ref={gridMatrixRef}
-            className="absolute top-0 left-0 cursor-none"
+            className="absolute top-0 left-0"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, max-content)',
@@ -559,7 +392,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
               transformOrigin: '50% 50%',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              cursor: glassCursor ? 'none' : undefined,
             }}
           >
             {matrix.map((row, rowIndex) =>
@@ -577,7 +409,6 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
                       alignItems: 'center',
                       gap: `${gapVw}vw`,
                       padding: '1.25vw',
-                      cursor: glassCursor ? 'none' : undefined,
                     }}
                   >
                     {items.map((item) => (
@@ -590,15 +421,10 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
                           width: `${cardWidthVw}vw`,
                           userSelect: 'none',
                           WebkitUserSelect: 'none',
-                          cursor: glassCursor ? 'none' : undefined,
                         }}
-                        className={cn('select-none cursor-none', itemClassName)}
+                        className={cn('select-none', itemClassName)}
                       >
-                        <LiquidGlassCard
-                          item={item}
-                          className={cardClassName}
-                          onHoverChange={setIsHoveringCard}
-                        />
+                        <LiquidGlassCard item={item} className={cardClassName} />
                       </div>
                     ))}
                   </div>

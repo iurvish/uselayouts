@@ -55,6 +55,7 @@
     "fumadocs-core": "16.14.3",
     "fumadocs-mdx": "^14.1.0",
     "fumadocs-ui": "16.14.3",
+    "lenis": "^1.3.26",
     "lucide-react": "^0.561.0",
     "motion": "^12.23.26",
     "next": "16.0.10",

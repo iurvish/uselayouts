@@ -84,18 +84,18 @@ export const defaultCarouselItems: WheelCarouselItem[] = [
 
 const THEME_PRESETS = {
   dark: {
-    bg: '#000000',
-    text: 'rgba(255, 255, 255, 0.38)',
-    sel: '#FFFFFF',
-    marker: '#2C6BFF',
-    panel: '#121216',
+    bg: 'var(--background)',
+    text: 'var(--muted-foreground)',
+    sel: 'var(--foreground)',
+    marker: '#f59e0b',
+    panel: 'var(--muted)',
   },
   light: {
-    bg: '#FFFFFF',
-    text: 'rgba(0, 0, 0, 0.28)',
-    sel: '#0A0A0A',
-    marker: '#2C6BFF',
-    panel: '#EDEDED',
+    bg: 'var(--background)',
+    text: 'var(--muted-foreground)',
+    sel: 'var(--foreground)',
+    marker: '#f59e0b',
+    panel: 'var(--muted)',
   },
 };
 
@@ -298,16 +298,16 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       items = defaultCarouselItems,
       mode = 'light',
       photoSide = 'left',
-      photoWidth = 24,
+      photoWidth = 34,
       photoAspect = '3/4',
-      contentWidth = 960,
-      gap = 0,
+      contentWidth = 880,
+      gap = 12,
       photoRadius = 12,
       crossfade = 0.45,
       radius = 330,
       spacing = 14,
       visibleItems = 7,
-      apexInset = 34,
+      apexInset = 16,
       itemFont = {
         fontSize: '27px',
         fontWeight: 600,
@@ -319,8 +319,8 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       selectedColor,
       showMarker = true,
       markerColor,
-      markerSize = 16,
-      markerGap = 22,
+      markerSize = 14,
+      markerGap = 18,
       background,
       scrollSpeed = 0.007,
       dragSpeed = 0.016,
@@ -353,7 +353,6 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
     const startingIndex = ((Math.round(initialIndex) % total) + total) % total;
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const markerRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const rotPos = useRef<number>(startingIndex);
     const velocity = useRef<number>(0);
@@ -412,25 +411,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
     }, []);
 
     const applyTransforms = useCallback(
-      (currentRot: number, currentVelocity: number) => {
+      (currentRot: number, _currentVelocity: number) => {
         const { total: count, radius: r, spacing: sp, visibleItems: vis, apexInset: apex, theme: th } =
           configRef.current;
-
-        if (markerRef.current) {
-          const v = currentVelocity;
-          const absV = Math.abs(v);
-          const stretchY = 1 + Math.min(absV * 18, 1.35);
-          const squishX = 1 / Math.sqrt(stretchY);
-          const translateYOffset = v * 35;
-
-          markerRef.current.style.transform = `translate3d(0, -50%, 0) translateY(${translateYOffset.toFixed(2)}px) scale(${squishX.toFixed(3)}, ${stretchY.toFixed(3)})`;
-          markerRef.current.style.borderRadius =
-            absV > 0.005
-              ? v > 0
-                ? '50% 50% 65% 65%'
-                : '65% 65% 50% 50%'
-              : '50%';
-        }
 
         for (let i = 0; i < count; i++) {
           const el = itemRefs.current[i];
@@ -731,6 +714,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             width: `min(100%, ${contentWidth}px)`,
             height: '100%',
             alignItems: 'stretch',
+            justifyContent: 'center',
             touchAction: 'none',
             cursor: isDragging.current ? 'grabbing' : 'grab',
             userSelect: 'none',
@@ -754,7 +738,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           <div
             style={{
               position: 'relative',
-              flex: 1,
+              flex: '0 1 420px',
+              width: '420px',
+              maxWidth: '52%',
               height: '100%',
               overflow: 'hidden',
               WebkitMaskImage: maskValue,
@@ -766,25 +752,24 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           >
             {showMarker && (
               <div
-                ref={markerRef}
                 style={{
                   position: 'absolute',
                   left: `calc(${apexInset}% - ${markerGap}px)`,
                   top: '50%',
-                  width: markerSize,
+                  width: 5,
                   height: markerSize,
-                  marginLeft: -markerSize,
+                  marginLeft: -5,
                   transform: 'translate3d(0, -50%, 0)',
-                  borderRadius: '50%',
+                  borderRadius: 2,
                   background: theme.marker,
                   pointerEvents: 'none',
+                  flexShrink: 0,
                   boxShadow: `
                     0 0 24px ${theme.marker}80,
                     0 2px 8px ${theme.marker}50,
                     inset 0 1.5px 2px rgba(255,255,255,0.9),
                     inset 0 -1.5px 2px rgba(0,0,0,0.3)
                   `,
-                  willChange: 'transform, border-radius, background-color',
                   transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
                 }}
               />
@@ -833,7 +818,12 @@ export default function NewComponentDemo({ size }: { size?: string }) {
       data-hint-target=""
       className={size === "lg" ? "flex h-[min(78vh,820px)] min-h-[560px] w-full items-center justify-center" : "flex h-[min(70vh,720px)] min-h-[480px] w-full items-center justify-center"}
     >
-      <WheelCarousel contentWidth={1100} style={{ width: "100%", height: "100%", maxWidth: "1100px" }} />
+      <WheelCarousel
+        contentWidth={880}
+        photoWidth={34}
+        apexInset={16}
+        style={{ width: "100%", height: "100%", maxWidth: "880px" }}
+      />
     </div>
   );
 }

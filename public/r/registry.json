@@ -285,23 +285,6 @@
       ]
     },
     {
-      "name": "elevate-testimonial",
-      "type": "registry:component",
-      "title": "elevate-testimonial",
-      "description": "Abc",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/elevate-testimonial.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "empty-testimonial",
       "type": "registry:component",
       "title": "Empty Testimonial",
@@ -421,8 +404,8 @@
     {
       "name": "infinite-grid",
       "type": "registry:component",
-      "title": "Infinite Grid",
-      "description": "A draggable Polaroid gallery with realistic tilt, smooth stacking, hover effects, and customizable photos and captions.",
+      "title": "Infinite Canvas",
+      "description": "A free-panning product canvas that tiles forever — drag, scroll, and skim an endless grid of images and captions.",
       "dependencies": [
         "motion",
         "clsx",
@@ -608,8 +591,9 @@
       "title": "Pop Tilt Cards",
       "description": "Interactive tilt card deck with smooth hover animations, 3D popping effects, images, links, and customizable card styling.",
       "dependencies": [
-        "motion",
         "clsx",
+        "motion",
+        "react",
         "tailwind-merge"
       ],
       "files": [
@@ -644,7 +628,7 @@
       "name": "rollingcardstack",
       "type": "registry:component",
       "title": "RollingCardStack",
-      "description": "It\u2019s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
+      "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
       "dependencies": [
         "motion",
         "clsx",
@@ -653,6 +637,22 @@
       "files": [
         {
           "path": "registry/default/example/rollingcardstack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scroll-stack-deck",
+      "type": "registry:component",
+      "title": "Scroll Stack Deck",
+      "description": "A scroll-driven project showcase where cards stack, scale, and settle as you move through the page.",
+      "dependencies": [
+        "motion",
+        "lenis"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-stack-deck.tsx",
           "type": "registry:component"
         }
       ]

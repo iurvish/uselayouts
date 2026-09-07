@@ -30,7 +30,7 @@ const INITIAL_TESTIMONIALS: Testimonial[] = [
     author: "Cristiano Ronaldo",
     role: "Athlete & Entrepreneur",
     company: "CR7 Brand",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "This product has completely transformed how we work. The interface is intuitive and the features are exactly what we needed.",
   },
   {
@@ -38,7 +38,7 @@ const INITIAL_TESTIMONIALS: Testimonial[] = [
     author: "Jensen Huang",
     role: "CEO & Founder",
     company: "NVIDIA",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "I've tried many solutions, but this one stands out for its simplicity and power. Highly recommended!",
   },
   {
@@ -46,7 +46,7 @@ const INITIAL_TESTIMONIALS: Testimonial[] = [
     author: "Antony Raphy",
     role: "Staff Product Designer",
     company: "Studio Craft",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "The team behind this is incredibly responsive and the product keeps getting better with each update.",
   },
   {
@@ -54,7 +54,7 @@ const INITIAL_TESTIMONIALS: Testimonial[] = [
     author: "Leo Das",
     role: "Managing Director",
     company: "Das Capital",
-    avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Best investment we've made this year. The ROI has been incredible and our team loves using it.",
   },
 ];
@@ -65,7 +65,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Sarah Chen",
     role: "VP of Product",
     company: "Apex Systems",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Switching to this platform cut our team onboarding time in half. New members are productive on day one.",
   },
   {
@@ -73,7 +73,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Marcus Williams",
     role: "Principal Architect",
     company: "HyperScale",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "The analytics engine alone is worth it. We finally have real-time visibility across our entire architecture.",
   },
   {
@@ -81,7 +81,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Priya Nair",
     role: "Head of Design",
     company: "Design Lab",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Customer support is phenomenal. Every single question is resolved within minutes with exceptional care.",
   },
   {
@@ -89,7 +89,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Tom Eriksson",
     role: "Founder & CEO",
     company: "NorthTech",
-    avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "We evaluated dozens of tools before picking this one. Nothing else even comes close to its polish and speed.",
   },
   {
@@ -97,7 +97,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Aisha Okafor",
     role: "Director of Operations",
     company: "GlobalSync",
-    avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "The mobile workflows are seamless. I manage mission-critical deployments on the go without missing a beat.",
   },
   {
@@ -105,7 +105,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "David Park",
     role: "Group PM",
     company: "Flowstate",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Our entire engineering and design staff adopted it without friction. That has never happened with prior tooling.",
   },
   {
@@ -113,7 +113,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Lena Müller",
     role: "Chief Technology Officer",
     company: "Quantum Labs",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Automation features save us over 25 hours every single week. It paid for itself in less than a month.",
   },
   {
@@ -121,7 +121,7 @@ const ADDITIONAL_TESTIMONIALS: Testimonial[] = [
     author: "Ravi Shankar",
     role: "Creative Director",
     company: "Luminary",
-    avatar: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=120&auto=format&fit=crop&q=80",
+    avatar: "https://images.unsplash.com/photo-1548142813-c348350df52b?w=120&h=120&auto=format&fit=crop&crop=faces&q=80",
     quote: "Incredible attention to detail. Every transition and gesture feels silky, fluid, and delightful.",
   },
 ];
@@ -231,16 +231,12 @@ export default function FocusTestimonials() {
   const hasHover = hoveredId !== null;
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-slate-100/60 to-slate-200/40 p-4 sm:p-8 md:p-14 lg:p-20 select-none">
-      <div className="pointer-events-none absolute left-[15%] top-[15%] h-96 w-96 rounded-full bg-indigo-200/50 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-[18%] right-[18%] h-[28rem] w-[28rem] rounded-full bg-rose-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[34rem] w-[34rem] rounded-full bg-slate-100/70 blur-3xl" />
-
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-transparent p-4 sm:p-8 md:p-14 lg:p-20 select-none">
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="relative z-10 flex w-full max-w-[1400px] flex-col rounded-3xl border border-white/80 bg-white/65 p-6 text-slate-900 shadow-2xl backdrop-blur-2xl transition-all sm:p-10 md:p-14"
+        className="relative z-10 flex w-full max-w-[1400px] flex-col rounded-3xl border border-black/[0.06] bg-white p-6 text-slate-900 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] transition-all sm:p-10 md:p-14"
       >
         <AnimatePresence>
           {activeItem && (
@@ -324,7 +320,7 @@ export default function FocusTestimonials() {
           <button
             type="button"
             onClick={handleToggleShowMore}
-            className="group inline-flex items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-6 sm:px-8 py-3 text-sm font-medium tracking-tight text-slate-700 shadow-sm backdrop-blur-md transition-all hover:border-slate-300 hover:bg-white hover:text-slate-900 hover:shadow-md active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            className="group inline-flex items-center gap-1.5 text-sm tracking-tight text-slate-500 transition-colors hover:text-slate-900 active:scale-[0.98] focus-visible:outline-none focus-visible:underline"
           >
             <span>
               {showMore
@@ -337,7 +333,7 @@ export default function FocusTestimonials() {
               transition={{ type: "spring", stiffness: 360, damping: 22 }}
               className="inline-flex"
             >
-              <ChevronDown className="h-4 w-4 text-slate-500 transition-colors group-hover:text-slate-800" />
+              <ChevronDown className="h-3.5 w-3.5 text-current" />
             </motion.span>
           </button>
         </div>

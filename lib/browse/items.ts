@@ -80,13 +80,13 @@ const SEEDS: Seed[] = [
   { slug: "card-folder", title: "Card Folder", description: "A folder card with hover depth.", category: "Display" },
   { slug: "confidential-folder", title: "Confidential Folder", description: "A 3D stack you can drag through.", category: "Display" },
   { slug: "corner-vidoe", title: "Corner Video", description: "A player that morphs from the corner.", category: "Display" },
-  { slug: "elevate-testimonial", title: "Elevate Testimonial", description: "Quotes that lift into view.", category: "Display" },
   { slug: "focus-testimonials", title: "Focus Testimonials", description: "Hover to bring one voice forward.", category: "Display" },
-  { slug: "infinite-grid", title: "Infinite Grid", description: "A Polaroid wall you can drag.", category: "Layout" },
+  { slug: "infinite-grid", title: "Infinite Canvas", description: "An endless product canvas you can drag.", category: "Layout" },
   { slug: "logoshift", title: "LogoShift", description: "Logos that trade places.", category: "Display" },
   { slug: "polaroid-drag", title: "Polaroid Drag", description: "Photos that stack and tilt.", category: "Display" },
   { slug: "pop-tilt-cards", title: "Pop Tilt Cards", description: "A deck that pops toward the cursor.", category: "Display" },
   { slug: "rollingcardstack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
+  { slug: "scroll-stack-deck", title: "Scroll Stack Deck", description: "Cards that stack as you scroll.", category: "Display" },
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
 ];
 

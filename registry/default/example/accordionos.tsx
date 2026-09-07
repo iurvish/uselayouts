@@ -453,19 +453,16 @@ export function AccordionOS({
                   transition={bouncySpring}
                   className="accordion-os-nav-stack"
                 >
-                  <motion.button
+                  <button
                     type="button"
                     onClick={handlePrev}
                     aria-label="Previous (Up Arrow)"
-                    whileHover={{ scale: 1.18, y: -2 }}
-                    whileTap={{ scale: 0.88 }}
-                    transition={bouncySpring}
                     className="accordion-os-nav-btn"
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="accordion-os-nav-svg">
                       <polyline points="18 15 12 9 6 15" />
                     </svg>
-                  </motion.button>
+                  </button>
 
                   <div className="accordion-os-counter">
                     <span>{String((activeIndex ?? 0) + 1).padStart(2, "0")}</span>
@@ -473,19 +470,16 @@ export function AccordionOS({
                     <span>{String(items.length).padStart(2, "0")}</span>
                   </div>
 
-                  <motion.button
+                  <button
                     type="button"
                     onClick={handleNext}
                     aria-label="Next (Down Arrow)"
-                    whileHover={{ scale: 1.18, y: 2 }}
-                    whileTap={{ scale: 0.88 }}
-                    transition={bouncySpring}
                     className="accordion-os-nav-btn"
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="accordion-os-nav-svg">
                       <polyline points="6 9 12 15 18 9" />
                     </svg>
-                  </motion.button>
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -712,17 +706,20 @@ export function AccordionOS({
         .accordion-os-nav-stack {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           background: rgba(255, 255, 255, 0.65);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
-          padding: 4px 2px;
+          padding: 4px;
           border-radius: 100px;
           border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .accordion-os-nav-btn {
-          all: unset;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          flex-shrink: 0;
           width: 26px;
           height: 26px;
           border-radius: 9999px;
@@ -739,16 +736,19 @@ export function AccordionOS({
         .accordion-os-nav-svg {
           width: 13px;
           height: 13px;
+          display: block;
         }
 
         .accordion-os-counter {
           display: flex;
           align-items: center;
-          gap: 2px;
+          justify-content: center;
+          height: 26px;
+          gap: 4px;
           font-size: 11px;
           font-weight: 600;
+          line-height: 1;
           color: #374151;
-          padding: 0 4px;
           font-variant-numeric: tabular-nums;
         }
 

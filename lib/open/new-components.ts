@@ -5,13 +5,13 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "card-folder",
   "confidential-folder",
   "corner-vidoe",
-  "elevate-testimonial",
   "focus-testimonials",
   "infinite-grid",
   "logoshift",
   "polaroid-drag",
   "pop-tilt-cards",
   "rollingcardstack",
+  "scroll-stack-deck",
   "wheel-carousel",
 ]);
 
