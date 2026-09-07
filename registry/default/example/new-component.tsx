@@ -87,14 +87,14 @@ const THEME_PRESETS = {
     bg: 'var(--background)',
     text: 'var(--muted-foreground)',
     sel: 'var(--foreground)',
-    marker: '#f59e0b',
+    marker: '#22c55e',
     panel: 'var(--muted)',
   },
   light: {
     bg: 'var(--background)',
     text: 'var(--muted-foreground)',
     sel: 'var(--foreground)',
-    marker: '#f59e0b',
+    marker: '#22c55e',
     panel: 'var(--muted)',
   },
 };
@@ -102,18 +102,16 @@ const THEME_PRESETS = {
 interface PhotoCardProps {
   image?: string;
   label?: string;
-  category?: string;
   aspect: PhotoAspect;
   radius: number;
   widthPercent: number;
   crossfade?: number;
   panel: string;
-  isDark: boolean;
   mode?: string;
 }
 
 const PhotoCard = memo<PhotoCardProps>(
-  ({ image, label, category, aspect, radius, widthPercent, crossfade = 0.45, panel, isDark, mode }) => {
+  ({ image, label, aspect, radius, widthPercent, crossfade = 0.45, panel, mode }) => {
     const [currentImage, setCurrentImage] = useState<string | undefined>(image);
     const [prevImage, setPrevImage] = useState<string | undefined>(undefined);
     const [isCrossfading, setIsCrossfading] = useState<boolean>(false);
@@ -152,138 +150,80 @@ const PhotoCard = memo<PhotoCardProps>(
             width: '100%',
             aspectRatio: aspect,
             maxHeight: '100%',
-            borderRadius: radius + 4,
-            padding: 5,
+            borderRadius: radius,
             overflow: 'hidden',
-            transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-            transform: 'translate3d(0, 0, 0)',
-            backfaceVisibility: 'hidden',
-            willChange: 'transform',
-            background:
-              mode === 'dark'
-                ? 'rgba(18, 18, 22, 0.55)'
-                : mode === 'custom'
-                ? 'rgba(255, 246, 236, 0.6)'
-                : 'rgba(255, 255, 255, 0.45)',
-            backdropFilter: 'blur(24px) saturate(190%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+            background: panel,
             border:
               mode === 'dark'
-                ? '1px solid rgba(255, 255, 255, 0.12)'
+                ? '1px solid rgba(255, 255, 255, 0.1)'
                 : mode === 'custom'
-                ? '1px solid rgba(232, 121, 46, 0.2)'
-                : '1px solid rgba(255, 255, 255, 0.65)',
+                ? '1px solid rgba(232, 121, 46, 0.18)'
+                : '1px solid rgba(0, 0, 0, 0.08)',
             boxShadow:
               mode === 'dark'
-                ? '0 25px 60px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                : '0 20px 50px -12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+                ? '0 16px 40px -16px rgba(0, 0, 0, 0.65)'
+                : '0 12px 32px -12px rgba(0, 0, 0, 0.12)',
+            transform: 'translate3d(0, 0, 0)',
+            backfaceVisibility: 'hidden',
           }}
         >
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              borderRadius: radius,
-              overflow: 'hidden',
-              background: panel,
-              transition: 'background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-          >
-            {prevImage && (
-              <img
-                src={prevImage}
-                alt=""
-                decoding="async"
-                loading="eager"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  opacity: isCrossfading ? 0 : 1,
-                  transform: isCrossfading ? 'scale(0.96) translateY(-4px)' : 'scale(1)',
-                  filter: isCrossfading ? 'blur(10px)' : 'blur(0px)',
-                  transition: `opacity ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1), transform ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1), filter ${crossfade}s ease`,
-                  willChange: 'transform, opacity, filter',
-                }}
-              />
-            )}
+          {prevImage && (
+            <img
+              src={prevImage}
+              alt=""
+              decoding="async"
+              loading="eager"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: isCrossfading ? 0 : 1,
+                transform: isCrossfading ? 'scale(0.96) translateY(-4px)' : 'scale(1)',
+                filter: isCrossfading ? 'blur(10px)' : 'blur(0px)',
+                transition: `opacity ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1), transform ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1), filter ${crossfade}s ease`,
+                willChange: 'transform, opacity, filter',
+              }}
+            />
+          )}
 
-            {currentImage ? (
-              <img
-                src={currentImage}
-                alt={label || 'Carousel View'}
-                decoding="async"
-                loading="eager"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  opacity: 1,
-                  transform: 'scale(1)',
-                  animation: isCrossfading
-                    ? `liquidPhotoEnter ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1)`
-                    : 'none',
-                  willChange: 'transform, opacity, filter',
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  padding: 24,
-                  color: 'rgba(255, 255, 255, 0.6)',
-                  background: 'linear-gradient(135deg, #1f1f2e, #0e0e14)',
-                  fontSize: 14,
-                }}
-              >
-                {label}
-              </div>
-            )}
-
+          {currentImage ? (
+            <img
+              src={currentImage}
+              alt={label || 'Carousel View'}
+              decoding="async"
+              loading="eager"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: 1,
+                transform: 'scale(1)',
+                animation: isCrossfading
+                  ? `liquidPhotoEnter ${crossfade}s cubic-bezier(0.16, 1, 0.3, 1)`
+                  : 'none',
+                willChange: 'transform, opacity, filter',
+              }}
+            />
+          ) : (
             <div
               style={{
                 position: 'absolute',
                 inset: 0,
-                background:
-                  'linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 35%, transparent 50%, rgba(255,255,255,0.08) 100%)',
-                mixBlendMode: 'overlay',
-                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'flex-end',
+                padding: 24,
+                color: 'rgba(255, 255, 255, 0.6)',
+                background: 'linear-gradient(135deg, #1f1f2e, #0e0e14)',
+                fontSize: 14,
               }}
-            />
-
-            {category && (
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 12,
-                  left: 12,
-                  padding: '5px 12px',
-                  borderRadius: 999,
-                  background: isDark ? 'rgba(10, 10, 14, 0.55)' : 'rgba(255, 255, 255, 0.65)',
-                  backdropFilter: 'blur(16px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.85)',
-                  boxShadow: '0 8px 24px -4px rgba(0,0,0,0.18)',
-                  color: isDark ? '#FFFFFF' : '#111111',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  pointerEvents: 'none',
-                }}
-              >
-                {category}
-              </div>
-            )}
-          </div>
+            >
+              {label}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -301,13 +241,13 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       photoWidth = 34,
       photoAspect = '3/4',
       contentWidth = 880,
-      gap = 12,
-      photoRadius = 12,
+      gap = 48,
+      photoRadius = 16,
       crossfade = 0.45,
       radius = 330,
       spacing = 14,
       visibleItems = 7,
-      apexInset = 16,
+      apexInset = 24,
       itemFont = {
         fontSize: '27px',
         fontWeight: 600,
@@ -319,8 +259,8 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       selectedColor,
       showMarker = true,
       markerColor,
-      markerSize = 14,
-      markerGap = 18,
+      markerSize = 22,
+      markerGap = 28,
       background,
       scrollSpeed = 0.007,
       dragSpeed = 0.016,
@@ -345,7 +285,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             bg: background || '#FFF6EC',
             text: textColor || 'rgba(180, 90, 20, 0.45)',
             sel: selectedColor || '#B4541E',
-            marker: markerColor || '#E8792E',
+            marker: markerColor || '#22c55e',
             panel: background || '#FFF6EC',
           }
         : THEME_PRESETS[mode] || THEME_PRESETS.light;
@@ -725,13 +665,11 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           <PhotoCard
             image={activeItem?.image}
             label={activeItem?.label}
-            category={activeItem?.category}
             aspect={photoAspect}
             radius={photoRadius}
             widthPercent={photoWidth}
             crossfade={crossfade}
             panel={theme.panel}
-            isDark={mode === 'dark'}
             mode={mode}
           />
 
@@ -756,23 +694,30 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
                   position: 'absolute',
                   left: `calc(${apexInset}% - ${markerGap}px)`,
                   top: '50%',
-                  width: 5,
+                  width: markerSize,
                   height: markerSize,
-                  marginLeft: -5,
+                  marginLeft: -markerSize,
                   transform: 'translate3d(0, -50%, 0)',
-                  borderRadius: 2,
+                  borderRadius: 5,
                   background: theme.marker,
                   pointerEvents: 'none',
                   flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   boxShadow: `
-                    0 0 24px ${theme.marker}80,
-                    0 2px 8px ${theme.marker}50,
-                    inset 0 1.5px 2px rgba(255,255,255,0.9),
-                    inset 0 -1.5px 2px rgba(0,0,0,0.3)
+                    0 0 22px ${theme.marker}70,
+                    0 2px 8px ${theme.marker}45,
+                    inset 0 1px 1px rgba(255,255,255,0.55),
+                    inset 0 -1px 1px rgba(0,0,0,0.25)
                   `,
                   transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
                 }}
-              />
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M3.2 1.6v6.8L8.2 5z" fill="#fff" />
+                </svg>
+              </div>
             )}
 
             {list.map((item, index) => {
@@ -821,7 +766,8 @@ export default function NewComponentDemo({ size }: { size?: string }) {
       <WheelCarousel
         contentWidth={880}
         photoWidth={34}
-        apexInset={16}
+        gap={48}
+        apexInset={24}
         style={{ width: "100%", height: "100%", maxWidth: "880px" }}
       />
     </div>

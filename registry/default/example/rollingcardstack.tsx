@@ -290,7 +290,7 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
             onMouseLeave={() => setIsHovered(false)}
             className="relative flex items-center justify-center w-full transition-all duration-300"
             style={{
-              width: isMobile ? "380px" : "800px",
+              width: isMobile ? "320px" : "800px",
               maxWidth: isMobile ? "92vw" : "800px",
               height: "545px",
             }}
@@ -356,7 +356,8 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
                     willChange: "transform, width",
                   }}
                   className={cn(
-                    "cursor-pointer rounded-2xl bg-[#FFFFFF] shadow-[0_12px_40px_rgba(0,0,0,0.08),0_2px_6px_rgba(0,0,0,0.04)] border border-[#E5E5E0] overflow-hidden group",
+                    "rounded-2xl bg-[#FFFFFF] shadow-[0_12px_40px_rgba(0,0,0,0.08),0_2px_6px_rgba(0,0,0,0.04)] border border-[#E5E5E0] overflow-hidden group",
+                    isTop ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
                     isMobile ? "h-[390px]" : "h-auto"
                   )}
                 >
@@ -471,23 +472,36 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
 
         {/* Footer Pagination Controls */}
         {showPagination && (
-          <div className="mt-6 flex items-center justify-between w-full max-w-[380px] md:max-w-3xl px-2 text-neutral-500">
+          <div
+            className={cn(
+              "mt-6 flex items-center justify-between w-full px-2 text-neutral-500 transition-[max-width] duration-300",
+              isMobile ? "max-w-[320px]" : "max-w-3xl"
+            )}
+          >
             {/* Step Indicators */}
-            <div className="flex items-center gap-1.5">
+            <div className={cn("flex items-center", isMobile ? "gap-1" : "gap-1.5")}>
               {cards.map((_, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => handleCardClick(i)}
                   aria-label={`Go to slide ${i + 1}`}
-                  className="p-1 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 rounded-full"
+                  className={cn(
+                    "group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 rounded-full",
+                    isMobile ? "p-0.5" : "p-1"
+                  )}
                 >
                   <div
                     className={cn(
-                      "h-1.5 rounded-full transition-all duration-300",
+                      "rounded-full transition-all duration-300",
+                      isMobile ? "h-1" : "h-1.5",
                       i === activeIndex
-                        ? "w-7 bg-neutral-900"
-                        : "w-2 bg-neutral-400/60 hover:bg-neutral-600"
+                        ? isMobile
+                          ? "w-5 bg-neutral-900"
+                          : "w-7 bg-neutral-900"
+                        : isMobile
+                          ? "w-1.5 bg-neutral-400/60 hover:bg-neutral-600"
+                          : "w-2 bg-neutral-400/60 hover:bg-neutral-600"
                     )}
                   />
                 </button>
@@ -495,12 +509,15 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex items-center gap-2">
+            <div className={cn("flex items-center", isMobile ? "gap-1.5" : "gap-2")}>
               <button
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous Card"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FFFFFF] hover:bg-[#F2F2EC] text-neutral-800 border border-[#DCDCD6] shadow-xs transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400"
+                className={cn(
+                  "inline-flex items-center justify-center rounded-full bg-[#FFFFFF] hover:bg-[#F2F2EC] text-neutral-800 border border-[#DCDCD6] shadow-xs transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400",
+                  isMobile ? "w-6 h-6 [&_svg]:w-3.5 [&_svg]:h-3.5" : "w-8 h-8"
+                )}
               >
                 <ChevronLeftIcon />
               </button>
@@ -508,7 +525,10 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
                 type="button"
                 onClick={handleNext}
                 aria-label="Next Card"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FFFFFF] hover:bg-[#F2F2EC] text-neutral-800 border border-[#DCDCD6] shadow-xs transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400"
+                className={cn(
+                  "inline-flex items-center justify-center rounded-full bg-[#FFFFFF] hover:bg-[#F2F2EC] text-neutral-800 border border-[#DCDCD6] shadow-xs transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400",
+                  isMobile ? "w-6 h-6 [&_svg]:w-3.5 [&_svg]:h-3.5" : "w-8 h-8"
+                )}
               >
                 <ChevronRightIcon />
               </button>

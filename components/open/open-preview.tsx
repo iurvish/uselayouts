@@ -17,12 +17,13 @@ export function OpenPreview({
   return (
     <div
       className={cn(
-        "component-showcase dark grid h-full min-h-80 w-full min-w-0 text-foreground",
+        // min-h-full (not h-full): tall demos must expand so the docs <main> can scroll
+        "component-showcase dark grid min-h-full w-full min-w-0 text-foreground",
         className,
       )}
     >
       {Component ? (
-        <div className="flex h-full w-full min-w-0 items-center justify-center">
+        <div className="flex min-h-full w-full min-w-0 items-center justify-center">
           <Component size="lg" />
         </div>
       ) : (

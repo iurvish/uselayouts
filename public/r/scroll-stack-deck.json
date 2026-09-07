@@ -4,8 +4,9 @@
   "title": "Scroll Stack Deck",
   "description": "A scroll-driven project showcase where cards stack, scale, and settle as you move through the page.",
   "dependencies": [
+    "lenis",
     "motion",
-    "lenis"
+    "react"
   ],
   "files": [
     {

@@ -87,6 +87,7 @@ const SEEDS: Seed[] = [
   { slug: "pop-tilt-cards", title: "Pop Tilt Cards", description: "A deck that pops toward the cursor.", category: "Display" },
   { slug: "rollingcardstack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
   { slug: "scroll-stack-deck", title: "Scroll Stack Deck", description: "Cards that stack as you scroll.", category: "Display" },
+  { slug: "perspective-text-scroll", title: "Perspective Text Scroll", description: "Text that tilts through scroll perspective.", category: "Display" },
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
 ];
 
