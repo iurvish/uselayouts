@@ -67,7 +67,7 @@ function HintOverlay({
   }, [reduce]);
 
   return (
-    <div ref={ref} className="pointer-events-none sticky top-0 z-0 h-0 w-full">
+    <div ref={ref} className="pointer-events-none sticky top-0 z-[1] h-0 w-full">
       <div className="absolute inset-x-0 top-0 flex flex-col items-center gap-8 px-4 pt-20">
         <div className="flex max-w-full flex-col items-center gap-1 text-center">
           <p
@@ -117,7 +117,7 @@ export function PreviewHint({
   return (
     <div className={cn("relative h-full w-full min-w-0", className)}>
       {overlay}
-      <div className="flex h-full min-h-0 w-full items-center justify-center">
+      <div className="relative z-0 flex h-full min-h-0 w-full items-center justify-center">
         {children}
       </div>
     </div>
