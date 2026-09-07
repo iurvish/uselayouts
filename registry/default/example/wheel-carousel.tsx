@@ -221,16 +221,16 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       items = defaultCarouselItems,
       mode = 'light',
       photoSide = 'left',
-      photoWidth = 24,
+      photoWidth = 36,
       photoAspect = '3/4',
-      contentWidth = 960,
-      gap = 0,
-      photoRadius = 12,
+      contentWidth = 800,
+      gap = 48,
+      photoRadius = 16,
       crossfade = 0.45,
       radius = 330,
       spacing = 14,
       visibleItems = 7,
-      apexInset = 34,
+      apexInset = 16,
       itemFont = {
         fontSize: '28px',
         fontWeight: 600,
@@ -648,9 +648,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           <div
             className="relative h-full overflow-hidden"
             style={{
-              flex: '0 1 420px',
-              width: '420px',
-              maxWidth: '52%',
+              flex: '0 1 360px',
+              width: '360px',
+              maxWidth: '48%',
               WebkitMaskImage: maskValue,
               maskImage: maskValue,
               WebkitMaskComposite: edgeFade ? 'source-in' : undefined,
@@ -783,16 +783,16 @@ export const WheelCarouselDemo: React.FC = () => {
           items={defaultCarouselItems}
           mode={mode}
           photoSide="left"
-          photoWidth={24}
+          photoWidth={36}
           photoAspect="3/4"
-          contentWidth={960}
-          gap={0}
-          photoRadius={12}
+          contentWidth={800}
+          gap={48}
+          photoRadius={16}
           crossfade={0.45}
           radius={330}
           spacing={14}
           visibleItems={7}
-          apexInset={34}
+          apexInset={16}
           showMarker={true}
           markerSize={22}
           markerGap={28}
@@ -806,7 +806,7 @@ export const WheelCarouselDemo: React.FC = () => {
           textColor={customText}
           selectedColor={customSelected}
           markerColor={customMarker}
-          style={{ width: '100%', height: '100%', maxWidth: '960px' }}
+          style={{ width: '100%', height: '100%', maxWidth: '800px' }}
         />
       </div>
 
