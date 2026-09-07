@@ -230,7 +230,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       radius = 330,
       spacing = 14,
       visibleItems = 7,
-      apexInset = 16,
+      apexInset = 20,
       itemFont = {
         fontSize: '28px',
         fontWeight: 600,
@@ -242,8 +242,8 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       selectedColor,
       showMarker = true,
       markerColor,
-      markerSize = 22,
-      markerGap = 28,
+      markerSize = 14,
+      markerGap = 18,
       background,
       scrollSpeed = 0.007,
       dragSpeed = 0.016,
@@ -600,7 +600,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
     return (
       <motion.div
         className={cn(
-          'wheel-carousel-container relative w-full h-full flex items-center justify-center overflow-hidden',
+          'wheel-carousel-container relative mx-auto flex h-full w-full max-w-full items-center justify-center overflow-hidden',
           className
         )}
         initial={{ opacity: 0, y: 16 }}
@@ -648,9 +648,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           <div
             className="relative h-full overflow-hidden"
             style={{
-              flex: '0 1 360px',
-              width: '360px',
-              maxWidth: '48%',
+              flex: '0 1 300px',
+              width: '300px',
+              maxWidth: '44%',
               WebkitMaskImage: maskValue,
               maskImage: maskValue,
               WebkitMaskComposite: edgeFade ? 'source-in' : undefined,
@@ -660,27 +660,20 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
           >
             {showMarker && (
               <div
-                className="absolute top-1/2 pointer-events-none flex items-center justify-center"
+                className="absolute top-1/2 pointer-events-none"
                 style={{
                   left: `calc(${apexInset}% - ${markerGap}px)`,
                   width: markerSize,
                   height: markerSize,
                   marginLeft: -markerSize,
                   transform: 'translate3d(0, -50%, 0)',
-                  borderRadius: 5,
-                  background: theme.marker,
-                  flexShrink: 0,
-                  boxShadow: `
-                    0 0 22px ${theme.marker}70,
-                    0 2px 8px ${theme.marker}45,
-                    inset 0 1px 1px rgba(255,255,255,0.55),
-                    inset 0 -1px 1px rgba(0,0,0,0.25)
-                  `,
-                  transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
+                  color: theme.marker,
+                  filter: `drop-shadow(0 1px 6px ${theme.marker}99)`,
+                  transition: 'color 0.35s ease',
                 }}
               >
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-                  <path d="M3.2 1.6v6.8L8.2 5z" fill="#fff" />
+                <svg width={markerSize} height={markerSize} viewBox="0 0 12 12" aria-hidden="true">
+                  <path d="M2.1 1.3v9.4L10.5 6z" fill="currentColor" />
                 </svg>
               </div>
             )}
@@ -792,10 +785,10 @@ export const WheelCarouselDemo: React.FC = () => {
           radius={330}
           spacing={14}
           visibleItems={7}
-          apexInset={16}
+          apexInset={20}
           showMarker={true}
-          markerSize={22}
-          markerGap={28}
+          markerSize={14}
+          markerGap={18}
           scrollSpeed={0.007}
           dragSpeed={0.016}
           snap={true}
