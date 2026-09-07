@@ -113,8 +113,7 @@ export const LiquidGlassCard = forwardRef<HTMLDivElement, LiquidGlassCardProps>(
                     imageClassName
                   )}
                   style={{
-                    filter:
-                      'grayscale(100%) contrast(108%) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.12))',
+                    filter: 'grayscale(100%) contrast(108%)',
                     mixBlendMode: 'multiply',
                   }}
                 />
