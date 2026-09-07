@@ -14,6 +14,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "scroll-stack-deck",
   "perspective-text-scroll",
   "wheel-carousel",
+  "editorial-deck",
 ]);
 
 export function isNewComponent(slug: string) {

@@ -284,6 +284,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "editorial-deck": {
+    name: "editorial-deck",
+    description: "A stacked editorial story deck. Drag the front card and it springs back into the pile.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/editorial-deck.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/editorial-deck-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "editorial-deck"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "empty-testimonial": {
     name: "empty-testimonial",
     description: "An interactive empty state for testimonials with a playful folder animation.",

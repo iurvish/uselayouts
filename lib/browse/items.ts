@@ -74,6 +74,7 @@ const SEEDS: Seed[] = [
   { slug: "fluid-expanding-grid", title: "Fluid Expanding Grid", description: "A grid that breathes.", category: "Layout" },
   { slug: "bento-card", title: "Bento Card", description: "Tabs inside a single tile.", category: "Layout" },
   { slug: "magnified-bento", title: "Magnified Bento", description: "A lens you can drag.", category: "Layout" },
+  { slug: "editorial-deck", title: "Editorial Deck", description: "Swipe stories back into the stack.", category: "Display" },
   { slug: "empty-testimonial", title: "Empty Testimonial", description: "An empty state worth keeping.", category: "Display" },
   { slug: "accessible-action", title: "Accessible Action", description: "A card stack you can tilt and swipe.", category: "Display" },
   { slug: "accordionos", title: "AccordionOS", description: "Accordions with image transitions.", category: "Display" },

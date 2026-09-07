@@ -285,6 +285,21 @@
       ]
     },
     {
+      "name": "editorial-deck",
+      "type": "registry:component",
+      "title": "Editorial Deck",
+      "description": "A stacked editorial story deck. Drag the front card and it springs back into the pile.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/editorial-deck.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "empty-testimonial",
       "type": "registry:component",
       "title": "Empty Testimonial",

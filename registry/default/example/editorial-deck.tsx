@@ -85,12 +85,14 @@ export function EditorialDeck({
   const [order, setOrder] = useState(() => cards.map((_, i) => i));
   const [fly, setFly] = useState(false);
   const flying = useRef(false);
+  const flyStarted = useRef(0);
 
   const lastDepth = cards.length - 1;
   const showIntro = Boolean(title || subtitle);
 
   const commitBack = () => {
     if (!flying.current) return;
+    if (Date.now() - flyStarted.current < 200) return;
     flying.current = false;
     setOrder((prev) => rotateOrder(prev, 1));
     setFly(false);
@@ -103,7 +105,9 @@ export function EditorialDeck({
       return;
     }
     flying.current = true;
+    flyStarted.current = Date.now();
     setFly(true);
+    window.setTimeout(commitBack, 360);
   };
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
@@ -151,25 +155,26 @@ export function EditorialDeck({
                 drag={canDrag ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.16}
+                whileDrag={{ scale: 0.97 }}
                 onDragEnd={canDrag ? onDragEnd : undefined}
                 initial={false}
                 animate={{
                   x: 0,
                   y: depth * STACK_Y,
                   scale: 1 - depth * STACK_SCALE,
-                  rotateZ: 0,
                 }}
                 transition={SETTLE}
                 onAnimationComplete={() => {
                   if (isFlying) commitBack();
                 }}
-                className={`absolute inset-0 flex touch-none overflow-hidden rounded-[1.5rem] ring-1 ring-inset ring-black/6 md:flex-row ${
+                className={`absolute inset-0 flex flex-col touch-none overflow-hidden rounded-[1.5rem] ring-1 ring-inset ring-black/5 md:flex-row ${
                   canDrag
                     ? "cursor-grab active:cursor-grabbing"
                     : "pointer-events-none"
                 }`}
                 style={{
-                  zIndex: isFlying ? 30 : 20 - depth,
+                  zIndex: isFlying ? 1 : 20 - depth,
+                  transition: isFlying ? "z-index 0s linear 0.12s" : undefined,
                   backgroundColor: c.tint,
                   boxShadow: isFront
                     ? "0 8px 24px -12px rgba(0,0,0,0.14), 0 2px 6px -2px rgba(0,0,0,0.05)"
@@ -187,7 +192,7 @@ export function EditorialDeck({
                     />
                   </div>
                 </div>
-                <div className="flex flex-1 flex-col justify-center gap-3 border-t border-black/8 px-7 py-7 md:border-l md:border-t-0 md:px-10 md:py-10">
+                <div className="flex flex-1 flex-col justify-center gap-3 border-t border-black/10 px-7 py-7 md:border-l md:border-t-0 md:px-10 md:py-10">
                   <p className="text-[13px] font-medium tracking-[0.06em] text-neutral-500">
                     {c.date}
                   </p>

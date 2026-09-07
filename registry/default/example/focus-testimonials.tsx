@@ -260,7 +260,7 @@ export default function FocusTestimonials() {
                 translateX: 18,
                 translateY: -56,
               }}
-              className="pointer-events-none absolute left-0 top-0 z-50 flex items-center gap-2.5 rounded-full border border-white/20 bg-neutral-950/90 px-4 py-2 text-white shadow-2xl backdrop-blur-xl will-change-[transform,opacity]"
+              className="pointer-events-none absolute left-0 top-0 z-50 flex items-center gap-2.5 rounded-full border border-white/20 bg-neutral-950/90 pl-2 pr-4 py-2 text-white shadow-2xl backdrop-blur-xl will-change-[transform,opacity]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <div className="h-7 w-7 rounded-full overflow-hidden flex-shrink-0">
