@@ -14,6 +14,7 @@ export default function ScrollStackDeckDemo() {
       className="relative h-full min-h-0 w-full self-stretch overflow-y-auto overscroll-contain bg-[#F4F6F8]"
     >
       <PreviewHint
+        absolute={false}
         tone="light"
         heading="Scroll the stack"
         description="Five project cards pin in the viewport. Keep scrolling — each new card slides up and the others settle behind it."

@@ -42,10 +42,12 @@ function HintOverlay({
   heading,
   description,
   tone,
+  absolute,
 }: {
   heading: string;
   description?: string;
   tone: "dark" | "light";
+  absolute: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion() ?? false;
@@ -67,10 +69,20 @@ function HintOverlay({
   }, [reduce]);
 
   return (
-    <div ref={ref} className="pointer-events-none sticky top-0 z-[1] h-0 w-full">
+    <div
+      ref={ref}
+      className={cn(
+        "pointer-events-none z-[1] w-full",
+        absolute ? "absolute inset-x-0 top-0" : "sticky top-0 h-0",
+      )}
+    >
       <div
-        className="absolute inset-x-0 top-0 flex flex-col items-center gap-8 px-4"
-        style={{ paddingTop: "var(--preview-hint-top, 80px)" }}
+        className={cn(
+          "flex flex-col items-center gap-8 px-4",
+          // top (not paddingTop): --preview-hint-top may be negative
+          absolute ? "relative w-full" : "absolute inset-x-0",
+        )}
+        style={{ top: "var(--preview-hint-top, 80px)" }}
       >
         <div className="flex max-w-full flex-col items-center gap-1 text-center">
           <p
@@ -104,15 +116,23 @@ export function PreviewHint({
   children,
   className,
   tone = "dark",
+  absolute = true,
 }: {
   heading: string;
   description?: string;
   children?: ReactNode;
   className?: string;
   tone?: "dark" | "light";
+  /** When true (default), hint overlays with position:absolute. Set false for sticky scroll-fade. */
+  absolute?: boolean;
 }) {
   const overlay = (
-    <HintOverlay heading={heading} description={description} tone={tone} />
+    <HintOverlay
+      heading={heading}
+      description={description}
+      tone={tone}
+      absolute={absolute}
+    />
   );
 
   if (!children) return overlay;

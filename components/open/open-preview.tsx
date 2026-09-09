@@ -39,7 +39,9 @@ export function OpenPreview({
       {Component ? (
         <div
           className={cn(
-            "flex w-full min-w-0 items-[safe_center] justify-center",
+            // items-center (not safe_center): Tailwind never emitted items-[safe_center],
+            // so align-items stayed normal/stretch and short demos pinned to the top.
+            "flex w-full min-w-0 items-center justify-center",
             fill && "h-full",
             nestedPageScroll && "min-h-0",
           )}

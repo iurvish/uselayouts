@@ -31,7 +31,7 @@ export type ComponentControlsMeta = {
   posterUrl?: string;
   /** Cloudflare R2 CDN muted preview MP4. */
   videoUrl?: string;
-  /** PreviewHint overlay padding-top in px. Default 80 (`pt-20`). */
+  /** PreviewHint overlay top offset in px. Default 80. May be negative. */
   hintTop?: number;
 };
 

@@ -9,15 +9,16 @@ const HOLD_MS = 5000;
 /** Dense grid so neighbors always fill top/left when a card is centered. */
 const COLS = 5;
 const ROWS = 5;
-const CARD_W = 320;
-const CARD_H = 286;
-const GAP = 20;
+const CARD_W = 300;
+const CARD_H = 268;
+/** Wide enough that CARD_SCALE_ACTIVE still leaves a clear gutter. */
+const GAP = 44;
 const PAD = 40;
 
 /** Hold zoomed in so the spotlight reads larger; out pulls back to pan. */
-const SCALE_HOLD = 1.38;
-const SCALE_OUT = 0.92;
-const CARD_SCALE_ACTIVE = 1.1;
+const SCALE_HOLD = 1.26;
+const SCALE_OUT = 0.9;
+const CARD_SCALE_ACTIVE = 1.05;
 
 const OUT_MS = 220;
 const MOVE_MS = 380;
@@ -162,7 +163,7 @@ function HeroCard({
   return (
     <motion.figure
       className={cn(
-        "absolute flex flex-col gap-1.5 rounded-[12px] p-1.5",
+        "absolute flex flex-col gap-1.5 overflow-hidden rounded-[12px] p-1.5",
         active && "z-20",
       )}
       style={{
@@ -172,11 +173,11 @@ function HeroCard({
         height: CARD_H,
         background: glassBg,
         border: active
-          ? "1px solid rgba(255,255,255,0.42)"
+          ? "1px solid rgba(255,255,255,0.55)"
           : "1px solid rgba(255,255,255,0.14)",
         boxShadow: active ? spotlightShadow : "none",
-        backdropFilter: active ? "blur(22px) saturate(1.55)" : "blur(10px) saturate(1.2)",
-        WebkitBackdropFilter: active ? "blur(22px) saturate(1.55)" : "blur(10px) saturate(1.2)",
+        backdropFilter: active ? "blur(28px) saturate(1.7)" : "blur(10px) saturate(1.2)",
+        WebkitBackdropFilter: active ? "blur(28px) saturate(1.7)" : "blur(10px) saturate(1.2)",
       }}
       animate={
         reducedMotion
@@ -192,31 +193,39 @@ function HeroCard({
           : { type: "spring", stiffness: 420, damping: 28, mass: 0.85 }
       }
     >
-      {/* Specular / refraction rim — Figma glass highlight */}
+      {/* Glass refraction: top specular + edge rim (Figma bento) */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden rounded-[12px]"
+        className="pointer-events-none absolute inset-0 rounded-[12px]"
         style={{
           boxShadow: active
-            ? "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(255,255,255,0.08), inset 1px 0 0 rgba(255,255,255,0.12)"
+            ? "inset 0 1.5px 0 rgba(255,255,255,0.78), inset 0 -1px 0 rgba(255,255,255,0.1), inset 1.5px 0 0 rgba(255,255,255,0.22), inset -1px 0 0 rgba(255,255,255,0.1)"
             : "inset 0 1px 0 rgba(255,255,255,0.22)",
+        }}
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[42%] rounded-t-[12px]"
+        style={{
           background: active
-            ? "linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 38%, transparent 62%)"
-            : "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 40%)",
+            ? "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 42%, transparent 100%)"
+            : "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 70%)",
+          mixBlendMode: "soft-light",
         }}
       />
 
       <div className="relative z-[1] shrink-0 px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[13px] text-white sm:text-[14px]">
         {item.title}
       </div>
-      <div className="relative z-[1] min-h-0 flex-1 overflow-hidden rounded-[6px] bg-white/90">
+      {/* Figma media radius 10 inside card 12; radius on media too — video ignores parent clip otherwise */}
+      <div className="relative z-[1] min-h-0 flex-1 overflow-clip rounded-[10px] bg-white/90 [transform:translateZ(0)]">
         {/* eslint-disable-next-line @next/next/no-img-element -- CDN posters; sized by aspect box. */}
         <img
           src={item.poster}
           alt=""
           loading="eager"
           decoding="async"
-          className="absolute inset-0 size-full object-cover"
+          className="absolute inset-0 size-full rounded-[10px] object-cover"
           draggable={false}
         />
         {mountVideo ? (
@@ -228,7 +237,7 @@ function HeroCard({
             loop
             playsInline
             preload="metadata"
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full rounded-[10px] object-cover"
             draggable={false}
           />
         ) : null}
@@ -361,12 +370,15 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       <div
         className="absolute inset-0"
         style={{
+          // Figma Mask group — soft radial falloff over the baked hero image (no extra blue wash).
           WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(180deg, transparent 0%, black 4%, black 96%, transparent 100%)",
-          WebkitMaskComposite: "source-in",
+            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 100%)",
           maskImage:
-            "linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%), linear-gradient(180deg, transparent 0%, black 4%, black 96%, transparent 100%)",
-          maskComposite: "intersect",
+            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 100%)",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
         }}
       >
         <motion.div

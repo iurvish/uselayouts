@@ -36,7 +36,7 @@ export type OpenComponentData = {
   /** Shiki HTML for manual dep install commands. */
   manualHtml: Record<PackageManager, string>;
   previewBackground?: string | PreviewBackgrounds;
-  /** PreviewHint overlay padding-top in px. Omit = 80. */
+  /** PreviewHint overlay top offset in px. Omit = 80. */
   hintTop?: number;
 };
 

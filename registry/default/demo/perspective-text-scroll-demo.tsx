@@ -7,6 +7,7 @@ export default function PerspectiveTextScrollDemo() {
   return (
     <div className="w-full min-w-0 bg-[#F7F4F2]">
       <PreviewHint
+        absolute={false}
         tone="light"
         heading="Scroll to move through the text"
         description="Perspective tilts and fades as you scroll this section."

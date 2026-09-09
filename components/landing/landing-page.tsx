@@ -231,7 +231,7 @@ function LandingButton({
     <Link
       href={href}
       className={cn(
-        "inline-flex h-[50px] items-center justify-center rounded-full px-5 text-[16px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.97]",
+        "inline-flex h-[50px] items-center justify-center rounded-2xl px-5 text-[16px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.97]",
         craft.className,
         className,
       )}
@@ -328,11 +328,11 @@ function LandingNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        <ExploreButton className="hidden sm:inline-flex" />
+        <ExploreButton variant="outline" className="hidden h-11 sm:inline-flex" />
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="inline-flex size-10 items-center justify-center rounded-full text-[#071A31] lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-2xl text-[#071A31] lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="sr-only">Menu</span>
@@ -358,7 +358,7 @@ function LandingNav() {
               {link.label}
             </Link>
           ))}
-          <ExploreButton className="w-full sm:hidden" />
+          <ExploreButton variant="outline" className="w-full sm:hidden" />
         </div>
       ) : null}
     </header>
@@ -376,13 +376,6 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
           priority
           className="object-cover"
           sizes="100vw"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(7,26,49,0.38) 0%, rgba(7,26,49,0.18) 42%, rgba(7,26,49,0.04) 72%, transparent 100%)",
-          }}
         />
         <HeroSpotlightCanvas items={heroItems} />
 
