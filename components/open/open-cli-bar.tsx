@@ -82,7 +82,7 @@ export function OpenCliBar({
       />
       <div
         ref={rootRef}
-        className="relative z-20 flex items-start justify-center gap-px rounded-[12px] border border-solid border-[#47474d] bg-[#323239] py-0.5 pr-0.5 pl-1 text-foreground"
+        className="relative z-20 flex items-start justify-center gap-px rounded-[12px] border border-solid border-[#47474d] bg-[#323239] py-[2px] pr-[2px] pl-[4px] text-foreground"
       >
         <Tooltip>
           <TooltipTrigger
@@ -122,12 +122,13 @@ export function OpenCliBar({
           <TooltipContent>Package manager</TooltipContent>
         </Tooltip>
 
-        <div className="flex items-center">
+        {/* Figma 91:4661 — command + copy; 1px gap from PM via parent gap-px */}
+        <div className="flex h-8 items-center">
           <button
             type="button"
             className={cn(
-              /* Figma 102:699 — command segment; Shiki tokens only (bg stays #030202) */
-              "flex max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-l-[10px] bg-[#030202] px-2.5 py-1.5 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              /* Figma 91:4662 — text segment + drop-shadow rim */
+              "flex h-8 max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-tl-[10px] rounded-bl-[10px] bg-[#030202] px-2.5 py-1.5 drop-shadow-[0px_0.5px_0px_rgba(255,255,255,0.15)]",
               "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
@@ -147,8 +148,8 @@ export function OpenCliBar({
           <button
             type="button"
             className={cn(
-              /* Figma 102:701 — copy control; match command segment surface */
-              "flex cursor-pointer items-center justify-center rounded-r-[9px] border-l border-solid border-[#1b1b1d] bg-[#030202] p-2 shadow-[0_0.5px_0_0_rgba(255,255,255,0.15)]",
+              /* Figma 91:4664 — copy control; radius 9, same drop-shadow */
+              "flex h-8 cursor-pointer items-center justify-center rounded-tr-[9px] rounded-br-[9px] border-l border-solid border-[#1b1b1d] bg-[#030202] p-2 drop-shadow-[0px_0.5px_0px_rgba(255,255,255,0.15)]",
               "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
