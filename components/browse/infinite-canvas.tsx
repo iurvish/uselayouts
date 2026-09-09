@@ -4,7 +4,9 @@ import * as React from "react";
 import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
+import { canvasMediaTier } from "@/lib/browse/canvas-media-tier";
 import { mediaHeight, tileHeight } from "@/lib/browse/media";
+import { priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
 
 type InfiniteCanvasProps = {
@@ -18,19 +20,26 @@ type TileSpec = {
   row: number;
   index: number;
   height: number;
+  /** video = intersects viewport (green); image = overscan ring (yellow) poster-only. */
+  media: "video" | "image";
+  /** Quantized playback priority so the pool rebalances as the camera moves. */
+  priority: number;
 };
 
 /**
  * Camera-space infinite canvas (tldraw / Figma style):
  * world positions live on a masonry column grid; a camera offset is added in
- * `translate3d`. Only tiles whose AABB overlaps the viewport (+ overscan) are
- * mounted. Pan follows the pointer 1:1; clicks are preserved until the drag
- * threshold, then pointer capture starts.
+ * `translate3d`. Only tiles whose AABB overlaps the viewport (+ image overscan)
+ * are mounted. Video mounts only for tiles that intersect the true viewport;
+ * the overscan ring preloads posters so pans feel instant. Pan follows the
+ * pointer 1:1; clicks are preserved until the drag threshold, then pointer
+ * capture starts.
  */
 const DRAG_THRESHOLD = 8;
 const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
-const OVERSCAN = 280;
+/** Yellow ring: mount posters ahead of the viewport. Farther tiles stay unmounted (red). */
+const IMAGE_OVERSCAN = 480;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
@@ -52,7 +61,13 @@ function packColumn(col: number, count: number, gap: number) {
 function sameTiles(a: TileSpec[], b: TileSpec[]) {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i += 1) {
-    if (a[i].key !== b[i].key) return false;
+    if (
+      a[i].key !== b[i].key ||
+      a[i].media !== b[i].media ||
+      a[i].priority !== b[i].priority
+    ) {
+      return false;
+    }
   }
   return true;
 }
@@ -120,10 +135,10 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
     const camX = camera.current.x;
     const camY = camera.current.y;
-    const viewLeft = -OVERSCAN;
-    const viewRight = w + OVERSCAN;
-    const viewTop = -OVERSCAN;
-    const viewBottom = h + OVERSCAN;
+    const viewLeft = -IMAGE_OVERSCAN;
+    const viewRight = w + IMAGE_OVERSCAN;
+    const viewTop = -IMAGE_OVERSCAN;
+    const viewBottom = h + IMAGE_OVERSCAN;
 
     const c0 = Math.floor((viewLeft - camX - cardW) / cw);
     const c1 = Math.ceil((viewRight - camX) / cw);
@@ -149,7 +164,25 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
           if (x + cardW < viewLeft || x > viewRight) continue;
           if (y + height < viewTop || y > viewBottom) continue;
 
-          next.push({ key: `${col}:${row}`, col, row, index, height });
+          const media = canvasMediaTier(x, y, cardW, height, w, h, IMAGE_OVERSCAN);
+          if (!media) continue;
+
+          const rawPriority =
+            media === "video"
+              ? priorityFromCenter(x + cardW / 2, y + height / 2, w, h)
+              : 0;
+          // Bucket so tiny camera moves don't thrash React; big moves still rebalance.
+          const priority = Math.round(rawPriority / 80) * 80;
+
+          next.push({
+            key: `${col}:${row}`,
+            col,
+            row,
+            index,
+            height,
+            media,
+            priority,
+          });
         }
       }
     }
@@ -415,6 +448,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
                 item={item}
                 index={tile.index}
                 eager
+                allowVideo={tile.media === "video"}
+                playbackPriority={tile.priority || undefined}
                 surface="canvas"
                 pinHeight={mediaHeight(tile.index)}
                 className="size-full"

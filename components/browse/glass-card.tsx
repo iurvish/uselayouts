@@ -17,6 +17,10 @@ type BrowseCardProps = {
   surface?: "canvas" | "pin";
   pinHeight?: number;
   paused?: boolean;
+  /** Canvas: false for overscan (poster only). Grid: leave default + observeVisibility. */
+  allowVideo?: boolean;
+  observeVisibility?: boolean;
+  playbackPriority?: number;
 };
 
 /** Figma 82:3892 — titled preview card (title bar + media shell). */
@@ -28,6 +32,9 @@ export function BrowseCard({
   surface = "canvas",
   pinHeight = 320,
   paused = false,
+  allowVideo = true,
+  observeVisibility = false,
+  playbackPriority,
 }: BrowseCardProps) {
   const label = item.isNew ? `${item.title}, new` : item.title;
 
@@ -45,7 +52,15 @@ export function BrowseCard({
         </div>
         <div className="browse-chrome-media">
           <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
-            <BrowsePreview poster={item.poster} video={item.video} eager={eager} paused={paused} />
+            <BrowsePreview
+              poster={item.poster}
+              video={item.video}
+              eager={eager}
+              paused={paused}
+              allowVideo={allowVideo}
+              observeVisibility={observeVisibility}
+              playbackPriority={playbackPriority}
+            />
           </div>
         </div>
       </div>

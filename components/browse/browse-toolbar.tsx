@@ -2,9 +2,12 @@
 
 import * as React from "react";
 import { motion } from "motion/react";
+import { MorphIcon } from "morphicons/react";
+import { Pause, Play } from "lucide";
 
 import { cn } from "@/lib/utils";
-import { CanvasIcon, GridIcon, PauseIcon } from "./icons";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { CanvasIcon, GridIcon } from "./icons";
 
 export type ViewMode = "canvas" | "grid";
 
@@ -17,8 +20,8 @@ type Option = {
 };
 
 const VIEW_OPTIONS: Option[] = [
-  { value: "grid", label: "Grid", icon: GridIcon },
   { value: "canvas", label: "Canvas", icon: CanvasIcon },
+  { value: "grid", label: "List", icon: GridIcon },
 ];
 
 export function BrowseToolbar({
@@ -32,6 +35,8 @@ export function BrowseToolbar({
   paused: boolean;
   onPausedChange: (paused: boolean) => void;
 }) {
+  const pauseLabel = paused ? "Tap to play the videos" : "Tap to pause the videos";
+
   return (
     <div className="browse-dock pointer-events-none fixed inset-x-0 bottom-[34px] z-40 flex justify-center">
       <div className="pointer-events-auto flex items-center">
@@ -70,16 +75,24 @@ export function BrowseToolbar({
             draggable={false}
             className="browse-dock-join"
           />
-          <button
-            type="button"
-            onClick={() => onPausedChange(!paused)}
-            aria-label={paused ? "Play previews" : "Pause previews"}
-            aria-pressed={paused}
-            title={paused ? "Play previews" : "Pause previews"}
-            className="browse-dock-pause"
-          >
-            <PauseIcon className="size-5" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              type="button"
+              onClick={() => onPausedChange(!paused)}
+              aria-label={pauseLabel}
+              aria-pressed={paused}
+              className="browse-dock-pause"
+            >
+              <MorphIcon
+                icon={paused ? Play : Pause}
+                size={20}
+                strokeWidth={2.25}
+                absoluteStrokeWidth
+                className="size-5"
+              />
+            </TooltipTrigger>
+            <TooltipContent side="top">{pauseLabel}</TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>

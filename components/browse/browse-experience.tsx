@@ -10,7 +10,7 @@ import { InfiniteCanvas } from "./infinite-canvas";
 import { cn } from "@/lib/utils";
 
 export function BrowseExperience({ items }: { items: BrowseItem[] }) {
-  const [viewMode, setViewMode] = React.useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = React.useState<ViewMode>("canvas");
   const [query, setQuery] = React.useState("");
   const [paused, setPaused] = React.useState(false);
   const quality = useRenderQuality();
