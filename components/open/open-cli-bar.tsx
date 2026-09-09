@@ -87,19 +87,24 @@ export function OpenCliBar({
         <Tooltip>
           <TooltipTrigger
             delay={0}
-            className="flex cursor-pointer items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground"
+            className={cn(
+              /* Figma 91:4584 / 91:4641 — 20×20 logo + expand, px-6 py-4, gap-4 */
+              "flex cursor-pointer items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground transition-colors duration-150",
+              "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/10",
+              menuOpen && "bg-white/10",
+            )}
             aria-haspopup="listbox"
             aria-expanded={menuOpen}
             aria-label={`Package manager: ${manager}`}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <PackageManagerMark manager={manager} className="size-5" />
+            <PackageManagerMark manager={manager} className="size-5 shrink-0" />
             <img
               src="/open/expand.svg"
               alt=""
-              width={18}
-              height={18}
-              className="size-[18px] object-contain opacity-70"
+              width={20}
+              height={20}
+              className="size-5 shrink-0 object-contain opacity-70"
             />
           </TooltipTrigger>
           <TooltipContent>Package manager</TooltipContent>

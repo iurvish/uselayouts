@@ -35,6 +35,9 @@ const spotlightShadow = [
 
 const glassBg = "rgba(255, 255, 255, 0.20)";
 
+/** Figma Mask group SVG — soft radial, center α 0.5 → edge 0. */
+const FIELD_MASK = "url(/landing/hero-canvas-mask.svg)";
+
 const canvasW = PAD * 2 + COLS * CARD_W + (COLS - 1) * GAP;
 const canvasH = PAD * 2 + ROWS * CARD_H + (ROWS - 1) * GAP;
 const TOTAL = COLS * ROWS;
@@ -181,9 +184,10 @@ function HeroCard({
       }}
       animate={
         reducedMotion
-          ? { opacity: active ? 1 : 0.4, scale: 1 }
+          ? { opacity: 1, scale: 1 }
           : {
-              opacity: active ? 1 : 0.36,
+              // Field cards stay at 1 — Figma mask (α≤0.5) softens them; spotlight is unmasked.
+              opacity: 1,
               scale: active ? CARD_SCALE_ACTIVE : 1,
             }
       }
@@ -253,12 +257,14 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const [spotlight, setSpotlight] = React.useState(startIndex);
   const [videosReady, setVideosReady] = React.useState(false);
+  /** First layout pass done — avoid animating from 800×900 guess into real size. */
+  const [ready, setReady] = React.useState(false);
   const [view, setView] = React.useState({ w: 800, h: 900 });
   const [camera, setCamera] = React.useState<Camera>(() =>
     cameraFor(startIndex, 800, 900, SCALE_HOLD),
   );
   const [transition, setTransition] = React.useState({
-    duration: 0.45,
+    duration: 0,
     ease: [0.32, 0.72, 0, 1] as [number, number, number, number],
   });
   const spotlightRef = React.useRef(startIndex);
@@ -283,23 +289,26 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
     const el = viewportRef.current;
     if (!el) return;
 
-    const apply = (w: number, h: number) => {
+    const apply = (w: number, h: number, first: boolean) => {
       if (w < 1 || h < 1) return;
       setView({ w, h });
+      // Resize / first paint: snap camera, never ease into place.
+      setTransition({ duration: 0, ease: [0, 0, 1, 1] });
       setCamera(cameraFor(spotlightRef.current, w, h, scaleRef.current));
+      if (first) setReady(true);
     };
 
-    apply(el.clientWidth, el.clientHeight);
+    apply(el.clientWidth, el.clientHeight, true);
     const ro = new ResizeObserver(([entry]) => {
       const { width, height } = entry!.contentRect;
-      apply(width, height);
+      apply(width, height, false);
     });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
   React.useEffect(() => {
-    if (cards.length <= 1 || reducedMotion) return;
+    if (!ready || cards.length <= 1 || reducedMotion) return;
 
     let cancelled = false;
     let timer = 0;
@@ -335,6 +344,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       }, HOLD_MS);
     };
 
+    // Hold the initial zoomed selection, then start the cycle.
     timer = window.setTimeout(() => {
       void cycle();
     }, HOLD_MS);
@@ -343,10 +353,10 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [cards.length, reducedMotion]);
+  }, [ready, cards.length, reducedMotion]);
 
   React.useEffect(() => {
-    if (!reducedMotion || cards.length <= 1) return;
+    if (!ready || !reducedMotion || cards.length <= 1) return;
     const id = window.setInterval(() => {
       setSpotlight((current) => {
         const next = nextSpotlightIndex(current, cards.length);
@@ -357,58 +367,88 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       });
     }, HOLD_MS);
     return () => window.clearInterval(id);
-  }, [cards.length, reducedMotion]);
+  }, [ready, cards.length, reducedMotion]);
 
   if (cards.length === 0) return null;
+
+  const active = cards[spotlight];
+  const activeRect = cardRect(spotlight);
+  const cameraMotion = {
+    x: camera.x,
+    y: camera.y,
+    scale: camera.scale,
+  };
+  const cameraTransition = reducedMotion ? { duration: 0 } : transition;
+  const stageStyle = {
+    width: canvasW,
+    height: canvasH,
+    transformOrigin: "0px 0px" as const,
+    visibility: (ready ? "visible" : "hidden") as "visible" | "hidden",
+  };
 
   return (
     <div
       ref={viewportRef}
-      className="pointer-events-none absolute inset-y-0 right-0 hidden w-[58%] overflow-hidden md:block"
+      className="pointer-events-none absolute inset-0 overflow-hidden md:inset-y-0 md:right-0 md:left-auto md:w-[58%]"
       aria-hidden
     >
+      {/* Soft field — Figma Mask group is viewport-fixed; cards pan under it. */}
       <div
         className="absolute inset-0"
         style={{
-          // Figma Mask group — soft radial falloff over the baked hero image (no extra blue wash).
-          WebkitMaskImage:
-            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 100%)",
-          maskImage:
-            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 100%)",
+          WebkitMaskImage: FIELD_MASK,
+          maskImage: FIELD_MASK,
           WebkitMaskRepeat: "no-repeat",
           maskRepeat: "no-repeat",
           WebkitMaskSize: "100% 100%",
           maskSize: "100% 100%",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
         }}
       >
         <motion.div
           className="absolute top-0 left-0 transform-gpu will-change-transform"
-          style={{
-            width: canvasW,
-            height: canvasH,
-            transformOrigin: "0px 0px",
-          }}
-          animate={{
-            x: camera.x,
-            y: camera.y,
-            scale: camera.scale,
-          }}
-          transition={reducedMotion ? { duration: 0 } : transition}
+          style={stageStyle}
+          animate={cameraMotion}
+          transition={cameraTransition}
         >
           {cards.map((item, index) => {
+            if (index === spotlight) return null;
             const rect = cardRect(index);
             return (
               <HeroCard
                 key={item.key}
                 item={item}
-                active={index === spotlight}
-                allowVideo={videosReady}
+                active={false}
+                allowVideo={false}
                 reducedMotion={reducedMotion}
                 left={rect.left}
                 top={rect.top}
               />
             );
           })}
+        </motion.div>
+      </div>
+
+      {/* Clear spotlight — Figma 1:598 sits outside the mask so hero-bg never washes it. */}
+      <div className="absolute inset-0">
+        <motion.div
+          className="absolute top-0 left-0 transform-gpu will-change-transform"
+          style={stageStyle}
+          animate={cameraMotion}
+          transition={cameraTransition}
+        >
+          {active ? (
+            <HeroCard
+              key={`spotlight-${active.key}`}
+              item={active}
+              active
+              allowVideo={videosReady}
+              reducedMotion={reducedMotion}
+              left={activeRect.left}
+              top={activeRect.top}
+            />
+          ) : null}
         </motion.div>
       </div>
     </div>

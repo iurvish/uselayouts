@@ -87,14 +87,14 @@ const THEME_PRESETS = {
     bg: 'var(--background)',
     text: 'var(--muted-foreground)',
     sel: 'var(--foreground)',
-    marker: '#22c55e',
+    marker: '#86efac',
     panel: 'var(--muted)',
   },
   light: {
     bg: 'var(--background)',
     text: 'var(--muted-foreground)',
     sel: 'var(--foreground)',
-    marker: '#22c55e',
+    marker: '#86efac',
     panel: 'var(--muted)',
   },
 };
@@ -285,7 +285,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             bg: background || '#FFF6EC',
             text: textColor || 'rgba(180, 90, 20, 0.45)',
             sel: selectedColor || '#B4541E',
-            marker: markerColor || '#22c55e',
+            marker: markerColor || '#86efac',
             panel: background || '#FFF6EC',
           }
         : THEME_PRESETS[mode] || THEME_PRESETS.light;
@@ -702,22 +702,10 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
                   background: theme.marker,
                   pointerEvents: 'none',
                   flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: `
-                    0 0 22px ${theme.marker}70,
-                    0 2px 8px ${theme.marker}45,
-                    inset 0 1px 1px rgba(255,255,255,0.55),
-                    inset 0 -1px 1px rgba(0,0,0,0.25)
-                  `,
+                  boxShadow: `0 0 6px ${theme.marker}35`,
                   transition: 'background-color 0.35s ease, box-shadow 0.35s ease',
                 }}
-              >
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-                  <path d="M3.2 1.6v6.8L8.2 5z" fill="#fff" />
-                </svg>
-              </div>
+              />
             )}
 
             {list.map((item, index) => {
@@ -766,7 +754,7 @@ export default function NewComponentDemo({ size }: { size?: string }) {
       <WheelCarousel
         contentWidth={880}
         photoWidth={34}
-        gap={48}
+        gap={96}
         apexInset={24}
         style={{ width: "100%", height: "100%", maxWidth: "880px" }}
       />

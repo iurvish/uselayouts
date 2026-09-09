@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
+import { Star } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import type { BrowseItem } from "@/lib/browse/items";
 import { HeroSpotlightCanvas } from "@/components/landing/hero-spotlight-canvas";
@@ -107,51 +108,6 @@ const avatars = [
   "/landing/avatar-4.png",
 ];
 
-/** Combo craft depth: top inset highlight, bottom inset shade, hairline rim, crisp drop. */
-const buttonCraft = {
-  primary: {
-    className: "bg-[#071A31] text-white hover:brightness-110",
-    style: {
-      backgroundImage: "linear-gradient(180deg, #1a3558 0%, #071A31 48%, #040e1a 100%)",
-      boxShadow: [
-        "inset 0 1.5px 0 rgba(255,255,255,0.28)",
-        "inset 0 -2px 0 rgba(0,0,0,0.45)",
-        "inset 0 0 0 1px rgba(255,255,255,0.06)",
-        "0 1px 0 rgba(255,255,255,0.1)",
-        "0 3px 0 rgba(0,0,0,0.25)",
-        "0 8px 12px rgba(7,26,49,0.35)",
-      ].join(", "),
-    },
-  },
-  secondary: {
-    className: "bg-white text-[#071A31] hover:brightness-[0.98]",
-    style: {
-      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%)",
-      boxShadow: [
-        "inset 0 1.5px 0 #fff",
-        "inset 0 -2px 0 rgba(7,26,49,0.1)",
-        "inset 0 0 0 1px rgba(7,26,49,0.06)",
-        "0 1px 0 rgba(255,255,255,0.8)",
-        "0 3px 0 rgba(7,26,49,0.08)",
-        "0 8px 12px rgba(7,26,49,0.14)",
-      ].join(", "),
-    },
-  },
-  outline: {
-    className: "bg-transparent text-[#071A31] hover:bg-white/40",
-    style: {
-      backgroundImage: "none",
-      boxShadow: [
-        "inset 0 1px 0 rgba(255,255,255,0.65)",
-        "inset 0 -1px 0 rgba(7,26,49,0.06)",
-        "inset 0 0 0 1.5px rgba(7,26,49,0.22)",
-        "0 1px 0 rgba(255,255,255,0.35)",
-        "0 4px 8px rgba(7,26,49,0.06)",
-      ].join(", "),
-    },
-  },
-} as const;
-
 const testimonials = [
   {
     quote:
@@ -250,6 +206,50 @@ function WhyCoralSurface({
 const whyActiveLine =
   "linear-gradient(in oklab 179.04deg, oklab(43.6% -0.034 -0.138) -260%, oklab(53% 0.114 0.016) 225.3%, oklab(86.5% 0.053 0.047) 720%)";
 
+/** Combo craft depth: top inset highlight, bottom inset shade, hairline rim, crisp drop. */
+const buttonCraft = {
+  primary: {
+    className: "bg-[#071A31] text-white hover:brightness-110",
+    style: {
+      backgroundImage: "linear-gradient(180deg, #1a3558 0%, #071A31 48%, #040e1a 100%)",
+      boxShadow: [
+        "inset 0 1.5px 0 rgba(255,255,255,0.28)",
+        "inset 0 -2px 0 rgba(0,0,0,0.45)",
+        "inset 0 0 0 1px rgba(255,255,255,0.06)",
+        "0 1px 0 rgba(255,255,255,0.1)",
+        "0 3px 0 rgba(0,0,0,0.25)",
+        "0 8px 12px rgba(7,26,49,0.35)",
+      ].join(", "),
+    },
+  },
+  secondary: {
+    className: "bg-white text-[#071A31] hover:brightness-[0.98]",
+    style: {
+      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%)",
+      boxShadow: [
+        "inset 0 1.5px 0 #fff",
+        "inset 0 -2px 0 rgba(7,26,49,0.1)",
+        "inset 0 0 0 1px rgba(7,26,49,0.06)",
+        "0 1px 0 rgba(255,255,255,0.8)",
+        "0 6px 14px rgba(7,26,49,0.12)",
+      ].join(", "),
+    },
+  },
+  outline: {
+    className: "bg-transparent text-[#071A31] hover:bg-white/40",
+    style: {
+      backgroundImage: "none",
+      boxShadow: [
+        "inset 0 1px 0 rgba(255,255,255,0.65)",
+        "inset 0 -1px 0 rgba(7,26,49,0.06)",
+        "inset 0 0 0 1.5px rgba(7,26,49,0.22)",
+        "0 1px 0 rgba(255,255,255,0.35)",
+        "0 4px 8px rgba(7,26,49,0.06)",
+      ].join(", "),
+    },
+  },
+} as const;
+
 function LandingButton({
   children,
   className,
@@ -266,7 +266,7 @@ function LandingButton({
     <Link
       href={href}
       className={cn(
-        "inline-flex h-[50px] items-center justify-center rounded-2xl px-5 text-[16px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.97]",
+        "inline-flex h-10 items-center justify-center rounded-xl px-3.5 text-[15px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.96]",
         craft.className,
         className,
       )}
@@ -287,9 +287,33 @@ function ExploreButton({
   variant?: keyof typeof buttonCraft;
 }) {
   return (
-    <LandingButton className={className} href={href} variant={variant}>
+    <LandingButton
+      className={cn("h-12 px-5 text-[16px]", className)}
+      href={href}
+      variant={variant}
+    >
       Explore Components
     </LandingButton>
+  );
+}
+
+function StarOnGithub({ className }: { className?: string }) {
+  const craft = buttonCraft.primary;
+  return (
+    <a
+      href="https://github.com/iurvish/uselayouts"
+      target="_blank"
+      rel="noreferrer"
+      className={cn(
+        "inline-flex h-10 items-center justify-center gap-2 rounded-xl px-3.5 text-[15px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.96]",
+        craft.className,
+        className,
+      )}
+      style={craft.style}
+    >
+      <Star className="size-3.5 fill-white text-white" aria-hidden />
+      Star on GitHub
+    </a>
   );
 }
 
@@ -363,11 +387,11 @@ function LandingNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        <ExploreButton variant="outline" className="hidden h-11 sm:inline-flex" />
+        <StarOnGithub className="hidden sm:inline-flex" />
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="inline-flex size-10 items-center justify-center rounded-2xl text-[#071A31] lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-2xl text-[#071A31] transition-opacity duration-150 hover:opacity-70 lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="sr-only">Menu</span>
@@ -387,13 +411,13 @@ function LandingNav() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-[15px] text-[#071A31]"
+              className="text-[15px] text-[#071A31] transition-opacity duration-150 hover:opacity-70"
               onClick={() => setOpen(false)}
             >
               {link.label}
             </Link>
           ))}
-          <ExploreButton variant="outline" className="w-full sm:hidden" />
+          <StarOnGithub className="w-full sm:hidden" />
         </div>
       ) : null}
     </header>
@@ -591,7 +615,7 @@ function WhySection() {
 
           <div className="relative h-[280px] w-full sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
             <WhyCoralSurface className="size-full rounded-2xl">
-              <div className="absolute inset-[10%] sm:inset-[12%]">
+              <div className="absolute inset-[4%] sm:inset-[5%]">
                 <Image
                   key={whyFeatures[active].image}
                   src={whyFeatures[active].image}
@@ -603,40 +627,6 @@ function WhySection() {
               </div>
             </WhyCoralSurface>
           </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
-          {whyFeatures.map((feature, i) => {
-            const isActive = i === active;
-            return (
-              <button
-                key={feature.image}
-                type="button"
-                onClick={() => select(i)}
-                aria-label={feature.title}
-                aria-pressed={isActive}
-                className={cn(
-                  "relative aspect-[4/3] w-full overflow-hidden rounded-2xl transition-[transform,box-shadow] duration-150 ease-out active:scale-[0.98]",
-                  isActive
-                    ? "ring-2 ring-white/35 ring-offset-2 ring-offset-[#1B1C1D]"
-                    : "ring-0",
-                )}
-              >
-                <WhyCoralSurface className="size-full rounded-2xl">
-                  {/* Minimized art — Figma surface breathes around the illustration */}
-                  <div className="absolute inset-[18%] sm:inset-[22%]">
-                    <Image
-                      src={feature.image}
-                      alt=""
-                      fill
-                      sizes="(max-width: 1024px) 50vw, 280px"
-                      className="object-contain"
-                    />
-                  </div>
-                </WhyCoralSurface>
-              </button>
-            );
-          })}
         </div>
       </div>
     </section>
@@ -1003,30 +993,133 @@ function TestimonialsSection() {
         </div>
       </div>
 
-      {/* Intentional carousel peek: clip to content column, show next card edge */}
-      <div
-        ref={scrollerRef}
-        className={cn(
-          "mx-auto mt-12 max-w-[1200px] cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
-          dragging && "cursor-grabbing"
-        )}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onPointerLeave={(e) => {
-          if (dragRef.current) endDrag(e);
-          else resume();
-        }}
-        onPointerEnter={pause}
-      >
-        <div className="flex w-max gap-6 pr-6">
-          {loop.map((t, i) => (
-            <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
-          ))}
+      {/* Intentional carousel peek: edge fades keep scroll/swipe natural */}
+      <div className="relative mx-auto mt-12 max-w-[1200px]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-gradient-to-r from-[#F5F3EE] via-[#F5F3EE]/85 to-transparent sm:w-20 lg:w-28"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-gradient-to-l from-[#F5F3EE] via-[#F5F3EE]/85 to-transparent sm:w-20 lg:w-28"
+        />
+        <div
+          ref={scrollerRef}
+          className={cn(
+            "cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
+            dragging && "cursor-grabbing"
+          )}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onPointerLeave={(e) => {
+            if (dragRef.current) endDrag(e);
+            else resume();
+          }}
+          onPointerEnter={pause}
+        >
+          <div className="flex w-max gap-6 px-2 pr-6 sm:px-4">
+            {loop.map((t, i) => (
+              <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+const footerLinks = [
+  { label: "Component", href: "/browse" },
+  { label: "Documentation", href: "/docs/installation" },
+  { label: "Meet Creator", href: "https://urvish.in" },
+  { label: "Become a Sponsor", href: "https://github.com/sponsors/iurvish" },
+  { label: "0xUrvish", href: "https://x.com/0xUrvish" },
+] as const;
+
+/** Figma 47:687 — dark footer with masked wordmark rays + site links. */
+function LandingFooter() {
+  return (
+    <footer className="relative overflow-hidden bg-[#232323]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
+      />
+      <div className="relative mx-auto w-full max-w-[1320px] border-x border-[rgba(235,233,230,0.08)] px-4 sm:px-10 lg:px-[140px]">
+        <div className="border-x border-[#333]">
+          {/* Wordmark band — glow + rays masked to useLayouts letterforms */}
+          <div className="relative flex h-[168px] items-center justify-center overflow-hidden border-y border-[#333] sm:h-[188px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/landing/footer/texture.png"
+              alt=""
+              className="pointer-events-none absolute inset-0 size-full object-cover object-bottom opacity-40"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/landing/footer/glow.svg"
+              alt=""
+              className="pointer-events-none absolute top-1/2 left-1/2 h-[143px] w-[min(715px,90%)] -translate-x-1/2 -translate-y-1/2"
+            />
+            <div
+              className="pointer-events-none absolute top-1/2 left-1/2 h-[min(165px,70%)] w-[min(936px,92%)] -translate-x-1/2 -translate-y-1/2"
+              style={{
+                WebkitMaskImage: "url(/landing/footer/wordmark-mask.svg)",
+                maskImage: "url(/landing/footer/wordmark-mask.svg)",
+                WebkitMaskSize: "contain",
+                maskSize: "contain",
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskPosition: "center",
+              }}
+            >
+              <div className="flex size-full items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/landing/footer/rays.svg"
+                  alt=""
+                  className="h-[280%] w-[120%] max-w-none rotate-[25.49deg] object-cover opacity-90"
+                />
+              </div>
+            </div>
+            <span className="sr-only">useLayouts</span>
+          </div>
+
+          {/* Links in the open band under the wordmark */}
+          <div className="relative flex min-h-[120px] flex-col items-center justify-center gap-6 border-b border-[#333] px-4 py-10 sm:min-h-[160px] sm:py-12">
+            <nav
+              aria-label="Footer"
+              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8"
+            >
+              {footerLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-[14px] tracking-[-0.03em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80"
+                  {...(link.href.startsWith("http")
+                    ? { target: "_blank", rel: "noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex h-[59px] items-center justify-center">
+            <p className="text-[14px] leading-[27px] tracking-[-0.03em] text-[#ACAFB9]">
+              Copyright © 2026 useLayouts
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 shadow-[inset_0_0.36px_0.36px_rgba(255,255,255,0.06)]"
+      />
+    </footer>
   );
 }
 
@@ -1039,6 +1132,7 @@ export default function LandingPage({ heroItems }: { heroItems: BrowseItem[] }) 
       <WhySection />
       <ToolsSection />
       <TestimonialsSection />
+      <LandingFooter />
     </main>
   );
 }
