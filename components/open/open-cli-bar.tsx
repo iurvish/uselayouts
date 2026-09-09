@@ -82,7 +82,7 @@ export function OpenCliBar({
       />
       <div
         ref={rootRef}
-        className="relative z-20 flex items-start justify-center gap-px rounded-[12px] border border-solid border-[#47474d] bg-[#323239] py-[2px] pr-[2px] pl-[4px] text-foreground"
+        className="relative z-20 flex items-start justify-center gap-1 rounded-[12px] border border-solid border-[#47474d] bg-[#323239] py-[2px] pr-[2px] pl-[4px] text-foreground"
       >
         <Tooltip>
           <TooltipTrigger
@@ -122,7 +122,7 @@ export function OpenCliBar({
           <TooltipContent>Package manager</TooltipContent>
         </Tooltip>
 
-        {/* Figma 91:4661 — command + copy; 1px gap from PM via parent gap-px */}
+        {/* Figma 91:4661 — command + copy; gap-1 from PM so hover bg doesn't kiss the text */}
         <div className="flex h-8 items-center">
           <button
             type="button"
