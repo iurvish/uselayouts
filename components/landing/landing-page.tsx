@@ -818,6 +818,9 @@ function TestimonialCard({
 
 const TESTIMONIAL_GAP_PX = 24;
 const TESTIMONIAL_LOOP_MS = 40_000;
+/** ~8% soft fade so dotted page bg shows through without fogging cards */
+const testimonialEdgeMask =
+  "linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)";
 
 function TestimonialsSection() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -993,22 +996,18 @@ function TestimonialsSection() {
         </div>
       </div>
 
-      {/* Intentional carousel peek: edge fades keep scroll/swipe natural */}
+      {/* Soft edge mask — fade to page dots, don't fog card content */}
       <div className="relative mx-auto mt-12 max-w-[1200px]">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-gradient-to-r from-[#F5F3EE] via-[#F5F3EE]/85 to-transparent sm:w-20 lg:w-28"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-gradient-to-l from-[#F5F3EE] via-[#F5F3EE]/85 to-transparent sm:w-20 lg:w-28"
-        />
         <div
           ref={scrollerRef}
           className={cn(
             "cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
             dragging && "cursor-grabbing"
           )}
+          style={{
+            WebkitMaskImage: testimonialEdgeMask,
+            maskImage: testimonialEdgeMask,
+          }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
@@ -1038,7 +1037,10 @@ const footerLinks = [
   { label: "0xUrvish", href: "https://x.com/0xUrvish" },
 ] as const;
 
-/** Figma 47:687 — dark footer with masked wordmark rays + site links. */
+/**
+ * Figma 47:687 — wordmark layers over #333 grid:
+ * 47:690 glow/outline, 47:692 masked rays; 47:825 hero-texture behind band (47:824).
+ */
 function LandingFooter() {
   return (
     <footer className="relative overflow-hidden bg-[#232323]">
@@ -1046,72 +1048,81 @@ function LandingFooter() {
         aria-hidden
         className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
       />
-      <div className="relative mx-auto w-full max-w-[1320px] border-x border-[rgba(235,233,230,0.08)] px-4 sm:px-10 lg:px-[140px]">
-        <div className="border-x border-[#333]">
-          {/* Wordmark band — glow + rays masked to useLayouts letterforms */}
-          <div className="relative flex h-[168px] items-center justify-center overflow-hidden border-y border-[#333] sm:h-[188px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/landing/footer/texture.png"
-              alt=""
-              className="pointer-events-none absolute inset-0 size-full object-cover object-bottom opacity-40"
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/landing/footer/glow.svg"
-              alt=""
-              className="pointer-events-none absolute top-1/2 left-1/2 h-[143px] w-[min(715px,90%)] -translate-x-1/2 -translate-y-1/2"
-            />
+      {/* Outer gutters 60px → inner 140px → 1040 content (Figma 1440 frame) */}
+      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-4 sm:px-[40px] lg:px-[60px]">
+        <div className="border-x border-[rgba(235,233,230,0.08)] px-0 sm:px-8 lg:px-[140px]">
+          <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
+            {/* 47:690 — glow/outline (absolute; baseline sits on band bottom border) */}
             <div
-              className="pointer-events-none absolute top-1/2 left-1/2 h-[min(165px,70%)] w-[min(936px,92%)] -translate-x-1/2 -translate-y-1/2"
-              style={{
-                WebkitMaskImage: "url(/landing/footer/wordmark-mask.svg)",
-                maskImage: "url(/landing/footer/wordmark-mask.svg)",
-                WebkitMaskSize: "contain",
-                maskSize: "contain",
-                WebkitMaskRepeat: "no-repeat",
-                maskRepeat: "no-repeat",
-                WebkitMaskPosition: "center",
-                maskPosition: "center",
-              }}
+              aria-hidden
+              className="pointer-events-none absolute top-[clamp(5.5rem,10vw,8.9375rem)] left-[16.01%] z-[2] h-[clamp(5rem,10vw,8.9375rem)] w-[68.75%]"
             >
-              <div className="flex size-full items-center justify-center">
+              <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/landing/footer/rays.svg"
+                  src="/landing/footer/glow.svg"
                   alt=""
-                  className="h-[280%] w-[120%] max-w-none rotate-[25.49deg] object-cover opacity-90"
+                  className="block size-full max-w-none"
                 />
               </div>
             </div>
-            <span className="sr-only">useLayouts</span>
-          </div>
 
-          {/* Links in the open band under the wordmark */}
-          <div className="relative flex min-h-[120px] flex-col items-center justify-center gap-6 border-b border-[#333] px-4 py-10 sm:min-h-[160px] sm:py-12">
-            <nav
-              aria-label="Footer"
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8"
+            {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-[clamp(5.75rem,10.3vw,9.21rem)] left-[5.4%] z-[3] w-[90%]"
             >
-              {footerLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-[14px] tracking-[-0.03em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80"
-                  {...(link.href.startsWith("http")
-                    ? { target: "_blank", rel: "noreferrer" }
-                    : {})}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/landing/footer/wordmark-rays-masked.svg"
+                alt=""
+                className="block h-auto w-full max-w-none"
+              />
+            </div>
 
-          <div className="flex h-[59px] items-center justify-center">
-            <p className="text-[14px] leading-[27px] tracking-[-0.03em] text-[#ACAFB9]">
-              Copyright © 2026 useLayouts
-            </p>
+            <span className="sr-only">useLayouts</span>
+
+            {/* 47:824 band — 47:825 hero-texture at back (Figma: left -88 / top -160 / 1200×668, object-bottom) */}
+            <div className="relative -mb-px h-[clamp(7.5rem,13vw,11.75rem)] overflow-hidden border-y border-[#333]">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute top-[-85%] left-[-8.5%] z-0 h-[356%] w-[115%]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/landing/footer/hero-texture.png"
+                  alt=""
+                  className="absolute inset-0 size-full max-w-none object-cover object-bottom"
+                />
+              </div>
+            </div>
+
+            {/* Site links under wordmark */}
+            <div className="relative flex min-h-[120px] flex-col items-center justify-center border-b border-[#333] px-4 py-10 sm:min-h-[195px] sm:py-12">
+              <nav
+                aria-label="Footer"
+                className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8"
+              >
+                {footerLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="text-[14px] tracking-[-0.03em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80"
+                    {...(link.href.startsWith("http")
+                      ? { target: "_blank", rel: "noreferrer" }
+                      : {})}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+
+            <div className="flex h-[59px] items-center justify-center">
+              <p className="text-[14px] leading-[27px] tracking-[-0.03em] text-[#ACAFB9]">
+                Copyright © 2026 useLayouts
+              </p>
+            </div>
           </div>
         </div>
       </div>

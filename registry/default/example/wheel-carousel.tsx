@@ -710,23 +710,10 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
 WheelCarousel.displayName = 'WheelCarousel';
 
 export const WheelCarouselDemo: React.FC = () => {
-  const [mode, setMode] = useState<WheelCarouselMode>('light');
-
-  const modes: { key: WheelCarouselMode; label: string }[] = [
-    { key: 'light', label: 'Light' },
-    { key: 'dark', label: 'Dark' },
-    { key: 'custom', label: 'Custom' },
-  ];
-
   const customBg = '#fff6ec';
   const customText = 'rgba(180, 90, 20, 0.45)';
   const customSelected = '#b4541e';
-  const customMarker = '#22c55e';
-
-  const currentBgColor =
-    mode === 'dark' ? '#09090b' : mode === 'custom' ? customBg : '#ffffff';
-
-  const isDark = mode === 'dark';
+  const customMarker = '#86efac';
 
   useEffect(() => {
     const body = document.body;
@@ -736,56 +723,50 @@ export const WheelCarouselDemo: React.FC = () => {
 
     body.style.transition = 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
     html.style.transition = 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-    body.style.backgroundColor = currentBgColor;
-    html.style.backgroundColor = currentBgColor;
+    body.style.backgroundColor = customBg;
+    html.style.backgroundColor = customBg;
 
     return () => {
       body.style.backgroundColor = prevBodyBg;
       html.style.backgroundColor = prevHtmlBg;
     };
-  }, [currentBgColor]);
+  }, []);
 
   return (
     <div
-      className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden transition-colors duration-500 font-sans"
-      style={{ backgroundColor: currentBgColor }}
+      className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden font-sans"
+      style={{ backgroundColor: customBg }}
     >
       <div
-        className="absolute top-[12%] left-[10%] w-[450px] h-[450px] rounded-full blur-[70px] pointer-events-none opacity-60 transition-all duration-700 animate-pulse"
+        className="pointer-events-none absolute top-[12%] left-[10%] h-[450px] w-[450px] animate-pulse rounded-full opacity-60 blur-[70px]"
         style={{
-          background: isDark
-            ? 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)'
-            : mode === 'custom'
-            ? 'radial-gradient(circle, rgba(232, 121, 46, 0.18) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%)',
+          background:
+            'radial-gradient(circle, rgba(232, 121, 46, 0.18) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute bottom-[10%] right-[15%] w-[500px] h-[500px] rounded-full blur-[80px] pointer-events-none opacity-60 transition-all duration-700"
+        className="pointer-events-none absolute right-[15%] bottom-[10%] h-[500px] w-[500px] rounded-full opacity-60 blur-[80px]"
         style={{
-          background: isDark
-            ? 'radial-gradient(circle, rgba(147, 51, 234, 0.12) 0%, transparent 70%)'
-            : mode === 'custom'
-            ? 'radial-gradient(circle, rgba(180, 84, 30, 0.14) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(191, 219, 254, 0.4) 0%, transparent 70%)',
+          background:
+            'radial-gradient(circle, rgba(180, 84, 30, 0.14) 0%, transparent 70%)',
         }}
       />
 
-      <div className="flex-1 w-full h-full flex items-center justify-center min-h-0 z-10">
+      <div className="z-10 flex h-full min-h-0 w-full flex-1 items-center justify-center px-6 pb-8">
         <WheelCarousel
           items={defaultCarouselItems}
-          mode={mode}
+          mode="custom"
           photoSide="left"
-          photoWidth={36}
+          photoWidth={34}
           photoAspect="3/4"
-          contentWidth={800}
-          gap={48}
+          contentWidth={920}
+          gap={100}
           photoRadius={16}
           crossfade={0.45}
           radius={330}
           spacing={14}
           visibleItems={7}
-          apexInset={20}
+          apexInset={18}
           showMarker={true}
           markerSize={14}
           markerGap={18}
@@ -799,43 +780,8 @@ export const WheelCarouselDemo: React.FC = () => {
           textColor={customText}
           selectedColor={customSelected}
           markerColor={customMarker}
-          style={{ width: '100%', height: '100%', maxWidth: '800px' }}
+          style={{ width: '100%', height: '100%', maxWidth: '920px' }}
         />
-      </div>
-
-      <div className="flex justify-center items-center pb-20 pt-2 z-50">
-        <div
-          className={cn(
-            'inline-flex h-11 items-center justify-center rounded-full p-1 shadow-lg backdrop-blur-2xl transition-all duration-300',
-            isDark
-              ? 'bg-zinc-900/80 border border-zinc-800 text-zinc-400'
-              : mode === 'custom'
-              ? 'bg-[#fff6ec]/80 border border-[#e8792e]/25 text-[#b4541e]/70'
-              : 'bg-zinc-100/90 border border-zinc-200 text-zinc-600'
-          )}
-        >
-          {modes.map(({ key, label }) => {
-            const isSelected = key === mode;
-            return (
-              <button
-                key={key}
-                onClick={() => setMode(key)}
-                className={cn(
-                  'inline-flex items-center justify-center whitespace-nowrap rounded-full px-5 py-2 text-xs font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                  isSelected
-                    ? isDark
-                      ? 'bg-zinc-100 text-zinc-950 shadow-md'
-                      : 'bg-zinc-950 text-zinc-50 shadow-md'
-                    : isDark
-                    ? 'hover:text-zinc-100 hover:bg-zinc-800/50'
-                    : 'hover:text-zinc-900 hover:bg-zinc-200/50'
-                )}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
       </div>
     </div>
   );
