@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
-import { Pause, Play } from "lucide";
+import { SolidPause, SolidPlay } from "@/lib/browse/solid-media-icons";
 
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -51,7 +51,10 @@ export function BrowseToolbar({
                 aria-label={option.label}
                 aria-pressed={active}
                 title={option.label}
-                className={cn("browse-dock-btn", active ? "text-foreground" : "text-muted-foreground")}
+                className={cn(
+                  "browse-dock-btn",
+                  active ? "text-foreground" : "text-foreground/40",
+                )}
               >
                 {active ? (
                   <motion.span
@@ -84,11 +87,10 @@ export function BrowseToolbar({
               className="browse-dock-pause"
             >
               <MorphIcon
-                icon={paused ? Play : Pause}
+                icon={paused ? SolidPlay : SolidPause}
                 size={20}
-                strokeWidth={2.25}
-                absoluteStrokeWidth
-                className="size-5"
+                strokeWidth={0}
+                className="size-5 [&_path]:fill-current [&_rect]:fill-current"
               />
             </TooltipTrigger>
             <TooltipContent side="top">{pauseLabel}</TooltipContent>

@@ -27,6 +27,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <div className="flex-1" />
           <nav className="flex items-center gap-1">
             <Link
+              href="/admin/landing"
+              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+            >
+              Landing
+            </Link>
+            <Link
               href="/admin/new"
               className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
             >

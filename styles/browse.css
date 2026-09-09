@@ -172,7 +172,7 @@
 .browse-dock-pause {
   overflow: hidden;
   border-radius: 10px;
-  color: var(--muted-foreground);
+  color: var(--foreground);
   background:
     linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%),
     var(--secondary);

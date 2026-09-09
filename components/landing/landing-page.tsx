@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import type { BrowseItem } from "@/lib/browse/items";
+import { HeroSpotlightCanvas } from "@/components/landing/hero-spotlight-canvas";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -104,6 +107,51 @@ const avatars = [
   "/landing/avatar-4.png",
 ];
 
+/** Combo craft depth: top inset highlight, bottom inset shade, hairline rim, crisp drop. */
+const buttonCraft = {
+  primary: {
+    className: "bg-[#071A31] text-white hover:brightness-110",
+    style: {
+      backgroundImage: "linear-gradient(180deg, #1a3558 0%, #071A31 48%, #040e1a 100%)",
+      boxShadow: [
+        "inset 0 1.5px 0 rgba(255,255,255,0.28)",
+        "inset 0 -2px 0 rgba(0,0,0,0.45)",
+        "inset 0 0 0 1px rgba(255,255,255,0.06)",
+        "0 1px 0 rgba(255,255,255,0.1)",
+        "0 3px 0 rgba(0,0,0,0.25)",
+        "0 8px 12px rgba(7,26,49,0.35)",
+      ].join(", "),
+    },
+  },
+  secondary: {
+    className: "bg-white text-[#071A31] hover:brightness-[0.98]",
+    style: {
+      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%)",
+      boxShadow: [
+        "inset 0 1.5px 0 #fff",
+        "inset 0 -2px 0 rgba(7,26,49,0.1)",
+        "inset 0 0 0 1px rgba(7,26,49,0.06)",
+        "0 1px 0 rgba(255,255,255,0.8)",
+        "0 3px 0 rgba(7,26,49,0.08)",
+        "0 8px 12px rgba(7,26,49,0.14)",
+      ].join(", "),
+    },
+  },
+  outline: {
+    className: "bg-transparent text-[#071A31] hover:bg-white/40",
+    style: {
+      backgroundImage: "none",
+      boxShadow: [
+        "inset 0 1px 0 rgba(255,255,255,0.65)",
+        "inset 0 -1px 0 rgba(7,26,49,0.06)",
+        "inset 0 0 0 1.5px rgba(7,26,49,0.22)",
+        "0 1px 0 rgba(255,255,255,0.35)",
+        "0 4px 8px rgba(7,26,49,0.06)",
+      ].join(", "),
+    },
+  },
+} as const;
+
 const testimonials = [
   {
     quote:
@@ -134,8 +182,6 @@ const testimonials = [
     avatar: "/landing/avatar-3.png",
   },
 ];
-
-const bentoCards = Array.from({ length: 12 }, (_, i) => i);
 
 const WHY_INTERVAL_MS = 6000;
 
@@ -169,23 +215,87 @@ const whyFeatures = [
 const whyActiveLine =
   "linear-gradient(in oklab 179.04deg, oklab(43.6% -0.034 -0.138) -260%, oklab(53% 0.114 0.016) 225.3%, oklab(86.5% 0.053 0.047) 720%)";
 
-function ExploreButton({
+function LandingButton({
+  children,
   className,
   href = "/browse",
+  variant = "primary",
 }: {
+  children: ReactNode;
   className?: string;
   href?: string;
+  variant?: keyof typeof buttonCraft;
 }) {
+  const craft = buttonCraft[variant];
   return (
     <Link
       href={href}
       className={cn(
-        "inline-flex h-[45px] items-center justify-center rounded-full bg-[#071A31] px-3.5 text-[16px] font-medium text-white transition-transform duration-150 ease-out active:scale-[0.98]",
-        className
+        "inline-flex h-[50px] items-center justify-center rounded-full px-5 text-[16px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.97]",
+        craft.className,
+        className,
       )}
+      style={craft.style}
     >
-      Explore Components
+      {children}
     </Link>
+  );
+}
+
+function ExploreButton({
+  className,
+  href = "/browse",
+  variant = "primary",
+}: {
+  className?: string;
+  href?: string;
+  variant?: keyof typeof buttonCraft;
+}) {
+  return (
+    <LandingButton className={className} href={href} variant={variant}>
+      Explore Components
+    </LandingButton>
+  );
+}
+
+function TrustedBy() {
+  const reduce = useReducedMotion() ?? false;
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setInterval(() => setActive((a) => (a + 1) % avatars.length), 5000);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
+  return (
+    <div className="mt-auto flex items-center gap-3 pb-1">
+      <div className="flex">
+        {avatars.map((src, i) => (
+          <div key={src} className={cn("relative", i > 0 && "-ml-3")}>
+            {i === active && !reduce ? (
+              <motion.span
+                layoutId="trusted-ring"
+                className="absolute -inset-1 rounded-full ring-2 ring-white/90"
+                transition={{ type: "spring", stiffness: 500, damping: 32 }}
+              />
+            ) : null}
+            <Image
+              src={src}
+              alt=""
+              width={45}
+              height={45}
+              className="relative size-[45px] rounded-full object-cover ring-2 ring-white"
+            />
+          </div>
+        ))}
+      </div>
+      <p className="font-[family-name:var(--font-geist-mono)] text-[16px] leading-tight tracking-[-0.03em] text-white">
+        Trusted by 100+
+        <br />
+        Developers
+      </p>
+    </div>
   );
 }
 
@@ -255,43 +365,10 @@ function LandingNav() {
   );
 }
 
-function HeroBento() {
-  return (
-    <div
-      className="pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] overflow-hidden md:block"
-      aria-hidden
-    >
-      <div
-        className="absolute inset-0"
-        style={{
-          WebkitMaskImage:
-            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)",
-          maskImage:
-            "radial-gradient(ellipse 66% 66% at 60% 39%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)",
-        }}
-      >
-        <div className="absolute left-0 top-[-20%] grid w-[120%] grid-cols-3 gap-3">
-          {bentoCards.map((i) => (
-            <div
-              key={i}
-              className="flex flex-col gap-1.5 rounded-xl bg-white/20 p-1.5 backdrop-blur-[2px]"
-            >
-              <div className="px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[13px] text-white/90">
-                Bento Card
-              </div>
-              <div className="aspect-[326/274] rounded-[10px] bg-white" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function HeroSection() {
+function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
   return (
     <section className="px-4 pb-4 sm:px-4 lg:px-4">
-      <div className="relative min-h-[min(814px,calc(100svh-86px))] overflow-hidden rounded-[10px] bg-white">
+      <div className="relative h-[calc(100svh-70px-1rem)] min-h-[560px] overflow-hidden rounded-[10px] bg-white">
         <Image
           src="/landing/hero-bg.png"
           alt=""
@@ -300,45 +377,32 @@ function HeroSection() {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-[#071A31]/25" />
-        <HeroBento />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(7,26,49,0.38) 0%, rgba(7,26,49,0.18) 42%, rgba(7,26,49,0.04) 72%, transparent 100%)",
+          }}
+        />
+        <HeroSpotlightCanvas items={heroItems} />
 
-        <div className="relative z-10 flex max-w-[410px] flex-col gap-8 p-6 sm:p-10 lg:p-12">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-balance text-[40px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[54px]">
-              Build interfaces that feel as good as they look.
-            </h1>
-            <p className="text-pretty text-[16px] leading-relaxed text-white/85">
-              Beautiful, interactive React components built to help you ship
-              polished interfaces without building every interaction from
-              scratch.
-            </p>
-          </div>
-
-          <ExploreButton className="w-fit" />
-
-          <div className="flex items-center gap-3">
-            <div className="flex">
-              {avatars.map((src, i) => (
-                <Image
-                  key={src}
-                  src={src}
-                  alt=""
-                  width={45}
-                  height={45}
-                  className={cn(
-                    "size-[45px] rounded-full object-cover ring-2 ring-white",
-                    i > 0 && "-ml-3"
-                  )}
-                />
-              ))}
+        <div className="relative z-10 flex h-full max-w-[480px] flex-col gap-8 p-6 sm:p-10 lg:p-12">
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-balance text-[40px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[54px]">
+                Build interfaces that feel as good as they look.
+              </h1>
+              <p className="text-pretty text-[16px] leading-relaxed text-white/85">
+                Beautiful, interactive React components built to help you ship
+                polished interfaces without building every interaction from
+                scratch.
+              </p>
             </div>
-            <p className="font-[family-name:var(--font-geist-mono)] text-[16px] leading-tight tracking-[-0.03em] text-white">
-              Trusted by 100+
-              <br />
-              Developers
-            </p>
+
+            <ExploreButton className="w-fit" />
           </div>
+
+          <TrustedBy />
         </div>
       </div>
     </section>
@@ -359,12 +423,9 @@ function FeaturesSection() {
               interfaces that feel considered, not cookie-cutter.
             </p>
           </div>
-          <Link
-            href="/browse"
-            className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#071A31] px-3.5 py-3 text-[16px] font-medium leading-5 text-white transition-transform duration-150 ease-out active:scale-[0.98]"
-          >
+          <LandingButton href="/browse" variant="secondary" className="shrink-0">
             Explore full library
-          </Link>
+          </LandingButton>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -903,11 +964,11 @@ function TestimonialsSection() {
   );
 }
 
-export default function LandingPage() {
+export default function LandingPage({ heroItems }: { heroItems: BrowseItem[] }) {
   return (
     <main className="min-h-screen bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
       <LandingNav />
-      <HeroSection />
+      <HeroSection heroItems={heroItems} />
       <FeaturesSection />
       <WhySection />
       <ToolsSection />
