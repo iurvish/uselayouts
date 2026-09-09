@@ -532,6 +532,66 @@ html.dark .shiki span {
   animation: landing-why-fade 220ms var(--ease-out) both;
 }
 
+/* Figma 1:670 coral media surface — base + lighting + plus grid */
+.landing-why-surface {
+  background-color: #f45140;
+  isolation: isolate;
+}
+
+.landing-why-surface-glow-a,
+.landing-why-surface-glow-b {
+  position: absolute;
+  pointer-events: none;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  user-select: none;
+}
+
+.landing-why-surface-glow-a {
+  left: 57%;
+  top: -37%;
+  width: 68%;
+  height: 93%;
+}
+
+.landing-why-surface-glow-b {
+  left: -18%;
+  top: -14%;
+  width: 108%;
+  height: 140%;
+}
+
+.landing-why-surface-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("/landing/why/plus-grid.svg");
+  background-size: 10px 10px;
+  opacity: 0.9;
+}
+
+.landing-why-surface-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 72% 18%,
+      oklch(0.86 0.08 40 / 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 18% 55%,
+      oklch(0.78 0.1 35 / 0.22),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 88% 78%,
+      oklch(0.42 0.12 35 / 0.28),
+      transparent 55%
+    );
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-why-fade {
     animation: none !important;

@@ -190,27 +190,62 @@ const whyFeatures = [
     title: "Copy. Customize. Ship.",
     description:
       "Start with production-ready components and make them your own. No locked-down abstractions. No fighting the library.",
-    image: "/landing/why-media.png",
+    image: "/landing/why/copy.png",
+    short: "Copy",
   },
   {
     title: "Motion that means something.",
     description:
       "Every animation is purposeful — feedback, focus, and flow — not decoration for its own sake.",
-    image: "/landing/card-interactions.png",
+    image: "/landing/why/motion.png",
+    short: "Motion",
   },
   {
     title: "Built to be changed.",
     description:
       "Clean, editable source you own. Swap tokens, restyle freely, and keep shipping without fighting abstractions.",
-    image: "/landing/card-layouts.png",
+    image: "/landing/why/built.png",
+    short: "Change",
   },
   {
     title: "Skip the blank canvas.",
     description:
       "Start from patterns that already work. Less scaffolding, more product — from first commit to polished UI.",
-    image: "/landing/card-navigation.png",
+    image: "/landing/why/blank.png",
+    short: "Start",
   },
 ] as const;
+
+/** Coral media plate from Figma node 1:670 — base, lighting ellipses, plus grid */
+function WhyCoralSurface({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className={cn("landing-why-surface relative overflow-hidden", className)}>
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/landing/why/glow-a.svg"
+          alt=""
+          className="landing-why-surface-glow-a"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/landing/why/glow-b.svg"
+          alt=""
+          className="landing-why-surface-glow-b"
+        />
+        <div className="landing-why-surface-grid" />
+        <div className="landing-why-surface-light" />
+      </div>
+      <div className="relative z-[1] size-full">{children}</div>
+    </div>
+  );
+}
 
 const whyActiveLine =
   "linear-gradient(in oklab 179.04deg, oklab(43.6% -0.034 -0.138) -260%, oklab(53% 0.114 0.016) 225.3%, oklab(86.5% 0.053 0.047) 720%)";
@@ -554,16 +589,54 @@ function WhySection() {
             })}
           </div>
 
-          <div className="relative h-[280px] w-full overflow-hidden rounded-2xl bg-[#0A1739] sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
-            <Image
-              key={whyFeatures[active].image}
-              src={whyFeatures[active].image}
-              alt=""
-              fill
-              sizes="(max-width: 1024px) 100vw, 588px"
-              className="landing-why-fade object-cover"
-            />
+          <div className="relative h-[280px] w-full sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
+            <WhyCoralSurface className="size-full rounded-2xl">
+              <div className="absolute inset-[10%] sm:inset-[12%]">
+                <Image
+                  key={whyFeatures[active].image}
+                  src={whyFeatures[active].image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 588px"
+                  className="landing-why-fade object-contain"
+                />
+              </div>
+            </WhyCoralSurface>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
+          {whyFeatures.map((feature, i) => {
+            const isActive = i === active;
+            return (
+              <button
+                key={feature.image}
+                type="button"
+                onClick={() => select(i)}
+                aria-label={feature.title}
+                aria-pressed={isActive}
+                className={cn(
+                  "relative aspect-[4/3] w-full overflow-hidden rounded-2xl transition-[transform,box-shadow] duration-150 ease-out active:scale-[0.98]",
+                  isActive
+                    ? "ring-2 ring-white/35 ring-offset-2 ring-offset-[#1B1C1D]"
+                    : "ring-0",
+                )}
+              >
+                <WhyCoralSurface className="size-full rounded-2xl">
+                  {/* Minimized art — Figma surface breathes around the illustration */}
+                  <div className="absolute inset-[18%] sm:inset-[22%]">
+                    <Image
+                      src={feature.image}
+                      alt=""
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 280px"
+                      className="object-contain"
+                    />
+                  </div>
+                </WhyCoralSurface>
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>
