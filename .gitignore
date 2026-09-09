@@ -47,4 +47,12 @@ next-env.d.ts
 # local agent / QA scratch (do not commit)
 .cursor-agent-runs/
 
+# local agent skills (installed per-tool; do not commit)
+.agents/
+.claude/
+.codex/
+.gemini/
+.cursor/skills/
+skills-lock.json
+
 bun.lock
