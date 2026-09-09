@@ -88,8 +88,8 @@ export function OpenCliBar({
           <TooltipTrigger
             delay={0}
             className={cn(
-              /* Figma 91:4584 / 91:4641 — 20×20 logo + expand, px-6 py-4, gap-4 */
-              "flex cursor-pointer items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground transition-colors duration-150",
+              /* Figma 91:4641 — 54×32: px-6 py-4, gap-4, logo 20, expand 18 */
+              "flex h-8 cursor-pointer items-center justify-center gap-1 self-stretch rounded-lg px-1.5 py-1 text-foreground transition-colors duration-150",
               "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/10",
               menuOpen && "bg-white/10",
             )}
@@ -98,14 +98,26 @@ export function OpenCliBar({
             aria-label={`Package manager: ${manager}`}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <PackageManagerMark manager={manager} className="size-5 shrink-0" />
-            <img
-              src="/open/expand.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="size-5 shrink-0 object-contain opacity-70"
-            />
+            <span className="relative size-5 shrink-0 overflow-hidden">
+              <PackageManagerMark
+                manager={manager}
+                className="absolute inset-0 size-full"
+              />
+            </span>
+            {/* Figma 91:4657 — 18×18 hit; chevron frame inset 15.28% / 30.56% */}
+            <span className="relative size-[18px] shrink-0 overflow-hidden opacity-70">
+              <span className="absolute inset-[15.28%_30.56%]">
+                <span className="absolute inset-[-4%_-7.14%]">
+                  <img
+                    src="/open/expand.svg"
+                    alt=""
+                    width={8}
+                    height={14}
+                    className="block size-full max-w-none"
+                  />
+                </span>
+              </span>
+            </span>
           </TooltipTrigger>
           <TooltipContent>Package manager</TooltipContent>
         </Tooltip>

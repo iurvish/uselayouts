@@ -89,11 +89,11 @@ const orbitCardShadow =
 const pillShadow =
   "0px 0px 1px 0px rgba(97,97,97,0.1), 0px 1px 1px 0px rgba(97,97,97,0.09), 0px 3px 2px 0px rgba(97,97,97,0.05), 0px 4px 2px 0px rgba(97,97,97,0.01), 0px 7px 2px 0px rgba(97,97,97,0)";
 
-/** Cream page dots — larger than Figma 1px/18px so the grid reads on screen */
+/** Cream page dots — Tools + Testimonials; sized to read on screen */
 const landingDotPattern = {
   backgroundColor: "#F5F3EE",
-  backgroundImage: "radial-gradient(circle, #EDEAE3 2px, transparent 2px)",
-  backgroundSize: "22px 22px",
+  backgroundImage: "radial-gradient(circle, #EDEAE3 3.5px, transparent 3.5px)",
+  backgroundSize: "28px 28px",
 } as const;
 
 const orbitMask =
@@ -818,9 +818,6 @@ function TestimonialCard({
 
 const TESTIMONIAL_GAP_PX = 24;
 const TESTIMONIAL_LOOP_MS = 40_000;
-/** ~8% soft fade so dotted page bg shows through without fogging cards */
-const testimonialEdgeMask =
-  "linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)";
 
 function TestimonialsSection() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -996,33 +993,26 @@ function TestimonialsSection() {
         </div>
       </div>
 
-      {/* Soft edge mask — fade to page dots, don't fog card content */}
-      <div className="relative mx-auto mt-12 max-w-[1200px]">
-        <div
-          ref={scrollerRef}
-          className={cn(
-            "cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
-            dragging && "cursor-grabbing"
-          )}
-          style={{
-            WebkitMaskImage: testimonialEdgeMask,
-            maskImage: testimonialEdgeMask,
-          }}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-          onPointerLeave={(e) => {
-            if (dragRef.current) endDrag(e);
-            else resume();
-          }}
-          onPointerEnter={pause}
-        >
-          <div className="flex w-max gap-6 px-2 pr-6 sm:px-4">
-            {loop.map((t, i) => (
-              <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
-            ))}
-          </div>
+      <div
+        ref={scrollerRef}
+        className={cn(
+          "mx-auto mt-12 max-w-[1200px] cursor-grab overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden",
+          dragging && "cursor-grabbing"
+        )}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={(e) => {
+          if (dragRef.current) endDrag(e);
+          else resume();
+        }}
+        onPointerEnter={pause}
+      >
+        <div className="flex w-max gap-6 pr-6">
+          {loop.map((t, i) => (
+            <TestimonialCard key={`${t.avatar}-${i}`} {...t} />
+          ))}
         </div>
       </div>
     </section>
