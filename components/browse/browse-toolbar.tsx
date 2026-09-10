@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
 import { SolidPause, SolidPlay } from "@/lib/browse/solid-media-icons";
 
-import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { CanvasIcon, GridIcon } from "./icons";
 
@@ -51,10 +50,7 @@ export function BrowseToolbar({
                 aria-label={option.label}
                 aria-pressed={active}
                 title={option.label}
-                className={cn(
-                  "browse-dock-btn",
-                  active ? "text-foreground" : "text-foreground/40",
-                )}
+                className="browse-dock-btn"
               >
                 {active ? (
                   <motion.span

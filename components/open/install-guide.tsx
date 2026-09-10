@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- Figma-exported marks. */
 
 import * as React from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { CodeBlockCommand } from "@/components/open/code-block-command";
 import { DocsCodeBlock } from "@/components/open/docs-code-block";
@@ -15,6 +16,9 @@ import {
   type PackageManager,
 } from "@/lib/open/package-manager";
 import { cn } from "@/lib/utils";
+
+/** Same spring as browse dock Grid/Canvas tabs. */
+const installModeSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
 
 /** Figma 117:3894 — numbered steps with #47474d connectors */
 export function DocsSteps({ children }: { children: React.ReactNode }) {
@@ -136,6 +140,7 @@ export function InstallGuide({
   slug: string;
 }) {
   const [mode, setMode] = React.useState<"cli" | "manual">("cli");
+  const reduceMotion = useReducedMotion();
   const file = `${slug}.tsx`;
   const commands = {
     npm: cliInstallCommand("npm", registryItem),
@@ -157,10 +162,10 @@ export function InstallGuide({
         }}
         className="flex min-w-0 flex-col gap-3"
       >
-        {/* Paper 117-0 — static segmented control, no sliding indicator */}
+        {/* Figma 114:3098 — track 12 / pad 2 / pill 10; sliding fill like browse dock */}
         <TabsList
           className={cn(
-            "mb-0 h-auto w-fit gap-0 overflow-clip rounded-xl bg-[#161618] p-0.5",
+            "mb-0 h-auto w-fit gap-0 overflow-hidden rounded-[12px] bg-[#161618] p-0.5",
             "group-data-horizontal/tabs:h-auto",
             "text-[#acacb4]",
           )}
@@ -170,21 +175,37 @@ export function InstallGuide({
               { value: "cli", label: "CLI" },
               { value: "manual", label: "Manual" },
             ] as const
-          ).map((option) => (
-            <TabsTrigger
-              key={option.value}
-              value={option.value}
-              className={cn(
-                "relative z-1 h-auto flex-none rounded-[10px] border-0 bg-transparent px-2.5 py-1.5 text-base leading-5 font-normal tracking-[-0.03em] shadow-none",
-                "text-[#acacb4] data-active:bg-[#3f3f48] data-active:text-white data-active:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.11)]",
-                "dark:data-active:border-transparent dark:data-active:bg-[#3f3f48]",
-                "after:hidden",
-                openPressMotion,
-              )}
-            >
-              {option.label}
-            </TabsTrigger>
-          ))}
+          ).map((option) => {
+            const active = option.value === mode;
+            return (
+              <TabsTrigger
+                key={option.value}
+                value={option.value}
+                className={cn(
+                  "relative z-1 h-auto flex-none cursor-pointer rounded-[10px] border-0 bg-transparent px-2.5 py-1.5 text-base leading-5 font-normal tracking-[-0.48px] shadow-none",
+                  "text-[#acacb4] data-active:bg-transparent data-active:text-white data-active:shadow-none",
+                  "dark:data-active:border-transparent dark:data-active:bg-transparent",
+                  "after:hidden",
+                  openPressMotion,
+                )}
+              >
+                {active ? (
+                  <motion.span
+                    layoutId="install-mode"
+                    transition={
+                      reduceMotion ? { duration: 0 } : installModeSpring
+                    }
+                    className="absolute inset-0 rounded-[10px] shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.11)]"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 2%) 100%), #3f3f48",
+                    }}
+                  />
+                ) : null}
+                <span className="relative">{option.label}</span>
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
 
         <div className="min-w-0">

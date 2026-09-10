@@ -137,13 +137,17 @@
   padding: 10px;
   border: 0;
   cursor: pointer;
-  color: inherit;
   background: transparent;
   transition: transform 150ms ease;
 }
 
 .browse-dock-btn {
   border-radius: 10px;
+  color: var(--muted-foreground);
+}
+
+.browse-dock-btn[aria-pressed="true"] {
+  color: var(--foreground);
 }
 
 .browse-dock-btn:active,

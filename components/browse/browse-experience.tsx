@@ -68,12 +68,6 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
         </div>
       </div>
 
-      {isCanvas && !isEmpty ? (
-        <p className="pointer-events-none absolute bottom-24 left-8 z-20 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-          Drag to explore
-        </p>
-      ) : null}
-
       <BrowseToolbar
         viewMode={viewMode}
         onViewModeChange={setViewMode}

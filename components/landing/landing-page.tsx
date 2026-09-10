@@ -79,6 +79,7 @@ const toolsArcCardShadow =
 /**
  * OriginKit pivots + matrix on 1000×1000 group (geometry fixed; logos by index).
  * L→R on arc: Lucide → Next → Motion → React → Tailwind → Shadcn → TypeScript.
+ * Motion uses Framer mark (tool-framer) — tool-motion.png is a // that twins Shadcn.
  */
 const toolsArc = [
   {
@@ -131,7 +132,7 @@ const toolsArc = [
   },
   {
     name: "Motion",
-    src: "/landing/tool-motion.png",
+    src: "/landing/tool-framer.png",
     left: 201.5,
     top: 94.98,
     matrix: "matrix(0.866025447845459,-0.5,0.5,0.866025447845459)",
@@ -748,19 +749,19 @@ function ToolsArc() {
         maskImage: toolsArcMask,
       }}
     >
-      {/* Inset square so rotated end cards stay inside the mask box */}
-      <div className="absolute left-1/2 top-0 aspect-square w-[92%] -translate-x-1/2">
+      {/* 1000×1000 orbit group; cards ~9.6% ≈ 88px on 920px orbit */}
+      <div className="absolute left-1/2 top-0 aspect-square w-full -translate-x-1/2">
         {toolsArc.map((tool) => (
           <div
             key={tool.name}
-            className="absolute w-[9.8%]"
+            className="absolute w-[9.6%]"
             style={{
               left: `${(tool.left / 1000) * 100}%`,
               top: `${(tool.top / 1000) * 100}%`,
             }}
           >
             <div
-              className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-[#F9F8F6]"
+              className="relative aspect-square w-full overflow-hidden rounded-[8px] bg-[#F9F8F6]"
               style={{
                 transform: tool.matrix,
                 transformOrigin: "0 0",
@@ -796,12 +797,12 @@ function ToolsSection() {
       style={landingDotPattern}
     >
       <div className="relative mx-auto w-full max-w-[1440px] lg:aspect-[1440/783]">
-        {/* Full-width arc — hidden on mobile */}
+        {/* Arc — ~920px / 63.9% wide (tighter than Figma 1000), nudged to hug title */}
         <div
-          className="pointer-events-none relative z-0 hidden justify-center overflow-visible md:flex md:mb-[-8%] lg:absolute lg:inset-0 lg:mb-0"
+          className="pointer-events-none relative z-0 hidden justify-center overflow-visible md:flex md:mb-[-4%] lg:absolute lg:inset-0 lg:mb-0"
           aria-hidden
         >
-          <div className="w-full lg:absolute lg:left-0 lg:top-[15.33%] lg:w-full">
+          <div className="w-full max-w-[920px] lg:absolute lg:left-1/2 lg:top-[18.5%] lg:w-[63.9%] lg:max-w-none lg:-translate-x-1/2">
             <ToolsArc />
           </div>
         </div>
@@ -845,7 +846,7 @@ function ToolsSection() {
 }
 
 const testimonialCardShadow =
-  "0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.08)";
+  "0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08)";
 
 function TestimonialCard({
   quote,
@@ -1132,13 +1133,13 @@ function LandingFooter() {
         className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
       />
       {/* Same border frame as desktop; gutters tighten on small screens */}
-      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-5 sm:px-[40px] lg:px-[60px]">
-        <div className="border-x border-[rgba(235,233,230,0.08)] px-2 sm:px-8 lg:px-[140px]">
+      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-2 sm:px-[40px] lg:px-[60px]">
+        <div className="border-x border-[rgba(235,233,230,0.08)] px-0 sm:px-8 lg:px-[140px]">
           <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
             {/* 47:690 — glow/outline; mobile sits near band bottom; desktop restores Figma frame h */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[7.6rem] left-[17.9%] z-[2] aspect-[938/170] w-[64.2%] sm:top-[8.9375rem] sm:left-[16.01%] sm:aspect-auto sm:h-[8.9375rem] sm:w-[68.75%]"
+              className="pointer-events-none absolute top-[4.9rem] left-[12.95%] z-[2] aspect-[938/170] w-[74.1%] sm:top-[8.9375rem] sm:left-[16.01%] sm:aspect-auto sm:h-[8.9375rem] sm:w-[68.75%]"
             >
               <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1153,7 +1154,7 @@ function LandingFooter() {
             {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[7.85rem] left-[8%] z-[3] w-[84%] sm:top-[9.21rem] sm:left-[5.4%] sm:w-[90%]"
+              className="pointer-events-none absolute top-[5.1rem] left-[1.5%] z-[3] w-[97%] sm:top-[9.21rem] sm:left-[5.4%] sm:w-[90%]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1166,7 +1167,7 @@ function LandingFooter() {
             <span className="sr-only">useLayouts</span>
 
             {/* 47:824 band — 47:825 hero-texture at back */}
-            <div className="relative -mb-px h-[7.5rem] overflow-hidden border-y border-[#333] sm:h-[11.75rem]">
+            <div className="relative -mb-px h-[5rem] overflow-hidden border-y border-[#333] sm:h-[11.75rem]">
               <div
                 aria-hidden
                 className="pointer-events-none absolute top-[-85%] left-[-8.5%] z-0 h-[356%] w-[115%]"
