@@ -753,7 +753,7 @@ function ToolsArc() {
         {toolsArc.map((tool) => (
           <div
             key={tool.name}
-            className="absolute w-[11.2%]"
+            className="absolute w-[9.8%]"
             style={{
               left: `${(tool.left / 1000) * 100}%`,
               top: `${(tool.top / 1000) * 100}%`,
