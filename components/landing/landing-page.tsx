@@ -783,7 +783,7 @@ function ToolsSection() {
   return (
     <section
       id="tools"
-      className="relative w-full py-20 lg:py-0"
+      className="relative w-full pt-20 lg:pt-0"
       style={landingDotPattern}
     >
       <div className="relative mx-auto w-full max-w-[1440px] lg:aspect-[1440/783]">
