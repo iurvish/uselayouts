@@ -62,12 +62,82 @@ const toolPills = [
   "Tailwind CSS",
   "Motion",
   "Shadcn",
-  "Framer",
-  "Webflow",
+  "Radix",
+  "Lucide",
 ] as const;
 
 const pillShadow =
   "0px 0px 1px 0px rgba(97,97,97,0.1), 0px 1px 1px 0px rgba(97,97,97,0.09), 0px 3px 2px 0px rgba(97,97,97,0.05), 0px 4px 2px 0px rgba(97,97,97,0.01), 0px 7px 2px 0px rgba(97,97,97,0)";
+
+/** Figma 1:733 Mask group — fade so end cards dissolve into the section. */
+const toolsArcMask =
+  "linear-gradient(180deg, rgba(217,217,217,1) 73.92%, rgba(115,115,115,0) 100%)";
+
+const toolsArcCardShadow =
+  "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01), 0 36px 10px rgba(102,102,102,0)";
+
+/**
+ * OriginKit pivots + matrix on 1000×1000 group (geometry fixed; logos by index).
+ * L→R on arc: Lucide → Next → Motion → React → Tailwind → Shadcn → TypeScript.
+ */
+const toolsArc = [
+  {
+    name: "TypeScript",
+    src: "/landing/tool-typescript.png",
+    left: 1000,
+    top: 444,
+    matrix: "matrix(0,1,-1,0)",
+    icon: { left: 16, top: 16, width: 80, height: 80 },
+  },
+  {
+    name: "Shadcn",
+    src: "/landing/tool-shadcn.svg",
+    left: 905.01,
+    top: 201.5,
+    matrix: "matrix(0.5,0.8660253882408142,-0.8660253882408142,0.5)",
+    icon: { left: 14, top: 14, width: 84, height: 84 },
+  },
+  {
+    name: "Tailwind CSS",
+    src: "/landing/tool-tailwind.png",
+    left: 701.5,
+    top: 38.99,
+    matrix: "matrix(0.866025447845459,0.5,-0.5,0.866025447845459)",
+    icon: { left: 11, top: 28, width: 90, height: 55 },
+  },
+  {
+    name: "React",
+    src: "/landing/tool-react.png",
+    left: 444,
+    top: 0,
+    matrix: undefined,
+    icon: { left: 11, top: 16, width: 90, height: 80 },
+  },
+  {
+    name: "Lucide",
+    src: "/landing/tool-lucide.svg",
+    left: 0,
+    top: 556,
+    matrix: "matrix(0,-1,1,0)",
+    icon: { left: 14, top: 14, width: 84, height: 84 },
+  },
+  {
+    name: "Next.js",
+    src: "/landing/tool-next.png",
+    left: 38.99,
+    top: 298.5,
+    matrix: "matrix(0.5,-0.8660253882408142,0.8660253882408142,0.5)",
+    icon: { left: 16, top: 16, width: 80, height: 80 },
+  },
+  {
+    name: "Motion",
+    src: "/landing/tool-motion.png",
+    left: 201.5,
+    top: 94.98,
+    matrix: "matrix(0.866025447845459,-0.5,0.5,0.866025447845459)",
+    icon: { left: 16, top: 16, width: 80, height: 80 },
+  },
+] as const;
 
 /** Cream page dots — Tools + Testimonials; sized to read on screen */
 const landingDotPattern = {
@@ -668,28 +738,72 @@ function WhySection() {
   );
 }
 
-/** Figma 1:732 — arc is exported image (1:733); copy/CTA match frame spacing. */
+/** Figma 1:733 — coded logo arc; copy/CTA match 1:757 spacing. */
+function ToolsArc() {
+  return (
+    <div
+      className="relative aspect-[1000/556] w-full overflow-hidden"
+      style={{
+        WebkitMaskImage: toolsArcMask,
+        maskImage: toolsArcMask,
+      }}
+    >
+      {/* Inset square so rotated end cards stay inside the mask box */}
+      <div className="absolute left-1/2 top-0 aspect-square w-[92%] -translate-x-1/2">
+        {toolsArc.map((tool) => (
+          <div
+            key={tool.name}
+            className="absolute w-[11.2%]"
+            style={{
+              left: `${(tool.left / 1000) * 100}%`,
+              top: `${(tool.top / 1000) * 100}%`,
+            }}
+          >
+            <div
+              className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-[#F9F8F6]"
+              style={{
+                transform: tool.matrix,
+                transformOrigin: "0 0",
+                boxShadow: toolsArcCardShadow,
+              }}
+            >
+              <Image
+                src={tool.src}
+                alt=""
+                width={tool.icon.width}
+                height={tool.icon.height}
+                unoptimized={tool.src.endsWith(".svg")}
+                className="absolute max-w-none object-contain"
+                style={{
+                  left: `${(tool.icon.left / 112) * 100}%`,
+                  top: `${(tool.icon.top / 112) * 100}%`,
+                  width: `${(tool.icon.width / 112) * 100}%`,
+                  height: `${(tool.icon.height / 112) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ToolsSection() {
   return (
     <section
-      className="relative w-full overflow-x-hidden"
+      className="relative w-full overflow-x-hidden pt-20 md:overflow-x-visible md:pt-0"
       style={landingDotPattern}
     >
       <div className="relative mx-auto w-full max-w-[1440px] lg:aspect-[1440/783]">
-        {/* Figma 1:733 Mask group — left 220 / top 120 / 1000×556 on 1440×783 */}
+        {/* Full-width arc — hidden on mobile */}
         <div
-          className="pointer-events-none relative z-0 flex justify-center overflow-visible pt-10 max-lg:mb-[-12%] max-sm:pt-12 lg:absolute lg:inset-0 lg:pt-0"
+          className="pointer-events-none relative z-0 hidden justify-center overflow-visible md:flex md:mb-[-8%] lg:absolute lg:inset-0 lg:mb-0"
           aria-hidden
         >
-          <Image
-            src="/landing/tools-orbit-arc.png"
-            alt=""
-            width={2000}
-            height={1112}
-            className="h-auto w-[165%] max-w-none sm:w-[130%] lg:absolute lg:left-[15.28%] lg:top-[15.33%] lg:w-[69.44%] lg:max-w-none"
-            sizes="(max-width: 1024px) 165vw, 1000px"
-            priority={false}
-          />
+          <div className="w-full lg:absolute lg:left-0 lg:top-[15.33%] lg:w-full">
+            <ToolsArc />
+          </div>
         </div>
 
         {/* Figma 1:757 — top 351, gap 32, text gap 16 */}
@@ -1017,14 +1131,14 @@ function LandingFooter() {
         aria-hidden
         className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
       />
-      {/* Mobile: full-bleed; desktop: Figma gutters */}
-      <div className="relative mx-auto w-full max-w-[1440px] border-[rgba(235,233,230,0.08)] px-5 sm:border-x sm:border-b sm:px-[40px] lg:px-[60px]">
-        <div className="sm:border-x sm:border-[rgba(235,233,230,0.08)] sm:px-8 lg:px-[140px]">
-          <div className="relative pt-12 sm:border-x sm:border-[#333] sm:pt-[100px]">
-            {/* 47:690 — glow/outline (absolute; baseline sits on band bottom border) */}
+      {/* Same border frame as desktop; gutters tighten on small screens */}
+      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-5 sm:px-[40px] lg:px-[60px]">
+        <div className="border-x border-[rgba(235,233,230,0.08)] px-2 sm:px-8 lg:px-[140px]">
+          <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
+            {/* 47:690 — glow/outline; width-only box + aspect so SVG never warps */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[clamp(5.5rem,10vw,8.9375rem)] left-[8%] z-[2] h-[clamp(5rem,10vw,8.9375rem)] w-[84%] sm:left-[16.01%] sm:w-[68.75%]"
+              className="pointer-events-none absolute top-[6.5rem] left-[16.01%] z-[2] aspect-[938/170] w-[68.75%] sm:top-[8.9375rem]"
             >
               <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1039,7 +1153,7 @@ function LandingFooter() {
             {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[clamp(5.75rem,10.3vw,9.21rem)] left-[2%] z-[3] w-[96%] sm:left-[5.4%] sm:w-[90%]"
+              className="pointer-events-none absolute top-[6.75rem] left-[5.4%] z-[3] w-[90%] sm:top-[9.21rem]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1052,7 +1166,7 @@ function LandingFooter() {
             <span className="sr-only">useLayouts</span>
 
             {/* 47:824 band — 47:825 hero-texture at back */}
-            <div className="relative -mb-px h-[clamp(7.5rem,13vw,11.75rem)] overflow-hidden border-y border-[#333]">
+            <div className="relative -mb-px h-[7.5rem] overflow-hidden border-y border-[#333] sm:h-[11.75rem]">
               <div
                 aria-hidden
                 className="pointer-events-none absolute top-[-85%] left-[-8.5%] z-0 h-[356%] w-[115%]"
@@ -1076,7 +1190,7 @@ function LandingFooter() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="whitespace-nowrap text-[12px] leading-normal tracking-[-0.02em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80 sm:text-[13px] sm:tracking-[-0.03em]"
+                    className="whitespace-nowrap text-[13px] leading-normal tracking-[-0.02em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80 sm:text-[14px] sm:tracking-[-0.03em]"
                     {...(link.href.startsWith("http")
                       ? { target: "_blank", rel: "noreferrer" }
                       : {})}

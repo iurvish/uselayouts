@@ -161,7 +161,7 @@ export function OpenSwitcher({
             transition={instant ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
             {/* Figma 82:3700 search — same padding/radius/height; no `/` kbd; hidden on mobile */}
-            <div className="hidden border-b border-border px-2.5 py-3 md:block">
+            <div className="hidden border-b border-border p-3 md:block">
               <div className="relative flex items-center gap-2 overflow-hidden rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)]">
                 <Search className="size-4 shrink-0 text-[#acacb4]" aria-hidden strokeWidth={1.75} />
                 <input
@@ -174,9 +174,10 @@ export function OpenSwitcher({
                 />
               </div>
             </div>
-            <div className={cn("flex max-h-[280px] flex-col gap-0.5 overflow-auto px-2.5 py-2", scrollbarMinimal)}>
+            {/* Figma 95:4696 — list gap 2; items mx/px 12 py 10 (inset on items, not container) */}
+            <div className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}>
               {filtered.length === 0 ? (
-                <p className="px-2 py-4 text-center text-xs text-muted-foreground">No matches.</p>
+                <p className="mx-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
                 filtered.map((item) => {
                   const active = item.href === displayed.href;
@@ -188,7 +189,7 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "relative z-10 flex w-full cursor-pointer items-center gap-2.5 rounded-none py-1.5 text-left text-sm text-foreground outline-none",
+                        "relative z-10 mx-3 flex cursor-pointer items-center gap-2.5 rounded-none py-2.5 text-left text-sm text-foreground outline-none",
                         "transition-[background-color] duration-150",
                         "focus-visible:outline-none focus-visible:ring-0",
                         active
