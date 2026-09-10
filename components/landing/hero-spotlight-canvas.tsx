@@ -48,9 +48,12 @@ const glassBg = "rgba(255, 255, 255, 0.20)";
 
 /** Figma Mask group SVG — soft radial, center α 0.5 → edge 0 (desktop). */
 const FIELD_MASK = "url(/landing/hero-canvas-mask.svg)";
-/** Mobile: taller band, soft radial — more cards visible without covering copy. */
+/** Mobile: soft top dissolve into hero-bg (lavender/blue), not a hard clip. */
 const FIELD_MASK_MOBILE =
-  "radial-gradient(ellipse 95% 85% at 50% 38%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 78%)";
+  "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.35) 10%, black 28%, black 100%)";
+/** Soft color wash matching hero mid-tones — mobile canvas seam only. */
+const MOBILE_SEAM_WASH =
+  "linear-gradient(180deg, rgba(146,148,190,0.72) 0%, rgba(120,130,175,0.35) 45%, transparent 100%)";
 
 const canvasW = PAD * 2 + COLS * CARD_W + (COLS - 1) * GAP;
 const canvasH = PAD * 2 + ROWS * CARD_H + (ROWS - 1) * GAP;
@@ -424,21 +427,30 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   return (
     <div
       ref={viewportRef}
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[56%] min-h-[260px] overflow-hidden md:inset-y-0 md:right-0 md:left-auto md:h-auto md:min-h-0 md:w-[58%]"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[56%] min-h-[260px] overflow-hidden max-md:[mask-image:var(--hero-field-mask-mobile)] max-md:[-webkit-mask-image:var(--hero-field-mask-mobile)] md:inset-y-0 md:right-0 md:left-auto md:h-auto md:min-h-0 md:w-[58%]"
+      style={
+        {
+          "--hero-field-mask-mobile": FIELD_MASK_MOBILE,
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
+        } as React.CSSProperties
+      }
       aria-hidden
     >
-      {/* Soft top wash — eases the copy ↔ canvas seam on mobile */}
+      {/* Soft top wash — hero lavender/blue into cards (mobile only; not white) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-[rgba(7,26,49,0.45)] via-[rgba(7,26,49,0.18)] to-transparent md:hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-28 md:hidden"
+        style={{ backgroundImage: MOBILE_SEAM_WASH }}
       />
-      {/* Soft field — mobile: bottom-band radial; md+: Figma mask SVG */}
+      {/* Soft field — md+: Figma mask SVG (mobile dissolve is on the viewport) */}
       <div
-        className="absolute inset-0 max-md:[mask-image:var(--hero-field-mask-mobile)] max-md:[-webkit-mask-image:var(--hero-field-mask-mobile)] md:[mask-image:var(--hero-field-mask)] md:[-webkit-mask-image:var(--hero-field-mask)]"
+        className="absolute inset-0 md:[mask-image:var(--hero-field-mask)] md:[-webkit-mask-image:var(--hero-field-mask)]"
         style={
           {
             "--hero-field-mask": FIELD_MASK,
-            "--hero-field-mask-mobile": FIELD_MASK_MOBILE,
             WebkitMaskRepeat: "no-repeat",
             maskRepeat: "no-repeat",
             WebkitMaskSize: "100% 100%",
