@@ -16,3 +16,8 @@ export function canvasMediaTier(
   const inViewport = x + cardW > 0 && x < viewW && y + height > 0 && y < viewH;
   return inViewport ? "video" : "image";
 }
+
+/** Pan/coast: demote video → poster so decode doesn't fight the compositor. */
+export function canvasAllowVideo(media: "video" | "image", interacting: boolean) {
+  return media === "video" && !interacting;
+}

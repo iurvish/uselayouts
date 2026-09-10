@@ -18,7 +18,18 @@ const PAD = 40;
 /** Hold zoomed in so the spotlight reads larger; out pulls back to pan. */
 const SCALE_HOLD = 1.26;
 const SCALE_OUT = 0.9;
+/** Mobile: pull back so neighbors read as a canvas, not one huge card. */
+const SCALE_HOLD_MOBILE = 0.58;
+const SCALE_OUT_MOBILE = 0.48;
 const CARD_SCALE_ACTIVE = 1.05;
+const MOBILE_MQ = "(max-width: 767px)";
+
+function holdScale(mobile: boolean) {
+  return mobile ? SCALE_HOLD_MOBILE : SCALE_HOLD;
+}
+function outScale(mobile: boolean) {
+  return mobile ? SCALE_OUT_MOBILE : SCALE_OUT;
+}
 
 const OUT_MS = 220;
 const MOVE_MS = 380;
@@ -35,8 +46,11 @@ const spotlightShadow = [
 
 const glassBg = "rgba(255, 255, 255, 0.20)";
 
-/** Figma Mask group SVG — soft radial, center α 0.5 → edge 0. */
+/** Figma Mask group SVG — soft radial, center α 0.5 → edge 0 (desktop). */
 const FIELD_MASK = "url(/landing/hero-canvas-mask.svg)";
+/** Mobile: taller band, soft radial — more cards visible without covering copy. */
+const FIELD_MASK_MOBILE =
+  "radial-gradient(ellipse 95% 85% at 50% 38%, rgba(217,217,217,1) 0%, rgba(115,115,115,0) 78%)";
 
 const canvasW = PAD * 2 + COLS * CARD_W + (COLS - 1) * GAP;
 const canvasH = PAD * 2 + ROWS * CARD_H + (ROWS - 1) * GAP;
@@ -270,6 +284,8 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   const spotlightRef = React.useRef(startIndex);
   const viewRef = React.useRef(view);
   const scaleRef = React.useRef(SCALE_HOLD);
+  const holdRef = React.useRef(SCALE_HOLD);
+  const outRef = React.useRef(SCALE_OUT);
 
   React.useEffect(() => {
     spotlightRef.current = spotlight;
@@ -289,12 +305,24 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
     const el = viewportRef.current;
     if (!el) return;
 
+    const mq = window.matchMedia(MOBILE_MQ);
+    const syncBreakpoint = () => {
+      const mobile = mq.matches;
+      holdRef.current = holdScale(mobile);
+      outRef.current = outScale(mobile);
+    };
+    syncBreakpoint();
+
     const apply = (w: number, h: number, first: boolean) => {
       if (w < 1 || h < 1) return;
+      syncBreakpoint();
       setView({ w, h });
       // Resize / first paint: snap camera, never ease into place.
       setTransition({ duration: 0, ease: [0, 0, 1, 1] });
-      setCamera(cameraFor(spotlightRef.current, w, h, scaleRef.current));
+      const scale = first || scaleRef.current === SCALE_HOLD || scaleRef.current === SCALE_HOLD_MOBILE
+        ? holdRef.current
+        : scaleRef.current;
+      setCamera(cameraFor(spotlightRef.current, w, h, scale));
       if (first) setReady(true);
     };
 
@@ -303,8 +331,13 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       const { width, height } = entry!.contentRect;
       apply(width, height, false);
     });
+    const onMq = () => apply(el.clientWidth, el.clientHeight, false);
     ro.observe(el);
-    return () => ro.disconnect();
+    mq.addEventListener("change", onMq);
+    return () => {
+      ro.disconnect();
+      mq.removeEventListener("change", onMq);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -322,20 +355,22 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       const { w, h } = viewRef.current;
       const current = spotlightRef.current;
       const next = nextSpotlightIndex(current, cards.length);
+      const out = outRef.current;
+      const hold = holdRef.current;
 
       setTransition({ duration: OUT_MS / 1000, ease: [0.4, 0, 1, 1] });
-      setCamera(cameraFor(current, w, h, SCALE_OUT));
+      setCamera(cameraFor(current, w, h, out));
       await wait(OUT_MS);
       if (cancelled) return;
 
       setTransition({ duration: MOVE_MS / 1000, ease: [0.45, 0, 0.55, 1] });
       setSpotlight(next);
-      setCamera(cameraFor(next, w, h, SCALE_OUT));
+      setCamera(cameraFor(next, w, h, out));
       await wait(MOVE_MS);
       if (cancelled) return;
 
       setTransition({ duration: IN_MS / 1000, ease: [0.32, 0.72, 0, 1] });
-      setCamera(cameraFor(next, w, h, SCALE_HOLD));
+      setCamera(cameraFor(next, w, h, hold));
       await wait(IN_MS);
       if (cancelled) return;
 
@@ -362,7 +397,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
         const next = nextSpotlightIndex(current, cards.length);
         const { w, h } = viewRef.current;
         setTransition({ duration: 0, ease: [0, 0, 1, 1] });
-        setCamera(cameraFor(next, w, h, SCALE_HOLD));
+        setCamera(cameraFor(next, w, h, holdRef.current));
         return next;
       });
     }, HOLD_MS);
@@ -389,22 +424,29 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   return (
     <div
       ref={viewportRef}
-      className="pointer-events-none absolute inset-0 overflow-hidden md:inset-y-0 md:right-0 md:left-auto md:w-[58%]"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[56%] min-h-[260px] overflow-hidden md:inset-y-0 md:right-0 md:left-auto md:h-auto md:min-h-0 md:w-[58%]"
       aria-hidden
     >
-      {/* Soft field — Figma Mask group is viewport-fixed; cards pan under it. */}
+      {/* Soft top wash — eases the copy ↔ canvas seam on mobile */}
       <div
-        className="absolute inset-0"
-        style={{
-          WebkitMaskImage: FIELD_MASK,
-          maskImage: FIELD_MASK,
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
-          WebkitMaskSize: "100% 100%",
-          maskSize: "100% 100%",
-          WebkitMaskPosition: "center",
-          maskPosition: "center",
-        }}
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-[rgba(7,26,49,0.45)] via-[rgba(7,26,49,0.18)] to-transparent md:hidden"
+      />
+      {/* Soft field — mobile: bottom-band radial; md+: Figma mask SVG */}
+      <div
+        className="absolute inset-0 max-md:[mask-image:var(--hero-field-mask-mobile)] max-md:[-webkit-mask-image:var(--hero-field-mask-mobile)] md:[mask-image:var(--hero-field-mask)] md:[-webkit-mask-image:var(--hero-field-mask)]"
+        style={
+          {
+            "--hero-field-mask": FIELD_MASK,
+            "--hero-field-mask-mobile": FIELD_MASK_MOBILE,
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskSize: "100% 100%",
+            maskSize: "100% 100%",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+          } as React.CSSProperties
+        }
       >
         <motion.div
           className="absolute top-0 left-0 transform-gpu will-change-transform"

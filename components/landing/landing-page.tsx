@@ -225,26 +225,23 @@ const buttonCraft = {
   secondary: {
     className: "bg-white text-[#071A31] hover:brightness-[0.98]",
     style: {
-      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%)",
+      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%)",
       boxShadow: [
-        "inset 0 1.5px 0 #fff",
-        "inset 0 -2px 0 rgba(7,26,49,0.1)",
-        "inset 0 0 0 1px rgba(7,26,49,0.06)",
-        "0 1px 0 rgba(255,255,255,0.8)",
-        "0 6px 14px rgba(7,26,49,0.12)",
+        "inset 0 1px 0 #fff",
+        "inset 0 0 0 1px rgba(7,26,49,0.08)",
+        "0 1px 2px rgba(7,26,49,0.06)",
+        "0 4px 10px rgba(7,26,49,0.08)",
       ].join(", "),
     },
   },
   outline: {
-    className: "bg-transparent text-[#071A31] hover:bg-white/40",
+    className: "bg-transparent text-[#071A31] hover:bg-[#071A31]/[0.04]",
     style: {
       backgroundImage: "none",
       boxShadow: [
-        "inset 0 1px 0 rgba(255,255,255,0.65)",
-        "inset 0 -1px 0 rgba(7,26,49,0.06)",
-        "inset 0 0 0 1.5px rgba(7,26,49,0.22)",
-        "0 1px 0 rgba(255,255,255,0.35)",
-        "0 4px 8px rgba(7,26,49,0.06)",
+        "inset 0 1px 0 rgba(255,255,255,0.7)",
+        "inset 0 0 0 1.5px rgba(7,26,49,0.2)",
+        "0 1px 2px rgba(7,26,49,0.04)",
       ].join(", "),
     },
   },
@@ -298,7 +295,7 @@ function ExploreButton({
 }
 
 function StarOnGithub({ className }: { className?: string }) {
-  const craft = buttonCraft.primary;
+  const craft = buttonCraft.outline;
   return (
     <a
       href="https://github.com/iurvish/uselayouts"
@@ -311,7 +308,7 @@ function StarOnGithub({ className }: { className?: string }) {
       )}
       style={craft.style}
     >
-      <Star className="size-3.5 fill-white text-white" aria-hidden />
+      <Star className="size-3.5 fill-[#071A31] text-[#071A31]" aria-hidden />
       Star on GitHub
     </a>
   );
@@ -328,7 +325,7 @@ function TrustedBy() {
   }, [reduce]);
 
   return (
-    <div className="mt-auto flex items-center gap-3 pb-1">
+    <div className="mt-auto hidden items-center gap-3 pb-1 md:flex">
       <div className="flex">
         {avatars.map((src, i) => (
           <div key={src} className={cn("relative", i > 0 && "-ml-3")}>
@@ -438,8 +435,9 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
         />
         <HeroSpotlightCanvas items={heroItems} />
 
-        <div className="relative z-10 flex h-full max-w-[480px] flex-col gap-8 p-6 sm:p-10 lg:p-12">
-          <div className="flex flex-col gap-8">
+        {/* Mobile: canvas sits higher; hide Trusted-by; keep copy clear of the band */}
+        <div className="relative z-10 flex h-full max-w-[480px] flex-col gap-6 p-6 pb-[min(52%,300px)] sm:gap-8 sm:p-10 sm:pb-10 md:pb-12 lg:p-12">
+          <div className="flex flex-col gap-6 sm:gap-8">
             <div className="flex flex-col gap-4">
               <h1 className="text-balance text-[40px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[54px]">
                 Build interfaces that feel as good as they look.

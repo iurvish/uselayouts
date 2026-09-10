@@ -197,6 +197,11 @@
   cursor: grabbing;
 }
 
+/* Promote tiles to their own layer while panning; drop after settle. */
+.canvas-viewport[data-dragging="true"] .canvas-tile {
+  will-change: transform;
+}
+
 .canvas-stage {
   position: absolute;
   inset: 0;

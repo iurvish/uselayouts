@@ -4,7 +4,7 @@ import * as React from "react";
 import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
-import { canvasMediaTier } from "@/lib/browse/canvas-media-tier";
+import { canvasAllowVideo, canvasMediaTier } from "@/lib/browse/canvas-media-tier";
 import { mediaHeight, tileHeight } from "@/lib/browse/media";
 import { priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
@@ -38,6 +38,8 @@ type TileSpec = {
 const DRAG_THRESHOLD = 8;
 const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
+/** After pan/coast stops: remount tiles + resume video. */
+const SETTLE_MS = 220;
 /** Yellow ring: mount posters ahead of the viewport. Farther tiles stay unmounted (red). */
 const IMAGE_OVERSCAN = 480;
 
@@ -46,7 +48,9 @@ function mod(value: number, length: number) {
 }
 
 function tileIndex(col: number, row: number, count: number) {
-  return mod(col * 7 + row * 3, count);
+  // Sequential through every component, then wrap — true infinite repeat.
+  // (Old col*7+row*3 hashing skipped items when gcd(3, count) > 1.)
+  return mod(row + col, count);
 }
 
 function packColumn(col: number, count: number, gap: number) {
@@ -89,10 +93,13 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const size = React.useRef({ w: 0, h: 0 });
   const frame = React.useRef(0);
   const coast = React.useRef<{ stop: () => void }[]>([]);
+  const settleTimer = React.useRef(0);
+  const mediaFrozen = React.useRef(false);
   const didCenter = React.useRef(false);
 
   const [metrics, setMetrics] = React.useState({ cardW: 340, gap: 54 });
   const [tiles, setTiles] = React.useState<TileSpec[]>([]);
+  /** True from pan threshold until settle — freezes React tile sync + demotes video. */
   const [isDragging, setIsDragging] = React.useState(false);
 
   const cellW = metrics.cardW + metrics.gap;
@@ -208,12 +215,22 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     setTiles((current) => (sameTiles(current, next) ? current : next));
   }, [applyTransforms, collectVisible]);
 
+  const scheduleSettle = React.useCallback(() => {
+    window.clearTimeout(settleTimer.current);
+    settleTimer.current = window.setTimeout(() => {
+      mediaFrozen.current = false;
+      setIsDragging(false);
+      syncVisible();
+    }, SETTLE_MS);
+  }, [syncVisible]);
+
   const tickRef = React.useRef<() => void>(() => {});
 
+  // Pan loop: DOM transforms only — never setState / collectVisible / video remount.
   const tick = React.useCallback(() => {
-    syncVisible();
+    applyTransforms();
     frame.current = panning.current ? requestAnimationFrame(() => tickRef.current()) : 0;
-  }, [syncVisible]);
+  }, [applyTransforms]);
 
   React.useEffect(() => {
     tickRef.current = tick;
@@ -234,26 +251,33 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       const fromX = camera.current.x;
       const fromY = camera.current.y;
       const spring = { type: "spring" as const, duration, bounce };
+      let pending = 2;
+      const onDone = () => {
+        pending -= 1;
+        if (pending === 0) scheduleSettle();
+      };
 
       const onX = animate(fromX, toX, {
         ...spring,
         velocity: velocityX,
         onUpdate: (value) => {
           camera.current.x = value;
-          syncVisible();
+          applyTransforms();
         },
+        onComplete: onDone,
       });
       const onY = animate(fromY, toY, {
         ...spring,
         velocity: velocityY,
         onUpdate: (value) => {
           camera.current.y = value;
-          syncVisible();
+          applyTransforms();
         },
+        onComplete: onDone,
       });
       coast.current = [onX, onY];
     },
-    [stopCoast, syncVisible],
+    [stopCoast, applyTransforms, scheduleSettle],
   );
 
   const springCoast = React.useCallback(() => {
@@ -261,6 +285,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     if (speed < MIN_VELOCITY) {
       velocity.current.x = 0;
       velocity.current.y = 0;
+      applyTransforms();
+      scheduleSettle();
       return;
     }
 
@@ -274,11 +300,12 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       velocityX: vx,
       velocityY: vy,
     });
-  }, [springTo]);
+  }, [springTo, applyTransforms, scheduleSettle]);
 
   React.useEffect(
     () => () => {
       cancelAnimationFrame(frame.current);
+      window.clearTimeout(settleTimer.current);
       stopCoast();
     },
     [stopCoast],
@@ -335,16 +362,20 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       camera.current.y -= event.deltaY;
       velocity.current.x = 0;
       velocity.current.y = 0;
-      syncVisible();
+      applyTransforms();
+      // Remount visibility without freezing media every wheel tick.
+      window.clearTimeout(settleTimer.current);
+      settleTimer.current = window.setTimeout(() => syncVisible(), SETTLE_MS);
     };
 
     node.addEventListener("wheel", onWheel, { passive: false });
     return () => node.removeEventListener("wheel", onWheel);
-  }, [stopCoast, syncVisible]);
+  }, [stopCoast, applyTransforms, syncVisible]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
     stopCoast();
+    window.clearTimeout(settleTimer.current);
     pointerDown.current = true;
     panning.current = false;
     travelled.current = 0;
@@ -362,6 +393,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     if (!panning.current) {
       if (travelled.current < DRAG_THRESHOLD) return;
       panning.current = true;
+      mediaFrozen.current = true;
       setIsDragging(true);
       event.currentTarget.setPointerCapture(event.pointerId);
       ensureLoop();
@@ -378,13 +410,15 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     pointerDown.current = false;
     const didPan = panning.current;
     panning.current = false;
-    setIsDragging(false);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     if (didPan) {
       suppressClick.current = true;
       springCoast();
+    } else if (mediaFrozen.current) {
+      // Interrupted coast / cancelled gesture — unfreeze media.
+      scheduleSettle();
     }
   };
 
@@ -448,7 +482,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
                 item={item}
                 index={tile.index}
                 eager
-                allowVideo={tile.media === "video"}
+                allowVideo={canvasAllowVideo(tile.media, isDragging)}
                 playbackPriority={tile.priority || undefined}
                 surface="canvas"
                 pinHeight={mediaHeight(tile.index)}
