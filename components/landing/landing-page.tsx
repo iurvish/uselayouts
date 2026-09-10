@@ -1135,10 +1135,10 @@ function LandingFooter() {
       <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-5 sm:px-[40px] lg:px-[60px]">
         <div className="border-x border-[rgba(235,233,230,0.08)] px-2 sm:px-8 lg:px-[140px]">
           <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
-            {/* 47:690 — glow/outline; width-only box + aspect so SVG never warps */}
+            {/* 47:690 — glow/outline; mobile sits near band bottom; desktop restores Figma frame h */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[6.5rem] left-[16.01%] z-[2] aspect-[938/170] w-[68.75%] sm:top-[8.9375rem]"
+              className="pointer-events-none absolute top-[7.6rem] left-[17.9%] z-[2] aspect-[938/170] w-[64.2%] sm:top-[8.9375rem] sm:left-[16.01%] sm:aspect-auto sm:h-[8.9375rem] sm:w-[68.75%]"
             >
               <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1153,7 +1153,7 @@ function LandingFooter() {
             {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[6.75rem] left-[5.4%] z-[3] w-[90%] sm:top-[9.21rem]"
+              className="pointer-events-none absolute top-[7.85rem] left-[8%] z-[3] w-[84%] sm:top-[9.21rem] sm:left-[5.4%] sm:w-[90%]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

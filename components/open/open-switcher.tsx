@@ -174,10 +174,10 @@ export function OpenSwitcher({
                 />
               </div>
             </div>
-            {/* Figma 95:4696 — list gap 2; items mx/px 12 py 10 (inset on items, not container) */}
+            {/* Figma 95:4696 — list gap 2; px 12 py 10 inset via padding so hover bg is full-bleed */}
             <div className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}>
               {filtered.length === 0 ? (
-                <p className="mx-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
+                <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (
                 filtered.map((item) => {
                   const active = item.href === displayed.href;
@@ -189,7 +189,7 @@ export function OpenSwitcher({
                       role="option"
                       aria-selected={active}
                       className={cn(
-                        "relative z-10 mx-3 flex cursor-pointer items-center gap-2.5 rounded-none py-2.5 text-left text-sm text-foreground outline-none",
+                        "relative z-10 mx-0 flex cursor-pointer items-center gap-2.5 rounded-none px-3 py-2.5 text-left text-sm text-foreground outline-none",
                         "transition-[background-color] duration-150",
                         "focus-visible:outline-none focus-visible:ring-0",
                         active
