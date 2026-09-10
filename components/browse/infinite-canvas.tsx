@@ -219,6 +219,14 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     setTiles((current) => (sameTiles(current, next) ? current : next));
   }, [applyTransforms, collectVisible]);
 
+  /** Throttled remount during motion — posters only while isDragging. */
+  const syncVisibleThrottled = React.useCallback(() => {
+    const now = performance.now();
+    if (now - lastPanSync.current < PAN_SYNC_MS) return;
+    lastPanSync.current = now;
+    syncVisible();
+  }, [syncVisible]);
+
   const scheduleSettle = React.useCallback(() => {
     window.clearTimeout(settleTimer.current);
     settleTimer.current = window.setTimeout(() => {
@@ -230,11 +238,12 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
   const tickRef = React.useRef<() => void>(() => {});
 
-  // Pan loop: DOM transforms only — never setState / collectVisible / video remount.
+  // Pan loop: transform every frame; remount posters on a throttle so the field stays filled.
   const tick = React.useCallback(() => {
     applyTransforms();
+    syncVisibleThrottled();
     frame.current = panning.current ? requestAnimationFrame(() => tickRef.current()) : 0;
-  }, [applyTransforms]);
+  }, [applyTransforms, syncVisibleThrottled]);
 
   React.useEffect(() => {
     tickRef.current = tick;
@@ -267,6 +276,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         onUpdate: (value) => {
           camera.current.x = value;
           applyTransforms();
+          syncVisibleThrottled();
         },
         onComplete: onDone,
       });
@@ -276,12 +286,13 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         onUpdate: (value) => {
           camera.current.y = value;
           applyTransforms();
+          syncVisibleThrottled();
         },
         onComplete: onDone,
       });
       coast.current = [onX, onY];
     },
-    [stopCoast, applyTransforms, scheduleSettle],
+    [stopCoast, applyTransforms, scheduleSettle, syncVisibleThrottled],
   );
 
   const springCoast = React.useCallback(() => {
@@ -309,6 +320,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   React.useEffect(
     () => () => {
       cancelAnimationFrame(frame.current);
+      cancelAnimationFrame(wheelSyncRaf.current);
       window.clearTimeout(settleTimer.current);
       stopCoast();
     },
@@ -367,14 +379,21 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       velocity.current.x = 0;
       velocity.current.y = 0;
       applyTransforms();
-      // Remount visibility without freezing media every wheel tick.
-      window.clearTimeout(settleTimer.current);
-      settleTimer.current = window.setTimeout(() => syncVisible(), SETTLE_MS);
+      // Keep the field filled while scrolling; videos resume after settle.
+      mediaFrozen.current = true;
+      setIsDragging(true);
+      if (!wheelSyncRaf.current) {
+        wheelSyncRaf.current = requestAnimationFrame(() => {
+          wheelSyncRaf.current = 0;
+          syncVisibleThrottled();
+        });
+      }
+      scheduleSettle();
     };
 
     node.addEventListener("wheel", onWheel, { passive: false });
     return () => node.removeEventListener("wheel", onWheel);
-  }, [stopCoast, applyTransforms, syncVisible]);
+  }, [stopCoast, applyTransforms, syncVisibleThrottled, scheduleSettle]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
@@ -398,7 +417,9 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       if (travelled.current < DRAG_THRESHOLD) return;
       panning.current = true;
       mediaFrozen.current = true;
+      lastPanSync.current = 0;
       setIsDragging(true);
+      syncVisible();
       event.currentTarget.setPointerCapture(event.pointerId);
       ensureLoop();
     }
