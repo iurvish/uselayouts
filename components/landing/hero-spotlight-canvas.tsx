@@ -18,10 +18,11 @@ const PAD = 40;
 /** Hold zoomed in so the spotlight reads larger; out pulls back to pan. */
 const SCALE_HOLD = 1.26;
 const SCALE_OUT = 0.9;
-/** Mobile: pull back so neighbors read as a canvas, not one huge card. */
-const SCALE_HOLD_MOBILE = 0.58;
-const SCALE_OUT_MOBILE = 0.48;
+/** Mobile: closer hold so the selected card reads larger, still shows neighbors. */
+const SCALE_HOLD_MOBILE = 0.84;
+const SCALE_OUT_MOBILE = 0.62;
 const CARD_SCALE_ACTIVE = 1.05;
+const CARD_SCALE_ACTIVE_MOBILE = 1.14;
 const MOBILE_MQ = "(max-width: 767px)";
 
 function holdScale(mobile: boolean) {
@@ -29,6 +30,9 @@ function holdScale(mobile: boolean) {
 }
 function outScale(mobile: boolean) {
   return mobile ? SCALE_OUT_MOBILE : SCALE_OUT;
+}
+function activeCardScale(mobile: boolean) {
+  return mobile ? CARD_SCALE_ACTIVE_MOBILE : CARD_SCALE_ACTIVE;
 }
 
 const OUT_MS = 220;
@@ -160,6 +164,7 @@ function HeroCard({
   reducedMotion,
   left,
   top,
+  activeScale = CARD_SCALE_ACTIVE,
 }: {
   item: BrowseItem;
   active: boolean;
@@ -167,6 +172,7 @@ function HeroCard({
   reducedMotion: boolean;
   left: number;
   top: number;
+  activeScale?: number;
 }) {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const mountVideo = allowVideo && active && Boolean(item.video);
@@ -205,7 +211,7 @@ function HeroCard({
           : {
               // Field cards stay at 1 — Figma mask (α≤0.5) softens them; spotlight is unmasked.
               opacity: 1,
-              scale: active ? CARD_SCALE_ACTIVE : 1,
+              scale: active ? activeScale : 1,
             }
       }
       transition={
@@ -289,6 +295,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   const scaleRef = React.useRef(SCALE_HOLD);
   const holdRef = React.useRef(SCALE_HOLD);
   const outRef = React.useRef(SCALE_OUT);
+  const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
     spotlightRef.current = spotlight;
@@ -311,6 +318,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
     const mq = window.matchMedia(MOBILE_MQ);
     const syncBreakpoint = () => {
       const mobile = mq.matches;
+      setIsMobile(mobile);
       holdRef.current = holdScale(mobile);
       outRef.current = outScale(mobile);
     };
@@ -501,6 +509,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
               reducedMotion={reducedMotion}
               left={activeRect.left}
               top={activeRect.top}
+              activeScale={activeCardScale(isMobile)}
             />
           ) : null}
         </motion.div>

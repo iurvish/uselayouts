@@ -40,8 +40,10 @@ const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
 /** After pan/coast stops: remount tiles + resume video. */
 const SETTLE_MS = 220;
+/** While panning: remount posters this often so new areas never feel empty. */
+const PAN_SYNC_MS = 72;
 /** Yellow ring: mount posters ahead of the viewport. Farther tiles stay unmounted (red). */
-const IMAGE_OVERSCAN = 480;
+const IMAGE_OVERSCAN = 720;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
@@ -96,6 +98,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const settleTimer = React.useRef(0);
   const mediaFrozen = React.useRef(false);
   const didCenter = React.useRef(false);
+  const lastPanSync = React.useRef(0);
+  const wheelSyncRaf = React.useRef(0);
 
   const [metrics, setMetrics] = React.useState({ cardW: 340, gap: 54 });
   const [tiles, setTiles] = React.useState<TileSpec[]>([]);

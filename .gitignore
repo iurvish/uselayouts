@@ -54,5 +54,5 @@ next-env.d.ts
 .gemini/
 .cursor/skills/
 skills-lock.json
-
+/app/proto
 bun.lock
