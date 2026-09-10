@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { Star } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { BrowseItem } from "@/lib/browse/items";
 import { HeroSpotlightCanvas } from "@/components/landing/hero-spotlight-canvas";
 import { cn } from "@/lib/utils";
@@ -62,26 +62,9 @@ const toolPills = [
   "Tailwind CSS",
   "Motion",
   "Shadcn",
-  "Radix",
+  "Framer",
+  "Webflow",
 ] as const;
-
-/** Angles from Figma 1:732 (0° = top, clockwise). */
-const orbitTools = [
-  { name: "Shadcn", src: "/landing/tool-shadcn.svg", angle: 0 },
-  { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 30 },
-  { name: "Next.js", src: "/landing/tool-next.png", angle: 60 },
-  { name: "React", src: "/landing/tool-react.png", angle: 90 },
-  { name: "Radix", src: "/landing/tool-radix.svg", angle: -30 },
-  { name: "Motion", src: "/landing/tool-motion.png", angle: -60 },
-  { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -90 },
-] as const;
-
-/** Tighter on desktop; roomier on mobile (inset below keeps apex uncropped). */
-const ORBIT_RADIUS_DESKTOP = 32;
-const ORBIT_RADIUS_MOBILE = 46;
-
-const orbitCardShadow =
-  "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
 
 const pillShadow =
   "0px 0px 1px 0px rgba(97,97,97,0.1), 0px 1px 1px 0px rgba(97,97,97,0.09), 0px 3px 2px 0px rgba(97,97,97,0.05), 0px 4px 2px 0px rgba(97,97,97,0.01), 0px 7px 2px 0px rgba(97,97,97,0)";
@@ -92,9 +75,6 @@ const landingDotPattern = {
   backgroundImage: "radial-gradient(circle, #EDEAE3 3.5px, transparent 3.5px)",
   backgroundSize: "28px 28px",
 } as const;
-
-const orbitMask =
-  "linear-gradient(180deg, #d9d9d9 48%, rgba(217,217,217,0.45) 68%, transparent 86%)";
 
 const pillRowMask =
   "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)";
@@ -529,24 +509,34 @@ function FeaturesSection() {
   );
 }
 
+const WHY_EASE = [0.32, 0.72, 0, 1] as const;
+
 function WhySection() {
+  const reduce = useReducedMotion() ?? false;
   const [active, setActive] = useState(0);
   const [cycle, setCycle] = useState(0);
+  const [allowMotion, setAllowMotion] = useState(true);
+  const fromKeyboardRef = useRef(false);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduce.matches) return;
+    if (reduce) return;
     const id = window.setInterval(() => {
+      fromKeyboardRef.current = false;
+      setAllowMotion(true);
       setActive((i) => (i + 1) % whyFeatures.length);
       setCycle((c) => c + 1);
     }, WHY_INTERVAL_MS);
     return () => window.clearInterval(id);
-  }, [cycle]);
+  }, [cycle, reduce]);
 
   const select = (i: number) => {
+    setAllowMotion(!reduce && !fromKeyboardRef.current);
     setActive(i);
     setCycle((c) => c + 1);
   };
+
+  const motionOn = allowMotion && !reduce;
+  const expandMs = motionOn ? 220 : 0;
 
   return (
     <section className="relative overflow-hidden bg-[#1B1C1D] px-4 py-20 sm:px-8 lg:px-[120px] lg:py-[120px]">
@@ -570,23 +560,47 @@ function WhySection() {
                 <button
                   key={feature.title}
                   type="button"
-                  className="flex w-full cursor-pointer flex-col gap-8 text-left transition-colors duration-150"
+                  className="flex w-full cursor-pointer flex-col gap-8 text-left"
+                  onPointerDown={() => {
+                    fromKeyboardRef.current = false;
+                  }}
+                  onKeyDown={() => {
+                    fromKeyboardRef.current = true;
+                  }}
                   onClick={() => select(i)}
                 >
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col">
                     <span
                       className={cn(
-                        "text-[20px] font-medium leading-6 tracking-[-0.02em] transition-colors duration-150",
+                        "text-[20px] font-medium leading-6 tracking-[-0.02em] transition-colors",
+                        motionOn ? "duration-150" : "duration-0",
                         isActive ? "text-white" : "text-[#9F9F9F]"
                       )}
                     >
                       {feature.title}
                     </span>
-                    {isActive ? (
-                      <p className="landing-why-fade max-w-[459px] text-[16px] leading-[1.5] text-white/80">
-                        {feature.description}
-                      </p>
-                    ) : null}
+                    <div
+                      className="grid transition-[grid-template-rows] ease-[cubic-bezier(0.32,0.72,0,1)]"
+                      style={{
+                        gridTemplateRows: isActive ? "1fr" : "0fr",
+                        transitionDuration: `${expandMs}ms`,
+                      }}
+                    >
+                      <div
+                        className="min-h-0 overflow-hidden"
+                        aria-hidden={!isActive}
+                      >
+                        <p
+                          className="mt-4 max-w-[459px] text-[16px] leading-[1.5] text-white/80 transition-opacity ease-[cubic-bezier(0.32,0.72,0,1)]"
+                          style={{
+                            opacity: isActive ? 1 : 0,
+                            transitionDuration: `${expandMs}ms`,
+                          }}
+                        >
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   <span
                     className="relative h-0.5 w-full overflow-hidden bg-[#3C3C3C]"
@@ -595,10 +609,15 @@ function WhySection() {
                     {isActive ? (
                       <span
                         key={cycle}
-                        className="landing-why-progress absolute inset-y-0 left-0 h-full"
+                        className="landing-why-progress absolute inset-y-0 left-0 h-full w-full origin-left"
                         style={{
                           backgroundImage: whyActiveLine,
-                          animation: `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards, landing-why-fade 220ms var(--ease-out) both`,
+                          animation: reduce
+                            ? undefined
+                            : motionOn
+                              ? `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards, landing-why-fade 220ms var(--ease-out) both`
+                              : `landing-why-progress ${WHY_INTERVAL_MS}ms linear forwards`,
+                          transform: reduce ? "scaleX(1)" : undefined,
                         }}
                       />
                     ) : null}
@@ -611,14 +630,35 @@ function WhySection() {
           <div className="relative h-[280px] w-full sm:h-[360px] lg:h-[400px] lg:w-[588px] lg:shrink-0">
             <WhyCoralSurface className="size-full rounded-2xl">
               <div className="absolute inset-[4%] sm:inset-[5%]">
-                <Image
-                  key={whyFeatures[active].image}
-                  src={whyFeatures[active].image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 588px"
-                  className="landing-why-fade object-contain"
-                />
+                <AnimatePresence initial={false}>
+                  <motion.div
+                    key={whyFeatures[active].image}
+                    className="absolute inset-0"
+                    initial={motionOn ? { opacity: 0, y: 10 } : false}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={
+                      motionOn
+                        ? {
+                            opacity: 0,
+                            y: -8,
+                            transition: { duration: 0.16, ease: "easeIn" },
+                          }
+                        : false
+                    }
+                    transition={{
+                      duration: motionOn ? 0.22 : 0,
+                      ease: WHY_EASE,
+                    }}
+                  >
+                    <Image
+                      src={whyFeatures[active].image}
+                      alt=""
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 588px"
+                      className="object-contain"
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </WhyCoralSurface>
           </div>
@@ -628,80 +668,34 @@ function WhySection() {
   );
 }
 
-/** Static Figma 1:733 semi-circle — no spin; tighter desktop / roomier mobile. */
-function ToolsOrbit() {
-  const [radius, setRadius] = useState(ORBIT_RADIUS_DESKTOP);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const apply = () => setRadius(mq.matches ? ORBIT_RADIUS_MOBILE : ORBIT_RADIUS_DESKTOP);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  return (
-    /* Inset so the apex card stays inside overflow-hidden parents */
-    <div className="absolute inset-[11%] sm:inset-[7%]">
-      {orbitTools.map((tool) => {
-        const rad = (tool.angle * Math.PI) / 180;
-        const x = 50 + Math.sin(rad) * radius;
-        const y = 50 - Math.cos(rad) * radius;
-        const abs = Math.abs(tool.angle);
-        const opacity = abs >= 90 ? 0.4 : abs >= 60 ? 0.72 : 1;
-        return (
-          <div
-            key={tool.name}
-            className="absolute"
-            style={{ left: `${x}%`, top: `${y}%`, opacity }}
-          >
-            <div
-              className="size-[78px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[88px] lg:size-[104px]"
-              style={{
-                boxShadow: orbitCardShadow,
-                transform: `rotate(${tool.angle}deg)`,
-              }}
-            >
-              <Image
-                src={tool.src}
-                alt=""
-                width={112}
-                height={112}
-                className="size-full object-contain p-[16%] sm:p-[18%]"
-              />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
+/** Figma 1:732 — arc is exported image (1:733); copy/CTA match frame spacing. */
 function ToolsSection() {
   return (
     <section
-      className="relative w-full overflow-x-hidden px-0 py-16 sm:px-4 sm:py-20 lg:px-8 lg:py-[100px]"
+      className="relative w-full overflow-x-hidden"
       style={landingDotPattern}
     >
-      {/* Taller + padded so the apex card isn’t cropped; desktop orbit stays compact */}
-      <div className="relative mx-auto flex min-h-[640px] w-full max-w-[1100px] items-center justify-center overflow-hidden pt-20 sm:min-h-[600px] sm:pt-14 lg:min-h-[680px] lg:pt-16">
+      <div className="relative mx-auto w-full max-w-[1440px] lg:aspect-[1440/783]">
+        {/* Figma 1:733 Mask group — left 220 / top 120 / 1000×556 on 1440×783 */}
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+          className="pointer-events-none relative z-0 flex justify-center overflow-visible pt-10 max-lg:mb-[-12%] max-sm:pt-12 lg:absolute lg:inset-0 lg:pt-0"
           aria-hidden
         >
-          <div className="absolute inset-x-0 top-10 flex justify-center sm:top-8 sm:px-12 lg:top-10 lg:px-20 max-sm:top-8">
-            <div
-              className="relative aspect-square w-[min(100%,560px)] max-sm:w-[185%] sm:w-[min(100%,620px)]"
-              style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
-            >
-              <ToolsOrbit />
-            </div>
-          </div>
+          <Image
+            src="/landing/tools-orbit-arc.png"
+            alt=""
+            width={2000}
+            height={1112}
+            className="h-auto w-[165%] max-w-none sm:w-[130%] lg:absolute lg:left-[15.28%] lg:top-[15.33%] lg:w-[69.44%] lg:max-w-none"
+            sizes="(max-width: 1024px) 165vw, 1000px"
+            priority={false}
+          />
         </div>
 
-        <div className="relative z-10 mt-12 flex w-full flex-col items-center gap-10 px-4 sm:mt-2 sm:gap-6">
-          <div className="flex w-full max-w-[378px] flex-col items-center gap-5 text-center sm:gap-3">
-            <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
+        {/* Figma 1:757 — top 351, gap 32, text gap 16 */}
+        <div className="relative z-10 mx-auto flex w-full max-w-[378px] flex-col items-center gap-10 px-4 pb-16 pt-6 sm:gap-9 lg:absolute lg:left-1/2 lg:top-[44.83%] lg:gap-8 lg:-translate-x-1/2 lg:px-0 lg:pb-0 lg:pt-0">
+          <div className="flex w-full flex-col items-center gap-5 text-center sm:gap-4 lg:gap-4">
+            <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px] sm:tracking-[-1.92px]">
               Fits right into the way you build.
             </h2>
             <p className="max-w-[310px] text-[16px] leading-[1.5] text-[#4B565E]">
@@ -710,7 +704,7 @@ function ToolsSection() {
             </p>
           </div>
 
-          <div className="relative w-full max-w-[616px] overflow-hidden px-1 sm:px-0">
+          <div className="relative w-[min(100vw-2rem,616px)] overflow-hidden lg:w-[616px]">
             <div
               className="relative h-[45px] w-full overflow-hidden"
               style={{ WebkitMaskImage: pillRowMask, maskImage: pillRowMask }}
@@ -1072,7 +1066,7 @@ function LandingFooter() {
               </div>
             </div>
 
-            {/* Site links — normal size/width on mobile (no squeezed gutters) */}
+            {/* Site links — smaller type, not wider gutters */}
             <div className="relative flex min-h-[120px] flex-col items-center justify-center border-b border-[#333] px-2 py-10 sm:min-h-[195px] sm:px-4 sm:py-12">
               <nav
                 aria-label="Footer"
@@ -1082,7 +1076,7 @@ function LandingFooter() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="whitespace-nowrap text-[15px] leading-normal tracking-normal text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80 sm:text-[14px] sm:tracking-[-0.03em]"
+                    className="whitespace-nowrap text-[12px] leading-normal tracking-[-0.02em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80 sm:text-[13px] sm:tracking-[-0.03em]"
                     {...(link.href.startsWith("http")
                       ? { target: "_blank", rel: "noreferrer" }
                       : {})}

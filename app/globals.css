@@ -512,10 +512,10 @@ html.dark .shiki span {
 
 @keyframes landing-why-progress {
   from {
-    width: 0%;
+    transform: scaleX(0);
   }
   to {
-    width: 100%;
+    transform: scaleX(1);
   }
 }
 
@@ -530,6 +530,11 @@ html.dark .shiki span {
 
 .landing-why-fade {
   animation: landing-why-fade 220ms var(--ease-out) both;
+}
+
+.landing-why-progress {
+  width: 100%;
+  transform-origin: left center;
 }
 
 /* Figma 1:670 coral media surface — base + lighting + plus grid */
@@ -599,7 +604,7 @@ html.dark .shiki span {
 
   .landing-why-progress {
     animation: none !important;
-    width: 100% !important;
+    transform: scaleX(1) !important;
   }
 
   .hint-ripple {
