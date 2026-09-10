@@ -79,47 +79,14 @@ const toolsArcCardShadow =
 /**
  * OriginKit pivots + matrix on 1000×1000 group (geometry fixed; logos by index).
  * L→R on arc: Lucide → Next → Motion → React → Tailwind → Shadcn → TypeScript.
- * Motion uses Framer mark (tool-framer) — tool-motion.png is a // that twins Shadcn.
  */
 const toolsArc = [
-  {
-    name: "TypeScript",
-    src: "/landing/tool-typescript.png",
-    left: 1000,
-    top: 444,
-    matrix: "matrix(0,1,-1,0)",
-    icon: { left: 16, top: 16, width: 80, height: 80 },
-  },
-  {
-    name: "Shadcn",
-    src: "/landing/tool-shadcn.svg",
-    left: 905.01,
-    top: 201.5,
-    matrix: "matrix(0.5,0.8660253882408142,-0.8660253882408142,0.5)",
-    icon: { left: 14, top: 14, width: 84, height: 84 },
-  },
-  {
-    name: "Tailwind CSS",
-    src: "/landing/tool-tailwind.png",
-    left: 701.5,
-    top: 38.99,
-    matrix: "matrix(0.866025447845459,0.5,-0.5,0.866025447845459)",
-    icon: { left: 11, top: 28, width: 90, height: 55 },
-  },
-  {
-    name: "React",
-    src: "/landing/tool-react.png",
-    left: 444,
-    top: 0,
-    matrix: undefined,
-    icon: { left: 11, top: 16, width: 90, height: 80 },
-  },
   {
     name: "Lucide",
     src: "/landing/tool-lucide.svg",
     left: 0,
     top: 556,
-    matrix: "matrix(0,-1,1,0)",
+    matrix: "matrix(0 -1 1 0 0 0)",
     icon: { left: 14, top: 14, width: 84, height: 84 },
   },
   {
@@ -127,15 +94,47 @@ const toolsArc = [
     src: "/landing/tool-next.png",
     left: 38.99,
     top: 298.5,
-    matrix: "matrix(0.5,-0.8660253882408142,0.8660253882408142,0.5)",
+    matrix: "matrix(0.5 -0.8660253882408142 0.8660253882408142 0.5 0 0)",
     icon: { left: 16, top: 16, width: 80, height: 80 },
   },
   {
     name: "Motion",
-    src: "/landing/tool-framer.png",
+    src: "/landing/tool-motion.png",
     left: 201.5,
     top: 94.98,
-    matrix: "matrix(0.866025447845459,-0.5,0.5,0.866025447845459)",
+    matrix: "matrix(0.866025447845459 -0.5 0.5 0.866025447845459 0 0)",
+    icon: { left: 14, top: 14, width: 84, height: 84 },
+  },
+  {
+    name: "React",
+    src: "/landing/tool-react.png",
+    left: 444,
+    top: 0,
+    matrix: "matrix(1 0 0 1 0 0)",
+    icon: { left: 11, top: 16, width: 90, height: 80 },
+  },
+  {
+    name: "Tailwind CSS",
+    src: "/landing/tool-tailwind.png",
+    left: 701.5,
+    top: 38.99,
+    matrix: "matrix(0.866025447845459 0.5 -0.5 0.866025447845459 0 0)",
+    icon: { left: 11, top: 28, width: 90, height: 55 },
+  },
+  {
+    name: "Shadcn",
+    src: "/landing/tool-shadcn.svg",
+    left: 905.01,
+    top: 201.5,
+    matrix: "matrix(0.5 0.8660253882408142 -0.8660253882408142 0.5 0 0)",
+    icon: { left: 14, top: 14, width: 84, height: 84 },
+  },
+  {
+    name: "TypeScript",
+    src: "/landing/tool-typescript.png",
+    left: 1000,
+    top: 444,
+    matrix: "matrix(0 1 -1 0 0 0)",
     icon: { left: 16, top: 16, width: 80, height: 80 },
   },
 ] as const;
@@ -742,31 +741,26 @@ function WhySection() {
 /** Figma 1:733 — coded logo arc; copy/CTA match 1:757 spacing. */
 function ToolsArc() {
   return (
-    <div
-      className="relative aspect-[1000/556] w-full overflow-hidden"
+    <svg
+      viewBox="0 0 1000 556"
+      className="block aspect-[1000/556] w-full overflow-hidden"
+      preserveAspectRatio="xMidYMid meet"
       style={{
         WebkitMaskImage: toolsArcMask,
         maskImage: toolsArcMask,
       }}
+      role="presentation"
     >
-      {/* 1000×1000 orbit group; cards ~9.6% ≈ 88px on 920px orbit */}
-      <div className="absolute left-1/2 top-0 aspect-square w-full -translate-x-1/2">
-        {toolsArc.map((tool) => (
-          <div
-            key={tool.name}
-            className="absolute w-[9.6%]"
-            style={{
-              left: `${(tool.left / 1000) * 100}%`,
-              top: `${(tool.top / 1000) * 100}%`,
-            }}
-          >
+      {toolsArc.map((tool) => (
+        <g
+          key={tool.name}
+          transform={`translate(${tool.left} ${tool.top}) ${tool.matrix}`}
+        >
+          <foreignObject width="112" height="112" overflow="visible">
             <div
-              className="relative aspect-square w-full overflow-hidden rounded-[8px] bg-[#F9F8F6]"
-              style={{
-                transform: tool.matrix,
-                transformOrigin: "0 0",
-                boxShadow: toolsArcCardShadow,
-              }}
+              className="relative size-[112px] overflow-hidden rounded-[10px] bg-[#F9F8F6]"
+              style={{ boxShadow: toolsArcCardShadow }}
+              xmlns="http://www.w3.org/1999/xhtml"
             >
               <Image
                 src={tool.src}
@@ -775,41 +769,37 @@ function ToolsArc() {
                 height={tool.icon.height}
                 unoptimized={tool.src.endsWith(".svg")}
                 className="absolute max-w-none object-contain"
-                style={{
-                  left: `${(tool.icon.left / 112) * 100}%`,
-                  top: `${(tool.icon.top / 112) * 100}%`,
-                  width: `${(tool.icon.width / 112) * 100}%`,
-                  height: `${(tool.icon.height / 112) * 100}%`,
-                }}
+                style={tool.icon}
               />
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          </foreignObject>
+        </g>
+      ))}
+    </svg>
   );
 }
 
 function ToolsSection() {
   return (
     <section
-      className="relative w-full overflow-x-hidden pt-20 md:overflow-x-visible md:pt-0"
+      id="tools"
+      className="relative w-full py-20 lg:py-0"
       style={landingDotPattern}
     >
       <div className="relative mx-auto w-full max-w-[1440px] lg:aspect-[1440/783]">
-        {/* Arc — ~920px / 63.9% wide (tighter than Figma 1000), nudged to hug title */}
+        {/* Figma 1:733 — x220, y120, 1000×556 within the 1440×783 section. */}
         <div
-          className="pointer-events-none relative z-0 hidden justify-center overflow-visible md:flex md:mb-[-4%] lg:absolute lg:inset-0 lg:mb-0"
+          className="pointer-events-none absolute inset-0 z-0 hidden lg:block"
           aria-hidden
         >
-          <div className="w-full max-w-[920px] lg:absolute lg:left-1/2 lg:top-[18.5%] lg:w-[63.9%] lg:max-w-none lg:-translate-x-1/2">
+          <div className="absolute left-1/2 top-[15.3257%] w-[69.4444%] -translate-x-1/2">
             <ToolsArc />
           </div>
         </div>
 
         {/* Figma 1:757 — top 351, gap 32, text gap 16 */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[378px] flex-col items-center gap-10 px-4 pb-16 pt-6 sm:gap-9 lg:absolute lg:left-1/2 lg:top-[44.83%] lg:gap-8 lg:-translate-x-1/2 lg:px-0 lg:pb-0 lg:pt-0">
-          <div className="flex w-full flex-col items-center gap-5 text-center sm:gap-4 lg:gap-4">
+        <div className="relative z-10 mx-auto flex w-full max-w-[378px] flex-col items-center gap-8 px-4 lg:absolute lg:left-1/2 lg:top-[44.8276%] lg:-translate-x-1/2 lg:px-0">
+          <div className="flex w-full flex-col items-center gap-4 text-center">
             <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px] sm:tracking-[-1.92px]">
               Fits right into the way you build.
             </h2>
@@ -838,7 +828,7 @@ function ToolsSection() {
             </div>
           </div>
 
-          <ExploreButton />
+          <ExploreButton className="h-auto rounded-full px-[14px] py-3" />
         </div>
       </div>
     </section>
@@ -1133,13 +1123,13 @@ function LandingFooter() {
         className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
       />
       {/* Same border frame as desktop; gutters tighten on small screens */}
-      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-2 sm:px-[40px] lg:px-[60px]">
-        <div className="border-x border-[rgba(235,233,230,0.08)] px-0 sm:px-8 lg:px-[140px]">
+      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-5 sm:px-[40px] lg:px-[60px]">
+        <div className="border-x border-[rgba(235,233,230,0.08)] px-2 sm:px-8 lg:px-[140px]">
           <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
             {/* 47:690 — glow/outline; mobile sits near band bottom; desktop restores Figma frame h */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[4.9rem] left-[12.95%] z-[2] aspect-[938/170] w-[74.1%] sm:top-[8.9375rem] sm:left-[16.01%] sm:aspect-auto sm:h-[8.9375rem] sm:w-[68.75%]"
+              className="pointer-events-none absolute top-[5rem] left-[16.4%] z-[2] aspect-[938/170] w-[67.2%] sm:top-[8.9375rem] sm:left-[16.01%] sm:aspect-auto sm:h-[8.9375rem] sm:w-[68.75%]"
             >
               <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1154,7 +1144,7 @@ function LandingFooter() {
             {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[5.1rem] left-[1.5%] z-[3] w-[97%] sm:top-[9.21rem] sm:left-[5.4%] sm:w-[90%]"
+              className="pointer-events-none absolute top-[5.25rem] left-[6%] z-[3] w-[88%] sm:top-[9.21rem] sm:left-[5.4%] sm:w-[90%]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
