@@ -62,26 +62,23 @@ const toolPills = [
   "Tailwind CSS",
   "Motion",
   "Shadcn",
-  "Framer",
-  "Webflow",
+  "Radix",
 ] as const;
 
-/** Angles from Figma 1:732 (0° = top, clockwise). Radius 44.4% of 1000px orbit. */
+/** Angles from Figma 1:732 (0° = top, clockwise). */
 const orbitTools = [
-  { name: "Webflow", src: "/landing/tool-webflow.png", angle: 0 },
+  { name: "Shadcn", src: "/landing/tool-shadcn.svg", angle: 0 },
   { name: "TypeScript", src: "/landing/tool-typescript.png", angle: 30 },
   { name: "Next.js", src: "/landing/tool-next.png", angle: 60 },
   { name: "React", src: "/landing/tool-react.png", angle: 90 },
-  { name: "Framer", src: "/landing/tool-framer.png", angle: -30 },
+  { name: "Radix", src: "/landing/tool-radix.svg", angle: -30 },
   { name: "Motion", src: "/landing/tool-motion.png", angle: -60 },
   { name: "Tailwind CSS", src: "/landing/tool-tailwind.png", angle: -90 },
 ] as const;
 
-const ORBIT_RADIUS_PCT = 44.4;
-/** Card spacing on the Figma arc — one slot per tick. */
-const ORBIT_SLOT_DEG = 30;
-const ORBIT_STEP_MS = 2000;
-const ORBIT_MOVE_MS = 280;
+/** Tighter on desktop; roomier on mobile (inset below keeps apex uncropped). */
+const ORBIT_RADIUS_DESKTOP = 32;
+const ORBIT_RADIUS_MOBILE = 46;
 
 const orbitCardShadow =
   "inset 0 0 0 1px #fff, 0 1px 3px rgba(102,102,102,0.1), 0 6px 6px rgba(102,102,102,0.09), 0 13px 8px rgba(102,102,102,0.05), 0 23px 9px rgba(102,102,102,0.01)";
@@ -631,54 +628,47 @@ function WhySection() {
   );
 }
 
+/** Static Figma 1:733 semi-circle — no spin; tighter desktop / roomier mobile. */
 function ToolsOrbit() {
-  const [offsetDeg, setOffsetDeg] = useState(0);
+  const [radius, setRadius] = useState(ORBIT_RADIUS_DESKTOP);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduce.matches) return;
-    const id = window.setInterval(
-      () => setOffsetDeg((d) => d + ORBIT_SLOT_DEG),
-      ORBIT_STEP_MS,
-    );
-    return () => window.clearInterval(id);
+    const mq = window.matchMedia("(max-width: 767px)");
+    const apply = () => setRadius(mq.matches ? ORBIT_RADIUS_MOBILE : ORBIT_RADIUS_DESKTOP);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
   }, []);
 
   return (
-    <div
-      className="absolute inset-0"
-      style={{
-        transform: `rotate(${offsetDeg}deg)`,
-        transition: `transform ${ORBIT_MOVE_MS}ms ease-out`,
-      }}
-    >
+    /* Inset so the apex card stays inside overflow-hidden parents */
+    <div className="absolute inset-[11%] sm:inset-[7%]">
       {orbitTools.map((tool) => {
         const rad = (tool.angle * Math.PI) / 180;
-        const x = 50 + Math.sin(rad) * ORBIT_RADIUS_PCT;
-        const y = 50 - Math.cos(rad) * ORBIT_RADIUS_PCT;
+        const x = 50 + Math.sin(rad) * radius;
+        const y = 50 - Math.cos(rad) * radius;
+        const abs = Math.abs(tool.angle);
+        const opacity = abs >= 90 ? 0.4 : abs >= 60 ? 0.72 : 1;
         return (
           <div
             key={tool.name}
             className="absolute"
-            style={{ left: `${x}%`, top: `${y}%` }}
+            style={{ left: `${x}%`, top: `${y}%`, opacity }}
           >
-            <div className="-translate-x-1/2 -translate-y-1/2">
-              <div
-                className="size-[96px] overflow-hidden rounded-[10px] bg-[#F9F8F6] lg:size-[112px]"
-                style={{
-                  boxShadow: orbitCardShadow,
-                  transform: `rotate(${-offsetDeg}deg)`,
-                  transition: `transform ${ORBIT_MOVE_MS}ms ease-out`,
-                }}
-              >
-                <Image
-                  src={tool.src}
-                  alt=""
-                  width={112}
-                  height={112}
-                  className="size-full object-contain p-[12%] sm:p-[14%]"
-                />
-              </div>
+            <div
+              className="size-[78px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[10px] bg-[#F9F8F6] sm:size-[88px] lg:size-[104px]"
+              style={{
+                boxShadow: orbitCardShadow,
+                transform: `rotate(${tool.angle}deg)`,
+              }}
+            >
+              <Image
+                src={tool.src}
+                alt=""
+                width={112}
+                height={112}
+                className="size-full object-contain p-[16%] sm:p-[18%]"
+              />
             </div>
           </div>
         );
@@ -690,20 +680,18 @@ function ToolsOrbit() {
 function ToolsSection() {
   return (
     <section
-      className="relative overflow-x-hidden px-4 py-16 sm:px-8 sm:py-20 lg:px-[120px] lg:py-[100px]"
+      className="relative w-full overflow-x-hidden px-0 py-16 sm:px-4 sm:py-20 lg:px-8 lg:py-[100px]"
       style={landingDotPattern}
     >
-      {/* Figma 1:732 — orbit inset by ~half-card so rim logos aren't clipped;
-          frame < square height; bottom fades via mask.
-          Mobile: oversized orbit clipped in this frame so rim cards clear copy. */}
-      <div className="relative mx-auto flex min-h-[520px] w-full max-w-[1000px] items-center justify-center overflow-hidden pt-9 sm:min-h-[640px] sm:pt-12 lg:min-h-[783px] lg:pt-14">
+      {/* Taller + padded so the apex card isn’t cropped; desktop orbit stays compact */}
+      <div className="relative mx-auto flex min-h-[640px] w-full max-w-[1100px] items-center justify-center overflow-hidden pt-20 sm:min-h-[600px] sm:pt-14 lg:min-h-[680px] lg:pt-16">
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
           aria-hidden
         >
-          <div className="absolute inset-x-0 top-9 flex justify-center sm:top-12 sm:px-12 lg:top-14 lg:px-14 max-sm:top-6">
+          <div className="absolute inset-x-0 top-10 flex justify-center sm:top-8 sm:px-12 lg:top-10 lg:px-20 max-sm:top-8">
             <div
-              className="relative aspect-square w-full max-sm:w-[165%] sm:w-full"
+              className="relative aspect-square w-[min(100%,560px)] max-sm:w-[185%] sm:w-[min(100%,620px)]"
               style={{ WebkitMaskImage: orbitMask, maskImage: orbitMask }}
             >
               <ToolsOrbit />
@@ -711,9 +699,8 @@ function ToolsSection() {
           </div>
         </div>
 
-        {/* gap 32px groups, 16px title↔subtitle — Figma 1:757 */}
-        <div className="relative z-10 flex w-full flex-col items-center gap-8">
-          <div className="flex w-full max-w-[378px] flex-col items-center gap-4 text-center">
+        <div className="relative z-10 mt-12 flex w-full flex-col items-center gap-10 px-4 sm:mt-2 sm:gap-6">
+          <div className="flex w-full max-w-[378px] flex-col items-center gap-5 text-center sm:gap-3">
             <h2 className="text-balance text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
               Fits right into the way you build.
             </h2>
@@ -760,7 +747,7 @@ function TestimonialCard({
 }: (typeof testimonials)[number]) {
   return (
     <article
-      className="relative flex min-h-[380px] w-[min(calc(100vw-2rem),550px)] shrink-0 flex-col overflow-hidden rounded-2xl bg-[#1B1C1D] p-6"
+      className="relative flex min-h-[300px] w-[min(calc(100vw-4rem),300px)] shrink-0 flex-col overflow-hidden rounded-2xl bg-[#1B1C1D] p-5 sm:min-h-[340px] sm:w-[min(calc(100vw-2rem),420px)] sm:p-6 lg:min-h-[380px] lg:w-[min(calc(100vw-2rem),550px)]"
       style={{ boxShadow: testimonialCardShadow }}
     >
       {/* Figma 23:585 — top-left specular shine */}
@@ -782,8 +769,8 @@ function TestimonialCard({
       >
         “
       </div>
-      <div className="relative mt-28 flex flex-1 flex-col justify-between gap-7">
-        <p className="max-w-[404px] text-[16px] leading-[1.5] text-white">
+      <div className="relative mt-20 flex flex-1 flex-col justify-between gap-5 sm:mt-28 sm:gap-7">
+        <p className="max-w-[404px] text-[15px] leading-[1.5] text-white sm:text-[16px]">
           {quote}
         </p>
         <div className="flex flex-col gap-7">
@@ -1031,19 +1018,19 @@ const footerLinks = [
  */
 function LandingFooter() {
   return (
-    <footer className="relative overflow-hidden bg-[#232323]">
+    <footer className="relative w-full overflow-hidden bg-[#232323]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 backdrop-blur-[19px]"
       />
-      {/* Outer gutters 60px → inner 140px → 1040 content (Figma 1440 frame) */}
-      <div className="relative mx-auto w-full max-w-[1440px] border-x border-b border-[rgba(235,233,230,0.08)] px-4 sm:px-[40px] lg:px-[60px]">
-        <div className="border-x border-[rgba(235,233,230,0.08)] px-0 sm:px-8 lg:px-[140px]">
-          <div className="relative border-x border-[#333] pt-12 sm:pt-[100px]">
+      {/* Mobile: full-bleed; desktop: Figma gutters */}
+      <div className="relative mx-auto w-full max-w-[1440px] border-[rgba(235,233,230,0.08)] px-5 sm:border-x sm:border-b sm:px-[40px] lg:px-[60px]">
+        <div className="sm:border-x sm:border-[rgba(235,233,230,0.08)] sm:px-8 lg:px-[140px]">
+          <div className="relative pt-12 sm:border-x sm:border-[#333] sm:pt-[100px]">
             {/* 47:690 — glow/outline (absolute; baseline sits on band bottom border) */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[clamp(5.5rem,10vw,8.9375rem)] left-[16.01%] z-[2] h-[clamp(5rem,10vw,8.9375rem)] w-[68.75%]"
+              className="pointer-events-none absolute top-[clamp(5.5rem,10vw,8.9375rem)] left-[8%] z-[2] h-[clamp(5rem,10vw,8.9375rem)] w-[84%] sm:left-[16.01%] sm:w-[68.75%]"
             >
               <div className="absolute inset-[0_-15.6%_-19.23%_-15.57%]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1058,7 +1045,7 @@ function LandingFooter() {
             {/* 47:692 — self-contained SVG: rays @ 25.49° clipped by wordmark paths */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-[clamp(5.75rem,10.3vw,9.21rem)] left-[5.4%] z-[3] w-[90%]"
+              className="pointer-events-none absolute top-[clamp(5.75rem,10.3vw,9.21rem)] left-[2%] z-[3] w-[96%] sm:left-[5.4%] sm:w-[90%]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1070,7 +1057,7 @@ function LandingFooter() {
 
             <span className="sr-only">useLayouts</span>
 
-            {/* 47:824 band — 47:825 hero-texture at back (Figma: left -88 / top -160 / 1200×668, object-bottom) */}
+            {/* 47:824 band — 47:825 hero-texture at back */}
             <div className="relative -mb-px h-[clamp(7.5rem,13vw,11.75rem)] overflow-hidden border-y border-[#333]">
               <div
                 aria-hidden
@@ -1085,17 +1072,17 @@ function LandingFooter() {
               </div>
             </div>
 
-            {/* Site links under wordmark */}
-            <div className="relative flex min-h-[120px] flex-col items-center justify-center border-b border-[#333] px-4 py-10 sm:min-h-[195px] sm:py-12">
+            {/* Site links — normal size/width on mobile (no squeezed gutters) */}
+            <div className="relative flex min-h-[120px] flex-col items-center justify-center border-b border-[#333] px-2 py-10 sm:min-h-[195px] sm:px-4 sm:py-12">
               <nav
                 aria-label="Footer"
-                className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8"
+                className="flex w-full max-w-[560px] flex-wrap items-center justify-center gap-x-5 gap-y-3 sm:gap-x-8"
               >
                 {footerLinks.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-[14px] tracking-[-0.03em] text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80"
+                    className="whitespace-nowrap text-[15px] leading-normal tracking-normal text-[#ACAFB9] transition-opacity duration-150 hover:opacity-80 sm:text-[14px] sm:tracking-[-0.03em]"
                     {...(link.href.startsWith("http")
                       ? { target: "_blank", rel: "noreferrer" }
                       : {})}
@@ -1106,8 +1093,8 @@ function LandingFooter() {
               </nav>
             </div>
 
-            <div className="flex h-[59px] items-center justify-center">
-              <p className="text-[14px] leading-[27px] tracking-[-0.03em] text-[#ACAFB9]">
+            <div className="flex h-[59px] items-center justify-center px-4">
+              <p className="text-center text-[14px] leading-[27px] tracking-normal text-[#ACAFB9] sm:tracking-[-0.03em]">
                 Copyright © 2026 useLayouts
               </p>
             </div>
