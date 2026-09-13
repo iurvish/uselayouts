@@ -17,7 +17,28 @@ export type RibbonPatternMode =
   | "ripple"
   | "shear";
 
-type Pointer = { x: number; y: number; inside: boolean };
+type Pointer = { x: number; y: number; inside: boolean; vx: number };
+
+/** px/frame — ignore jitter; only flip bend when movement is deliberate */
+const BEND_VX_THRESHOLD = 0.4;
+
+function updateBendDirection(
+  direction: { current: number },
+  x: number,
+  vx: number,
+  w: number,
+  justEntered: boolean,
+) {
+  if (justEntered) {
+    // Latch entry side: right half → bend left (−1), left half → bend right (+1).
+    direction.current = Math.sign(w * 0.5 - x) || 1;
+    return;
+  }
+  if (Math.abs(vx) >= BEND_VX_THRESHOLD) {
+    // Moving right → bend right (+1); moving left → bend left (−1).
+    direction.current = Math.sign(vx) || direction.current;
+  }
+}
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -40,31 +61,36 @@ function grain(
 }
 
 /**
- * Cylindrical lens centered at focus — lines bulge away from the focal point.
- * offset = bend · sin(πy/h)^p · (dx/lensR) · exp(−(dx/lensR)²/f) · sharp · gain
- * dx = x0 − focusX — left of focus shifts left, right of focus shifts right
+ * Unidirectional Gaussian displacement field centered at (focusX, focusY).
+ * offset = direction · bend · sin(πy/h)^p · exp(−dx²/2σx²) · exp(−dy²/2σy²) · strength
+ * All lines at a given y shift the same direction; magnitude falls off with distance from cursor.
+ * vEnv pins displacement to zero at top/bottom edges.
  */
-function arcLensOffset(
+function gaussianWarpOffset(
   x0: number,
   y: number,
   focusX: number,
+  focusY: number,
   w: number,
   h: number,
   bend: number,
+  direction: number,
   p: RibbonDialParams,
 ) {
+  const dx = x0 - focusX;
+  const dy = y - focusY;
+
+  const sigmaX = Math.max(w * p.warpRadius, 1);
+  const sigmaY = Math.max(h * p.verticalSpread, 1);
+  const gauss =
+    Math.exp(-(dx * dx) / (2 * sigmaX * sigmaX)) *
+    Math.exp(-(dy * dy) / (2 * sigmaY * sigmaY));
+
   const yn = y / h;
   const vEnv = Math.pow(Math.sin(yn * Math.PI), p.curvePower);
   if (vEnv <= 0) return 0;
 
-  const lensR = w * p.lensWidth * 0.5;
-  const dx = x0 - focusX;
-  const normDx = dx / Math.max(lensR, 1);
-  const bump = Math.exp(
-    -(normDx * normDx) / Math.max(p.arcFalloff, 0.01),
-  );
-
-  return bend * vEnv * normDx * bump * p.arcSharpness * p.arcGain;
+  return direction * bend * vEnv * gauss * p.warpStrength;
 }
 
 function lineDisplacement(
@@ -77,11 +103,22 @@ function lineDisplacement(
   w: number,
   h: number,
   bend: number,
+  direction: number,
   pointer: Pointer,
   p: RibbonDialParams,
   t: number,
 ) {
-  const base = arcLensOffset(x0, y, focusX, w, h, bend, p);
+  const base = gaussianWarpOffset(
+    x0,
+    y,
+    focusX,
+    focusY,
+    w,
+    h,
+    bend,
+    direction,
+    p,
+  );
 
   switch (mode) {
     case "cylinder":
@@ -120,15 +157,16 @@ function drawRibbons(
   mode: RibbonPatternMode,
   pointer: Pointer,
   smooth: { x: number; y: number; bend: number },
+  bendDirection: number,
   params: RibbonDialParams,
   t: number,
 ) {
   const lines = Math.round(params.lineCount);
-  const restX = params.restFocusX * w;
-  const restY = 0.5 * h;
+  const restX = w * 0.5;
+  const restY = h * 0.5;
 
   const targetX = pointer.inside ? pointer.x : restX;
-  const targetY = restY;
+  const targetY = pointer.inside ? pointer.y : restY;
   const targetBend = pointer.inside ? params.hoverBend : params.restBend;
 
   const follow =
@@ -137,8 +175,10 @@ function drawRibbons(
       : params.follow;
 
   smooth.x = lerp(smooth.x, targetX, follow);
-  smooth.y = lerp(smooth.y, targetY, follow * 0.85);
+  smooth.y = lerp(smooth.y, targetY, follow);
   smooth.bend = lerp(smooth.bend, targetBend, follow * 1.15);
+
+  const direction = pointer.inside ? bendDirection : 1;
 
   for (let i = 0; i < lines; i++) {
     const u = i / (lines - 1);
@@ -164,6 +204,7 @@ function drawRibbons(
         w,
         h,
         smooth.bend,
+        direction,
         pointer,
         params,
         t,
@@ -190,7 +231,8 @@ export function RibbonField({
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const reduce = useReducedMotion() ?? false;
-  const pointerRef = React.useRef<Pointer>({ x: 0, y: 0, inside: false });
+  const pointerRef = React.useRef<Pointer>({ x: 0, y: 0, inside: false, vx: 0 });
+  const bendDirectionRef = React.useRef(1);
   const smoothRef = React.useRef({
     x: 0,
     y: 0,
@@ -215,7 +257,7 @@ export function RibbonField({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       if (!seeded && width > 0) {
         smoothRef.current = {
-          x: width * paramsRef.current.restFocusX,
+          x: width * 0.5,
           y: height * 0.5,
           bend: paramsRef.current.restBend,
         };
@@ -235,6 +277,7 @@ export function RibbonField({
         mode,
         pointerRef.current,
         smoothRef.current,
+        bendDirectionRef.current,
         paramsRef.current,
         t,
       );
@@ -252,17 +295,38 @@ export function RibbonField({
     };
   }, [mode, reduce, params]);
 
-  const onMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const syncPointer = (
+    e: React.PointerEvent<HTMLCanvasElement>,
+    justEntered: boolean,
+  ) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    pointerRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      inside: true,
-    };
+    const prev = pointerRef.current;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const vx = prev.inside && !justEntered ? x - prev.x : 0;
+
+    updateBendDirection(
+      bendDirectionRef,
+      x,
+      vx,
+      rect.width,
+      justEntered,
+    );
+
+    pointerRef.current = { x, y, inside: true, vx };
+  };
+
+  const onEnter = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    syncPointer(e, true);
+  };
+
+  const onMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    syncPointer(e, false);
   };
 
   const onLeave = () => {
-    pointerRef.current.inside = false;
+    pointerRef.current = { x: 0, y: 0, inside: false, vx: 0 };
+    bendDirectionRef.current = 1;
   };
 
   return (
@@ -270,6 +334,7 @@ export function RibbonField({
       ref={canvasRef}
       aria-hidden
       className={cn("absolute inset-0 size-full touch-none", className)}
+      onPointerEnter={onEnter}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
     />
