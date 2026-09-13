@@ -39,9 +39,9 @@ export function BrowseHeader({
         <img
           src="/brand/logo-wordmark.svg"
           alt="useLayouts"
-          width={185}
-          height={48}
-          className="h-12 w-[185px]"
+          width={128}
+          height={30}
+          className="h-[30px] w-auto"
           draggable={false}
         />
       </Link>

@@ -253,19 +253,17 @@ function WhyCoralSurface({
 const whyActiveLine =
   "linear-gradient(in oklab 179.04deg, oklab(43.6% -0.034 -0.138) -260%, oklab(53% 0.114 0.016) 225.3%, oklab(86.5% 0.053 0.047) 720%)";
 
-/** Combo craft depth: top inset highlight, bottom inset shade, hairline rim, crisp drop. */
+/** Figma 91:4500 — stacked drop, 1px rim, top inset highlight. */
 const buttonCraft = {
   primary: {
-    className: "bg-[#071A31] text-white hover:brightness-110",
+    className:
+      "relative bg-[#3351e5] text-white after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_1px_0_0.2px_rgba(255,255,255,0.16)] hover:brightness-110",
     style: {
-      backgroundImage: "linear-gradient(180deg, #1a3558 0%, #071A31 48%, #040e1a 100%)",
+      backgroundImage: "none",
       boxShadow: [
-        "inset 0 1.5px 0 rgba(255,255,255,0.28)",
-        "inset 0 -2px 0 rgba(0,0,0,0.45)",
-        "inset 0 0 0 1px rgba(255,255,255,0.06)",
-        "0 1px 0 rgba(255,255,255,0.1)",
-        "0 3px 0 rgba(0,0,0,0.25)",
-        "0 8px 12px rgba(7,26,49,0.35)",
+        "0px 2px 2px -1px rgba(0,0,0,0.16)",
+        "0px 4px 4px -2px rgba(0,0,0,0.24)",
+        "0px 0px 0px 1px rgba(0,0,0,0.12)",
       ].join(", "),
     },
   },
@@ -411,9 +409,9 @@ function LandingNav() {
         <Image
           src="/logomark.svg"
           alt="uselayouts"
-          width={162}
-          height={36}
-          className="h-9 w-auto"
+          width={128}
+          height={30}
+          className="h-[30px] w-auto"
           priority
         />
       </Link>
