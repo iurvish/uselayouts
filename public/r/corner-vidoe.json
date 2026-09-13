@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "corner-vidoe",
-  "title": "Corner Vidoe",
+  "title": "Corner Video",
   "description": "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
   "dependencies": [
     "motion",

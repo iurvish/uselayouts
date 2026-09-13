@@ -172,7 +172,7 @@
     {
       "name": "corner-vidoe",
       "type": "registry:component",
-      "title": "Corner Vidoe",
+      "title": "Corner Video",
       "description": "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
       "dependencies": [
         "motion",
@@ -475,23 +475,6 @@
       ]
     },
     {
-      "name": "logoshift",
-      "type": "registry:component",
-      "title": "LogoShift",
-      "description": "Animated logo showcase with smooth transitions, hover effects, and customizable layouts.",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/logoshift.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "magnified-bento",
       "type": "registry:component",
       "title": "Magnified Bento",
@@ -562,23 +545,6 @@
       "files": [
         {
           "path": "registry/default/example/multi-step-form.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "new-component",
-      "type": "registry:component",
-      "title": "new component",
-      "description": "hehehe",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/new-component.tsx",
           "type": "registry:component"
         }
       ]
@@ -692,23 +658,6 @@
       ]
     },
     {
-      "name": "see-the-bug",
-      "type": "registry:component",
-      "title": "See the bug",
-      "description": "dd",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/see-the-bug.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "shake-testimonial-card",
       "type": "registry:component",
       "title": "Shake Testimonial Card",
@@ -787,23 +736,6 @@
       "files": [
         {
           "path": "registry/default/example/status-button.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "urvish",
-      "type": "registry:component",
-      "title": "urvish",
-      "description": "urvish",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/urvish.tsx",
           "type": "registry:component"
         }
       ]

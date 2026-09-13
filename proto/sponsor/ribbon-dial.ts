@@ -13,7 +13,7 @@ export type RibbonDialParams = {
   grain: number;
 };
 
-/** Shipped defaults — subtle rightward lean at rest; one-directional Gaussian warp on hover */
+/** Shipped defaults — subtle rightward lean at rest; local antisymmetric bulge on hover */
 export const ribbonDefaults: RibbonDialParams = {
   lineCount: 28,
   thickWidth: 8.0,

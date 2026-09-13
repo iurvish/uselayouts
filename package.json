@@ -40,8 +40,8 @@
     "@number-flow/react": "^0.5.10",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@shikijs/transformers": "^4.4.3",
-    "@supabase/ssr": "^0.12.6",
-    "@supabase/supabase-js": "^2.115.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.116.0",
     "@types/mdx": "^2.0.13",
     "@vercel/analytics": "^1.6.1",
     "canvas-confetti": "^1.9.4",
@@ -89,5 +89,19 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.12",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@modelcontextprotocol/sdk": {
+      "ajv": "^8.17.1",
+      "ajv-formats": "^3.0.1"
+    }
+  },
+  "resolutions": {
+    "@supabase/auth-js": "2.116.0",
+    "@supabase/supabase-js": "2.116.0",
+    "@supabase/functions-js": "2.116.0",
+    "@supabase/postgrest-js": "2.116.0",
+    "@supabase/realtime-js": "2.116.0",
+    "@supabase/storage-js": "2.116.0"
   }
 }
