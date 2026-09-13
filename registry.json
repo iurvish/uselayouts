@@ -692,23 +692,6 @@
       ]
     },
     {
-      "name": "see-the-bug",
-      "type": "registry:component",
-      "title": "See the bug",
-      "description": "dd",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/see-the-bug.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "shake-testimonial-card",
       "type": "registry:component",
       "title": "Shake Testimonial Card",

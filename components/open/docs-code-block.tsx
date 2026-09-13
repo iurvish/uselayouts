@@ -21,6 +21,7 @@ export function DocsCodeBlock({
   withWrapper = true,
   compact = false,
   componentSlug,
+  variant = "dark",
 }: {
   html: string;
   code: string;
@@ -33,7 +34,10 @@ export function DocsCodeBlock({
   /** Shorter card for nested manual step 2 */
   compact?: boolean;
   componentSlug?: string;
+  /** Docs pages use light surfaces on cream backgrounds. */
+  variant?: "dark" | "light";
 }) {
+  const isLight = variant === "light";
   const [copied, setCopied] = React.useState(false);
   const cleaned = stripCodeAnnotations(code);
   const gatedCopy = useGatedCopy({
@@ -59,6 +63,7 @@ export function DocsCodeBlock({
         className={cn(
           "h-full min-w-0 overflow-auto outline-none",
           shikiCommandSurface,
+          isLight && "open-shiki-light",
           scrollbarNone,
           className,
         )}
@@ -119,7 +124,12 @@ export function DocsCodeBlock({
         <div className="relative min-h-0 min-w-0 flex-1 p-1">
           <figure
             data-rehype-pretty-code-figure=""
-            className="relative h-full min-w-0 overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] p-2 shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)] outline-none"
+            className={cn(
+              "relative h-full min-w-0 overflow-hidden rounded-[10px] p-2 outline-none",
+              isLight
+                ? "border border-[#E2E2E2] bg-[#FAFAF8] shadow-[0_1px_2px_rgba(7,26,49,0.04)]"
+                : "dark bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1),0_-1px_0_0_rgba(255,255,255,0.04)]",
+            )}
           >
             {body}
             {floatingCopy}
@@ -131,11 +141,21 @@ export function DocsCodeBlock({
 
   return (
     <figure
-      className="relative overflow-hidden rounded-[10px] bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]"
+      className={cn(
+        "relative overflow-hidden rounded-[10px]",
+        isLight
+          ? "border border-[#E2E2E2] bg-[#FAFAF8] shadow-[0_1px_2px_rgba(7,26,49,0.04)]"
+          : "dark bg-[hsl(240_6%_20%)] shadow-[0_1.5px_2px_0_rgba(0,0,0,0.32),0_0_0_1px_rgba(255,255,255,0.1)]",
+      )}
       data-rehype-pretty-code-figure=""
     >
       {title ? (
-        <figcaption className="flex min-w-0 items-center gap-2.5 px-4 py-2.5 text-base text-[hsl(240_5%_69%)]">
+        <figcaption
+          className={cn(
+            "flex min-w-0 items-center gap-2.5 px-4 py-2.5 text-base",
+            isLight ? "text-[#4B565E]" : "text-[hsl(240_5%_69%)]",
+          )}
+        >
           <img src="/open/file.svg" alt="" width={16} height={16} className="size-4" />
           <span className="truncate">{title}</span>
         </figcaption>

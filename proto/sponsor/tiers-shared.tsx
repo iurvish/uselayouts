@@ -361,6 +361,8 @@ export function HeroCard({
   dial?: boolean;
   dialPanel?: string;
 }) {
+  const stripeRef = React.useRef<HTMLDivElement>(null);
+
   return (
     <aside
       className={cn(
@@ -375,15 +377,16 @@ export function HeroCard({
         className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0px_1.5px_0px_0px_rgba(255,255,255,0.25)]"
       />
       <div
+        ref={stripeRef}
         className={cn(
           "relative aspect-[356/210] w-full overflow-hidden bg-[#1a1a1e]",
           artClassName,
         )}
       >
         {dial ? (
-          <RibbonFieldDial mode={pattern} panel={dialPanel} />
+          <RibbonFieldDial mode={pattern} panel={dialPanel} boundsRef={stripeRef} />
         ) : (
-          <RibbonField mode={pattern} />
+          <RibbonField mode={pattern} boundsRef={stripeRef} />
         )}
       </div>
       <div className="relative flex flex-col gap-3.5 text-white">

@@ -44,6 +44,10 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+function clamp(v: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, v));
+}
+
 function grain(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -162,23 +166,26 @@ function drawRibbons(
   t: number,
 ) {
   const lines = Math.round(params.lineCount);
-  const restX = w * 0.5;
-  const restY = h * 0.5;
 
-  const targetX = pointer.inside ? pointer.x : restX;
-  const targetY = pointer.inside ? pointer.y : restY;
+  const targetX = pointer.inside ? pointer.x : w * 0.5;
+  const targetY = pointer.inside ? pointer.y : h * 0.5;
   const targetBend = pointer.inside ? params.hoverBend : params.restBend;
 
   const follow =
     mode === "magnetic" && pointer.inside
       ? params.follow * 1.6
       : params.follow;
+  const leaveFollow = follow * 0.35;
 
-  smooth.x = lerp(smooth.x, targetX, follow);
-  smooth.y = lerp(smooth.y, targetY, follow);
-  smooth.bend = lerp(smooth.bend, targetBend, follow * 1.15);
+  smooth.x = lerp(smooth.x, targetX, pointer.inside ? follow : leaveFollow);
+  smooth.y = lerp(smooth.y, targetY, pointer.inside ? follow : leaveFollow);
+  smooth.bend = lerp(
+    smooth.bend,
+    targetBend,
+    pointer.inside ? follow * 1.15 : leaveFollow,
+  );
 
-  const direction = pointer.inside ? bendDirection : 1;
+  const direction = bendDirection;
 
   for (let i = 0; i < lines; i++) {
     const u = i / (lines - 1);
@@ -221,14 +228,18 @@ export function RibbonField({
   mode,
   className,
   params = ribbonDefaults,
+  boundsRef,
 }: {
   mode: RibbonPatternMode;
   className?: string;
   params?: RibbonDialParams;
+  /** Pointer hit target — defaults to the canvas container; pass the card root to include padding. */
+  boundsRef?: React.RefObject<HTMLElement | null>;
 }) {
   const paramsRef = React.useRef(params);
   paramsRef.current = params;
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const reduce = useReducedMotion() ?? false;
   const pointerRef = React.useRef<Pointer>({ x: 0, y: 0, inside: false, vx: 0 });
@@ -295,49 +306,46 @@ export function RibbonField({
     };
   }, [mode, reduce, params]);
 
-  const syncPointer = (
-    e: React.PointerEvent<HTMLCanvasElement>,
-    justEntered: boolean,
-  ) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const prev = pointerRef.current;
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const vx = prev.inside && !justEntered ? x - prev.x : 0;
+  React.useEffect(() => {
+    const hit = boundsRef?.current ?? containerRef.current;
+    const canvas = canvasRef.current;
+    if (!hit || !canvas) return;
 
-    updateBendDirection(
-      bendDirectionRef,
-      x,
-      vx,
-      rect.width,
-      justEntered,
-    );
+    const syncPointer = (e: PointerEvent, justEntered: boolean) => {
+      const canvasRect = canvas.getBoundingClientRect();
+      const w = canvasRect.width;
+      const h = canvasRect.height;
+      if (w <= 0 || h <= 0) return;
 
-    pointerRef.current = { x, y, inside: true, vx };
-  };
+      const prev = pointerRef.current;
+      const x = clamp(e.clientX - canvasRect.left, 0, w);
+      const y = clamp(e.clientY - canvasRect.top, 0, h);
+      const vx = prev.inside && !justEntered ? x - prev.x : 0;
 
-  const onEnter = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    syncPointer(e, true);
-  };
+      updateBendDirection(bendDirectionRef, x, vx, w, justEntered);
+      pointerRef.current = { x, y, inside: true, vx };
+    };
 
-  const onMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    syncPointer(e, false);
-  };
+    const onEnter = (e: PointerEvent) => syncPointer(e, true);
+    const onMove = (e: PointerEvent) => syncPointer(e, false);
+    const onLeave = () => {
+      pointerRef.current = { ...pointerRef.current, inside: false, vx: 0 };
+    };
 
-  const onLeave = () => {
-    pointerRef.current = { x: 0, y: 0, inside: false, vx: 0 };
-    bendDirectionRef.current = 1;
-  };
+    hit.addEventListener("pointerenter", onEnter);
+    hit.addEventListener("pointermove", onMove);
+    hit.addEventListener("pointerleave", onLeave);
+    return () => {
+      hit.removeEventListener("pointerenter", onEnter);
+      hit.removeEventListener("pointermove", onMove);
+      hit.removeEventListener("pointerleave", onLeave);
+    };
+  }, [boundsRef]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className={cn("absolute inset-0 size-full touch-none", className)}
-      onPointerEnter={onEnter}
-      onPointerMove={onMove}
-      onPointerLeave={onLeave}
-    />
+    <div ref={containerRef} className={cn("absolute inset-0 touch-none", className)}>
+      <canvas ref={canvasRef} aria-hidden className="size-full" />
+    </div>
   );
 }
 
@@ -345,11 +353,20 @@ export function RibbonFieldDial({
   mode,
   className,
   panel = "Ribbon pattern",
+  boundsRef,
 }: {
   mode: RibbonPatternMode;
   className?: string;
   panel?: string;
+  boundsRef?: React.RefObject<HTMLElement | null>;
 }) {
   const params = useDialKit(panel, ribbonDialConfig as never) as RibbonDialParams;
-  return <RibbonField mode={mode} className={className} params={params} />;
+  return (
+    <RibbonField
+      mode={mode}
+      className={className}
+      params={params}
+      boundsRef={boundsRef}
+    />
+  );
 }

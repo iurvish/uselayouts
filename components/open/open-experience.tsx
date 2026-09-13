@@ -60,7 +60,7 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
   return (
     <header
       className={cn(
-        "flex w-full shrink-0 flex-col gap-3 overflow-hidden rounded-bl-[16px] rounded-br-[16px] bg-[hsl(240_5%_4%)] px-3.5 py-[15px]",
+        "flex w-full shrink-0 flex-col gap-6 overflow-hidden rounded-bl-[16px] rounded-br-[16px] bg-[hsl(240_5%_4%)] px-3.5 py-[15px]",
         "shadow-[0_1px_0_0_hsla(0,0%,100%,0.02),0_6px_16px_-14px_hsla(0,0%,0%,0.06),0_4px_8px_-12px_hsla(0,0%,0%,0.08),0_2px_6px_-10px_hsla(0,0%,0%,0.1)]",
       )}
     >

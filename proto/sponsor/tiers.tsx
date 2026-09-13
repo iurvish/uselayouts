@@ -2,7 +2,7 @@
 
 import { TiersClassic } from "./tiers-classic";
 
-/** Production sponsor page — Classic + DialKit tuning panel */
+/** Production sponsor page */
 export function Tiers() {
-  return <TiersClassic pattern="cylinder" dial dialPanel="Sponsor ribbon" />;
+  return <TiersClassic pattern="cylinder" />;
 }

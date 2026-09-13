@@ -26,7 +26,7 @@ function Heading({
 }
 
 /** Fenced MDX → same Shiki surface as the main panel (no Copy Code). */
-async function OpenMdxPre({
+export async function OpenMdxPre({
   children,
   title,
   "data-language": dataLanguage,
@@ -42,7 +42,7 @@ async function OpenMdxPre({
   const html = await highlightCode(code, lang, { showLineNumbers: false });
 
   return (
-    <div className="mb-3 min-w-0">
+    <div className="not-prose mb-3 min-w-0">
       <DocsCodeBlock
         html={html}
         code={code}
@@ -50,6 +50,7 @@ async function OpenMdxPre({
         title={title}
         withWrapper={false}
         copyButton={false}
+        variant="light"
       />
     </div>
   );
