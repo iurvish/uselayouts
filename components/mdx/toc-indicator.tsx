@@ -271,7 +271,7 @@ export function TocIndicator({
                   key={`${idx}-outer`}
                   cx={pos.x}
                   cy={pos.y}
-                  r={4}
+                  r={6}
                   fill="none"
                   stroke="var(--accent)"
                   strokeWidth={1}
@@ -287,7 +287,7 @@ export function TocIndicator({
                   key={`${idx}-inner`}
                   cx={pos.x}
                   cy={pos.y}
-                  r={2.5}
+                  r={3.5}
                   fill="#071A31"
                   stroke="#4B565E"
                   strokeWidth={1}

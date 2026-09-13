@@ -4,14 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import type { BrowseItem } from "@/lib/browse/items";
+import { browseItems, type BrowseItem } from "@/lib/browse/items";
 import { HeroSpotlightCanvas } from "@/components/landing/hero-spotlight-canvas";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { cn } from "@/lib/utils";
 
+const browseBySlug = new Map(browseItems.map((item) => [item.slug, item]));
+
 const categories = [
   {
     title: "Layouts",
+    slug: "fluid-expanding-grid",
     count: "20+",
     image: "/landing/card-layouts.png",
     panel: "#879F6C",
@@ -21,6 +24,7 @@ const categories = [
   },
   {
     title: "Navigation",
+    slug: "discrete-tabs",
     count: "20+",
     image: "/landing/card-navigation.png",
     panel: "#2495D1",
@@ -30,6 +34,7 @@ const categories = [
   },
   {
     title: "Interactions",
+    slug: "pop-tilt-cards",
     count: "20+",
     image: "/landing/card-interactions.png",
     panel: "#BC6147",
@@ -39,6 +44,7 @@ const categories = [
   },
   {
     title: "User Interface",
+    slug: "pricing-card",
     count: "20+",
     image: "/landing/card-user-interface.png",
     panel: "#B6547A",
@@ -411,6 +417,57 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
   );
 }
 
+function CategoryCardPreview({
+  poster,
+  video,
+}: {
+  poster: string;
+  video?: string;
+}) {
+  const [ready, setReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const start = () => setReady(true);
+    if (typeof requestIdleCallback !== "undefined") {
+      const id = requestIdleCallback(start, { timeout: 1500 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(start, 300);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const node = videoRef.current;
+    if (!node || !ready || !video) return;
+    void node.play().catch(() => {});
+  }, [ready, video]);
+
+  return (
+    <>
+      <Image
+        src={poster}
+        alt=""
+        fill
+        sizes="(max-width: 768px) 100vw, 588px"
+        className="object-cover"
+      />
+      {ready && video ? (
+        <video
+          ref={videoRef}
+          src={video}
+          poster={poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 size-full object-cover"
+        />
+      ) : null}
+    </>
+  );
+}
+
 function FeaturesSection() {
   return (
     <section className="bg-[#F5F3EE] px-4 py-16 sm:px-8 lg:px-[120px] lg:py-[100px]">
@@ -441,12 +498,9 @@ function FeaturesSection() {
                   className="relative h-[220px] overflow-hidden rounded-xl sm:h-[320px] lg:h-[430px]"
                   style={{ backgroundColor: cat.panel }}
                 >
-                  <Image
-                    src={cat.image}
-                    alt=""
-                    fill
-                    sizes="(max-width: 768px) 100vw, 588px"
-                    className="object-cover"
+                  <CategoryCardPreview
+                    poster={cat.image}
+                    video={browseBySlug.get(cat.slug)?.video}
                   />
                 </div>
                 <div className="flex flex-col gap-4 px-2">
