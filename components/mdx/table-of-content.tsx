@@ -121,19 +121,26 @@ export function DocsTableOfContents({
         </p>
       </div>
       <div className="relative flex flex-row">
-        <TocIndicator toc={toc} activeIndex={activeIndex} />
-        <div className="flex h-fit flex-col gap-2 pt-2">
+        <div className="flex h-fit min-w-0 flex-1 flex-col gap-2 pt-2">
           {toc.map((item) => (
             <a
               key={item.url}
               href={item.url}
-              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=1]:pl-5 data-[depth=2]:pl-5 data-[depth=3]:pl-8 data-[depth=4]:pl-11"
+              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=1]:pr-5 data-[depth=2]:pr-5 data-[depth=3]:pr-8 data-[depth=4]:pr-11"
               data-active={item.url === `#${activeHeading}`}
               data-depth={item.depth}
             >
               {item.title}
             </a>
           ))}
+        </div>
+        <div className="relative w-8 shrink-0 self-stretch">
+          <TocIndicator
+            toc={toc}
+            activeIndex={activeIndex}
+            className="scale-x-[-1]"
+            airplaneClassName="scale-x-[-1]"
+          />
         </div>
       </div>
     </div>

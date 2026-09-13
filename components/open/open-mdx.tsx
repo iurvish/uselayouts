@@ -30,9 +30,12 @@ export async function OpenMdxPre({
   children,
   title,
   "data-language": dataLanguage,
+  variant = "dark",
 }: ComponentPropsWithoutRef<"pre"> & {
   title?: string;
   "data-language"?: string;
+  /** Docs pages use light surfaces; open drawer/panels use dark (default). */
+  variant?: "dark" | "light";
 }) {
   const code = extractMdxPreText(children).replace(/\n$/, "");
   const lang =
@@ -50,7 +53,7 @@ export async function OpenMdxPre({
         title={title}
         withWrapper={false}
         copyButton={false}
-        variant="light"
+        variant={variant}
       />
     </div>
   );

@@ -207,7 +207,7 @@ export function ComponentEditor({
     setMessage(null);
 
     const payload = {
-      name: form.name || undefined,
+      ...(mode === "create" && form.name.trim() ? { name: form.name.trim() } : {}),
       title: form.title,
       description: form.description,
       code: form.code,
@@ -246,12 +246,15 @@ export function ComponentEditor({
     }
 
     setMessage(`Saved ${data.name}.`);
+    setForm((current) => ({ ...current, name: data.name }));
     setPreviewKey((key) => key + 1);
     setDepsLocked(true);
     setCopyLocked(true);
     router.refresh();
     if (mode === "create") {
       router.push(`/admin/${data.name}`);
+    } else if (initialName && data.name !== initialName) {
+      router.replace(`/admin/${data.name}`);
     }
   }
 

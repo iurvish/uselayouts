@@ -41,7 +41,8 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     const result = await upsertComponent({
-      name,
+      previousName: name,
+      name: body.name,
       title: body.title,
       description: body.description,
       code: body.code,

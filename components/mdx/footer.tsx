@@ -16,7 +16,9 @@ export default function Footer() {
 
     function scan(items: PageTree.Node[]) {
       for (const item of items) {
-        if (item.type === "page") result.push(item);
+        if (item.type === "page" && !item.url.startsWith("/docs/components/")) {
+          result.push(item);
+        }
         else if (item.type === "folder") {
           if (item.index) result.push(item.index);
           scan(item.children);

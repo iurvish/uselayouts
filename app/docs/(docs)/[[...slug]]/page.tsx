@@ -31,7 +31,12 @@ export default async function Page(props: {
       <div
         className="prose prose-neutral mt-8 w-full min-w-0 max-w-none flex-1 overflow-x-clip text-[15px] leading-7 text-[#4B565E] *:data-[slot=alert]:first:mt-0 [&_a]:text-[#071A31] [&_code]:text-[#071A31] [&_h2]:scroll-mt-28 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-[#071A31] [&_h3]:scroll-mt-28 [&_h3]:text-base [&_h3]:font-medium [&_h3]:text-[#071A31] [&_strong]:text-[#071A31]"
       >
-        <MDX components={{ ...defaultMdxComponents, pre: OpenMdxPre }} />
+        <MDX
+          components={{
+            ...defaultMdxComponents,
+            pre: (props) => <OpenMdxPre {...props} variant="light" />,
+          }}
+        />
       </div>
       <div className="mt-20 flex flex-col gap-8">
         <Footer />

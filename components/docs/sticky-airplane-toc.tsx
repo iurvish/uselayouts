@@ -10,7 +10,7 @@ export type DocTocItem = {
   depth: number;
 };
 
-/** Mounts the existing airplane TOC sticky on the left — component internals unchanged. */
+/** Mounts the existing airplane TOC sticky on the right — component internals unchanged. */
 export function StickyAirplaneToc({
   toc,
   className,

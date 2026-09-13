@@ -26,6 +26,7 @@ interface TocIndicatorProps {
   toc: TocItem[];
   activeIndex: number;
   className?: string;
+  airplaneClassName?: string;
 }
 
 interface PathData {
@@ -130,6 +131,7 @@ export function TocIndicator({
   toc,
   activeIndex,
   className,
+  airplaneClassName,
 }: TocIndicatorProps) {
   const { path, totalLength, itemCenterDistances, itemPositions } =
     usePathData(toc);
@@ -165,7 +167,7 @@ export function TocIndicator({
           "linear-gradient(to bottom, transparent 0px, currentColor 15px, currentColor 100%)",
       }}
       className={cn(
-        "text-accent pointer-events-none absolute h-full w-full",
+        "pointer-events-none absolute h-full w-full text-[#4B565E]",
         className,
       )}
     >
@@ -252,8 +254,8 @@ export function TocIndicator({
             let strokeWidth = 0;
 
             if (isUpcoming) {
-              fillColor = "var(--background)";
-              strokeColor = "currentColor";
+              fillColor = "#F5F3EE";
+              strokeColor = "#4B565E";
               strokeWidth = 1;
             }
             if (isCovered) {
@@ -286,8 +288,8 @@ export function TocIndicator({
                   cx={pos.x}
                   cy={pos.y}
                   r={2.5}
-                  fill="var(--primary-foreground)"
-                  stroke="var(--currentColor)"
+                  fill="#071A31"
+                  stroke="#4B565E"
                   strokeWidth={1}
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{
@@ -320,7 +322,7 @@ export function TocIndicator({
         </AnimatePresence>
       </svg>
       <motion.div
-        className="absolute top-0 left-0"
+        className={cn("absolute top-0 left-0", airplaneClassName)}
         style={{
           offsetPath: cssOffsetPath,
           offsetRotate: "0deg",
@@ -340,7 +342,7 @@ export function TocIndicator({
           <g clipPath="url(#clip0_78_315)">
             <path
               d="M15.4443 4.85163L9.14804 6.8146V2.48126L10.7036 1.29608V0.110894L7.96286 0.888672L5.18508 0.110894V1.29608L6.77767 2.48126V6.8146L0.444336 4.85163V6.40719L6.77767 10.3702V14.7035C6.77767 15.0492 6.88878 15.3331 7.111 15.5553C7.33322 15.7776 7.611 15.8887 7.94434 15.8887C8.27767 15.8887 8.56162 15.7776 8.79619 15.5553C9.03076 15.3331 9.14804 15.0492 9.14804 14.7035V10.3702L15.4443 6.40719V4.85163Z"
-              fill="white"
+              fill="#071A31"
             />
           </g>
           <defs>

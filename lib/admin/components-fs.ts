@@ -46,6 +46,8 @@ export type RegistryItem = {
 
 export type UpsertComponentInput = {
   name?: string;
+  /** When set, renames artifacts if the resolved slug changes. */
+  previousName?: string;
   title: string;
   description: string;
   code: string;
@@ -166,9 +168,100 @@ function flattenKeys(
   return keys;
 }
 
+async function safeRename(from: string, to: string) {
+  try {
+    await fs.access(from);
+    await fs.rename(from, to);
+  } catch {
+    // source missing
+  }
+}
+
+async function replaceSlugInFile(filePath: string, from: string, to: string) {
+  try {
+    const content = await fs.readFile(filePath, "utf8");
+    if (!content.includes(from)) return;
+    await fs.writeFile(filePath, content.replaceAll(from, to));
+  } catch {
+    // optional file
+  }
+}
+
+async function renameComponentSlug(from: string, to: string) {
+  if (from === to) return;
+
+  await safeRename(
+    path.join(EXAMPLE_DIR, `${from}.tsx`),
+    path.join(EXAMPLE_DIR, `${to}.tsx`),
+  );
+  await safeRename(
+    path.join(CONTROLS_DIR, `${from}.json`),
+    path.join(CONTROLS_DIR, `${to}.json`),
+  );
+  await safeRename(path.join(DOCS_DIR, `${from}.mdx`), path.join(DOCS_DIR, `${to}.mdx`));
+
+  const demoFrom = path.join(ROOT, "registry/default/demo", `${from}-demo.tsx`);
+  const demoTo = path.join(ROOT, "registry/default/demo", `${to}-demo.tsx`);
+  try {
+    const demo = await fs.readFile(demoFrom, "utf8");
+    await fs.writeFile(demoTo, demo.replaceAll(from, to));
+    await fs.unlink(demoFrom);
+  } catch {
+    await safeRename(demoFrom, demoTo);
+  }
+
+  const { readBrowseMediaMap, writeBrowseMediaOverride, clearBrowseMediaOverride } =
+    await import("@/lib/browse/browse-media-map");
+  const media = (await readBrowseMediaMap())[from];
+  if (media) {
+    await writeBrowseMediaOverride(to, media);
+    await clearBrowseMediaOverride(from);
+  }
+
+  const registry = await readRegistry();
+  registry.items = registry.items.filter((item) => item.name !== from);
+  await writeRegistry(registry);
+
+  await replaceSlugInFile(path.join(ROOT, "lib/browse/items.ts"), from, to);
+  await replaceSlugInFile(path.join(ROOT, "lib/open/new-components.ts"), from, to);
+
+  const heroPath = path.join(ROOT, "registry/default/landing-hero.json");
+  try {
+    const hero = JSON.parse(await fs.readFile(heroPath, "utf8")) as { slugs?: string[] };
+    if (Array.isArray(hero.slugs) && hero.slugs.includes(from)) {
+      hero.slugs = hero.slugs.map((slug) => (slug === from ? to : slug));
+      await fs.writeFile(heroPath, JSON.stringify(hero, null, 2) + "\n");
+    }
+  } catch {
+    // optional
+  }
+
+  try {
+    await fs.unlink(path.join(ROOT, "public/r", `${from}.json`));
+  } catch {
+    // rebuilt on save
+  }
+
+  try {
+    const { createServiceClient } = await import("@/lib/supabase/admin");
+    const supabase = createServiceClient();
+    if (supabase) await supabase.from("components").delete().eq("slug", from);
+  } catch {
+    // FS remains source of truth.
+  }
+}
+
 export async function upsertComponent(input: UpsertComponentInput) {
   const name = toSlug(input.name || input.title);
   if (!name) throw new Error("Invalid component name");
+
+  if (input.previousName && input.previousName !== name) {
+    const registry = await readRegistry();
+    if (registry.items.some((item) => item.name === name)) {
+      throw new Error(`Component "${name}" already exists`);
+    }
+    await renameComponentSlug(input.previousName, name);
+  }
 
   const title = input.title.trim() || toTitle(name);
   const description = input.description.trim();
