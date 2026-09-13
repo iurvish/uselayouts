@@ -190,7 +190,7 @@ export function FolderShell({
     <div className="relative flex flex-col items-center font-synthesis-none antialiased">
       <div
         ref={wrapRef}
-        className="relative h-[400px] w-[320px] cursor-pointer rounded-[22px] touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+        className="relative h-[400px] w-[320px] cursor-pointer overflow-visible touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
         style={{
           perspective: "2000px",
           transformStyle: "preserve-3d",

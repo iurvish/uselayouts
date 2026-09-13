@@ -56,7 +56,7 @@ const ORBIT_NODES: { deg: number; r: 2 | 1 }[][] = [
 ];
 
 const TITLE = "Stay hungry";
-const SUBTITLE = "For people who still build.";
+const SUBTITLE = "For people who still build the work.";
 
 function OrbitGraphic() {
   return (
@@ -114,7 +114,7 @@ function Cover() {
 
 function LetterFront() {
   return (
-    <div className="flex h-full flex-col px-5 py-5 font-[family-name:var(--font-geist-mono)] text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.42_0.02_95)]">
+    <div className="flex h-full flex-col py-5 pr-3 pl-5 font-[family-name:var(--font-geist-mono)] text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.42_0.02_95)]">
       <p className="tracking-[0.14em] text-[oklch(0.32_0.02_95)] uppercase">
         Product brief
       </p>
@@ -184,7 +184,7 @@ function LetterBack() {
 }
 
 const CUT =
-  "radial-gradient(circle 22px at 0% 50%, transparent 20px, #000 21.5px)";
+  "radial-gradient(circle 18px at 100% 50%, transparent 16.5px, #000 17.5px)";
 
 export function OrbitFolder() {
   return (
@@ -195,7 +195,7 @@ export function OrbitFolder() {
       cover={<Cover />}
       letterFront={<LetterFront />}
       letterBack={<LetterBack />}
-      tuckX={-8}
+      tuckX={44}
       coverStyle={{
         WebkitMaskImage: CUT,
         maskImage: CUT,
