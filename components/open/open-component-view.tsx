@@ -38,7 +38,12 @@ export function OpenComponentView({
           "grid h-full min-h-0 w-full min-w-0 flex-1 overflow-auto",
           scrollbarMinimal,
         )}
-        style={{ background: previewBackground || "hsl(225 7% 11%)" }}
+        style={
+          {
+            background: previewBackground || "hsl(225 7% 11%)",
+            "--preview-hint-top": `${data.hintTop ?? 80}px`,
+          } as React.CSSProperties
+        }
       >
         <OpenPreview name={data.slug} hintTop={data.hintTop} />
       </main>

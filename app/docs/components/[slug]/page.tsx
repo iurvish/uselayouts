@@ -9,6 +9,8 @@ import {
   getOpenNavItems,
 } from "@/lib/open/component";
 
+export const dynamic = "force-dynamic";
+
 export default async function OpenComponentPage(props: {
   params: Promise<{ slug: string }>;
 }) {

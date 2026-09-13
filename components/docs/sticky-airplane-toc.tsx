@@ -29,7 +29,10 @@ export function StickyAirplaneToc({
     >
       <DocsTableOfContents
         toc={toc}
-        className="px-0 pt-0 [&_a]:text-[#4B565E]/75 [&_a[data-active=true]]:text-[#071A31] [&_a:hover]:text-[#071A31] [&_p]:bg-[#F5F3EE] [&_p]:text-[#4B565E]/75 [&_svg]:text-[#4B565E]"
+        className="px-0 pt-0 [&_a]:text-[#4B565E]/75 [&_a[data-active=true]]:text-[#071A31] [&_a:hover]:text-[#071A31] [&_p]:bg-[#F5F3EE] [&_p]:text-[#4B565E]/75"
+        indicatorClassName="text-[#4B565E]"
+        indicatorActivePathColor="#071A31"
+        indicatorAirplaneFill="#071A31"
       />
     </aside>
   );

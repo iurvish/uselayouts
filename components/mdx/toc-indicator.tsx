@@ -27,6 +27,10 @@ interface TocIndicatorProps {
   activeIndex: number;
   className?: string;
   airplaneClassName?: string;
+  /** Solid path + progress gradient. Defaults to theme primary. */
+  activePathColor?: string;
+  /** Airplane icon fill. Defaults to white. */
+  airplaneFill?: string;
 }
 
 interface PathData {
@@ -132,12 +136,14 @@ export function TocIndicator({
   activeIndex,
   className,
   airplaneClassName,
+  activePathColor = "var(--primary)",
+  airplaneFill = "white",
 }: TocIndicatorProps) {
   const { path, totalLength, itemCenterDistances, itemPositions } =
     usePathData(toc);
 
   const activeDistance = getActiveDistance(activeIndex, itemCenterDistances);
-  const isActive = activeDistance > 0;
+  const isActive = activeIndex >= 0;
 
   const animatedDistance = useSpring(0, SPRING_CONFIG);
 
@@ -164,10 +170,10 @@ export function TocIndicator({
     <div
       style={{
         maskImage:
-          "linear-gradient(to bottom, transparent 0px, currentColor 15px, currentColor 100%)",
+          "linear-gradient(to bottom, currentColor 0px, currentColor 100%)",
       }}
       className={cn(
-        "pointer-events-none absolute h-full w-full text-[#4B565E]",
+        "text-accent pointer-events-none absolute h-full w-full",
         className,
       )}
     >
@@ -191,8 +197,8 @@ export function TocIndicator({
             y1={gradientY1}
             y2={gradientY2}
           >
-            <stop offset="0%" stopColor="var(--primary)" stopOpacity="0" />
-            <stop offset="100%" stopColor="var(--primary)" stopOpacity="1" />
+            <stop offset="0%" stopColor={activePathColor} stopOpacity="0" />
+            <stop offset="100%" stopColor={activePathColor} stopOpacity="1" />
           </motion.linearGradient>
           <mask id="toc-mask">
             <motion.path
@@ -227,7 +233,7 @@ export function TocIndicator({
         {/* Solid path that is revealed by the mask */}
         <path
           d={path}
-          stroke="currentColor"
+          stroke={activePathColor}
           strokeWidth="1"
           fill="none"
           mask="url(#toc-mask)"
@@ -342,7 +348,7 @@ export function TocIndicator({
           <g clipPath="url(#clip0_78_315)">
             <path
               d="M15.4443 4.85163L9.14804 6.8146V2.48126L10.7036 1.29608V0.110894L7.96286 0.888672L5.18508 0.110894V1.29608L6.77767 2.48126V6.8146L0.444336 4.85163V6.40719L6.77767 10.3702V14.7035C6.77767 15.0492 6.88878 15.3331 7.111 15.5553C7.33322 15.7776 7.611 15.8887 7.94434 15.8887C8.27767 15.8887 8.56162 15.7776 8.79619 15.5553C9.03076 15.3331 9.14804 15.0492 9.14804 14.7035V10.3702L15.4443 6.40719V4.85163Z"
-              fill="#071A31"
+              fill={airplaneFill}
             />
           </g>
           <defs>

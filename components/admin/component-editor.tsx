@@ -126,7 +126,7 @@ export function ComponentEditor({
         setPreviewBgDark(backgrounds.dark ?? DEFAULT_PREVIEW_BACKGROUNDS.dark);
         const loadedHint =
           typeof data.controls?.hintTop === "number" ? data.controls.hintTop : 80;
-        setHintTop(Math.min(200, Math.max(0, Math.round(loadedHint))));
+        setHintTop(Math.min(200, Math.max(-200, Math.round(loadedHint))));
         setPosterUrl(data.controls?.posterUrl ?? null);
         setVideoUrl(data.controls?.videoUrl ?? null);
       })
@@ -519,7 +519,7 @@ export function ComponentEditor({
                 </div>
                 <input
                   type="range"
-                  min={0}
+                  min={-200}
                   max={200}
                   step={1}
                   value={hintTop}

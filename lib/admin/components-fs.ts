@@ -144,7 +144,7 @@ export function clampHintTop(value: unknown): number | undefined {
   if (value == null || value === "") return undefined;
   const n = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(n)) return undefined;
-  return Math.min(200, Math.max(0, Math.round(n)));
+  return Math.min(200, Math.max(-200, Math.round(n)));
 }
 
 function flattenKeys(

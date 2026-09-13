@@ -17,10 +17,24 @@ export type RibbonPatternMode =
   | "ripple"
   | "shear";
 
-type Pointer = { x: number; y: number; inside: boolean };
+type Pointer = { x: number; y: number; inside: boolean; vx: number };
+
+/** px/frame — ignore jitter; only flip bend when movement is deliberate */
+const BEND_VX_THRESHOLD = 0.4;
 
 /** Rest-state lean — subtle uniform rightward bend when not hovered */
 const REST_BEND_DIRECTION = 1;
+
+/** After exit — nudge focus/bend partway toward rest so it doesn't feel frozen */
+const SETTLE_CENTER_PULL = 0.18;
+const SETTLE_BEND_RETAIN = 0.48;
+
+function updateBendTarget(target: { current: number }, vx: number) {
+  if (Math.abs(vx) >= BEND_VX_THRESHOLD) {
+    // Only flip when the user is deliberately moving — never on pointerenter.
+    target.current = Math.sign(vx) || target.current;
+  }
+}
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -47,9 +61,9 @@ function grain(
 }
 
 /**
- * Gaussian displacement field centered at (focusX, focusY).
- * Rest: uniform lean (all lines same sign). Hover: local antisymmetric bulge —
- * lines left of focus bend left, right bend right; blend tracks bend amount.
+ * Unidirectional Gaussian displacement field centered at (focusX, focusY).
+ * offset = direction · bend · sin(πy/h)^p · exp(−dx²/2σx²) · exp(−dy²/2σy²) · strength
+ * All lines at a given y shift the same direction; magnitude falls off with distance from cursor.
  * vEnv pins displacement to zero at top/bottom edges.
  */
 function gaussianWarpOffset(
@@ -60,7 +74,7 @@ function gaussianWarpOffset(
   w: number,
   h: number,
   bend: number,
-  hoverMix: number,
+  direction: number,
   p: RibbonDialParams,
 ) {
   const dx = x0 - focusX;
@@ -76,12 +90,7 @@ function gaussianWarpOffset(
   const vEnv = Math.pow(Math.sin(yn * Math.PI), p.curvePower);
   if (vEnv <= 0) return 0;
 
-  const mag = bend * vEnv * gauss * p.warpStrength;
-  const globalOffset = REST_BEND_DIRECTION * mag;
-  const localDir = Math.tanh(dx / (sigmaX * 0.35));
-  const localOffset = localDir * mag;
-
-  return lerp(globalOffset, localOffset, hoverMix);
+  return direction * bend * vEnv * gauss * p.warpStrength;
 }
 
 function lineDisplacement(
@@ -94,8 +103,9 @@ function lineDisplacement(
   w: number,
   h: number,
   bend: number,
-  hoverMix: number,
+  direction: number,
   pointer: Pointer,
+  hasInteracted: boolean,
   p: RibbonDialParams,
   t: number,
 ) {
@@ -107,7 +117,7 @@ function lineDisplacement(
     w,
     h,
     bend,
-    hoverMix,
+    direction,
     p,
   );
 
@@ -124,7 +134,7 @@ function lineDisplacement(
     }
 
     case "ripple": {
-      if (!pointer.inside) return base * 0.85;
+      if (!pointer.inside) return hasInteracted ? base : base * 0.85;
       const r = Math.hypot(x0 - pointer.x, y - pointer.y);
       const wave = Math.sin(r * 0.09 - t * 3.2) * bend * 0.22;
       const damp = Math.exp(-r / (w * 0.28));
@@ -147,34 +157,44 @@ function drawRibbons(
   h: number,
   mode: RibbonPatternMode,
   pointer: Pointer,
-  smooth: { x: number; y: number; bend: number },
+  smooth: { x: number; y: number; bend: number; direction: number },
+  targetDirection: number,
+  hasInteracted: boolean,
+  settle: { x: number; y: number; bend: number } | null,
   params: RibbonDialParams,
   t: number,
 ) {
   const lines = Math.round(params.lineCount);
 
-  const targetX = pointer.inside ? pointer.x : w * 0.5;
-  const targetY = pointer.inside ? pointer.y : h * 0.5;
-  const targetBend = pointer.inside ? params.hoverBend : params.restBend;
-
   const follow =
     mode === "magnetic" && pointer.inside
       ? params.follow * 1.6
       : params.follow;
-  const leaveFollow = follow * 0.35;
 
-  smooth.x = lerp(smooth.x, targetX, pointer.inside ? follow : leaveFollow);
-  smooth.y = lerp(smooth.y, targetY, pointer.inside ? follow : leaveFollow);
-  smooth.bend = lerp(
-    smooth.bend,
-    targetBend,
-    pointer.inside ? follow * 1.15 : leaveFollow,
-  );
+  if (pointer.inside) {
+    smooth.x = lerp(smooth.x, pointer.x, follow);
+    smooth.y = lerp(smooth.y, pointer.y, follow);
+    smooth.bend = lerp(smooth.bend, params.hoverBend, follow * 1.15);
+    smooth.direction = lerp(smooth.direction, targetDirection, follow * 0.55);
+  } else if (hasInteracted && settle) {
+    const settleFollow = follow * 0.32;
+    smooth.x = lerp(smooth.x, settle.x, settleFollow);
+    smooth.y = lerp(smooth.y, settle.y, settleFollow);
+    smooth.bend = lerp(smooth.bend, settle.bend, settleFollow);
+  } else if (!hasInteracted) {
+    // Snap rest state — no lerp on first paint (smooth starts at 0,0 otherwise).
+    smooth.x = w * 0.5;
+    smooth.y = h * 0.5;
+    smooth.bend = params.restBend;
+    smooth.direction = REST_BEND_DIRECTION;
+  }
 
-  const bendSpan = Math.max(params.hoverBend - params.restBend, 0.001);
-  const hoverMix = pointer.inside
-    ? clamp((smooth.bend - params.restBend) / bendSpan, 0, 1)
-    : 0;
+  const focusX = hasInteracted ? smooth.x : w * 0.5;
+  const focusY = hasInteracted ? smooth.y : h * 0.5;
+  const direction = hasInteracted ? smooth.direction : REST_BEND_DIRECTION;
+  const warpParams = !hasInteracted
+    ? { ...params, warpRadius: params.warpRadius * 1.22 }
+    : params;
 
   for (let i = 0; i < lines; i++) {
     const u = i / (lines - 1);
@@ -195,14 +215,15 @@ function drawRibbons(
         x0,
         y,
         u,
-        smooth.x,
-        smooth.y,
+        focusX,
+        focusY,
         w,
         h,
         smooth.bend,
-        hoverMix,
+        direction,
         pointer,
-        params,
+        hasInteracted,
+        warpParams,
         t,
       );
       const x = x0 + offset;
@@ -231,11 +252,17 @@ export function RibbonField({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const reduce = useReducedMotion() ?? false;
-  const pointerRef = React.useRef<Pointer>({ x: 0, y: 0, inside: false });
+  const pointerRef = React.useRef<Pointer>({ x: 0, y: 0, inside: false, vx: 0 });
+  const targetDirectionRef = React.useRef(REST_BEND_DIRECTION);
+  const hasInteractedRef = React.useRef(false);
+  const settleRef = React.useRef<{ x: number; y: number; bend: number } | null>(
+    null,
+  );
   const smoothRef = React.useRef({
     x: 0,
     y: 0,
     bend: ribbonDefaults.restBend,
+    direction: REST_BEND_DIRECTION,
   });
 
   React.useEffect(() => {
@@ -254,18 +281,25 @@ export function RibbonField({
       canvas.width = Math.max(1, Math.floor(width * dpr));
       canvas.height = Math.max(1, Math.floor(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (!seeded && width > 0) {
-        smoothRef.current = {
-          x: width * 0.5,
-          y: height * 0.5,
-          bend: paramsRef.current.restBend,
-        };
-        seeded = true;
+      if (width > 0 && height > 0) {
+        if (!seeded) {
+          seeded = true;
+        }
+        if (!pointerRef.current.inside && !hasInteractedRef.current) {
+          smoothRef.current.x = width * 0.5;
+          smoothRef.current.y = height * 0.5;
+          smoothRef.current.bend = paramsRef.current.restBend;
+          smoothRef.current.direction = REST_BEND_DIRECTION;
+        }
       }
     };
 
     const frame = (now: number) => {
       const { width, height } = canvas.getBoundingClientRect();
+      if (width <= 0 || height <= 0) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const t = reduce ? 0 : (now - t0) / 1000;
       ctx.fillStyle = "#1a1a1e";
       ctx.fillRect(0, 0, width, height);
@@ -276,6 +310,9 @@ export function RibbonField({
         mode,
         pointerRef.current,
         smoothRef.current,
+        targetDirectionRef.current,
+        hasInteractedRef.current,
+        settleRef.current,
         paramsRef.current,
         t,
       );
@@ -304,15 +341,35 @@ export function RibbonField({
       const h = canvasRect.height;
       if (w <= 0 || h <= 0) return;
 
+      const prev = pointerRef.current;
       const x = clamp(e.clientX - canvasRect.left, 0, w);
       const y = clamp(e.clientY - canvasRect.top, 0, h);
-      pointerRef.current = { x, y, inside: true };
+      const vx = prev.inside ? x - prev.x : 0;
+
+      updateBendTarget(targetDirectionRef, vx);
+      hasInteractedRef.current = true;
+      pointerRef.current = { x, y, inside: true, vx };
     };
 
     const onEnter = (e: PointerEvent) => syncPointer(e);
     const onMove = (e: PointerEvent) => syncPointer(e);
     const onLeave = () => {
-      pointerRef.current = { ...pointerRef.current, inside: false };
+      const canvasRect = canvas.getBoundingClientRect();
+      const w = canvasRect.width;
+      const h = canvasRect.height;
+      const p = paramsRef.current;
+      const ptr = pointerRef.current;
+
+      if (w > 0 && h > 0) {
+        settleRef.current = {
+          x: ptr.x + (w * 0.5 - ptr.x) * SETTLE_CENTER_PULL,
+          y: ptr.y + (h * 0.5 - ptr.y) * SETTLE_CENTER_PULL,
+          bend:
+            p.restBend + (p.hoverBend - p.restBend) * SETTLE_BEND_RETAIN,
+        };
+      }
+
+      pointerRef.current = { ...ptr, inside: false, vx: 0 };
     };
 
     hit.addEventListener("pointerenter", onEnter);

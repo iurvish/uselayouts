@@ -16,34 +16,41 @@ import { cn } from "@/lib/utils";
 import * as React from "react";
 
 function useActiveItem(itemIds: string[]) {
-  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const [activeId, setActiveId] = React.useState<string | null>(
+    () => itemIds[0] ?? null,
+  );
 
   React.useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        }
-      },
-      { rootMargin: "0% 0% -60% 0%" },
-    );
-
-    for (const id of itemIds ?? []) {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
-      }
+    if (!itemIds.length) {
+      setActiveId(null);
+      return;
     }
 
-    return () => {
-      for (const id of itemIds ?? []) {
-        const element = document.getElementById(id);
-        if (element) {
-          observer.unobserve(element);
+    const update = () => {
+      // Pin first section at page top — IntersectionObserver misses headings here.
+      if (window.scrollY < 64) {
+        setActiveId(itemIds[0]);
+        return;
+      }
+
+      const marker = window.innerHeight * 0.25;
+      let current = itemIds[0];
+      for (const id of itemIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= marker) {
+          current = id;
         }
       }
+      setActiveId(current);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, [itemIds]);
 
@@ -54,6 +61,9 @@ export function DocsTableOfContents({
   toc,
   variant = "list",
   className,
+  indicatorClassName,
+  indicatorActivePathColor,
+  indicatorAirplaneFill,
 }: {
   toc: {
     title?: React.ReactNode;
@@ -62,6 +72,9 @@ export function DocsTableOfContents({
   }[];
   variant?: "dropdown" | "list";
   className?: string;
+  indicatorClassName?: string;
+  indicatorActivePathColor?: string;
+  indicatorAirplaneFill?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const itemIds = React.useMemo(
@@ -69,7 +82,9 @@ export function DocsTableOfContents({
     [toc],
   );
   const activeHeading = useActiveItem(itemIds);
-  const activeIndex = activeHeading ? itemIds.indexOf(activeHeading) : -1;
+  const activeIndex = activeHeading
+    ? Math.max(0, itemIds.indexOf(activeHeading))
+    : 0;
 
   if (!toc?.length) {
     return null;
@@ -121,26 +136,27 @@ export function DocsTableOfContents({
         </p>
       </div>
       <div className="relative flex flex-row">
+        <div className="relative w-8 shrink-0 self-stretch">
+          <TocIndicator
+            toc={toc}
+            activeIndex={activeIndex}
+            className={indicatorClassName}
+            activePathColor={indicatorActivePathColor}
+            airplaneFill={indicatorAirplaneFill}
+          />
+        </div>
         <div className="flex h-fit min-w-0 flex-1 flex-col gap-2 pt-2">
           {toc.map((item) => (
             <a
               key={item.url}
               href={item.url}
-              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=1]:pr-5 data-[depth=2]:pr-5 data-[depth=3]:pr-8 data-[depth=4]:pr-11"
+              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=1]:pl-5 data-[depth=2]:pl-5 data-[depth=3]:pl-8 data-[depth=4]:pl-11"
               data-active={item.url === `#${activeHeading}`}
               data-depth={item.depth}
             >
               {item.title}
             </a>
           ))}
-        </div>
-        <div className="relative w-8 shrink-0 self-stretch">
-          <TocIndicator
-            toc={toc}
-            activeIndex={activeIndex}
-            className="scale-x-[-1]"
-            airplaneClassName="scale-x-[-1]"
-          />
         </div>
       </div>
     </div>

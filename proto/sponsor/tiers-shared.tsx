@@ -23,46 +23,8 @@ export const TIER_SPONSORS: Record<
   (typeof TIERS)[number],
   (SponsorEntry | null)[]
 > = {
-  Gold: [
-    {
-      name: "International Business Machines Corporation",
-      abbr: "IBM",
-      color: "#0F62FE",
-      href: "https://ibm.com",
-      since: "Jan 2024",
-    },
-    {
-      name: "Vercel",
-      abbr: "▲",
-      color: "#000000",
-      href: "https://vercel.com",
-      since: "Mar 2025",
-    },
-    null,
-  ],
-  Silver: [
-    {
-      name: "Linear",
-      abbr: "LN",
-      color: "#5E6AD2",
-      href: "https://linear.app",
-      since: "Jun 2025",
-    },
-    {
-      name: "Stripe",
-      abbr: "S",
-      color: "#635BFF",
-      href: "https://stripe.com",
-      since: "Apr 2025",
-    },
-    {
-      name: "Acme Design Systems International LLC",
-      abbr: "AD",
-      color: "#BC6147",
-      href: "https://example.com",
-      since: "Aug 2025",
-    },
-  ],
+  Gold: [null, null, null],
+  Silver: [null, null, null],
   Bronze: [null, null, null],
 };
 
@@ -184,22 +146,30 @@ export function SponsorTicketSlot({
       aria-label={label}
     >
       <div className="relative mx-auto h-[100px] w-full max-w-full min-w-0 sm:h-[120px] [&_img]:pointer-events-none">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[#FDFCFC]"
+          style={{
+            maskImage: `url(${shape.src})`,
+            WebkitMaskImage: `url(${shape.src})`,
+            maskSize: "contain",
+            WebkitMaskSize: "contain",
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+            maskPosition: "center",
+            WebkitMaskPosition: "center",
+          }}
+        />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={shape.src}
           alt=""
           width={shape.w}
           height={shape.h}
-          className="size-full object-contain object-center"
+          className="absolute inset-0 size-full object-contain object-center mix-blend-multiply"
           draggable={false}
         />
-        <span
-          className={cn(
-            "absolute inset-0 flex items-center justify-center px-3",
-            !sponsor &&
-              "transition-[background-color] duration-150 group-hover:bg-white/30",
-          )}
-        >
+        <span className="absolute inset-0 flex items-center justify-center px-3">
           <TicketSlotContent sponsor={sponsor} mode={mode} />
         </span>
       </div>
@@ -312,12 +282,12 @@ export function TierTickets({
       className="w-full overflow-hidden rounded-[14px] border border-[#e2e2e2] shadow-[0px_1px_1px_0px_rgba(0,0,0,0.02)]"
       aria-label={`${label} sponsors`}
     >
-      <div className={cn("flex items-center bg-[#f9f8f5] px-4", compact ? "py-2.5" : "py-3")}>
+      <div className={cn("flex items-center px-4", compact ? "py-2.5" : "py-3")}>
         <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">{label}</h2>
       </div>
       <div
         className={cn(
-          "grid grid-cols-1 items-center gap-3 border-t border-[#e2e2e2] bg-[#f9f8f5] px-3 py-5 sm:grid-cols-3 sm:min-h-[160px] sm:gap-3 sm:px-4 sm:py-8",
+          "grid grid-cols-1 items-center gap-3 border-t border-[#e2e2e2] px-3 py-5 sm:grid-cols-3 sm:min-h-[160px] sm:gap-3 sm:px-4 sm:py-8",
           compact && "sm:min-h-[120px] gap-2 py-5",
         )}
       >
