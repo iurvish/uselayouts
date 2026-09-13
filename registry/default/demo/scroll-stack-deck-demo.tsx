@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 
-import { PreviewHint } from "@/components/open/preview-hint";
 import ScrollStackDeck from "@/registry/default/example/scroll-stack-deck";
 
 export default function ScrollStackDeckDemo() {
@@ -13,12 +12,6 @@ export default function ScrollStackDeckDemo() {
       ref={scrollerRef}
       className="relative h-full min-h-0 w-full self-stretch overflow-y-auto overscroll-contain bg-[#F4F6F8]"
     >
-      <PreviewHint
-        absolute={false}
-        tone="light"
-        heading="Scroll the stack"
-        description="Five project cards pin in the viewport. Keep scrolling — each new card slides up and the others settle behind it."
-      />
       <ScrollStackDeck
         title=""
         subtitle=""

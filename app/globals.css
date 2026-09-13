@@ -430,16 +430,10 @@
   padding-left: 0;
 }
 
-/* Shiki dual-theme output (`defaultColor: false`) needs these CSS variables. */
-/* Docs light surfaces: vesper token hues (same as component panel), remapped for cream/white bg. */
-.open-shiki-light {
-  --open-shiki-ink: #1c1c1c;
-  --open-shiki-mint: #0e8f7a;
-}
-
+/* Shiki dual-theme output (`defaultColor: false`) — docs light surfaces use min-light tokens. */
 .open-shiki-light .shiki,
 .open-shiki-light .shiki span {
-  color: var(--shiki-dark) !important;
+  color: var(--shiki-light) !important;
 }
 
 .open-shiki-light .shiki {
@@ -450,15 +444,17 @@
   background-color: transparent !important;
 }
 
-/* Vesper default text is white — unreadable on light surfaces */
-.open-shiki-light .shiki span[style*="--shiki-dark:#FFF"],
-.open-shiki-light .shiki span[style*="--shiki-dark:#FFFF"] {
-  color: var(--open-shiki-ink) !important;
+html.dark .open-shiki-light .shiki,
+html.dark .open-shiki-light .shiki span {
+  color: var(--shiki-light) !important;
 }
 
-/* Vesper mint imports/types — boost contrast on cream/white */
-.open-shiki-light .shiki span[style*="--shiki-dark:#99FFE4"] {
-  color: var(--open-shiki-mint) !important;
+/* Inline code in docs prose — fixed light chips even when html is .dark (system theme). */
+#nd-docs-layout .prose
+  :where(code):not(:where(pre *, [class~='not-prose'], [class~='not-prose'] *)) {
+  background-color: #f0efeb;
+  border-color: #e2e2e2;
+  color: #071a31;
 }
 
 .dark .shiki,

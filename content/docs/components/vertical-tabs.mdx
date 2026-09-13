@@ -1,32 +1,22 @@
 ---
 title: Vertical Tabs
-description: A service list on the side with a progress bar, and a large image that slides when the tab changes.
+description: A vertical tab interaction with smooth content switching.
 ---
 
-## Features
-
-- **Vertical index**: 01 Web Design, 02 Framer, 03 Branding — click any row.
-- **Progress on the active**: A bar fills while autoplay holds that tab.
-- **Synced still**: The big photo and copy swap with the selection.
-- **Directional slide**: Next vs previous enter from opposite sides.
-- **Pause on hover**: Auto-cycle stops when you’re reading.
-
 ## Usage
-
-Fill `SERVICES` with title, description, and image. Needs a two-pane layout (list + picture). Autoplay is five seconds in the demo. Three to five items is the right length; more and the list gets long. Good as a services or capabilities block.
 
 ```tsx
 import VerticalTabs from "@/components/vertical-tabs";
 
-export default function Page() {
+export default function Example() {
   return <VerticalTabs />;
 }
 ```
 
-## Where to use
+## Features
 
-- Agency services pages
-- Product capability tours
-- Studio homepages
-- Course or curriculum outlines
-- Case-study chapter navigation
+- Vertical index: 01 Web Design, 02 Framer, 03 Branding — click any row.
+- Progress on the active: A bar fills while autoplay holds that tab.
+- Synced still: The big photo and copy swap with the selection.
+- Directional slide: Next vs previous enter from opposite sides.
+- Pause on hover: Auto-cycle stops when you’re reading.

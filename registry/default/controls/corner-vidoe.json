@@ -19,11 +19,15 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T06:00:05.403Z",
-  "previewBackground": "hsl(240 6% 7%)",
+  "updatedAt": "2026-09-13T10:55:16.756Z",
+  "previewBackground": {
+    "light": "hsl(240 6% 7%)",
+    "dark": "hsl(240 6% 7%)"
+  },
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "hintTop": 80
 }

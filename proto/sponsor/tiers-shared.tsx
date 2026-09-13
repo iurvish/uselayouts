@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ProtoNav, SPONSOR_HREF } from "./shared";
+import { SPONSOR_HREF } from "./shared";
 
 export { SPONSOR_HREF };
 import { RibbonField, RibbonFieldDial, type RibbonPatternMode } from "./ribbon-pattern";
@@ -317,8 +317,8 @@ export function TierTickets({
       </div>
       <div
         className={cn(
-          "grid min-h-[140px] grid-cols-3 items-center gap-2 border-t border-[#e2e2e2] bg-[#f9f8f5] px-3 py-6 sm:min-h-[160px] sm:gap-3 sm:px-4 sm:py-8",
-          compact && "min-h-[120px] gap-2 py-5",
+          "grid grid-cols-1 items-center gap-3 border-t border-[#e2e2e2] bg-[#f9f8f5] px-3 py-5 sm:grid-cols-3 sm:min-h-[160px] sm:gap-3 sm:px-4 sm:py-8",
+          compact && "sm:min-h-[120px] gap-2 py-5",
         )}
       >
         {SLOT_SHAPES.map((shape, i) => (
@@ -402,12 +402,7 @@ export function HeroCard({
 }
 
 export function TiersShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-svh flex-col bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31] antialiased">
-      <ProtoNav active="Sponsor" cta="explore" />
-      {children}
-    </div>
-  );
+  return children;
 }
 
 export function allSponsorSlots() {

@@ -9,8 +9,8 @@ export default function EditorialDeckDemo() {
   return (
     <div
       className="flex h-full min-h-0 w-full flex-col self-stretch overflow-hidden bg-[#F7F4F0] pt-[28vh] pb-24"
-      // 100px above the default 80px overlay inset
-      style={{ "--preview-hint-top": "-20px" } as CSSProperties}
+      // Counteract pt-[28vh] so the hint sits near the viewport top
+      style={{ "--preview-hint-top": "calc(-28vh + 60px)" } as CSSProperties}
     >
       <PreviewHint
         tone="light"

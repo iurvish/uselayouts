@@ -18,7 +18,7 @@ export default async function Page(props: {
   return (
     <DocsPageShell toc={doc.toc}>
       <div className="flex flex-col gap-2">
-        <p className="font-mono text-[11px] tracking-wide text-[#4B565E]/60 uppercase">
+        <p className="font-mono text-[11px] tracking-wide text-[#4B565E]/85 uppercase">
           Documentation
         </p>
         <h1 className="text-balance text-4xl font-semibold tracking-tight text-[#071A31] sm:text-5xl sm:leading-[1.05]">

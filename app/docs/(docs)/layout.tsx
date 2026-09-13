@@ -6,7 +6,7 @@ import { TreeContextProvider } from "fumadocs-ui/contexts/tree";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <TreeContextProvider tree={source.pageTree}>
-      <div className="min-h-svh bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
+      <div className="light min-h-svh bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
         <LandingNav />
         {children}
       </div>

@@ -468,24 +468,6 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "logoshift": {
-    name: "logoshift",
-    description: "Animated logo showcase with smooth transitions, hover effects, and customizable layouts.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/logoshift.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/logoshift.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "logoshift"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
   "magnified-bento": {
     name: "magnified-bento",
     description: "A bento card component with a draggable magnifying lens effect over scrolling chips.",
@@ -535,24 +517,6 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/multi-step-form.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "multi-step-form"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "new-component": {
-    name: "new-component",
-    description: "hehehe",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/new-component.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/new-component.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "new-component"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -733,24 +697,6 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/status-button.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "status-button"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "urvish": {
-    name: "urvish",
-    description: "urvish",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/urvish.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/urvish.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "urvish"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
