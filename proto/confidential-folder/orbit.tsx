@@ -3,68 +3,92 @@
 import * as React from "react";
 import { COPY, FolderShell } from "./shared";
 
-const SLEEVE = "oklch(0.22 0.008 260)";
-const STROKE = "oklch(0.52 0.014 260)";
+const SLEEVE = "oklch(0.26 0.01 260)";
 const PAPER = "oklch(0.962 0.014 95)";
-const INK = "oklch(0.28 0.02 95)";
-const MUTED = "oklch(0.48 0.02 95)";
 const RULE = "oklch(0.28 0.02 95 / 0.14)";
 
-function ellipsePoint(
-  cx: number,
-  cy: number,
-  rx: number,
-  ry: number,
-  rotDeg: number,
-  t: number,
-) {
-  const rot = (rotDeg * Math.PI) / 180;
-  const x0 = rx * Math.cos(t);
-  const y0 = ry * Math.sin(t);
-  return {
-    x: cx + x0 * Math.cos(rot) - y0 * Math.sin(rot),
-    y: cy + x0 * Math.sin(rot) + y0 * Math.cos(rot),
-  };
-}
+const ORBIT_CX = 160;
+const ORBIT_CY = 176;
+const ORBIT_RX = 108;
+const ORBIT_RY = 44;
+const ORBIT_ROTS = [0, 26, 52, 78, 104, 130, 156];
+
+const ORBIT_NODES: { deg: number; r: 2 | 1 }[][] = [
+  [
+    { deg: 8, r: 2 },
+    { deg: 41, r: 1 },
+    { deg: 54, r: 2 },
+    { deg: 203, r: 1 },
+  ],
+  [
+    { deg: 67, r: 2 },
+    { deg: 188, r: 1 },
+    { deg: 301, r: 2 },
+  ],
+  [
+    { deg: 14, r: 1 },
+    { deg: 22, r: 2 },
+    { deg: 119, r: 1 },
+    { deg: 246, r: 2 },
+    { deg: 338, r: 1 },
+  ],
+  [
+    { deg: 96, r: 2 },
+    { deg: 271, r: 1 },
+  ],
+  [
+    { deg: 33, r: 1 },
+    { deg: 148, r: 2 },
+    { deg: 161, r: 1 },
+    { deg: 284, r: 2 },
+  ],
+  [
+    { deg: 77, r: 1 },
+    { deg: 215, r: 2 },
+    { deg: 352, r: 1 },
+  ],
+  [
+    { deg: 5, r: 2 },
+    { deg: 128, r: 1 },
+    { deg: 174, r: 2 },
+    { deg: 319, r: 1 },
+  ],
+];
+
+const TITLE = "Stay hungry";
+const SUBTITLE = "For people who still build.";
 
 function OrbitGraphic() {
-  const cx = 160;
-  const cy = 168;
-  const rx = 108;
-  const ry = 44;
-  const rots = [0, 26, 52, 78, 104, 130, 156];
-  const nodes = rots.flatMap((rot, i) => {
-    const ts = i % 2 === 0 ? [0.35, 2.2, 3.7] : [1.1, 4.4];
-    return ts.map((t) => ellipsePoint(cx, cy, rx, ry, rot, t));
-  });
-
   return (
     <svg
       viewBox="0 0 320 400"
-      className="pointer-events-none absolute inset-0 h-full w-full select-none"
+      className="pointer-events-none absolute inset-0 h-full w-full select-none text-[oklch(0.58_0.016_260)]"
       aria-hidden
     >
-      {rots.map((rot) => (
-        <ellipse
-          key={rot}
-          cx={cx}
-          cy={cy}
-          rx={rx}
-          ry={ry}
-          fill="none"
-          stroke={STROKE}
-          strokeWidth="1"
-          transform={`rotate(${rot} ${cx} ${cy})`}
-        />
-      ))}
-      {nodes.map((p, i) => (
-        <circle
-          key={`${p.x}-${p.y}-${i}`}
-          cx={p.x}
-          cy={p.y}
-          r={i % 4 === 0 ? 2.4 : 1.4}
-          fill={i % 4 === 0 ? "oklch(0.72 0.02 260)" : STROKE}
-        />
+      {ORBIT_ROTS.map((rot, i) => (
+        <g key={rot} transform={`rotate(${rot} ${ORBIT_CX} ${ORBIT_CY})`}>
+          <ellipse
+            cx={ORBIT_CX}
+            cy={ORBIT_CY}
+            rx={ORBIT_RX}
+            ry={ORBIT_RY}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+          {ORBIT_NODES[i]!.map((node) => {
+            const t = (node.deg * Math.PI) / 180;
+            return (
+              <circle
+                key={node.deg}
+                cx={Math.round(ORBIT_CX + ORBIT_RX * Math.cos(t))}
+                cy={Math.round(ORBIT_CY + ORBIT_RY * Math.sin(t))}
+                r={node.r}
+                fill="currentColor"
+              />
+            );
+          })}
+        </g>
       ))}
     </svg>
   );
@@ -74,16 +98,13 @@ function Cover() {
   return (
     <>
       <OrbitGraphic />
-      <div className="relative flex h-full flex-col justify-between px-6 py-7">
-        <p className="font-[family-name:var(--font-geist-mono)] text-[10px] tracking-[0.18em] text-[oklch(0.78_0.01_260)] uppercase">
-          Uselayouts
-        </p>
-        <div className="max-w-[11rem]">
-          <h3 className="font-[family-name:var(--font-geist-sans)] text-[22px] leading-[1.12] tracking-[-0.03em] text-[oklch(0.94_0.01_260)] text-balance">
-            {COPY.title} brief
+      <div className="relative flex h-full flex-col justify-end px-6 py-7">
+        <div>
+          <h3 className="font-[family-name:var(--font-geist-sans)] text-[22px] leading-[1.12] tracking-[-0.03em] text-[oklch(0.94_0.01_260)]">
+            {TITLE}
           </h3>
-          <p className="mt-2 font-[family-name:var(--font-geist-sans)] text-[12px] leading-snug text-[oklch(0.68_0.01_260)] text-pretty">
-            {COPY.subtitle}
+          <p className="mt-2 whitespace-nowrap font-[family-name:var(--font-geist-sans)] text-[13px] leading-snug text-[oklch(0.68_0.01_260)]">
+            {SUBTITLE}
           </p>
         </div>
       </div>
@@ -95,22 +116,22 @@ function LetterFront() {
   return (
     <div className="flex h-full flex-col px-5 py-5 font-[family-name:var(--font-geist-mono)] text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.42_0.02_95)]">
       <p className="tracking-[0.14em] text-[oklch(0.32_0.02_95)] uppercase">
-        Internal memo
+        Product brief
       </p>
-      <div className="mt-4 space-y-1 tabular-nums">
-        <p>from: people@uselayouts.com</p>
-        <p>to: committee@internal</p>
-        <p>re: {COPY.badge} compensation review</p>
+      <div className="mt-4 space-y-1">
+        <p>from: s.jobs@</p>
+        <p>to: the room</p>
+        <p>re: {TITLE}</p>
       </div>
       <div className="mt-4 h-px" style={{ background: RULE }} />
       <p className="mt-4 max-w-[36ch] text-pretty">
-        Do not circulate outside this thread. Figures are attached as a sealed
-        sheet. Holders, ranges, and exceptions follow.
+        Do not design by committee. The work either sings in the hand or it
+        does not. Cut until a stranger understands it in one look.
       </p>
       <ol className="mt-4 space-y-1 tabular-nums">
-        <li>1. Holders — banded by level</li>
-        <li>2. Ranges — Q3 freeze excepted</li>
-        <li>3. Exceptions — named in annex</li>
+        <li>1. Start with the feeling</li>
+        <li>2. Remove until it is obvious</li>
+        <li>3. Ship before you explain</li>
       </ol>
       <p className="mt-auto tracking-[0.12em] uppercase">{COPY.badge}</p>
     </div>
@@ -119,37 +140,14 @@ function LetterFront() {
 
 function Colophon() {
   return (
-    <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
-      <ellipse
-        cx="24"
-        cy="24"
-        rx="16"
-        ry="7"
-        fill="none"
-        stroke={INK}
-        strokeWidth="1"
-      />
-      <ellipse
-        cx="24"
-        cy="24"
-        rx="16"
-        ry="7"
-        fill="none"
-        stroke={INK}
-        strokeWidth="1"
-        transform="rotate(60 24 24)"
-      />
-      <ellipse
-        cx="24"
-        cy="24"
-        rx="16"
-        ry="7"
-        fill="none"
-        stroke={INK}
-        strokeWidth="1"
-        transform="rotate(120 24 24)"
-      />
-      <circle cx="24" cy="24" r="1.6" fill={INK} />
+    <svg
+      viewBox="0 0 48 48"
+      className="h-10 w-10 text-[oklch(0.28_0.02_95)]"
+      aria-hidden
+    >
+      <ellipse cx="24" cy="24" rx="16" ry="7" fill="none" stroke="currentColor" strokeWidth="1" />
+      <ellipse cx="24" cy="24" rx="16" ry="7" fill="none" stroke="currentColor" strokeWidth="1" transform="rotate(60 24 24)" />
+      <ellipse cx="24" cy="24" rx="16" ry="7" fill="none" stroke="currentColor" strokeWidth="1" transform="rotate(120 24 24)" />
     </svg>
   );
 }
@@ -160,10 +158,10 @@ function LetterBack() {
       <div className="flex items-end justify-between gap-3 border-b pb-3" style={{ borderColor: RULE }}>
         <div>
           <p className="font-[family-name:var(--font-geist-mono)] text-[10px] tracking-[0.16em] text-[oklch(0.42_0.02_95)] uppercase">
-            Correspondence
+            Closed session
           </p>
           <p className="mt-1 font-[family-name:var(--font-geist-sans)] text-[15px] leading-tight tracking-[-0.02em] text-[oklch(0.24_0.02_95)]">
-            People committee
+            The room
           </p>
         </div>
         <span className="font-[family-name:var(--font-geist-mono)] text-[10px] tabular-nums tracking-[0.08em] text-[oklch(0.45_0.02_95)]">
@@ -178,29 +176,29 @@ function LetterBack() {
           {COPY.punchline}
         </p>
       </div>
-      <div className="flex items-end justify-between gap-3 border-t pt-3" style={{ borderColor: RULE }}>
-        <p className="font-[family-name:var(--font-geist-mono)] text-[10px] tracking-[0.12em] text-[oklch(0.5_0.02_95)] uppercase">
-          File sealed
-        </p>
+      <div className="flex items-end justify-end border-t pt-3" style={{ borderColor: RULE }}>
         <Colophon />
       </div>
     </div>
   );
 }
 
+const CUT =
+  "radial-gradient(circle 22px at 0% 50%, transparent 20px, #000 21.5px)";
+
 export function OrbitFolder() {
   return (
     <FolderShell
+      title={TITLE}
       sleeveFill={SLEEVE}
       letterFill={PAPER}
       cover={<Cover />}
       letterFront={<LetterFront />}
       letterBack={<LetterBack />}
+      tuckX={-8}
       coverStyle={{
-        WebkitMaskImage:
-          "radial-gradient(circle 20px at 100% 50%, transparent 19px, #000 20.5px)",
-        maskImage:
-          "radial-gradient(circle 20px at 100% 50%, transparent 19px, #000 20.5px)",
+        WebkitMaskImage: CUT,
+        maskImage: CUT,
       }}
     />
   );

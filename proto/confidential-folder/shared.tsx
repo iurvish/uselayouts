@@ -12,13 +12,12 @@ export type DrawerPhase =
   | "sliding_in";
 
 export const COPY = {
-  title: "Confidential",
-  subtitle: "Q3 compensation review — people committee only",
-  badge: "#1847",
+  title: "Think different",
+  subtitle: "One more thing",
+  badge: "#1984",
   message:
-    "You weren’t supposed to look inside. The envelope was already unsealed when it arrived on the desk.",
-  punchline:
-    "Curiosity wins every time. Now you have to pretend you didn’t.",
+    "Taste is not a committee. If it needs explaining, it isn’t finished. Cut until it is obvious, then ship.",
+  punchline: "Stay hungry. Stay foolish.",
 };
 
 type FolderShellProps = {
@@ -30,13 +29,15 @@ type FolderShellProps = {
   letterBack: React.ReactNode;
   peekTab?: React.ReactNode;
   coverStyle?: React.CSSProperties;
+  tuckX?: number;
 };
 
-function cardTransform(phase: DrawerPhase, hovered: boolean) {
+function cardTransform(phase: DrawerPhase, hovered: boolean, tuckX: number) {
+  const hoverX = tuckX + 22;
   if (phase === "tucked") {
     return hovered
-      ? "translate3d(46px, 0px, 2px) scale(0.97) rotate(0deg) rotateY(0deg)"
-      : "translate3d(24px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)";
+      ? `translate3d(${hoverX}px, 0px, 2px) scale(0.97) rotate(0deg) rotateY(0deg)`
+      : `translate3d(${tuckX}px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)`;
   }
   if (phase === "extracting") {
     return "translate3d(330px, -2px, 4px) scale(1) rotate(1deg) rotateY(0deg)";
@@ -54,9 +55,9 @@ function cardTransform(phase: DrawerPhase, hovered: boolean) {
     return "translate3d(330px, -2px, 4px) scale(1) rotate(0deg) rotateY(0deg)";
   }
   if (phase === "sliding_in") {
-    return "translate3d(24px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)";
+    return `translate3d(${tuckX}px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)`;
   }
-  return "translate3d(24px, 0, 2px)";
+  return `translate3d(${tuckX}px, 0, 2px)`;
 }
 
 function cardTransition(phase: DrawerPhase, reduced: boolean) {
@@ -91,6 +92,7 @@ export function FolderShell({
   letterBack,
   peekTab,
   coverStyle,
+  tuckX = 24,
 }: FolderShellProps) {
   const [phase, setPhase] = React.useState<DrawerPhase>("tucked");
   const [hovered, setHovered] = React.useState(false);
@@ -232,7 +234,7 @@ export function FolderShell({
             height: 354,
             left: "calc(50% - 141px)",
             top: "calc(50% - 177px)",
-            transform: cardTransform(phase, hovered && canHover),
+            transform: cardTransform(phase, hovered && canHover, tuckX),
             transformStyle: "preserve-3d",
             zIndex: inFront ? 50 : 3,
             transition: cardTransition(phase, reduced),
@@ -289,16 +291,6 @@ export function FolderShell({
           {cover}
         </div>
       </div>
-
-      {phase === "revealed" ? (
-        <button
-          type="button"
-          onClick={onToggle}
-          className="mt-8 inline-flex min-h-11 min-w-11 items-center gap-1.5 rounded-full bg-[oklch(0.2_0.01_260)] px-5 py-2 font-[family-name:var(--font-geist-mono)] text-xs tracking-[0.06em] text-[oklch(0.86_0.01_260)] uppercase touch-manipulation outline outline-1 outline-white/10 transition-[transform,background-color] duration-150 ease-out hover:bg-[oklch(0.16_0.01_260)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70 active:scale-[0.96]"
-        >
-          <span aria-hidden>↩</span> Close drawer
-        </button>
-      ) : null}
     </div>
   );
 }
