@@ -23,6 +23,7 @@ import {
 
 import { ComponentLivePreview } from "@/components/admin/live-preview";
 import { DependencyTags } from "@/components/admin/dependency-tags";
+import { PreviewHint } from "@/components/open/preview-hint";
 import { detectDependencies } from "@/lib/admin/detect-code";
 import { generateComponentCopy } from "@/lib/admin/generate-copy";
 import { extractHints } from "@/lib/open/mdx-extract";
@@ -32,6 +33,14 @@ import {
   resolvePreviewBackground,
   serializePreviewBackgrounds,
 } from "@/lib/open/preview-background";
+import {
+  PREVIEW_HINT_KINDS,
+  PREVIEW_HINT_PRESETS,
+  hintToneForBackground,
+  parsePreviewHint,
+  resolvePreviewHint,
+  type PreviewHintKind,
+} from "@/lib/open/preview-hint-config";
 import { Index } from "@/registry/__index__";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -91,6 +100,10 @@ export function ComponentEditor({
   const [previewBgLight, setPreviewBgLight] = useState<string>(DEFAULT_PREVIEW_BACKGROUNDS.light);
   const [previewBgDark, setPreviewBgDark] = useState<string>(DEFAULT_PREVIEW_BACKGROUNDS.dark);
   const [hintTop, setHintTop] = useState(80);
+  const [showHint, setShowHint] = useState(false);
+  const [hintKind, setHintKind] = useState<PreviewHintKind>("click");
+  const [hintHeading, setHintHeading] = useState("");
+  const [hintDescription, setHintDescription] = useState("");
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark");
   const [previewKey, setPreviewKey] = useState(0);
   const [depsLocked, setDepsLocked] = useState(false);
@@ -127,6 +140,11 @@ export function ComponentEditor({
         const loadedHint =
           typeof data.controls?.hintTop === "number" ? data.controls.hintTop : 80;
         setHintTop(Math.min(200, Math.max(-200, Math.round(loadedHint))));
+        const hint = parsePreviewHint(data.controls);
+        setShowHint(hint.show);
+        setHintKind(hint.kind);
+        setHintHeading(hint.heading);
+        setHintDescription(hint.description);
         setPosterUrl(data.controls?.posterUrl ?? null);
         setVideoUrl(data.controls?.videoUrl ?? null);
       })
@@ -224,6 +242,10 @@ export function ComponentEditor({
         dark: previewBgDark,
       }),
       hintTop,
+      showHint,
+      hintKind,
+      hintHeading,
+      hintDescription,
     };
 
     const res = await fetch(
@@ -340,6 +362,13 @@ export function ComponentEditor({
   const Preview = previewName
     ? (Index[previewName]?.component as ComponentType<{ size?: string }> | undefined)
     : undefined;
+  const previewHint = resolvePreviewHint({
+    show: showHint,
+    kind: hintKind,
+    heading: hintHeading,
+    description: hintDescription,
+  });
+  const hintTone = hintToneForBackground(activePreviewBackground);
 
   const showPoster = imagePreviewUrl || posterUrl;
   const showVideo = videoPreviewUrl || videoUrl;
@@ -510,24 +539,94 @@ export function ComponentEditor({
                   onChange={setPreviewBgDark}
                 />
               </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between gap-3">
-                  <Label className="text-xs text-muted-foreground">Hint top</Label>
-                  <span className="font-mono text-xs tabular-nums text-muted-foreground">
-                    {hintTop}px
-                  </span>
-                </div>
+            </CardContent>
+          </Card>
+
+          <Card size="sm">
+            <CardHeader>
+              <CardTitle>Preview hint</CardTitle>
+              <CardDescription>
+                Overlay on the live preview and open page. Off by default.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <label className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium">Show hint</span>
                 <input
-                  type="range"
-                  min={-200}
-                  max={200}
-                  step={1}
-                  value={hintTop}
-                  aria-label="Preview hint top offset"
-                  className="h-8 w-full cursor-pointer accent-foreground"
-                  onChange={(e) => setHintTop(Number(e.target.value))}
+                  type="checkbox"
+                  checked={showHint}
+                  aria-label="Show preview hint"
+                  className="size-4 accent-foreground"
+                  onChange={(e) => setShowHint(e.target.checked)}
                 />
-              </div>
+              </label>
+              {showHint ? (
+                <>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-muted-foreground">Hint</Label>
+                    <div className="flex flex-wrap gap-1 rounded-lg border border-border bg-muted/40 p-0.5">
+                      {PREVIEW_HINT_KINDS.map((kind) => (
+                        <button
+                          key={kind}
+                          type="button"
+                          className={cn(
+                            "rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors",
+                            hintKind === kind
+                              ? "bg-background text-foreground shadow-sm"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                          onClick={() => setHintKind(kind)}
+                        >
+                          {kind === "custom" ? "Custom" : PREVIEW_HINT_PRESETS[kind].label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {hintKind === "custom" ? (
+                    <div className="grid gap-3">
+                      <Field label="Heading">
+                        <Input
+                          value={hintHeading}
+                          placeholder="Click to open"
+                          onChange={(e) => setHintHeading(e.target.value)}
+                        />
+                      </Field>
+                      <Field label="Description">
+                        <Textarea
+                          rows={2}
+                          value={hintDescription}
+                          placeholder="Click the folder to read the letter"
+                          onChange={(e) => setHintDescription(e.target.value)}
+                        />
+                      </Field>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      {PREVIEW_HINT_PRESETS[hintKind].heading}
+                      {" — "}
+                      {PREVIEW_HINT_PRESETS[hintKind].description}
+                    </p>
+                  )}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-3">
+                      <Label className="text-xs text-muted-foreground">Hint top</Label>
+                      <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                        {hintTop}px
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={-200}
+                      max={200}
+                      step={1}
+                      value={hintTop}
+                      aria-label="Preview hint top offset"
+                      className="h-8 w-full cursor-pointer accent-foreground"
+                      onChange={(e) => setHintTop(Number(e.target.value))}
+                    />
+                  </div>
+                </>
+              ) : null}
             </CardContent>
           </Card>
 
@@ -610,9 +709,29 @@ export function ComponentEditor({
                     </div>
                   }
                 >
-                  <div key={previewKey} className="flex h-full w-full items-center justify-center p-4">
-                    <Preview size="lg" />
-                  </div>
+                  {previewHint ? (
+                    <PreviewHint
+                      heading={previewHint.heading}
+                      description={previewHint.description}
+                      tone={hintTone}
+                      absolute={previewName !== "perspective-text-scroll"}
+                      className="w-full self-stretch"
+                    >
+                      <div
+                        key={previewKey}
+                        className="flex h-full w-full items-center justify-center p-4"
+                      >
+                        <Preview size="lg" />
+                      </div>
+                    </PreviewHint>
+                  ) : (
+                    <div
+                      key={previewKey}
+                      className="flex h-full w-full items-center justify-center p-4"
+                    >
+                      <Preview size="lg" />
+                    </div>
+                  )}
                 </Suspense>
               ) : (
                 <p className="max-w-sm px-6 text-center text-sm text-muted-foreground">

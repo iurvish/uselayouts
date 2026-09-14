@@ -12,6 +12,11 @@ import {
   type PackageManager,
 } from "@/lib/open/package-manager";
 import type { PreviewBackgrounds } from "@/lib/open/preview-background";
+import {
+  parsePreviewHint,
+  resolvePreviewHint,
+  type ResolvedPreviewHint,
+} from "@/lib/open/preview-hint-config";
 import { source } from "@/lib/source";
 
 export type OpenNavItem = {
@@ -38,6 +43,7 @@ export type OpenComponentData = {
   previewBackground?: string | PreviewBackgrounds;
   /** PreviewHint overlay top offset in px. Omit = 80. */
   hintTop?: number;
+  previewHint?: ResolvedPreviewHint | null;
 };
 
 async function highlightShellCommands(
@@ -133,5 +139,6 @@ export async function getOpenComponent(slug: string): Promise<OpenComponentData 
     manualHtml,
     previewBackground: record?.controls?.previewBackground,
     hintTop: clampHintTop(record?.controls?.hintTop),
+    previewHint: resolvePreviewHint(parsePreviewHint(record?.controls)),
   };
 }

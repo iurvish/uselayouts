@@ -14,6 +14,7 @@ import {
   parsePreviewBackgrounds,
   resolvePreviewBackground,
 } from "@/lib/open/preview-background";
+import { hintToneForBackground } from "@/lib/open/preview-hint-config";
 import { cn } from "@/lib/utils";
 
 export function OpenComponentView({
@@ -30,6 +31,7 @@ export function OpenComponentView({
     [data.previewBackground],
   );
   const previewBackground = resolvePreviewBackground(backgrounds, "dark");
+  const hintTone = hintToneForBackground(previewBackground);
 
   return (
     <>
@@ -45,7 +47,12 @@ export function OpenComponentView({
           } as React.CSSProperties
         }
       >
-        <OpenPreview name={data.slug} hintTop={data.hintTop} />
+        <OpenPreview
+          name={data.slug}
+          hintTop={data.hintTop}
+          hint={data.previewHint}
+          hintTone={hintTone}
+        />
       </main>
 
       <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">

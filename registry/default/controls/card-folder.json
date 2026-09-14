@@ -23,6 +23,10 @@
   "disabled": [],
   "updatedAt": "2026-08-29T12:06:39.573Z",
   "previewBackground": "#faf8f6",
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Hover to peek",
+  "hintDescription": "A playful filing system for design ops, research, and launch work.",
   "interactionHints": {
     "duration": 2.7,
     "scale": 80,

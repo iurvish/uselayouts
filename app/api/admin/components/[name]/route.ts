@@ -52,6 +52,10 @@ export async function PUT(request: Request, { params }: Params) {
       disabledControls: body.disabledControls,
       previewBackground: body.previewBackground,
       hintTop: body.hintTop,
+      showHint: body.showHint,
+      hintKind: body.hintKind,
+      hintHeading: body.hintHeading,
+      hintDescription: body.hintDescription,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {

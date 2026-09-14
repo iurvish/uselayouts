@@ -33,6 +33,10 @@ export async function POST(request: Request) {
       disabledControls,
       previewBackground,
       hintTop,
+      showHint,
+      hintKind,
+      hintHeading,
+      hintDescription,
     } = body;
 
     if (!title || !description || !code) {
@@ -54,6 +58,10 @@ export async function POST(request: Request) {
       disabledControls: disabledControls ?? [],
       previewBackground,
       hintTop,
+      showHint,
+      hintKind,
+      hintHeading,
+      hintDescription,
     });
 
     return NextResponse.json({ ok: true, ...result });

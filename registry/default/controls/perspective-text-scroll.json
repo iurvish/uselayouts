@@ -20,5 +20,9 @@
     "light": "#f7f4f2",
     "dark": "#f7f4f2"
   },
-  "hintTop": 173
+  "hintTop": 173,
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Scroll to move through the text",
+  "hintDescription": "Perspective tilts and fades as you scroll this section."
 }

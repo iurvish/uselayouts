@@ -13,6 +13,12 @@ import {
   serializePreviewBackgrounds,
   type PreviewBackgrounds,
 } from "@/lib/open/preview-background";
+import {
+  parsePreviewHint,
+  parsePreviewHintKind,
+  serializePreviewHint,
+  type PreviewHintKind,
+} from "@/lib/open/preview-hint-config";
 
 const execAsync = promisify(exec);
 
@@ -33,6 +39,11 @@ export type ComponentControlsMeta = {
   videoUrl?: string;
   /** PreviewHint overlay top offset in px. Default 80. May be negative. */
   hintTop?: number;
+  /** When true, OpenPreview / admin live preview render PreviewHint. */
+  showHint?: boolean;
+  hintKind?: PreviewHintKind;
+  hintHeading?: string;
+  hintDescription?: string;
 };
 
 export type RegistryItem = {
@@ -57,6 +68,10 @@ export type UpsertComponentInput = {
   disabledControls?: string[];
   previewBackground?: PreviewBackgrounds | string | null;
   hintTop?: number | null;
+  showHint?: boolean;
+  hintKind?: PreviewHintKind;
+  hintHeading?: string;
+  hintDescription?: string;
 };
 
 async function readRegistry(): Promise<{
@@ -282,6 +297,12 @@ export async function upsertComponent(input: UpsertComponentInput) {
       : existingMeta?.previewBackground;
 
   const hintTop = clampHintTop(input.hintTop);
+  const hasHintInput =
+    input.showHint !== undefined ||
+    input.hintKind !== undefined ||
+    input.hintHeading !== undefined ||
+    input.hintDescription !== undefined;
+  const existingHint = parsePreviewHint(existingMeta);
   await writeControls(name, {
     dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
     disabled,
@@ -290,6 +311,17 @@ export async function upsertComponent(input: UpsertComponentInput) {
     posterUrl: existingMeta?.posterUrl,
     videoUrl: existingMeta?.videoUrl,
     ...(hintTop !== undefined ? { hintTop } : {}),
+    ...(hasHintInput
+      ? serializePreviewHint({
+          show: input.showHint ?? existingHint.show,
+          kind:
+            input.hintKind !== undefined
+              ? parsePreviewHintKind(input.hintKind)
+              : existingHint.kind,
+          heading: input.hintHeading ?? existingHint.heading,
+          description: input.hintDescription ?? existingHint.description,
+        })
+      : {}),
   });
 
   const mdx = generateComponentMdx({
