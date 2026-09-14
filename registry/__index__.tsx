@@ -156,7 +156,7 @@ export const Index: Record<string, any> = {
   },
   "confidential-folder": {
     name: "confidential-folder",
-    description: "A smooth 3D card stack with draggable cards, tilt effects, swipe-to-back interaction, and customizable images and content.",
+    description: "A charcoal sleeve that pulls a letter out, flips it, and lands it in front of you.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{
@@ -172,19 +172,19 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "corner-vidoe": {
-    name: "corner-vidoe",
+  "corner-video": {
+    name: "corner-video",
     description: "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{
-      path: "registry/default/example/corner-vidoe.tsx",
+      path: "registry/default/example/corner-video.tsx",
       type: "registry:component",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/corner-vidoe-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "corner-vidoe"
+      const mod = await import("@/registry/default/demo/corner-video-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "corner-video"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

@@ -15,9 +15,10 @@
     "textColor": "#7B9E87"
   },
   "disabled": [],
-  "updatedAt": "2026-09-07T17:50:02.134Z",
+  "updatedAt": "2026-09-14T06:56:02.241Z",
   "previewBackground": {
     "light": "#f7f4f2",
     "dark": "#f7f4f2"
-  }
+  },
+  "hintTop": 173
 }

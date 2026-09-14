@@ -1,7 +1,7 @@
 "use client";
 
 import { PreviewHint } from "@/components/open/preview-hint";
-import CornerVideoPlayer from "@/registry/default/example/corner-vidoe";
+import CornerVideoPlayer from "@/registry/default/example/corner-video";
 
 export default function CornerVidoeDemo() {
   return (

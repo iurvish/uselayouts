@@ -1,14 +1,14 @@
 "use client";
 
 import { DialRoot } from "dialkit";
-import { TIERS, TierTickets, TiersShell, HeroCard } from "./tiers-shared";
+import { TIERS, TierTickets, TiersShell } from "./tiers-shared";
+import { HeroFolder } from "./hero-folder";
 import type { RibbonPatternMode } from "./ribbon-pattern";
 import { cn } from "@/lib/utils";
 
 export function TiersClassic({
   pattern = "cylinder",
   dial = false,
-  dialPanel = "Ribbon pattern",
 }: {
   pattern?: RibbonPatternMode;
   dial?: boolean;
@@ -23,12 +23,9 @@ export function TiersClassic({
           "lg:flex-row lg:items-center lg:gap-[100px] lg:pl-[100px] lg:pr-4 lg:py-2.5",
         )}
       >
-        <HeroCard
-          pattern={pattern}
-          dial={dial}
-          dialPanel={dialPanel}
-          className="w-full max-w-[454px] lg:h-[584px]"
-        />
+        <div className="relative z-[999] flex w-full max-w-[454px] shrink-0 justify-center lg:justify-start">
+          <HeroFolder pattern={pattern} />
+        </div>
         <div className="flex w-full min-w-0 flex-1 flex-col gap-5 p-4 lg:max-h-[760px] lg:overflow-y-auto">
           {TIERS.map((tier) => (
             <TierTickets key={tier} label={tier} />

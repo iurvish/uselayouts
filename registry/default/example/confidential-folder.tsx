@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useRef, useEffect, forwardRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+} from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -22,446 +27,527 @@ export interface ConfidentialFolderProps
   title?: string;
   subtitle?: string;
   badge?: string;
-  logo?: React.ReactNode | string;
   message?: string;
   punchline?: string;
-  stickerSrc?: string;
+  cover?: React.ReactNode;
+  letterFront?: React.ReactNode;
+  letterBack?: React.ReactNode;
+  stage?: boolean;
+  width?: number;
+  height?: number;
+  letterZIndex?: number;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  sleeveClassName?: string;
-  cardClassName?: string;
 }
 
-export const CornerBookLogo = ({ className }: { className?: string }) => (
-  <div
-    className={cn(
-      "w-[32px] h-[32px] rounded-lg overflow-hidden flex items-center justify-center border border-white/15 bg-neutral-950/85 shadow-sm p-1.5",
-      className
-    )}
-  >
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-full h-full text-white"
-    >
-      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-      <path d="M6 6h10" />
-      <path d="M6 10h10" />
-    </svg>
-  </div>
-);
+const SLEEVE = "oklch(0.26 0.01 260)";
+const PAPER = "oklch(0.962 0.014 95)";
+const RULE = "oklch(0.28 0.02 95 / 0.14)";
+const STAGE = "oklch(0.18 0.012 260)";
+const BASE_W = 320;
+const BASE_H = 400;
+const LETTER_W = 282 / BASE_W;
+const LETTER_H = 354 / BASE_H;
+const LETTER_INSET_X = (BASE_W - 282) / 2 / BASE_W;
+const LETTER_INSET_Y = (BASE_H - 354) / 2 / BASE_H;
+const TUCK_PCT = (44 / 282) * 100;
+const HOVER_PCT = (66 / 282) * 100;
+const EXTRACT_PCT = (330 / 282) * 100;
 
-export const ConfidentialFolder = forwardRef<HTMLDivElement, ConfidentialFolderProps>(
+const ORBIT_CX = 160;
+const ORBIT_CY = 176;
+const ORBIT_RX = 108;
+const ORBIT_RY = 44;
+const ORBIT_ROTS = [0, 26, 52, 78, 104, 130, 156];
+const ORBIT_NODES: { deg: number; r: 2 | 1 }[][] = [
+  [
+    { deg: 8, r: 2 },
+    { deg: 41, r: 1 },
+    { deg: 54, r: 2 },
+    { deg: 203, r: 1 },
+  ],
+  [
+    { deg: 67, r: 2 },
+    { deg: 188, r: 1 },
+    { deg: 301, r: 2 },
+  ],
+  [
+    { deg: 14, r: 1 },
+    { deg: 22, r: 2 },
+    { deg: 119, r: 1 },
+    { deg: 246, r: 2 },
+    { deg: 338, r: 1 },
+  ],
+  [
+    { deg: 96, r: 2 },
+    { deg: 271, r: 1 },
+  ],
+  [
+    { deg: 33, r: 1 },
+    { deg: 148, r: 2 },
+    { deg: 161, r: 1 },
+    { deg: 284, r: 2 },
+  ],
+  [
+    { deg: 77, r: 1 },
+    { deg: 215, r: 2 },
+    { deg: 352, r: 1 },
+  ],
+  [
+    { deg: 5, r: 2 },
+    { deg: 128, r: 1 },
+    { deg: 174, r: 2 },
+    { deg: 319, r: 1 },
+  ],
+];
+
+function cardTransform(phase: DrawerMotionPhase, hovered: boolean) {
+  if (phase === "tucked") {
+    return hovered
+      ? `translate3d(${HOVER_PCT}%, 0px, 2px) scale(0.97) rotate(0deg) rotateY(0deg)`
+      : `translate3d(${TUCK_PCT}%, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)`;
+  }
+  if (phase === "extracting") {
+    return `translate3d(${EXTRACT_PCT}%, -2px, 4px) scale(1) rotate(1deg) rotateY(0deg)`;
+  }
+  if (phase === "landing") {
+    return "translate3d(0px, -2px, 36px) scale(1.05) rotate(0deg) rotateY(0deg)";
+  }
+  if (phase === "revealed") {
+    return "translate3d(0px, -2px, 36px) scale(1.05) rotate(-4deg) rotateY(180deg)";
+  }
+  if (phase === "unflipping") {
+    return "translate3d(0px, -2px, 36px) scale(1.05) rotate(0deg) rotateY(0deg)";
+  }
+  if (phase === "aligning_side") {
+    return `translate3d(${EXTRACT_PCT}%, -2px, 4px) scale(1) rotate(0deg) rotateY(0deg)`;
+  }
+  if (phase === "sliding_in") {
+    return `translate3d(${TUCK_PCT}%, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)`;
+  }
+  return `translate3d(${TUCK_PCT}%, 0, 2px)`;
+}
+
+function cardTransition(phase: DrawerMotionPhase, reduced: boolean) {
+  if (reduced) return "none";
+  if (phase === "revealed") {
+    return "transform 0.65s cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 0.65s ease";
+  }
+  if (phase === "unflipping") {
+    return "transform 0.52s cubic-bezier(0.34, 1.25, 0.64, 1), box-shadow 0.52s ease";
+  }
+  if (phase === "aligning_side") {
+    return "transform 0.35s cubic-bezier(0.2, 0.85, 0.35, 1.15)";
+  }
+  if (phase === "extracting") {
+    return "transform 0.42s cubic-bezier(0.2, 0.85, 0.35, 1.15)";
+  }
+  if (phase === "landing") {
+    return "transform 0.38s cubic-bezier(0.2, 0.9, 0.35, 1.1)";
+  }
+  if (phase === "sliding_in") {
+    return "transform 0.42s cubic-bezier(0.2, 0.85, 0.35, 1.15)";
+  }
+  return "transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1)";
+}
+
+function OrbitGraphic() {
+  return (
+    <svg
+      viewBox="0 0 320 400"
+      className="pointer-events-none absolute inset-0 h-full w-full select-none text-[oklch(0.58_0.016_260)]"
+      aria-hidden
+    >
+      {ORBIT_ROTS.map((rot, i) => (
+        <g key={rot} transform={`rotate(${rot} ${ORBIT_CX} ${ORBIT_CY})`}>
+          <ellipse
+            cx={ORBIT_CX}
+            cy={ORBIT_CY}
+            rx={ORBIT_RX}
+            ry={ORBIT_RY}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+          {ORBIT_NODES[i]!.map((node) => {
+            const t = (node.deg * Math.PI) / 180;
+            return (
+              <circle
+                key={node.deg}
+                cx={Math.round(ORBIT_CX + ORBIT_RX * Math.cos(t))}
+                cy={Math.round(ORBIT_CY + ORBIT_RY * Math.sin(t))}
+                r={node.r}
+                fill="currentColor"
+              />
+            );
+          })}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function Colophon() {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      className="h-10 w-10 text-[oklch(0.28_0.02_95)]"
+      aria-hidden
+    >
+      <ellipse
+        cx="24"
+        cy="24"
+        rx="16"
+        ry="7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+      <ellipse
+        cx="24"
+        cy="24"
+        rx="16"
+        ry="7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        transform="rotate(60 24 24)"
+      />
+      <ellipse
+        cx="24"
+        cy="24"
+        rx="16"
+        ry="7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        transform="rotate(120 24 24)"
+      />
+    </svg>
+  );
+}
+
+export const ConfidentialFolder = forwardRef<
+  HTMLDivElement,
+  ConfidentialFolderProps
+>(
   (
     {
-      title = "CONFIDENTIAL",
-      subtitle = "Internal use only",
-      badge = "#042",
-      logo = <CornerBookLogo />,
-      message = "You weren’t supposed to look inside.",
-      punchline = "Curiosity wins every time.",
-      stickerSrc = "https://framerusercontent.com/images/blqn41GFzRaYAkfhHyI0zi4yc.gif?width=200&height=200",
+      title = "Stay hungry",
+      subtitle = "For people who still build the work.",
+      badge = "#1984",
+      message = "Taste is not a committee. If it needs explaining, it isn’t finished. Cut until it is obvious, then ship.",
+      punchline = "Stay hungry. Stay foolish.",
+      cover,
+      letterFront,
+      letterBack,
+      stage = true,
+      width = BASE_W,
+      height = BASE_H,
+      letterZIndex = 999,
       open: controlledOpen,
       defaultOpen = false,
       onOpenChange,
       className,
-      sleeveClassName,
-      cardClassName,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const [uncontrolledPhase, setUncontrolledPhase] = useState<DrawerMotionPhase>(
-      defaultOpen ? "revealed" : "tucked"
+    const [phase, setPhase] = useState<DrawerMotionPhase>(
+      defaultOpen ? "revealed" : "tucked",
     );
-    const [isHovered, setIsHovered] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const containerRef = useRef<HTMLDivElement>(null);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-    const isControlled = controlledOpen !== undefined;
-    const currentPhase = uncontrolledPhase;
-
-    const updatePhase = (next: DrawerMotionPhase) => {
-      if (!isControlled) {
-        setUncontrolledPhase(next);
-      }
-      onOpenChange?.(next === "revealed");
-    };
+    const [hovered, setHovered] = useState(false);
+    const [mouse, setMouse] = useState({ x: 0, y: 0 });
+    const [canHover, setCanHover] = useState(false);
+    const [reduced, setReduced] = useState(false);
+    const wrapRef = useRef<HTMLDivElement>(null);
+    const timerRef = useRef<number | null>(null);
 
     useEffect(() => {
-      if (isControlled) {
-        if (controlledOpen && currentPhase === "tucked") {
-          setUncontrolledPhase("extracting");
-        } else if (!controlledOpen && currentPhase === "revealed") {
-          setUncontrolledPhase("unflipping");
-        }
-      }
-    }, [controlledOpen, isControlled, currentPhase]);
-
-    useEffect(() => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-
-      if (currentPhase === "extracting") {
-        timerRef.current = setTimeout(() => {
-          updatePhase("landing");
-        }, 380);
-      } else if (currentPhase === "landing") {
-        timerRef.current = setTimeout(() => {
-          updatePhase("revealed");
-        }, 320);
-      } else if (currentPhase === "unflipping") {
-        timerRef.current = setTimeout(() => {
-          updatePhase("aligning_side");
-        }, 500);
-      } else if (currentPhase === "aligning_side") {
-        timerRef.current = setTimeout(() => {
-          updatePhase("sliding_in");
-        }, 320);
-      } else if (currentPhase === "sliding_in") {
-        timerRef.current = setTimeout(() => {
-          updatePhase("tucked");
-        }, 420);
-      }
-
-      return () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
+      const hoverMq = window.matchMedia("(hover: hover) and (pointer: fine)");
+      const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const sync = () => {
+        setCanHover(hoverMq.matches);
+        setReduced(motionMq.matches);
       };
-    }, [currentPhase]);
+      sync();
+      hoverMq.addEventListener("change", sync);
+      motionMq.addEventListener("change", sync);
+      return () => {
+        hoverMq.removeEventListener("change", sync);
+        motionMq.removeEventListener("change", sync);
+      };
+    }, []);
 
-    const handleAction = (e: React.MouseEvent | React.KeyboardEvent) => {
+    useEffect(() => {
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      if (reduced) return;
+      const wait =
+        phase === "extracting"
+          ? 380
+          : phase === "landing"
+            ? 320
+            : phase === "unflipping"
+              ? 500
+              : phase === "aligning_side"
+                ? 320
+                : phase === "sliding_in"
+                  ? 420
+                  : 0;
+      if (!wait) return;
+      const next: DrawerMotionPhase =
+        phase === "extracting"
+          ? "landing"
+          : phase === "landing"
+            ? "revealed"
+            : phase === "unflipping"
+              ? "aligning_side"
+              : phase === "aligning_side"
+                ? "sliding_in"
+                : "tucked";
+      timerRef.current = window.setTimeout(() => setPhase(next), wait);
+      return () => {
+        if (timerRef.current) window.clearTimeout(timerRef.current);
+      };
+    }, [phase, reduced]);
+
+    useEffect(() => {
+      if (controlledOpen === undefined) return;
+      if (controlledOpen) {
+        setPhase((p) =>
+          p === "tucked" ? (reduced ? "revealed" : "extracting") : p,
+        );
+      } else {
+        setPhase((p) =>
+          p === "revealed" ? (reduced ? "tucked" : "unflipping") : p,
+        );
+      }
+    }, [controlledOpen, reduced]);
+
+    const busy = phase !== "tucked" && phase !== "revealed";
+
+    const onToggle = (e: React.MouseEvent | React.KeyboardEvent) => {
       e.stopPropagation();
-      if (currentPhase === "tucked") {
-        updatePhase("extracting");
-      } else if (currentPhase === "revealed") {
-        updatePhase("unflipping");
+      if (busy) return;
+      if (phase === "tucked") {
+        setPhase(reduced ? "revealed" : "extracting");
+        onOpenChange?.(true);
+      } else if (phase === "revealed") {
+        setPhase(reduced ? "tucked" : "unflipping");
+        onOpenChange?.(false);
       }
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
+    const onKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        handleAction(e);
+        onToggle(e);
       }
     };
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      setMousePos({ x, y });
+    const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!wrapRef.current || !canHover || reduced) return;
+      const rect = wrapRef.current.getBoundingClientRect();
+      setMouse({
+        x: (e.clientX - rect.left) / rect.width - 0.5,
+        y: (e.clientY - rect.top) / rect.height - 0.5,
+      });
     };
 
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-      setMousePos({ x: 0, y: 0 });
-    };
+    const inFront =
+      phase === "landing" ||
+      phase === "revealed" ||
+      phase === "unflipping" ||
+      phase === "aligning_side";
 
-    const isCardInForeground =
-      currentPhase === "landing" ||
-      currentPhase === "revealed" ||
-      currentPhase === "unflipping" ||
-      currentPhase === "aligning_side";
-
-    const tiltX = isHovered ? -mousePos.y * 12 : 0;
-    const tiltY = isHovered ? mousePos.x * 12 : 0;
-
-    const getCardTransform = () => {
-      if (currentPhase === "tucked") {
-        return isHovered
-          ? "translate3d(46px, 0px, 2px) scale(0.97) rotate(0deg) rotateY(0deg)"
-          : "translate3d(24px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)";
-      }
-      if (currentPhase === "extracting") {
-        return "translate3d(330px, -2px, 4px) scale(1.0) rotate(1deg) rotateY(0deg)";
-      }
-      if (currentPhase === "landing") {
-        return "translate3d(0px, -2px, 36px) scale(1.05) rotate(0deg) rotateY(0deg)";
-      }
-      if (currentPhase === "revealed") {
-        return "translate3d(0px, -2px, 36px) scale(1.05) rotate(-4deg) rotateY(180deg)";
-      }
-      if (currentPhase === "unflipping") {
-        return "translate3d(0px, -2px, 36px) scale(1.05) rotate(0deg) rotateY(0deg)";
-      }
-      if (currentPhase === "aligning_side") {
-        return "translate3d(330px, -2px, 4px) scale(1.0) rotate(0deg) rotateY(0deg)";
-      }
-      if (currentPhase === "sliding_in") {
-        return "translate3d(24px, 0px, 2px) scale(0.96) rotate(0deg) rotateY(0deg)";
-      }
-      return "translate3d(24px, 0, 2px)";
-    };
+    const tiltX = canHover && hovered && !reduced ? -mouse.y * 12 : 0;
+    const tiltY = canHover && hovered && !reduced ? mouse.x * 12 : 0;
+    const lift = canHover && hovered && phase === "tucked" && !reduced;
+    const sx = width / BASE_W;
+    const cut = `radial-gradient(circle ${18 * sx}px at 100% 50%, transparent ${16.5 * sx}px, #000 ${17.5 * sx}px)`;
 
     return (
       <div
         ref={ref}
         className={cn(
-          "relative select-none flex flex-col items-center justify-center font-sans",
-          className
+          "relative flex flex-col items-center justify-center font-sans font-synthesis-none antialiased",
+          stage && "h-full min-h-[560px] w-full px-8 py-16",
+          className,
         )}
-        style={{
-          perspective: "2000px",
-          WebkitPerspective: "2000px",
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={handleMouseLeave}
+        style={stage ? { background: STAGE } : undefined}
         {...props}
       >
         <div
-          className={cn(
-            "absolute w-80 h-96 rounded-full blur-3xl opacity-20 pointer-events-none transition-all duration-700 -z-10 bg-radial from-black/50 to-transparent",
-            currentPhase === "revealed" && "scale-125"
-          )}
-        />
-
-        <div
-          ref={containerRef}
-          className={cn(
-            "relative w-[320px] h-[400px] cursor-pointer transition-transform duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[22px]",
-            sleeveClassName
-          )}
+          ref={wrapRef}
+          className="relative max-w-full cursor-pointer overflow-visible touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
           style={{
+            width,
+            aspectRatio: `${width} / ${height}`,
             perspective: "2000px",
-            WebkitPerspective: "2000px",
             transformStyle: "preserve-3d",
-            WebkitTransformStyle: "preserve-3d",
-            transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg) ${
-              isHovered && currentPhase === "tucked" ? "translateY(-4px)" : "translateY(0)"
-            }`,
+            transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(${lift ? -4 : 0}px)`,
+            zIndex: inFront ? letterZIndex : undefined,
+            transition: reduced
+              ? "none"
+              : "transform 150ms cubic-bezier(0.32, 0.72, 0, 1)",
           }}
-          onClick={handleAction}
-          onKeyDown={handleKeyDown}
+          onClick={onToggle}
+          onKeyDown={onKeyDown}
+          onMouseMove={onMove}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => {
+            setHovered(false);
+            setMouse({ x: 0, y: 0 });
+          }}
           role="button"
           tabIndex={0}
-          aria-expanded={currentPhase === "revealed"}
-          aria-label={`${title} Dossier`}
+          aria-expanded={phase === "revealed"}
+          aria-label={`${title} folder. ${phase === "revealed" ? "Close" : "Open"} the letter.`}
         >
           <div
-            className="absolute inset-0 rounded-[22px] shadow-2xl overflow-hidden border border-neutral-800/60 bg-gradient-to-b from-[#222328] to-[#16171a]"
+            className="absolute inset-0 overflow-hidden rounded-[22px]"
             style={{
-              boxShadow: isCardInForeground
-                ? "0 35px 70px -15px rgba(0, 0, 0, 0.45)"
-                : isHovered
-                ? "0 30px 60px -12px rgba(0, 0, 0, 0.35)"
-                : "0 20px 40px -10px rgba(0, 0, 0, 0.25)",
+              background: SLEEVE,
+              boxShadow: inFront
+                ? "0 0 0 1px rgb(255 255 255 / 0.08), 0 28px 56px -16px rgb(0 0 0 / 0.5)"
+                : hovered
+                  ? "0 0 0 1px rgb(255 255 255 / 0.1), 0 22px 44px -14px rgb(0 0 0 / 0.42)"
+                  : "0 0 0 1px rgb(255 255 255 / 0.08), 0 16px 32px -12px rgb(0 0 0 / 0.35)",
               transform: "translate3d(0, 0, 0px)",
               zIndex: 1,
-              transition: "box-shadow 0.6s ease",
+              transition: reduced ? "none" : "box-shadow 150ms ease-out",
             }}
-          >
-            <div className="absolute top-0 inset-x-0 h-9 bg-gradient-to-b from-[#32343b] to-[#25262c] border-b border-black/40 shadow-sm flex items-center justify-between px-6 z-10">
-              <div className="w-2 h-2 rounded-full bg-[#18191c] border border-white/20 shadow-inner" />
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
-                <span className="font-mono text-[9px] font-medium text-neutral-300 tracking-widest uppercase">
-                  {badge}
-                </span>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-[#18191c] border border-white/20 shadow-inner" />
-            </div>
-
-            <div className="absolute inset-x-0 top-0 bottom-0 bg-gradient-to-r from-black/50 via-transparent to-black/30 pointer-events-none" />
-          </div>
+          />
 
           <div
-            onClick={handleAction}
-            className={cn("absolute rounded-[18px]", cardClassName)}
+            className="absolute rounded-[18px]"
             style={{
-              width: "282px",
-              height: "354px",
-              left: "calc(50% - 141px)",
-              top: "calc(50% - 177px)",
-              transform: getCardTransform(),
+              width: `${LETTER_W * 100}%`,
+              height: `${LETTER_H * 100}%`,
+              left: `${LETTER_INSET_X * 100}%`,
+              top: `${LETTER_INSET_Y * 100}%`,
+              transform: cardTransform(phase, hovered && canHover),
               transformStyle: "preserve-3d",
-              WebkitTransformStyle: "preserve-3d",
-              willChange: "transform, box-shadow",
-              zIndex: isCardInForeground ? 50 : 3,
-              transition:
-                currentPhase === "revealed"
-                  ? "transform 0.65s cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 0.65s ease"
-                  : currentPhase === "unflipping"
-                  ? "transform 0.52s cubic-bezier(0.34, 1.25, 0.64, 1), box-shadow 0.52s ease"
-                  : currentPhase === "aligning_side"
-                  ? "transform 0.35s cubic-bezier(0.2, 0.85, 0.35, 1.15)"
-                  : currentPhase === "extracting"
-                  ? "transform 0.42s cubic-bezier(0.2, 0.85, 0.35, 1.15)"
-                  : currentPhase === "landing"
-                  ? "transform 0.38s cubic-bezier(0.2, 0.9, 0.35, 1.1)"
-                  : currentPhase === "sliding_in"
-                  ? "transform 0.42s cubic-bezier(0.2, 0.85, 0.35, 1.15)"
-                  : "transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1)",
-              boxShadow: isCardInForeground
-                ? "0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 1px rgba(0,0,0,0.2)"
-                : "0 2px 6px rgba(0, 0, 0, 0.08)",
+              zIndex: inFront ? letterZIndex : 3,
+              transition: cardTransition(phase, reduced),
+              boxShadow: inFront
+                ? "0 0 0 1px rgb(0 0 0 / 0.08), 0 24px 48px -12px rgb(0 0 0 / 0.35)"
+                : "0 0 0 1px rgb(0 0 0 / 0.06), 0 2px 6px rgb(0 0 0 / 0.08)",
+              background: PAPER,
             }}
           >
             <div
-              className={cn(
-                "absolute -right-[22px] top-1/2 -translate-y-1/2 w-[22px] h-32 rounded-r-lg bg-[#fbfbf9] border-r border-y border-neutral-300 shadow-md flex flex-col items-center justify-center py-2 transition-all duration-300 pointer-events-none overflow-hidden",
-                isCardInForeground ? "opacity-0" : "opacity-100"
-              )}
-            >
-              <div className="w-1 h-3 bg-red-600 rounded-full mb-1 animate-pulse" />
-              <span
-                className="font-mono text-[8px] font-black text-red-600 tracking-[0.16em] uppercase select-none whitespace-nowrap"
-                style={{
-                  writingMode: "vertical-rl",
-                  textOrientation: "mixed",
-                  transform: "rotate(180deg)",
-                }}
-              >
-                DO NOT OPEN
-              </span>
-            </div>
-
-            <div
-              className="absolute inset-0 bg-[#fbfbf9] rounded-[18px] flex flex-col justify-between p-6 overflow-hidden border border-neutral-200/90 shadow-sm"
+              className="absolute inset-0 overflow-hidden rounded-[18px]"
               style={{
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
                 transform: "rotateY(0deg) translateZ(1px)",
-                willChange: "transform",
+                background: PAPER,
               }}
             >
-              <div className="flex items-center justify-between border-b border-neutral-200/80 pb-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                  <span className="font-mono text-[10px] font-semibold tracking-widest text-neutral-800 uppercase">
-                    CLASSIFIED
-                  </span>
+              {letterFront ?? (
+                <div className="flex h-full flex-col py-5 pr-3 pl-5 font-mono text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.42_0.02_95)]">
+                  <p className="tracking-[0.14em] text-[oklch(0.32_0.02_95)] uppercase">
+                    Product brief
+                  </p>
+                  <div className="mt-4 space-y-1">
+                    <p>from: s.jobs@</p>
+                    <p>to: the room</p>
+                    <p>re: {title}</p>
+                  </div>
+                  <div className="mt-4 h-px" style={{ background: RULE }} />
+                  <p className="mt-4 max-w-[36ch] text-pretty">
+                    Do not design by committee. The work either sings in the
+                    hand or it does not. Cut until a stranger understands it in
+                    one look.
+                  </p>
+                  <ol className="mt-4 space-y-1 tabular-nums">
+                    <li>1. Start with the feeling</li>
+                    <li>2. Remove until it is obvious</li>
+                    <li>3. Ship before you explain</li>
+                  </ol>
+                  <p className="mt-auto tracking-[0.12em] uppercase">{badge}</p>
                 </div>
-                <span className="font-mono text-[9px] font-semibold text-red-700 bg-red-100/80 border border-red-300 px-2 py-0.5 rounded tracking-widest uppercase">
-                  RESTRICTED
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center justify-center my-auto text-center py-4">
-                <div className="border-[2.5px] border-red-600/90 text-red-600 px-5 py-2.5 rounded font-mono font-black tracking-[0.24em] text-[15px] uppercase -rotate-3 shadow-xs bg-red-50/50">
-                  DO NOT OPEN
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-neutral-200/80 pt-3">
-                <span className="font-mono text-[9px] text-neutral-400">{badge}</span>
-                <span className="font-mono text-[9px] font-medium text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-200">
-                  {currentPhase === "unflipping" ||
-                  currentPhase === "aligning_side" ||
-                  currentPhase === "sliding_in"
-                    ? "SEALING"
-                    : "OPEN"}
-                </span>
-              </div>
+              )}
             </div>
-
             <div
-              className="absolute inset-0 bg-[#fbfbf9] rounded-[18px] flex flex-col justify-between p-6 overflow-hidden border border-neutral-200/90 shadow-md"
+              className="absolute inset-0 overflow-hidden rounded-[18px]"
               style={{
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
                 transform: "rotateY(180deg) translateZ(1px)",
-                willChange: "transform",
+                background: PAPER,
               }}
             >
-              <div className="flex items-center justify-between border-b border-neutral-200/80 pb-2.5">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-neutral-900 animate-pulse" />
-                  <span className="font-mono text-[10px] font-semibold text-neutral-900 tracking-wider uppercase">
-                    TOP SECRET
-                  </span>
+              {letterBack ?? (
+                <div className="flex h-full flex-col px-6 py-6">
+                  <div
+                    className="flex items-end justify-between gap-3 border-b pb-3"
+                    style={{ borderColor: RULE }}
+                  >
+                    <div>
+                      <p className="font-mono text-[10px] tracking-[0.16em] text-[oklch(0.42_0.02_95)] uppercase">
+                        Closed session
+                      </p>
+                      <p className="mt-1 font-sans text-[15px] leading-tight tracking-[-0.02em] text-[oklch(0.24_0.02_95)]">
+                        The room
+                      </p>
+                    </div>
+                    <span className="font-mono text-[10px] tabular-nums tracking-[0.08em] text-[oklch(0.45_0.02_95)]">
+                      {badge}
+                    </span>
+                  </div>
+                  <div className="my-auto space-y-3">
+                    <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.24_0.02_95)] text-pretty">
+                      {message}
+                    </p>
+                    <p className="font-sans text-[13px] leading-[1.45] text-[oklch(0.45_0.02_95)] text-pretty">
+                      {punchline}
+                    </p>
+                  </div>
+                  <div
+                    className="flex items-end justify-end border-t pt-3"
+                    style={{ borderColor: RULE }}
+                  >
+                    <Colophon />
+                  </div>
                 </div>
-                <span className="font-mono text-[9px] text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-200">
-                  DECRYPTED
-                </span>
-              </div>
-
-              <div className="space-y-2.5 text-left my-auto">
-                <p className="font-sans text-[15px] font-medium text-neutral-900 leading-snug tracking-tight">
-                  {message}
-                </p>
-                <p className="font-sans text-[13px] text-neutral-500 font-normal italic">
-                  {punchline}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-neutral-200/80">
-                <span className="font-mono text-[9px] text-neutral-400 font-medium">
-                  DOC {badge}
-                </span>
-                <div className="w-[50px] h-[50px] rounded-full overflow-hidden border border-neutral-200 shadow-sm shrink-0 bg-neutral-50 ring-2 ring-neutral-200 hover:scale-110 hover:rotate-6 transition-transform duration-300">
-                  <img
-                    src={stickerSrc}
-                    alt="Octocat sticker"
-                    className="w-full h-full object-cover block"
-                    loading="eager"
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
           <div
-            className="absolute inset-0 rounded-[22px] select-none pointer-events-none flex flex-col justify-between p-6 text-white overflow-hidden border border-white/10 bg-gradient-to-b from-[#2e3036] to-[#1f2025]"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px]"
             style={{
-              boxShadow:
-                "inset 0px 1px 1px rgba(255, 255, 255, 0.2), 0 12px 30px -4px rgba(0, 0, 0, 0.35)",
+              background: SLEEVE,
               transform: "translate3d(0, 0, 8px)",
-              transformStyle: "preserve-3d",
-              WebkitTransformStyle: "preserve-3d",
               zIndex: 10,
+              boxShadow: "inset 0 1px 0 rgb(255 255 255 / 0.06)",
+              WebkitMaskImage: cut,
+              maskImage: cut,
             }}
           >
-            <div
-              className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.07] to-transparent pointer-events-none transition-transform duration-300"
-              style={{
-                transform: `translate(${mousePos.x * 50}px, ${mousePos.y * 50}px)`,
-              }}
-            />
-
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-24 bg-[#18191c] rounded-l-xl border-l border-y border-white/10 shadow-inner" />
-            <div className="absolute top-0 inset-x-0 h-9 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-
-            <div className="mt-3 text-neutral-200 flex items-center justify-start">
-              {typeof logo === "string" ? (
-                <div className="w-[32px] h-[32px] rounded-lg overflow-hidden border border-white/15 bg-neutral-950/85 shadow-sm p-1">
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="w-full h-full object-contain filter brightness-110 drop-shadow-xs"
-                  />
+            {cover ?? (
+              <>
+                <OrbitGraphic />
+                <div className="relative flex h-full flex-col justify-end px-6 py-7">
+                  <div>
+                    <h3 className="font-sans text-[22px] leading-[1.12] tracking-[-0.03em] text-[oklch(0.94_0.01_260)]">
+                      {title}
+                    </h3>
+                    <p className="mt-2 whitespace-nowrap font-sans text-[13px] leading-snug text-[oklch(0.68_0.01_260)]">
+                      {subtitle}
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                logo
-              )}
-            </div>
-
-            <div className="space-y-0.5">
-              <h3 className="font-mono text-[13.5px] font-semibold tracking-[0.1em] text-neutral-100 uppercase">
-                {title}
-              </h3>
-              <p className="font-sans text-[12px] font-normal text-neutral-400">{subtitle}</p>
-            </div>
+              </>
+            )}
           </div>
         </div>
-
-        {currentPhase === "revealed" && (
-          <button
-            onClick={handleAction}
-            className="mt-8 bg-neutral-900/95 hover:bg-black text-neutral-200 font-mono text-xs px-5 py-2 rounded-full border border-neutral-700/50 backdrop-blur transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 flex items-center gap-1.5 animate-fadeIn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
-          >
-            <span>↩</span> Close drawer
-          </button>
-        )}
       </div>
     );
-  }
+  },
 );
 
 ConfidentialFolder.displayName = "ConfidentialFolder";

@@ -156,9 +156,8 @@
       "name": "confidential-folder",
       "type": "registry:component",
       "title": "Confidential Folder",
-      "description": "A smooth 3D card stack with draggable cards, tilt effects, swipe-to-back interaction, and customizable images and content.",
+      "description": "A charcoal sleeve that pulls a letter out, flips it, and lands it in front of you.",
       "dependencies": [
-        "motion",
         "clsx",
         "tailwind-merge"
       ],
@@ -170,7 +169,7 @@
       ]
     },
     {
-      "name": "corner-vidoe",
+      "name": "corner-video",
       "type": "registry:component",
       "title": "Corner Video",
       "description": "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
@@ -181,7 +180,7 @@
       ],
       "files": [
         {
-          "path": "registry/default/example/corner-vidoe.tsx",
+          "path": "registry/default/example/corner-video.tsx",
           "type": "registry:component"
         }
       ]

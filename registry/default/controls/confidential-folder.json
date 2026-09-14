@@ -1,20 +1,18 @@
 {
   "dialConfig": {
     "previewPadding": [
-      24,
-      0,
-      96,
-      4
-    ],
-    "spring": {
-      "type": "spring",
-      "visualDuration": 0.35,
-      "bounce": 0.2
-    },
-    "imageUrl": "https://framerusercontent.com/images/blqn41GFzRaYAkfhHyI0zi4yc.gif?width=200&height=200"
+      32,
+      48,
+      48,
+      48
+    ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T13:14:07.900Z",
+  "updatedAt": "2026-09-14T05:52:00.000Z",
+  "previewBackground": {
+    "light": "oklch(0.18 0.012 260)",
+    "dark": "oklch(0.18 0.012 260)"
+  },
   "interactionHints": {
     "duration": 3,
     "scale": 70,

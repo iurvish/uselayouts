@@ -4,7 +4,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "accordionos",
   "card-folder",
   "confidential-folder",
-  "corner-vidoe",
+  "corner-video",
   "focus-testimonials",
   "infinite-grid",
   "logoshift",
