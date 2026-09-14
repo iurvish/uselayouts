@@ -4,7 +4,6 @@ import * as React from "react";
 import { FieldFolder } from "./field";
 import { OrbitFolder } from "./orbit";
 import { PlateFolder } from "./plate";
-import "./picker.css";
 
 const VARIANTS = [
   { name: "Orbit", render: OrbitFolder },
