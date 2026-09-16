@@ -85,11 +85,10 @@ export default function VerticalTabs() {
   };
 
   return (
-    <section className="w-full bg-background py-8 md:py-16 lg:py-24">
-      <div className="w-full px-4 md:px-8 lg:px-12 xl:px-20 mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Content */}
-          <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 pt-4">
+    <section className="@container w-full bg-background py-8 md:py-16">
+      <div className="mx-auto w-full px-4 md:px-8">
+        <div className="grid grid-cols-1 items-start gap-10 @min-[720px]:grid-cols-12 @min-[720px]:gap-12">
+          <div className="flex flex-col justify-center order-2 pt-4 @min-[720px]:col-span-5 @min-[720px]:order-1">
             <div className="space-y-1 mb-12">
               <h2 className="tracking-tighter text-balance text-3xl font-medium md:text-4xl lg:text-5xl text-foreground">
                 How I can help you
@@ -107,7 +106,7 @@ export default function VerticalTabs() {
                     key={service.id}
                     onClick={() => handleTabClick(index)}
                     className={cn(
-                      "group relative flex items-start gap-4 py-6 md:py-8 text-left transition-all duration-500 border-t border-border/50 first:border-0",
+                      "group relative flex cursor-pointer items-start gap-4 border-t border-border/50 py-6 text-left transition-[color] duration-150 ease-out first:border-0 md:py-8",
                       isActive
                         ? "text-foreground"
                         : "text-muted-foreground/60 hover:text-foreground"
@@ -137,7 +136,7 @@ export default function VerticalTabs() {
                     <div className="flex flex-col gap-2 flex-1">
                       <span
                         className={cn(
-                          "text-2xl md:text-3xl lg:text-4xl font-normal tracking-tight transition-colors duration-500",
+                          "text-2xl font-normal tracking-tight transition-colors duration-150 ease-out md:text-3xl @min-[720px]:text-4xl",
                           isActive ? "text-foreground" : ""
                         )}
                       >
@@ -169,13 +168,13 @@ export default function VerticalTabs() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 flex flex-col justify-end h-full order-1 lg:order-2">
+          <div className="flex h-full flex-col justify-end order-1 @min-[720px]:col-span-7 @min-[720px]:order-2">
             <div
               className="relative group/gallery"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              <div className="relative aspect-4/5 md:aspect-4/3 lg:aspect-16/11 rounded-3xl md:rounded-[2.5rem] overflow-hidden bg-muted/30 border border-border/40">
+              <div className="relative aspect-4/5 overflow-hidden rounded-3xl border border-border/40 bg-muted/30 md:aspect-4/3 md:rounded-[2.5rem] @min-[720px]:aspect-16/11">
                 <AnimatePresence
                   initial={false}
                   custom={direction}

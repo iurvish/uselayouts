@@ -757,8 +757,8 @@ export function ComponentEditor({
             <CardHeader>
               <CardTitle>Browse media</CardTitle>
               <CardDescription>
-                Poster + video for browse cards. Grab a still from the video, or
-                upload an image.
+                Poster + video for browse cards. Drop files onto a slot, or click
+                to choose. Grab a still from the video if you already have one.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -768,7 +768,30 @@ export function ComponentEditor({
                 </p>
               ) : (
                 <>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div
+                    className="grid gap-3 sm:grid-cols-2"
+                    onDragOver={(e) => {
+                      if (![...e.dataTransfer.types].includes("Files")) return;
+                      e.preventDefault();
+                      e.dataTransfer.dropEffect = "copy";
+                    }}
+                    onDrop={(e) => {
+                      const files = e.dataTransfer.files;
+                      if (!files.length) return;
+                      const image = firstMatchingFile(files, "image/*");
+                      const video = firstMatchingFile(files, "video/*");
+                      if (!image && !video) return;
+                      e.preventDefault();
+                      if (image) {
+                        setImageFile(image);
+                        setMediaNote(null);
+                      }
+                      if (video) {
+                        setVideoFile(video);
+                        setMediaNote(null);
+                      }
+                    }}
+                  >
                     <MediaSlot
                       label="Image"
                       icon={<ImageIcon className="size-5" />}
@@ -1102,6 +1125,26 @@ function FramePickerDialog({
   );
 }
 
+function fileMatchesAccept(file: File, accept: string) {
+  if (accept === "image/*") {
+    return (
+      file.type.startsWith("image/") ||
+      /\.(avif|gif|jpe?g|png|svg|webp)$/i.test(file.name)
+    );
+  }
+  if (accept === "video/*") {
+    return (
+      file.type.startsWith("video/") ||
+      /\.(m4v|mkv|mov|mp4|webm)$/i.test(file.name)
+    );
+  }
+  return true;
+}
+
+function firstMatchingFile(files: FileList | File[], accept: string) {
+  return Array.from(files).find((file) => fileMatchesAccept(file, accept)) ?? null;
+}
+
 function MediaSlot({
   label,
   icon,
@@ -1124,9 +1167,46 @@ function MediaSlot({
   children?: React.ReactNode;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [dragDepth, setDragDepth] = useState(0);
+  const dragging = dragDepth > 0;
+
+  function takeDroppedFile(data: DataTransfer) {
+    const file = firstMatchingFile(data.files, accept);
+    if (file) onPick(file);
+  }
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-border bg-muted/20">
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-xl border bg-muted/20 transition-[border-color,background-color,box-shadow] duration-150 ease-out",
+        dragging
+          ? "border-foreground/40 bg-muted/50 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]"
+          : "border-border",
+      )}
+      onDragEnter={(e) => {
+        if (![...e.dataTransfer.types].includes("Files")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setDragDepth((n) => n + 1);
+      }}
+      onDragOver={(e) => {
+        if (![...e.dataTransfer.types].includes("Files")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.dataTransfer.dropEffect = "copy";
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragDepth((n) => Math.max(0, n - 1));
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragDepth(0);
+        takeDroppedFile(e.dataTransfer);
+      }}
+    >
       <div className="relative aspect-[4/3]">
         {hasMedia ? (
           children
@@ -1134,21 +1214,30 @@ function MediaSlot({
           <button
             type="button"
             className={cn(
-              "flex size-full flex-col items-center justify-center gap-2 px-3 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground",
+              "flex size-full cursor-pointer flex-col items-center justify-center gap-2 px-3 text-muted-foreground transition-[color,background-color] duration-150 ease-out hover:bg-muted/40 hover:text-foreground",
               onPickFromVideo && "pb-9",
             )}
             onClick={() => inputRef.current?.click()}
           >
             {icon}
             <span className="text-xs font-medium">{label}</span>
-            <span className="text-[11px] text-muted-foreground">Click to choose</span>
+            <span className="text-[11px] text-muted-foreground">
+              Drop or click to choose
+            </span>
           </button>
         )}
+
+        {dragging ? (
+          <div className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center gap-1 bg-background/80 text-foreground">
+            {icon}
+            <span className="text-xs font-medium">Drop {label.toLowerCase()}</span>
+          </div>
+        ) : null}
 
         {!hasMedia && onPickFromVideo ? (
           <button
             type="button"
-            className="absolute inset-x-0 bottom-0 z-10 flex h-9 items-center justify-center border-t border-border bg-background/90 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+            className="absolute inset-x-0 bottom-0 z-10 flex h-10 cursor-pointer items-center justify-center border-t border-border bg-background/90 text-xs font-medium text-foreground transition-colors duration-150 ease-out hover:bg-muted"
             onClick={onPickFromVideo}
           >
             Pick from video
@@ -1159,7 +1248,7 @@ function MediaSlot({
           <>
             <button
               type="button"
-              className="absolute inset-0 z-0"
+              className="absolute inset-0 z-0 cursor-pointer"
               aria-label={`Replace ${label.toLowerCase()}`}
               onClick={() => inputRef.current?.click()}
             />
@@ -1169,7 +1258,7 @@ function MediaSlot({
                 {onPickFromVideo ? (
                   <button
                     type="button"
-                    className="pointer-events-auto relative z-20 text-[11px] font-medium text-white underline-offset-2 hover:underline"
+                    className="pointer-events-auto relative z-20 cursor-pointer text-[11px] font-medium text-white underline-offset-2 hover:underline"
                     onClick={(e) => {
                       e.stopPropagation();
                       onPickFromVideo();
@@ -1184,7 +1273,7 @@ function MediaSlot({
               type="button"
               aria-label={`Remove ${label.toLowerCase()}`}
               disabled={removing}
-              className="absolute top-2 right-2 z-20 inline-flex size-7 items-center justify-center rounded-md border border-border bg-background/95 text-foreground shadow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+              className="absolute top-2 right-2 z-20 inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-border bg-background/95 text-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.96] disabled:opacity-60"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();

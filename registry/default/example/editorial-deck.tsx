@@ -58,18 +58,25 @@ const STACK_Y = 10;
 const STACK_SCALE = 0.045;
 const STACK_PEEK = 2;
 const SWIPE = 90;
+const LIFT_Y = -64;
+const LIFT_SCALE = 0.92;
 const SETTLE = {
   type: "spring" as const,
-  stiffness: 340,
-  damping: 28,
-  mass: 0.8,
+  duration: 0.4,
+  bounce: 0,
 };
-const FLY = {
+const LIFT = {
   type: "spring" as const,
-  stiffness: 280,
-  damping: 24,
-  mass: 0.9,
+  duration: 0.32,
+  bounce: 0.12,
 };
+const TUCK = {
+  type: "spring" as const,
+  duration: 0.38,
+  bounce: 0,
+};
+
+type FlyPhase = "lift" | "tuck";
 
 function rotateOrder(prev: number[], from: number) {
   return [...prev.slice(from), ...prev.slice(0, from)];
@@ -90,9 +97,10 @@ export function EditorialDeck({
 }: EditorialDeckProps) {
   const reduceMotion = useReducedMotion() ?? false;
   const [order, setOrder] = useState(() => cards.map((_, i) => i));
-  const [fly, setFly] = useState(false);
+  const [fly, setFly] = useState<FlyPhase | false>(false);
   const [peel, setPeel] = useState(0);
   const flying = useRef(false);
+  const flyPhase = useRef<FlyPhase | "idle">("idle");
   const flyStarted = useRef(0);
   const releaseVx = useRef(0);
 
@@ -102,8 +110,9 @@ export function EditorialDeck({
 
   const commitBack = () => {
     if (!flying.current) return;
-    if (Date.now() - flyStarted.current < 200) return;
+    if (Date.now() - flyStarted.current < 180) return;
     flying.current = false;
+    flyPhase.current = "idle";
     releaseVx.current = 0;
     setOrder((prev) => rotateOrder(prev, 1));
     setFly(false);
@@ -116,9 +125,15 @@ export function EditorialDeck({
       return;
     }
     flying.current = true;
+    flyPhase.current = "lift";
     flyStarted.current = Date.now();
-    setFly(true);
-    window.setTimeout(commitBack, 520);
+    setFly("lift");
+    window.setTimeout(() => {
+      if (flyPhase.current !== "lift") return;
+      flyPhase.current = "tuck";
+      setFly("tuck");
+    }, 300);
+    window.setTimeout(commitBack, 720);
   };
 
   const onDrag = (_: unknown, info: PanInfo) => {
@@ -163,7 +178,9 @@ export function EditorialDeck({
           .map((cardIndex, revI) => {
             const restDepth = lastDepth - revI;
             const isFront = restDepth === 0;
-            const isFlying = isFront && fly;
+            const isFlying = isFront && Boolean(fly);
+            const lifting = isFront && fly === "lift";
+            const tucking = isFront && fly === "tuck";
             const depth = isFlying
               ? lastDepth
               : fly && restDepth > 0
@@ -187,19 +204,30 @@ export function EditorialDeck({
                 initial={false}
                 animate={{
                   x: 0,
-                  y: vis * STACK_Y,
-                  scale: 1 - vis * STACK_SCALE - dragShrink,
+                  y: lifting ? LIFT_Y : vis * STACK_Y,
+                  scale: lifting
+                    ? LIFT_SCALE - dragShrink * 0.25
+                    : 1 - vis * STACK_SCALE - dragShrink,
                   rotate: peelX * 0.06,
+                  opacity: lifting ? 0.72 : 1,
                 }}
                 transition={
                   peeling
                     ? { duration: 0, x: SETTLE }
-                    : isFlying
-                      ? { ...FLY, x: { ...FLY, velocity: releaseVx.current } }
-                      : SETTLE
+                    : lifting
+                      ? { ...LIFT, x: { ...LIFT, velocity: releaseVx.current } }
+                      : tucking
+                        ? TUCK
+                        : SETTLE
                 }
                 onAnimationComplete={() => {
-                  if (isFlying) commitBack();
+                  if (!isFront) return;
+                  if (flyPhase.current === "lift") {
+                    flyPhase.current = "tuck";
+                    setFly("tuck");
+                    return;
+                  }
+                  if (flyPhase.current === "tuck") commitBack();
                 }}
                 className={`absolute inset-x-0 top-0 flex h-72 flex-col touch-none overflow-hidden rounded-[1.5rem] ring-1 ring-inset ring-black/5 md:h-80 md:flex-row ${
                   canDrag
@@ -207,8 +235,8 @@ export function EditorialDeck({
                     : "pointer-events-none"
                 }`}
                 style={{
-                  zIndex: canDrag ? 40 : isFlying ? 1 : 20 - depth,
-                  transition: isFlying ? "z-index 0s linear 0.12s" : undefined,
+                  zIndex: canDrag || lifting ? 40 : isFlying ? 1 : 20 - depth,
+                  transition: tucking ? "z-index 0s linear" : undefined,
                   backgroundColor: c.tint,
                   boxShadow: isFront
                     ? "0 8px 24px -12px rgba(0,0,0,0.14), 0 2px 6px -2px rgba(0,0,0,0.05)"

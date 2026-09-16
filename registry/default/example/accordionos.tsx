@@ -154,52 +154,52 @@ export interface AccordionOSProps {
 const DEFAULT_ITEMS: AccordionItem[] = [
   {
     id: 1,
-    title: "Wet Clay",
+    title: "Centering",
     badge: "01",
     claim:
-      "Center the lump on the wheel, find the axis, then pull walls thin enough you can hear the room breathe.",
+      "Push the clay into the wheel's dead center. Until it stops wobbling, nothing else you do will hold.",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
-    alt: "Hands shaping clay on a pottery wheel",
+    alt: "Hands centering wet clay on a pottery wheel",
   },
   {
     id: 2,
-    title: "Safelight",
+    title: "Pulling Walls",
     badge: "02",
     claim:
-      "Chemistry needs darkness. A red bulb, a tray of developer, and thirty seconds of faith before the image appears.",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80",
-    alt: "Photographs developing in a darkroom under red safelight",
+      "Two fingers inside, one outside. Pull slow and even—the wall rises or it collapses.",
+    image: "https://images.unsplash.com/photo-1753164726043-31e583f8a9b8?auto=format&fit=crop&w=1200&q=80",
+    alt: "Potter pulling walls on a bowl at the wheel",
   },
   {
     id: 3,
-    title: "Type Metal",
+    title: "Glaze Prep",
     badge: "03",
     claim:
-      "Lead slugs lock into a chase. Ink hits paper with a kiss—not a smear—and every impression matches by hand.",
-    image: "https://images.unsplash.com/photo-1586281384340-47ca3c376274?auto=format&fit=crop&w=1200&q=80",
-    alt: "Vintage letterpress printing blocks and type",
+      "Oxides mixed in small bowls, tested on tile shards. The kiln decides if your recipe was right.",
+    image: "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?auto=format&fit=crop&w=1200&q=80",
+    alt: "Bowls of colorful ceramic glazes on a studio table",
   },
   {
     id: 4,
-    title: "Groove Cut",
+    title: "Trimming",
     badge: "04",
     claim:
-      "A diamond tip rides a spiral cut into lacquer. One scratch holds an entire afternoon of sound.",
-    image: "https://images.unsplash.com/photo-1603048297170-b37150c710d0?auto=format&fit=crop&w=1200&q=80",
-    alt: "Vinyl record spinning on a turntable",
+      "Foot ring cut while the bowl is still leather-hard. One cut too deep and months of work tips into the slop bucket.",
+    image: "https://images.unsplash.com/photo-1753164726182-4037e5b3bcaa?auto=format&fit=crop&w=1200&q=80",
+    alt: "Potter trimming a wide ceramic bowl in the studio",
   },
   {
     id: 5,
-    title: "Warp & Weft",
+    title: "Finished Ware",
     badge: "05",
     claim:
-      "Shuttle passes, threads cross. The pattern only shows itself after the twentieth row.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
-    alt: "Handloom weaving with colorful threads",
+      "Cooling crackle, lids that fit, handles thick enough for hot tea. The kiln signed off.",
+    image: "https://images.unsplash.com/photo-1771830937026-3e3474fdd947?auto=format&fit=crop&w=1200&q=80",
+    alt: "Handmade ceramic bowls and vases on display",
   },
 ];
 
-const DEFAULT_STATIC_IMAGE = "https://images.unsplash.com/photo-1452860606245-b0798529a591?auto=format&fit=crop&w=1200&q=80";
+const DEFAULT_STATIC_IMAGE = "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1200&q=80";
 
 const springPhysics = {
   type: "spring" as const,
@@ -475,7 +475,7 @@ export function AccordionOS({
           >
             <img
               src={staticImage}
-              alt="A cluttered maker studio desk with tools and materials"
+              alt="Handmade ceramic vessels on a studio shelf"
               className="accordion-os-image"
               loading="eager"
               decoding="async"
@@ -508,7 +508,6 @@ export function AccordionOS({
             );
           })}
 
-          <div className="accordion-os-vignette-overlay" />
         </div>
       </motion.div>
 
@@ -744,20 +743,6 @@ export function AccordionOS({
           display: block;
         }
 
-        .accordion-os-vignette-overlay {
-          position: absolute;
-          inset: 0;
-          border-radius: 36px;
-          background: linear-gradient(
-            to right,
-            rgba(246, 246, 248, 0.6) 0%,
-            rgba(246, 246, 248, 0.2) 35%,
-            transparent 70%
-          );
-          pointer-events: none;
-          z-index: 10;
-        }
-
         @container (max-width: 640px) {
           .accordion-os-card {
             flex-direction: column;
@@ -794,8 +779,7 @@ export function AccordionOS({
             margin-bottom: 12px;
           }
 
-          .accordion-os-image,
-          .accordion-os-vignette-overlay {
+          .accordion-os-image {
             border-radius: 24px;
           }
         }
@@ -811,8 +795,7 @@ export function AccordionOS({
             gap: 8px;
           }
 
-          .accordion-os-image,
-          .accordion-os-vignette-overlay {
+          .accordion-os-image {
             border-radius: 20px;
           }
         }

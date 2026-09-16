@@ -336,10 +336,6 @@
         {
           "path": "registry/default/example/expandable-gallery.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "hooks/use-outside-click.ts",
-          "type": "registry:hook"
         }
       ]
     },

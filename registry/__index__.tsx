@@ -329,10 +329,6 @@ export const Index: Record<string, any> = {
       path: "registry/default/example/expandable-gallery.tsx",
       type: "registry:component",
       target: ""
-    },{
-      path: "hooks/use-outside-click.ts",
-      type: "registry:hook",
-      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/expandable-gallery-demo.tsx")

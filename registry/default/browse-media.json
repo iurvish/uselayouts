@@ -18,5 +18,9 @@
   "animated-collection": {
     "posterUrl": "https://cdn.uselayouts.com/components/animated-collection/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4"
+  },
+  "shake-testimonial-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/video.mp4"
   }
 }

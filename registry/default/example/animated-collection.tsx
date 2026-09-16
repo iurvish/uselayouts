@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   motion,
   LayoutGroup,
@@ -11,13 +12,11 @@ import {
   GridViewIcon,
   Layers01Icon,
   StarIcon,
-  Ticket01Icon,
   Camera01Icon,
   BrushIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
 
 interface CollectionItem {
   id: string;
@@ -25,10 +24,9 @@ interface CollectionItem {
   subtitle: string;
   idNumber: string;
   image: string;
-  icon: any;
+  icon: typeof Camera01Icon;
 }
 
-// Change Here
 const ITEMS: CollectionItem[] = [
   {
     id: "1",
@@ -49,6 +47,7 @@ const ITEMS: CollectionItem[] = [
     icon: BrushIcon,
   },
 ];
+
 type ViewMode = "list" | "card" | "pack";
 
 const snappySpring: Transition = {
@@ -58,108 +57,123 @@ const snappySpring: Transition = {
   mass: 1,
 };
 
-const fastFade: Transition = {
-  duration: 0.1,
-  ease: "linear",
+const fadeMeta: Transition = {
+  duration: 0.16,
+  ease: [0.16, 1, 0.3, 1],
 };
+
+const PACK_POSE = [
+  { rotate: -11, x: -22, y: 6 },
+  { rotate: 9, x: 24, y: -8 },
+] as const;
 
 export default function LayoutSwitcher() {
   const [view, setView] = useState<ViewMode>("list");
-  return (
-    <div className="w-full max-w-xl mx-auto p-4 md:p-8 font-sans selection:bg-primary/10">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-5">
-          <h2 className="text-xl font-medium text-foreground ">
-            My Collection
-          </h2>
 
-          <div className="flex p-1 bg-muted rounded-full w-fit border border-border">
-            <Tab
-              active={view === "list"}
-              onClick={() => setView("list")}
-              icon={Playlist01Icon}
-              label="List view"
-            />
-            <Tab
-              active={view === "card"}
-              onClick={() => setView("card")}
-              icon={GridViewIcon}
-              label="Card view"
-            />
-            <Tab
-              active={view === "pack"}
-              onClick={() => setView("pack")}
-              icon={Layers01Icon}
-              label="Pack view"
-            />
+  return (
+    <div className="mx-auto w-full max-w-xl p-4 font-sans antialiased [-webkit-font-smoothing:antialiased] selection:bg-foreground/10 md:p-8">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="text-xl font-medium tracking-tight text-balance text-foreground">
+              My Collection
+            </h2>
+            <span className="shrink-0 text-xs font-medium tabular-nums text-muted-foreground">
+              {ITEMS.length} items
+            </span>
           </div>
+
+          <LayoutGroup id="ac-tabs">
+            <div
+              role="tablist"
+              aria-label="Collection layout"
+              className="flex w-fit rounded-full bg-muted/70 p-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+            >
+              <Tab
+                active={view === "list"}
+                onClick={() => setView("list")}
+                icon={Playlist01Icon}
+                label="List"
+              />
+              <Tab
+                active={view === "card"}
+                onClick={() => setView("card")}
+                icon={GridViewIcon}
+                label="Cards"
+              />
+              <Tab
+                active={view === "pack"}
+                onClick={() => setView("pack")}
+                icon={Layers01Icon}
+                label="Pack"
+              />
+            </div>
+          </LayoutGroup>
         </div>
-        <div className="h-px bg-border w-full" />
-        {/* Content Section */}
-        <div className="relative min-h-[350px] flex flex-col items-center">
-          <LayoutGroup>
+
+        <div className="h-px w-full bg-border" />
+
+        <div className="relative min-h-[360px]">
+          <LayoutGroup id="ac-items">
             <motion.div
               layout
+              initial={false}
               transition={snappySpring}
               className={cn(
-                "w-full relative",
-                view === "list" && "flex flex-col gap-4",
+                "relative w-full",
+                view === "list" && "flex flex-col gap-3",
                 view === "card" && "grid grid-cols-2 gap-4",
-                view === "pack" && "h-64 flex items-center justify-center mt-8"
+                view === "pack" && "flex h-[22rem] items-center justify-center"
               )}
             >
               {ITEMS.map((item, index) => (
                 <motion.div
                   key={item.id}
                   layout
+                  initial={false}
                   transition={snappySpring}
                   className={cn(
-                    "relative flex items-center z-10",
-                    view === "list" && "flex-row gap-4 w-full",
-                    view === "card" && "flex-col gap-3 w-full items-start",
+                    "relative z-10 flex items-center",
+                    view === "list" && "w-full gap-4",
+                    view === "card" && "w-full flex-col items-start gap-3",
                     view === "pack" &&
-                      "absolute w-56 h-56 items-center justify-center"
+                      "absolute size-56 items-center justify-center"
                   )}
                   style={{
                     zIndex: view === "pack" ? ITEMS.length - index : 1,
                   }}
                   animate={
                     view === "pack"
-                      ? {
-                          rotate: index === 0 ? -12 : 6,
-                          x: index === 0 ? -25 : 25,
-                          y: index === 0 ? -5 : 5,
-                        }
-                      : {
-                          rotate: 0,
-                          x: 0,
-                          y: 0,
-                        }
+                      ? PACK_POSE[index] ?? { rotate: 0, x: 0, y: 0 }
+                      : { rotate: 0, x: 0, y: 0 }
                   }
                 >
                   <motion.div
                     layout
+                    initial={false}
                     transition={snappySpring}
                     className={cn(
-                      "relative overflow-hidden shrink-0 bg-background",
-                      view === "list" &&
-                        "w-16 h-16 rounded-2xl border border-border/50 ",
+                      "relative shrink-0 overflow-hidden bg-muted outline outline-1 outline-black/10 dark:outline-white/10",
+                      view === "list" && "size-16 rounded-2xl",
                       view === "card" &&
-                        "w-full aspect-square rounded-[1.8rem] border border-border/50 shadow-sm",
+                        "aspect-square w-full rounded-[1.5rem] shadow-[0_1px_1px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]",
                       view === "pack" &&
-                        "w-full h-full rounded-[2rem] border border-border/50  shadow-xl"
+                        "size-full rounded-[1.75rem] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_18px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_18px_40px_rgba(0,0,0,0.45)]"
                     )}
                   >
                     <motion.img
                       layout
+                      initial={false}
                       transition={snappySpring}
                       src={item.image}
                       alt={item.title}
+                      width={400}
+                      height={400}
                       className={cn(
-                        "w-full h-full object-cover m-0! p-0! block",
+                        "pointer-events-none m-0! block size-full object-cover p-0! select-none",
                         view === "list" && "rounded-2xl",
-                        view === "card" && "rounded-[1.8rem]",
-                        view === "pack" && "rounded-[2rem]"
+                        view === "card" && "rounded-[1.5rem]",
+                        view === "pack" && "rounded-[1.75rem]"
                       )}
                     />
                   </motion.div>
@@ -169,85 +183,63 @@ export default function LayoutSwitcher() {
                       <motion.div
                         key={`${item.id}-info`}
                         layout
-                        initial={{
-                          opacity: 0,
-                          scale: 0.9,
-                          filter: "blur(4px)",
-                        }}
-                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
-                        transition={fastFade}
+                        initial={{ opacity: 0, filter: "blur(4px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, filter: "blur(4px)" }}
+                        transition={fadeMeta}
                         className={cn(
-                          "flex flex-1 justify-between items-center min-w-0",
-                          view === "card" ? "w-full px-1" : "px-0"
+                          "flex min-w-0 flex-1 items-center justify-between",
+                          view === "card" && "w-full px-0.5"
                         )}
                       >
-                        <div className="flex flex-col gap-0.5 min-w-0">
-                          <motion.h3
-                            layout
-                            className="font-medium text-[15px] text-foreground leading-tight truncate"
-                          >
+                        <div className="flex min-w-0 flex-col gap-0.5">
+                          <h3 className="truncate text-[15px] font-medium leading-tight tracking-tight text-foreground">
                             {item.title}
-                          </motion.h3>
-                          <motion.div
-                            layout
-                            className="text-muted-foreground font-medium text-xs flex items-center gap-1.5"
-                          >
+                          </h3>
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                             <HugeiconsIcon
                               icon={item.icon}
                               size={12}
-                              className="text-primary/70"
+                              className="shrink-0 text-primary/70"
                             />
                             <span className="truncate">{item.subtitle}</span>
-                          </motion.div>
+                          </div>
                         </div>
 
-                        <motion.div
-                          layout
-                          className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold shrink-0 ml-2"
-                        >
+                        <div className="ml-2 flex shrink-0 items-center gap-1 rounded-full bg-primary/5 px-2 py-1 text-[10px] font-medium text-primary">
                           <HugeiconsIcon
                             icon={StarIcon}
                             size={10}
-                            className="text-yellow-500 fill-yellow-500"
+                            className="text-yellow-500"
                           />
-                          <span>#{item.idNumber}</span>
-                        </motion.div>
+                          <span className="tabular-nums">#{item.idNumber}</span>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
-
-                  {view === "list" && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute -bottom-2 left-18 right-0 h-px bg-border/40"
-                    />
-                  )}
                 </motion.div>
               ))}
             </motion.div>
-
-            <AnimatePresence>
-              {view === "pack" && (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: 5, filter: "blur(5px)" }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className="mt-16 text-center space-y-3 px-4 relative z-0"
-                >
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wide">
-                    <HugeiconsIcon icon={Ticket01Icon} size={12} />
-                    <span>Bundle unlocked</span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </LayoutGroup>
+
+          <AnimatePresence initial={false}>
+            {view === "pack" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={fadeMeta}
+                className="pointer-events-none absolute inset-x-0 bottom-6 flex flex-col items-center gap-1 text-center"
+              >
+                <p className="text-sm font-medium tracking-tight text-foreground">
+                  {ITEMS.map((item) => item.title).join(" · ")}
+                </p>
+                <p className="text-xs tabular-nums text-muted-foreground">
+                  {ITEMS.length} pieces
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
@@ -262,35 +254,32 @@ function Tab({
 }: {
   active: boolean;
   onClick: () => void;
-  icon: any;
+  icon: typeof Playlist01Icon;
   label: string;
 }) {
   return (
     <button
+      type="button"
+      role="tab"
+      aria-selected={active}
       onClick={onClick}
       className={cn(
-        "relative flex items-center gap-2 px-4 py-2 text-sm font-normal  uppercase transition-all rounded-full outline-none",
+        "relative flex h-10 min-w-[5.75rem] cursor-pointer items-center justify-center gap-2 rounded-full px-4 text-sm font-medium outline-none transition-[color,background-color,box-shadow,transform] duration-150 ease-out",
+        "active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-foreground/25",
         active
           ? "text-primary-foreground"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+          : "text-muted-foreground hover:text-foreground"
       )}
     >
       {active && (
         <motion.div
-          layoutId="active-tab"
-          className="absolute inset-0 bg-primary rounded-full shadow-md"
+          layoutId="ac-active-tab"
+          className="pointer-events-none absolute inset-0 rounded-full bg-primary shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
           transition={snappySpring}
         />
       )}
       <span className="relative z-10 flex items-center gap-2">
-        <HugeiconsIcon
-          icon={icon}
-          size={16}
-          className={cn(
-            "transition-transform duration-300",
-            active && "scale-110"
-          )}
-        />
+        <HugeiconsIcon icon={icon} size={15} strokeWidth={2} />
         {label}
       </span>
     </button>
