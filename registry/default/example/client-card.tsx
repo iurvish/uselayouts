@@ -72,7 +72,7 @@ function CircularProgress({
           </linearGradient>
         </defs>
         <circle
-          className="text-muted"
+          className="text-muted-foreground"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           fill="transparent"
@@ -136,13 +136,19 @@ export function ClientCard({
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
-    <div className="relative flex items-stretch gap-2.5">
-      <div className="relative w-16 shrink-0">
-        {!isExpanded && (
+    <div className="relative grid grid-cols-[4rem_20rem] grid-rows-1 items-stretch gap-2.5 overflow-hidden">
+      <div className="relative w-16">
+        {isExpanded ? (
+          <div className="invisible flex w-full flex-col gap-1.5 p-1" aria-hidden>
+            {Array.from({ length: 4 }, (_, idx) => (
+              <div key={idx} className="aspect-square w-14" />
+            ))}
+          </div>
+        ) : (
           <motion.div
             key="sidebar"
             layoutId="wrapper"
-            className="z-10 flex h-full w-full flex-col gap-1.5 bg-card p-1 shadow-sm"
+            className="z-10 flex w-full flex-col gap-1.5 bg-card p-1 shadow-sm"
             style={{ borderRadius: "14.4px" }}
             transition={{ type: "spring", stiffness: 350, damping: 35 }}
           >
@@ -150,7 +156,7 @@ export function ClientCard({
               <motion.div
                 key={idx}
                 layoutId={`profile-${idx}`}
-                className="w-14 flex-1 overflow-hidden"
+                className="aspect-square w-14 shrink-0 overflow-hidden"
                 style={{ borderRadius: "12px" }}
                 transition={{ type: "spring", stiffness: 350, damping: 35 }}
               >
@@ -163,9 +169,10 @@ export function ClientCard({
               </motion.div>
             ))}
             {CLIENT_PROFILES.length > 3 && (
-              <motion.div
+              <motion.button
+                type="button"
                 layoutId="counter"
-                className="flex w-full flex-1 cursor-pointer items-center justify-center rounded-xl bg-muted text-sm text-muted-foreground"
+                className="flex aspect-square w-full shrink-0 cursor-pointer items-center justify-center rounded-xl bg-muted text-sm text-muted-foreground"
                 onClick={(event) => {
                   event.stopPropagation();
                   setIsExpanded(true);
@@ -173,18 +180,18 @@ export function ClientCard({
                 transition={{ type: "spring", stiffness: 350, damping: 35 }}
               >
                 +{CLIENT_PROFILES.length - 3}
-              </motion.div>
+              </motion.button>
             )}
           </motion.div>
         )}
       </div>
 
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence>
         {isExpanded && (
           <motion.div
             key="expanded"
             layoutId="wrapper"
-            className="absolute inset-0 z-30 flex h-full flex-col gap-3 overflow-hidden bg-card p-3 shadow-xl"
+            className="absolute inset-0 z-30 flex h-full flex-col gap-3 overflow-hidden bg-card p-3"
             style={{ borderRadius: "14.4px" }}
             transition={{ type: "spring", stiffness: 350, damping: 35 }}
             onClick={() => setIsExpanded(false)}
@@ -199,7 +206,7 @@ export function ClientCard({
                 type="button"
                 layout="position"
                 onClick={() => setIsExpanded(false)}
-                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 <ArrowLeft className="size-3.5" />
                 Go Back
@@ -228,9 +235,10 @@ export function ClientCard({
         )}
       </AnimatePresence>
 
-      <motion.div
+      <div
         className={cn(
-          "group relative flex h-fit w-80 flex-col justify-between overflow-hidden rounded-2xl bg-card shadow-sm transition-all",
+          "group relative flex h-full w-80 flex-col justify-between overflow-hidden rounded-2xl bg-card transition-[box-shadow] duration-150 ease-out",
+          isExpanded ? "shadow-none" : "shadow-sm",
           className,
         )}
       >
@@ -302,7 +310,7 @@ export function ClientCard({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

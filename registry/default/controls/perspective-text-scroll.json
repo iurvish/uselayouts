@@ -22,7 +22,8 @@
   },
   "hintTop": 173,
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Scroll to move through the text",
-  "hintDescription": "Perspective tilts and fades as you scroll this section."
+  "hintKind": "scroll",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": true
 }

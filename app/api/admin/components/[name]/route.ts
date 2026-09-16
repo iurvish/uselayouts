@@ -56,6 +56,7 @@ export async function PUT(request: Request, { params }: Params) {
       hintKind: body.hintKind,
       hintHeading: body.hintHeading,
       hintDescription: body.hintDescription,
+      hintHideOnScroll: body.hintHideOnScroll,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {

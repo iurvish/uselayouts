@@ -11,9 +11,25 @@ assert.equal(resolvePreviewHint(parsePreviewHint({})), null);
 assert.equal(resolvePreviewHint(parsePreviewHint({ showHint: false, hintKind: "click" })), null);
 
 assert.deepEqual(resolvePreviewHint(parsePreviewHint({ showHint: true, hintKind: "click" })), {
-  heading: "Click to open",
-  description: "Click the folder to read the letter",
+  heading: "Click",
+  description: "Click to try it",
+  hideOnScroll: false,
 });
+
+assert.deepEqual(
+  resolvePreviewHint(
+    parsePreviewHint({
+      showHint: true,
+      hintKind: "scroll",
+      hintHideOnScroll: true,
+    }),
+  ),
+  {
+    heading: "Scroll",
+    description: "Scroll to see it change",
+    hideOnScroll: true,
+  },
+);
 
 assert.deepEqual(
   resolvePreviewHint(
@@ -24,7 +40,7 @@ assert.deepEqual(
       hintDescription: "A short note.",
     }),
   ),
-  { heading: "Peek inside", description: "A short note." },
+  { heading: "Peek inside", description: "A short note.", hideOnScroll: false },
 );
 
 assert.equal(

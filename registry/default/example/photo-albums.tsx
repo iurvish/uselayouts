@@ -99,15 +99,15 @@ const COLLECTIONS: Collection[] = [
       },
       {
         id: "p3-4",
-        src: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?q=80&w=2070&auto=format&fit=crop",
       },
       {
         id: "p3-5",
-        src: "https://plus.unsplash.com/premium_photo-1676657954811-9409c4830467?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=800&auto=format&fit=crop",
       },
       {
         id: "p3-6",
-        src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=800&auto=format&fit=crop",
+        src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=800&auto=format&fit=crop",
       },
     ],
   },
@@ -150,118 +150,128 @@ const transition = {
 export default function PhotoAlbums() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const layoutGroupId = useId()
-
   const selectedCollection = COLLECTIONS.find((c) => c.id === selectedId)
+  const visible = COLLECTIONS.filter(
+    (collection) => !selectedId || collection.id === selectedId,
+  )
 
   return (
-    <div className="min-h-[720px] overflow-x-hidden bg-[#fafafa] py-16 font-sans text-[#111111] selection:bg-black/5">
+    <div className="flex h-full w-full items-center justify-center overflow-x-hidden font-sans text-foreground">
       <LayoutGroup id={layoutGroupId}>
-        <motion.div className="flex min-h-screen flex-col">
-          <main className="mx-auto w-full max-w-md flex-grow px-8 pb-32">
-            <div className="grid grid-cols-2 gap-x-12 gap-y-24">
-              {COLLECTIONS.map((collection) => (
-                <CollectionCard
-                  key={collection.id}
-                  collection={collection}
-                  onClick={() => setSelectedId(collection.id)}
-                  isExpanded={selectedId === collection.id}
-                />
-              ))}
-            </div>
-          </main>
-        </motion.div>
-
-        <AnimatePresence>
-          {selectedId && selectedCollection && (
-            <motion.div
-              key="details-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 overflow-y-auto bg-[#fafafa] px-8 pt-24 pb-48"
-              transition={{ duration: 0.25 }}
-            >
-              <div className="relative mx-auto max-w-md">
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  onClick={() => setSelectedId(null)}
-                  className="mb-12 flex h-12 w-12 items-center justify-center rounded-full bg-white text-black shadow-sm ring-1 ring-black/[0.03] transition-transform active:scale-95"
-                >
-                  <ChevronLeft size={24} strokeWidth={2.5} />
-                </motion.button>
-
-                <div className="mb-6 px-1">
-                  <motion.h2
-                    layoutId={`title-${selectedId}`}
-                    className="text-3xl leading-tight font-medium tracking-tight text-black"
-                  >
-                    {selectedCollection.title}
-                  </motion.h2>
-                </div>
-
-                <div className="grid grid-cols-2 gap-6">
-                  {selectedCollection.photos.map((photo) => (
-                    <motion.div
-                      key={photo.id}
-                      layoutId={`photo-${photo.id}`}
-                      className="aspect-square overflow-hidden rounded-2xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.02)] ring-1 ring-black/[0.04]"
-                      transition={transition}
-                    >
-                      <img
-                        src={photo.src}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <main className="w-full max-w-md px-8">
+          <div
+            className={cn(
+              "grid gap-x-12 gap-y-24",
+              selectedId ? "grid-cols-1" : "grid-cols-2",
+            )}
+          >
+            <AnimatePresence mode="popLayout">
+              {visible.map((collection) =>
+                selectedId === collection.id && selectedCollection ? (
+                  <ExpandedAlbum
+                    key={collection.id}
+                    collection={selectedCollection}
+                    onBack={() => setSelectedId(null)}
+                  />
+                ) : (
+                  <CollectionCard
+                    key={collection.id}
+                    collection={collection}
+                    onClick={() => setSelectedId(collection.id)}
+                  />
+                ),
+              )}
+            </AnimatePresence>
+          </div>
+        </main>
       </LayoutGroup>
     </div>
   )
 }
 
-const CollectionCard = ({
+function ExpandedAlbum({
+  collection,
+  onBack,
+}: {
+  collection: Collection
+  onBack: () => void
+}) {
+  const stacked = new Set(collection.photos.slice(0, 3).map((photo) => photo.id))
+
+  return (
+    <motion.div
+      layout
+      className="flex flex-col"
+      exit={{ opacity: 0 }}
+      transition={transition}
+    >
+      <motion.button
+        type="button"
+        layout
+        onClick={onBack}
+        className="mb-8 flex size-12 cursor-pointer items-center justify-center rounded-full bg-muted text-foreground transition-transform duration-150 ease-out active:scale-[0.96]"
+      >
+        <ChevronLeft size={24} strokeWidth={2.5} />
+        <span className="sr-only">Go back</span>
+      </motion.button>
+
+      <motion.h2
+        layoutId={`title-${collection.id}`}
+        className="mb-6 text-3xl leading-tight font-medium tracking-tight text-foreground"
+        transition={transition}
+      >
+        {collection.title}
+      </motion.h2>
+
+      <div className="grid grid-cols-2 gap-6">
+        {collection.photos.map((photo) => (
+          <motion.div
+            key={photo.id}
+            layoutId={`photo-${photo.id}`}
+            className="aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-border"
+            initial={stacked.has(photo.id) ? false : { opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={transition}
+          >
+            <img
+              src={photo.src}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+function CollectionCard({
   collection,
   onClick,
-  isExpanded,
 }: {
   collection: Collection
   onClick: () => void
-  isExpanded: boolean
-}) => {
+}) {
   return (
-    <div
+    <motion.button
+      type="button"
+      layout
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={transition}
       onClick={onClick}
-      className={cn(
-        "group flex cursor-pointer flex-col items-center outline-none select-none",
-        isExpanded ? "opacity-0" : "opacity-100"
-      )}
+      className="group flex cursor-pointer flex-col items-center outline-none select-none"
     >
       <div className="relative mb-3 flex aspect-square w-full items-center justify-center">
-        {/* The Stack (Increased image size to w-32) */}
         {collection.photos.slice(0, 3).map((photo, i) => {
           const rotations = [-14, 14, 0]
-          const xOffsets = [-35, 35, 0]
           const yOffsets = [-2, -2, 0]
-          const zIndexes = [10, 11, 20]
 
           return (
             <motion.div
               key={photo.id}
               layoutId={`photo-${photo.id}`}
-              className="absolute h-34 w-34 overflow-hidden rounded-3xl bg-white shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
-              // style={{
-              //   zIndex: zIndexes[i],
-              // }}
-              animate={{
-                rotate: rotations[i],
-              }}
+              className="absolute h-34 w-34 overflow-hidden rounded-3xl bg-muted ring-1 ring-border"
+              animate={{ rotate: rotations[i] }}
               whileHover={{
                 scale: 1.05,
                 y: yOffsets[i] - 5,
@@ -278,15 +288,13 @@ const CollectionCard = ({
           )
         })}
       </div>
-      <div className="px-2 text-center">
-        <motion.h3
-          layoutId={`title-${collection.id}`}
-          layout
-          className="text-base font-medium tracking-tight text-black/80"
-        >
-          {collection.title}
-        </motion.h3>
-      </div>
-    </div>
+      <motion.h3
+        layoutId={`title-${collection.id}`}
+        className="px-2 text-center text-base font-medium tracking-tight text-foreground"
+        transition={transition}
+      >
+        {collection.title}
+      </motion.h3>
+    </motion.button>
   )
 }

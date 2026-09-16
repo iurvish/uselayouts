@@ -186,8 +186,11 @@ export function SlideToUnlockHandle({
   return (
     <motion.div
       data-slot="handle"
+      role="slider"
+      aria-valuemin={0}
+      aria-valuemax={100}
       className={cn(
-        "absolute top-0 left-0 flex h-10 cursor-grab items-center justify-center rounded-lg bg-white text-zinc-400 shadow-sm active:cursor-grabbing",
+        "absolute top-0 left-0 flex h-10 cursor-grab items-center justify-center rounded-lg bg-background text-muted-foreground shadow-sm active:cursor-grabbing",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
         className
       )}

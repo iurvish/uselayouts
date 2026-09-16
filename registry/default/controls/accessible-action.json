@@ -16,9 +16,10 @@
   "updatedAt": "2026-08-29T08:24:36.590Z",
   "previewBackground": "#212121",
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Swipe & Explore",
-  "hintDescription": "Drag or click to cycle through the stack",
+  "hintKind": "swipe",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false,
   "interactionHints": {
     "duration": 3,
     "scale": 70,

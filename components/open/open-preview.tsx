@@ -63,7 +63,7 @@ export function OpenPreview({
           heading={hint.heading}
           description={hint.description}
           tone={hintTone}
-          absolute={fill}
+          hideOnScroll={hint.hideOnScroll}
           className={fill ? "h-full" : "h-auto"}
         >
           {inner}

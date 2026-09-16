@@ -34,8 +34,8 @@ function Cover({ pattern }: { pattern: RibbonPatternMode }) {
 
 function LetterFront() {
   return (
-    <div className="flex h-full flex-col py-5 pr-3 pl-5 font-mono text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.28_0.04_78)]">
-      <p className="tracking-[0.14em] text-[oklch(0.2_0.04_78)] uppercase">
+    <div className="flex h-full flex-col py-5 pr-3 pl-5 font-mono text-[10px] leading-[1.55] tracking-[0.01em] text-[oklch(0.32_0.03_95)]">
+      <p className="tracking-[0.14em] text-[oklch(0.22_0.03_95)] uppercase">
         A note
       </p>
       <div className="mt-4 space-y-1">
@@ -61,22 +61,22 @@ function LetterBack() {
   return (
     <div className="flex h-full flex-col px-6 py-6">
       <div className="border-b pb-3" style={{ borderColor: RULE }}>
-        <p className="font-mono text-[10px] tracking-[0.16em] text-[oklch(0.28_0.04_78)] uppercase">
+        <p className="font-mono text-[10px] tracking-[0.16em] text-[oklch(0.32_0.03_95)] uppercase">
           From Urvish
         </p>
-        <p className="mt-1 font-sans text-[15px] leading-tight tracking-[-0.02em] text-[oklch(0.2_0.04_78)]">
+        <p className="mt-1 font-sans text-[15px] leading-tight tracking-[-0.02em] text-[oklch(0.22_0.03_95)]">
           Keep this free
         </p>
       </div>
       <div className="my-auto space-y-4">
-        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.2_0.04_78)] text-pretty">
+        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.22_0.03_95)] text-pretty">
           I build uselayouts after work, in the hours I have left.
         </p>
-        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.2_0.04_78)] text-pretty">
+        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.22_0.03_95)] text-pretty">
           Your help buys me more of those hours. I put them into new
           components, and into growing this library so it stays free.
         </p>
-        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.2_0.04_78)] text-pretty">
+        <p className="font-sans text-[15px] leading-[1.45] tracking-[-0.015em] text-[oklch(0.22_0.03_95)] text-pretty">
           If something here has saved you time, that’s why I’m
           asking.
         </p>
@@ -85,7 +85,7 @@ function LetterBack() {
         className="flex items-end justify-end border-t pt-3"
         style={{ borderColor: RULE }}
       >
-        <p className="font-sans text-[15px] tracking-[-0.02em] text-[oklch(0.2_0.04_78)]">
+        <p className="font-sans text-[15px] tracking-[-0.02em] text-[oklch(0.22_0.03_95)]">
           - Urvish
         </p>
       </div>
@@ -105,7 +105,7 @@ export function HeroFolder({
       width={FOLDER_W}
       height={FOLDER_H}
       letterZIndex={999}
-      paper="oklch(0.84 0.05 78)"
+      paper="oklch(0.97 0.012 95)"
       title={HERO_COPY.title}
       subtitle={HERO_COPY.body}
       cover={<Cover pattern={pattern} />}

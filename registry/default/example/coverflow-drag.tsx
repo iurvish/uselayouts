@@ -132,7 +132,7 @@ function Card({
   return (
     <motion.div
       style={{ x, y, scale, zIndex, opacity }}
-      className="absolute top-1/2 left-1/2 -mt-[190px] -ml-[140px] h-[380px] w-[280px] origin-center overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl"
+      className="absolute top-1/2 left-1/2 -mt-[190px] -ml-[140px] h-[380px] w-[280px] origin-center overflow-hidden rounded-2xl bg-muted shadow-2xl"
     >
       <img
         src={src}
@@ -143,13 +143,13 @@ function Card({
       {/* Dark overlay for inactive cards */}
       <motion.div
         style={{ opacity: overlayOpacity }}
-        className="pointer-events-none absolute inset-0 bg-black select-none"
+        className="pointer-events-none absolute inset-0 bg-black/55 select-none"
       />
 
       {/* Green active border ring */}
       <motion.div
         style={{ opacity: borderOpacity }}
-        className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-white select-none"
+        className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-foreground select-none"
       />
     </motion.div>
   )

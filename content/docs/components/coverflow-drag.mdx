@@ -1,0 +1,31 @@
+---
+title: Coverflow Drag
+description: A horizontal coverflow of portraits that scale, dim, and snap as you drag.
+---
+
+## Features
+
+- **Drag to browse**: Pointer drag with spring snap to the nearest card.
+- **Depth**: Off-center cards shrink, drop, and darken.
+- **Loop**: The deck wraps so you can keep swiping.
+- **Active ring**: The front card keeps a border in `foreground`.
+
+## Usage
+
+Needs a tall stage (the demo is 480px). Swap the `images` array. Tune `DRAG_DIST` and `X_OFFSET` if your photos are a different size.
+
+```tsx
+import CoverflowDrag from "@/components/coverflow-drag";
+
+export default function Page() {
+  return <CoverflowDrag />;
+}
+```
+
+## Where to use
+
+- Cast or team pickers
+- Profile or dating browse
+- Lookbooks
+- Testimonial portraits
+- Onboarding “pick a face”

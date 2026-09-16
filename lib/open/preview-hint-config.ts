@@ -4,6 +4,7 @@ export const PREVIEW_HINT_KINDS = [
   "scroll",
   "hover",
   "swipe",
+  "scale",
   "custom",
 ] as const;
 
@@ -15,28 +16,33 @@ export const PREVIEW_HINT_PRESETS: Record<
 > = {
   click: {
     label: "Click",
-    heading: "Click to open",
-    description: "Click the folder to read the letter",
+    heading: "Click",
+    description: "Click to try it",
   },
   drag: {
     label: "Drag",
-    heading: "Drag to explore",
-    description: "Grab and drag to move through the stack",
+    heading: "Drag",
+    description: "Drag to move it",
   },
   scroll: {
     label: "Scroll",
-    heading: "Scroll to reveal",
-    description: "Scroll to move through the text",
+    heading: "Scroll",
+    description: "Scroll to see it change",
   },
   hover: {
     label: "Hover",
-    heading: "Hover to peek",
-    description: "Hover to preview the interaction",
+    heading: "Hover",
+    description: "Hover to see it change",
   },
   swipe: {
     label: "Swipe",
-    heading: "Swipe to browse",
-    description: "Swipe or click to cycle through the stack",
+    heading: "Swipe",
+    description: "Swipe to go to the next one",
+  },
+  scale: {
+    label: "Scale",
+    heading: "Scale",
+    description: "Pinch or scroll to zoom",
   },
 };
 
@@ -45,11 +51,13 @@ export type PreviewHintConfig = {
   kind: PreviewHintKind;
   heading: string;
   description: string;
+  hideOnScroll: boolean;
 };
 
 export type ResolvedPreviewHint = {
   heading: string;
   description?: string;
+  hideOnScroll: boolean;
 };
 
 export function parsePreviewHintKind(value: unknown): PreviewHintKind {
@@ -66,6 +74,7 @@ export function parsePreviewHint(raw: unknown): PreviewHintConfig {
     kind: parsePreviewHintKind(rec.hintKind),
     heading: typeof rec.hintHeading === "string" ? rec.hintHeading : "",
     description: typeof rec.hintDescription === "string" ? rec.hintDescription : "",
+    hideOnScroll: rec.hintHideOnScroll === true,
   };
 }
 
@@ -75,10 +84,18 @@ export function resolvePreviewHint(config: PreviewHintConfig): ResolvedPreviewHi
     const heading = config.heading.trim();
     if (!heading) return null;
     const description = config.description.trim();
-    return description ? { heading, description } : { heading };
+    return {
+      heading,
+      ...(description ? { description } : {}),
+      hideOnScroll: config.hideOnScroll,
+    };
   }
   const preset = PREVIEW_HINT_PRESETS[config.kind];
-  return { heading: preset.heading, description: preset.description };
+  return {
+    heading: preset.heading,
+    description: preset.description,
+    hideOnScroll: config.hideOnScroll,
+  };
 }
 
 export function serializePreviewHint(config: PreviewHintConfig) {
@@ -87,6 +104,7 @@ export function serializePreviewHint(config: PreviewHintConfig) {
     hintKind: config.kind,
     hintHeading: config.heading,
     hintDescription: config.description,
+    hintHideOnScroll: config.hideOnScroll,
   };
 }
 

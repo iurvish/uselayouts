@@ -20,7 +20,8 @@
   },
   "hintTop": 80,
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Scroll to peel through the stack",
-  "hintDescription": "Cards pin, scale, and lift away as you move down the page."
+  "hintKind": "scroll",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": true
 }

@@ -91,6 +91,12 @@ const SEEDS: Seed[] = [
   { slug: "stack-scroll-reveal", title: "Stack Scroll Reveal", description: "Cards that peel off a stack as you scroll.", category: "Display" },
   { slug: "perspective-text-scroll", title: "Perspective Text Scroll", description: "Text that tilts through scroll perspective.", category: "Display" },
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
+  { slug: "client-card", title: "Client Card", description: "A CRM card with paid and deadline rings.", category: "Display" },
+  { slug: "coverflow-drag", title: "Coverflow Drag", description: "Portraits that coverflow as you drag.", category: "Display" },
+  { slug: "create-menu", title: "Create Menu", description: "A create pill that opens into actions.", category: "Button" },
+  { slug: "liquid-index", title: "Liquid Index", description: "A feature list with a liquid hover badge.", category: "Display" },
+  { slug: "photo-albums", title: "Photo Albums", description: "Album stacks that open into a grid.", category: "Display" },
+  { slug: "slide-subscribe", title: "Slide Subscribe", description: "Pick a plan, then slide to start.", category: "Input" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {

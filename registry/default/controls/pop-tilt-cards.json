@@ -23,7 +23,8 @@
     "dark": "#f5f6f8"
   },
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Interaction study",
-  "hintDescription": "Pop and tilt on hover"
+  "hintKind": "hover",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false
 }

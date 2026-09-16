@@ -1,0 +1,42 @@
+---
+title: Client Card
+description: A CRM client card with paid and deadline rings, plus a morphing row of avatars.
+---
+
+## Features
+
+- **Shared layout**: The avatar rail expands into a full grid of faces with `layoutId`.
+- **Paid ring**: Circular progress from amount paid vs total.
+- **Deadline ring**: Time used vs the contract window, with a short “Xd left” label.
+- **Identity**: Name, country, and portrait on a compact card.
+
+## Usage
+
+Pass real dates and amounts — the rings are derived, not decorative. The avatar stack is demo data; swap `CLIENT_PROFILES` for the team or related clients. Keep the card around 320px wide.
+
+```tsx
+import ClientCard from "@/components/client-card";
+
+export default function Page() {
+  return (
+    <ClientCard
+      name="Sarah Jenkins"
+      country="United Kingdom"
+      service="Social Media Management"
+      amountPaid={4500}
+      totalAmount={6000}
+      plan="Professional"
+      startDate={new Date("2024-01-01")}
+      deadline={new Date("2024-06-01")}
+    />
+  );
+}
+```
+
+## Where to use
+
+- Agency or freelance CRM
+- Client lists on a studio dashboard
+- Account overview drawers
+- Project kickoff summaries
+- Retainer tracking

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { cn } from "@/lib/utils"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -47,23 +47,31 @@ const pricingOptions: PricingOption[] = [
   },
 ]
 
+const easeOut = [0.32, 0.72, 0, 1] as const
+
 export default function SlideSubscribe() {
   const [selected, setSelected] = useState<string>("pro-yearly")
   const [isUnlocked, setIsUnlocked] = useState(false)
-
-  const handleUnlock = () => {
-    setIsUnlocked(true)
-  }
+  const reduce = useReducedMotion() ?? false
 
   return (
     <div className="w-full max-w-[380px] space-y-4">
-      {/* Main Selection Container */}
       <div className="relative flex h-[302px] flex-col overflow-hidden rounded-2xl bg-muted/60 p-3 shadow-inner">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {!isUnlocked ? (
             <motion.div
               key="pricing-list"
               className="flex h-full flex-1 flex-col"
+              exit={
+                reduce
+                  ? undefined
+                  : {
+                      opacity: 0,
+                      y: -8,
+                      filter: "blur(2px)",
+                      transition: { duration: 0.14, ease: "easeIn" },
+                    }
+              }
             >
               <div className="relative flex-1 space-y-2">
                 {pricingOptions.map((option) => (
@@ -76,9 +84,8 @@ export default function SlideSubscribe() {
                 ))}
               </div>
 
-              {/* Converting Text */}
               <div className="pt-6 pb-2">
-                <p className="text-center text-xs font-medium text-zinc-500">
+                <p className="text-center text-xs font-medium text-muted-foreground">
                   Risk-free trial. Cancel anytime with one click.
                 </p>
               </div>
@@ -87,61 +94,79 @@ export default function SlideSubscribe() {
             <motion.div
               key="success-message"
               className="flex h-full flex-1 flex-col items-center justify-center p-6 text-center"
+              initial={reduce ? false : { opacity: 0, y: 8, filter: "blur(2px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.22, ease: easeOut }}
             >
               <motion.div
-                initial={{ scale: 0, rotate: -10 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{
-                  type: "spring",
-                  delay: 0.2,
-                  stiffness: 200,
-                  damping: 15,
-                }}
-                className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500 text-white shadow-lg shadow-green-500/10"
+                initial={
+                  reduce ? false : { scale: 0.3, opacity: 0, filter: "blur(3px)" }
+                }
+                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+                transition={{ type: "spring", duration: 0.35, bounce: 0 }}
+                className="mb-6 flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg will-change-transform"
               >
                 <HugeiconsIcon
                   icon={Tick02Icon}
-                  className="h-8 w-8 stroke-[3]"
+                  className="size-8 stroke-[3]"
                 />
               </motion.div>
               <div className="space-y-2">
-                <h3 className="text-xl font-medium tracking-tight text-zinc-900 dark:text-white">
+                <motion.h3
+                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: reduce ? 0 : 0.08, ease: easeOut }}
+                  className="text-xl font-medium tracking-tight text-balance text-foreground"
+                >
                   Subscription Active
-                </h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                </motion.h3>
+                <motion.p
+                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: reduce ? 0 : 0.16, ease: easeOut }}
+                  className="text-sm text-pretty text-muted-foreground"
+                >
                   Your Pro trial has started. Check your email for next steps.
-                </p>
+                </motion.p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Action Area */}
       <div className="h-14">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {!isUnlocked ? (
             <motion.div
               key="slider"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(2px)" }}
-              transition={{ duration: 0.3 }}
+              exit={
+                reduce
+                  ? undefined
+                  : {
+                      opacity: 0,
+                      y: -8,
+                      filter: "blur(2px)",
+                      transition: { duration: 0.14, ease: "easeIn" },
+                    }
+              }
             >
               <SlideToUnlock
                 handleWidth={56}
-                onUnlock={handleUnlock}
+                onUnlock={() => setIsUnlocked(true)}
                 className="w-full overflow-hidden rounded-2xl bg-primary p-1 shadow-lg ring-0"
               >
                 <SlideToUnlockTrack className="relative h-12">
-                  <SlideToUnlockHandle className="z-20 h-12 w-14 rounded-xl bg-white text-primary shadow-md">
+                  <SlideToUnlockHandle
+                    aria-label="Slide to start trial"
+                    className="z-20 h-12 w-14 rounded-xl bg-primary-foreground text-primary shadow-md"
+                  >
                     <HugeiconsIcon
                       icon={ArrowRight01Icon}
-                      className="h-6 w-6"
+                      className="size-6"
                     />
                   </SlideToUnlockHandle>
 
-                  <SlideToUnlockText className="-pl-16 z-10 flex items-center justify-center pr-4 text-base text-primary-foreground">
+                  <SlideToUnlockText className="z-10 flex items-center justify-center pr-4 text-base text-primary-foreground">
                     {({ isDragging }) => (
                       <ShimmeringText
                         text={
@@ -149,7 +174,8 @@ export default function SlideSubscribe() {
                             ? "Release to confirm"
                             : "Slide to start trial"
                         }
-                        className="font-medium [--color:rgba(255,255,255,0.4)] [--shimmering-color:rgba(255,255,255,1)]"
+                        isStopped={isDragging}
+                        className="font-medium [--color:color-mix(in_oklab,var(--primary-foreground)_42%,transparent)] [--shimmering-color:var(--primary-foreground)]"
                       />
                     )}
                   </SlideToUnlockText>
@@ -159,23 +185,21 @@ export default function SlideSubscribe() {
           ) : (
             <motion.button
               key="dashboard-button"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                type: "spring",
-                opacity: { duration: 0.3 },
-              }}
+              type="button"
+              initial={reduce ? false : { opacity: 0, y: 8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              whileTap={reduce ? undefined : { scale: 0.96 }}
+              transition={{ duration: 0.2, ease: easeOut }}
               onClick={() => setIsUnlocked(false)}
               className={cn(
-                "group flex h-14 w-full items-center justify-center gap-2 rounded-2xl font-medium shadow-md",
-                "bg-zinc-900 text-white dark:bg-white dark:text-black",
-                "[--hover-bg:black] dark:[--hover-bg:#f4f4f5]"
+                "group flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl font-medium shadow-md",
+                "bg-primary text-primary-foreground",
               )}
             >
               <span>Back to Dashboard</span>
               <HugeiconsIcon
                 icon={ArrowRight02Icon}
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                className="size-5 transition-transform duration-150 ease-out group-hover:translate-x-0.5"
               />
             </motion.button>
           )}
@@ -198,7 +222,7 @@ function PricingCard({
     <button
       onClick={onSelect}
       className={cn(
-        "group relative flex w-full items-center gap-3 rounded-xl bg-card p-4 text-left transition-all duration-300",
+        "group relative flex w-full cursor-pointer items-center gap-3 rounded-xl bg-card p-4 text-left transition-all duration-300",
         isSelected
           ? "shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)]"
           : "hover:bg-card/60"

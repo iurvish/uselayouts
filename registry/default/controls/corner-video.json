@@ -31,7 +31,8 @@
   },
   "hintTop": 126,
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Corner player with a smooth morph",
-  "hintDescription": "Close collapses into a pill without a blank flash. Hover for mute, enlarge, and scrub."
+  "hintKind": "hover",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false
 }

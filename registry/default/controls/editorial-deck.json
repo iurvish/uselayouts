@@ -20,7 +20,8 @@
   },
   "hintTop": 100,
   "showHint": true,
-  "hintKind": "custom",
-  "hintHeading": "Drag to flip through stories",
-  "hintDescription": "Swipe the front card; it settles into the back of the stack."
+  "hintKind": "drag",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false
 }

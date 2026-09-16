@@ -39,11 +39,13 @@ export type ComponentControlsMeta = {
   videoUrl?: string;
   /** PreviewHint overlay top offset in px. Default 80. May be negative. */
   hintTop?: number;
-  /** When true, OpenPreview / admin live preview render PreviewHint. */
+  /** When true, PreviewHint / admin live preview render PreviewHint. */
   showHint?: boolean;
   hintKind?: PreviewHintKind;
   hintHeading?: string;
   hintDescription?: string;
+  /** Fade the hint as the preview scrolls; it comes back at the top. */
+  hintHideOnScroll?: boolean;
 };
 
 export type RegistryItem = {
@@ -72,6 +74,7 @@ export type UpsertComponentInput = {
   hintKind?: PreviewHintKind;
   hintHeading?: string;
   hintDescription?: string;
+  hintHideOnScroll?: boolean;
 };
 
 async function readRegistry(): Promise<{
@@ -301,7 +304,8 @@ export async function upsertComponent(input: UpsertComponentInput) {
     input.showHint !== undefined ||
     input.hintKind !== undefined ||
     input.hintHeading !== undefined ||
-    input.hintDescription !== undefined;
+    input.hintDescription !== undefined ||
+    input.hintHideOnScroll !== undefined;
   const existingHint = parsePreviewHint(existingMeta);
   await writeControls(name, {
     dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
@@ -320,6 +324,7 @@ export async function upsertComponent(input: UpsertComponentInput) {
               : existingHint.kind,
           heading: input.hintHeading ?? existingHint.heading,
           description: input.hintDescription ?? existingHint.description,
+          hideOnScroll: input.hintHideOnScroll ?? existingHint.hideOnScroll,
         })
       : {}),
   });

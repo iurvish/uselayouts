@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -17,6 +17,36 @@ function nearestScroller(el: HTMLElement): HTMLElement | null {
     node = node.parentElement;
   }
   return null;
+}
+
+function scrollTopOf(target: HTMLElement | Window) {
+  // iframe windows fail `instanceof Window` (different realm).
+  if ("scrollY" in target) {
+    return target.scrollY || target.document.documentElement.scrollTop || 0;
+  }
+  return target.scrollTop;
+}
+
+function listenScroll(target: HTMLElement | Window, onScroll: () => void) {
+  target.addEventListener("scroll", onScroll, { passive: true });
+  return () => target.removeEventListener("scroll", onScroll);
+}
+
+/** Lenis (and some iframe windows) update scrollY without a native scroll event. */
+function watchTop(getTop: () => number, apply: (top: number) => void) {
+  let last = Number.NaN;
+  const tick = () => {
+    const top = getTop();
+    if (top === last) return;
+    last = top;
+    apply(top);
+  };
+  tick();
+  let id = requestAnimationFrame(function loop() {
+    tick();
+    id = requestAnimationFrame(loop);
+  });
+  return () => cancelAnimationFrame(id);
 }
 
 function HintConnector({ tone }: { tone: "dark" | "light" }) {
@@ -43,11 +73,13 @@ function HintOverlay({
   description,
   tone,
   absolute,
+  hideOnScroll,
 }: {
   heading: string;
   description?: string;
   tone: "dark" | "light";
   absolute: boolean;
+  hideOnScroll: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion() ?? false;
@@ -55,18 +87,37 @@ function HintOverlay({
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
-    const scroller = nearestScroller(node);
-    if (!scroller) return;
+    if (!hideOnScroll) {
+      node.style.opacity = "1";
+      return;
+    }
 
-    const update = () => {
-      const t = Math.min(Math.max(scroller.scrollTop, 0) / FADE_PX, 1);
-      // ease-out on opacity so it doesn't drop linearly with scroll
+    const apply = (top: number) => {
+      const t = Math.min(Math.max(top, 0) / FADE_PX, 1);
       node.style.opacity = String(reduce ? (t > 0 ? 0 : 1) : (1 - t) ** 2);
     };
-    update();
-    scroller.addEventListener("scroll", update, { passive: true });
-    return () => scroller.removeEventListener("scroll", update);
-  }, [reduce]);
+
+    const iframe = node.parentElement?.querySelector("iframe");
+    if (iframe instanceof HTMLIFrameElement) {
+      let stop: (() => void) | undefined;
+      const attach = () => {
+        const win = iframe.contentWindow;
+        if (!win) return;
+        stop?.();
+        stop = watchTop(() => scrollTopOf(win), apply);
+      };
+      attach();
+      iframe.addEventListener("load", attach);
+      return () => {
+        iframe.removeEventListener("load", attach);
+        stop?.();
+      };
+    }
+
+    const scroller = nearestScroller(node) ?? window;
+    apply(scrollTopOf(scroller));
+    return listenScroll(scroller, () => apply(scrollTopOf(scroller)));
+  }, [hideOnScroll, reduce]);
 
   return (
     <div
@@ -79,7 +130,6 @@ function HintOverlay({
       <div
         className={cn(
           "flex flex-col items-center gap-8 px-4",
-          // top (not paddingTop): --preview-hint-top may be negative
           absolute ? "relative w-full" : "absolute inset-x-0",
         )}
         style={{ top: "var(--preview-hint-top, 80px)" }}
@@ -116,29 +166,41 @@ export function PreviewHint({
   children,
   className,
   tone = "dark",
-  absolute = true,
+  hideOnScroll = false,
 }: {
   heading: string;
   description?: string;
   children?: ReactNode;
   className?: string;
   tone?: "dark" | "light";
-  /** When true (default), hint overlays with position:absolute. Set false for sticky scroll-fade. */
-  absolute?: boolean;
+  /** Fade the hint as the preview (or its iframe) scrolls; it returns at the top. */
+  hideOnScroll?: boolean;
 }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [sticky, setSticky] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!hideOnScroll) {
+      setSticky(false);
+      return;
+    }
+    setSticky(!wrapRef.current?.querySelector("iframe"));
+  }, [hideOnScroll, children]);
+
   const overlay = (
     <HintOverlay
       heading={heading}
       description={description}
       tone={tone}
-      absolute={absolute}
+      absolute={!sticky}
+      hideOnScroll={hideOnScroll}
     />
   );
 
   if (!children) return overlay;
 
   return (
-    <div className={cn("relative h-full w-full min-w-0", className)}>
+    <div ref={wrapRef} className={cn("relative h-full w-full min-w-0", className)}>
       {overlay}
       <div className="relative z-0 flex h-full min-h-0 w-full items-center justify-center">
         {children}

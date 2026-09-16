@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       hintKind,
       hintHeading,
       hintDescription,
+      hintHideOnScroll,
     } = body;
 
     if (!title || !description || !code) {
@@ -62,6 +63,7 @@ export async function POST(request: Request) {
       hintKind,
       hintHeading,
       hintDescription,
+      hintHideOnScroll,
     });
 
     return NextResponse.json({ ok: true, ...result });

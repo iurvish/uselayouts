@@ -6,25 +6,35 @@ import {
   motion,
   useReducedMotion,
 } from "motion/react"
+import {
+  BookOpen,
+  Camera,
+  Droplets,
+  Flame,
+  SwatchBook,
+  type LucideIcon,
+} from "lucide-react"
 import { LiquidGradientCanvas } from "./liquid-index-canvas"
 
 const SPRING = { type: "spring" as const, bounce: 0, duration: 0.36 }
 const COLOR_EASE = [0.25, 0.1, 0.25, 1] as const
+const IMG = "auto=format&fit=crop&w=800&q=80"
 
 type Item = {
   title: string
   description: string
-  logo: string
+  image: string
+  icon: LucideIcon
   seed: number
   colors: [number, number, number][]
 }
 
 const ITEMS: Item[] = [
   {
-    title: "AI Workflows",
-    description:
-      "Automate repetitive tasks with intelligent flows that move work forward in the background.",
-    logo: "https://framerusercontent.com/images/fgwxMb2ItHWuyeBNQgaoKwwBmcU.png?width=841&height=845",
+    title: "Marbling",
+    description: "Wet color that settles into the grain instead of sitting on top.",
+    image: `https://images.unsplash.com/photo-1541701494587-cb58502866ab?${IMG}`,
+    icon: Droplets,
     seed: 648,
     colors: [
       [0, 0, 26],
@@ -33,10 +43,10 @@ const ITEMS: Item[] = [
     ],
   },
   {
-    title: "Smart Insights",
-    description:
-      "Turn scattered data into clear signals your team can understand and act on.",
-    logo: "https://framerusercontent.com/images/YtN1ZgtJk5pPePihGuFqKWmUAc.png?width=887&height=891",
+    title: "Darkroom",
+    description: "Trays, safelight, and a print that only appears in the last minute.",
+    image: `https://images.unsplash.com/photo-1557672172-298e090bd0f1?${IMG}`,
+    icon: Camera,
     seed: 732,
     colors: [
       [22, 11, 0],
@@ -45,10 +55,10 @@ const ITEMS: Item[] = [
     ],
   },
   {
-    title: "Team Sync",
-    description:
-      "Keep decisions, updates, and context aligned across every part of the workspace.",
-    logo: "https://framerusercontent.com/images/3mGmRGsNCIGD3yeo0GWBCyQVZtU.png?width=916&height=910",
+    title: "Kiln",
+    description: "Clay that is unfinished until it comes back from the fire.",
+    image: `https://images.unsplash.com/photo-1574169208507-84376144848b?${IMG}`,
+    icon: Flame,
     seed: 516,
     colors: [
       [18, 10, 36],
@@ -57,10 +67,10 @@ const ITEMS: Item[] = [
     ],
   },
   {
-    title: "Live Dashboards",
-    description:
-      "Track projects, users, and performance through clean real-time views.",
-    logo: "https://framerusercontent.com/images/CDHuJkmVvdIR6DeGd128xOFdmI.png?width=940&height=942",
+    title: "Binding",
+    description: "Signatures sewn so the book can open flat on a desk.",
+    image: `https://images.unsplash.com/photo-1550684848-fac1c5b4e853?${IMG}`,
+    icon: BookOpen,
     seed: 884,
     colors: [
       [6, 19, 13],
@@ -69,10 +79,10 @@ const ITEMS: Item[] = [
     ],
   },
   {
-    title: "Secure Access",
-    description:
-      "Protect sensitive work with roles, permissions, and reliable account controls.",
-    logo: "https://framerusercontent.com/images/xyCUCSnxDy5lzSbk7qQHuT8XdQ.png?width=918&height=902",
+    title: "Proofing",
+    description: "One last pass on the sheet before the press run starts.",
+    image: `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?${IMG}`,
+    icon: SwatchBook,
     seed: 291,
     colors: [
       [11, 16, 32],
@@ -104,6 +114,7 @@ export default function LiquidIndex() {
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   const current = active == null ? ITEMS[0] : ITEMS[active]
+  const Icon = current.icon
   const transition = reduceMotion ? { duration: 0 } : SPRING
 
   useLayoutEffect(() => {
@@ -123,8 +134,8 @@ export default function LiquidIndex() {
     <div
       className={
         isPhone
-          ? "flex w-full max-w-[931px] flex-col items-start gap-[27px] bg-white"
-          : "flex w-full max-w-[931px] flex-row items-stretch gap-12 bg-white"
+          ? "flex w-full max-w-[931px] flex-col items-start gap-[27px]"
+          : "flex w-full max-w-[931px] flex-row items-stretch gap-12"
       }
     >
       <div
@@ -137,16 +148,33 @@ export default function LiquidIndex() {
         <motion.div
           className={
             isPhone
-              ? "relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[24px] bg-white"
-              : "relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[32px] bg-white"
+              ? "relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[24px] bg-muted opacity-0"
+              : "relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[32px] bg-muted opacity-0"
           }
+          initial={false}
           animate={{
             opacity: active == null ? 0 : 1,
             y: isPhone || active == null ? 0 : offsetY,
           }}
           transition={transition}
         >
-          <div className="absolute inset-0">
+          <AnimatePresence initial={false} mode="sync">
+            <motion.img
+              key={current.image}
+              src={current.image}
+              alt=""
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.18,
+                ease: COLOR_EASE,
+              }}
+              className="absolute inset-0 size-full object-cover"
+              draggable={false}
+            />
+          </AnimatePresence>
+          <div className="absolute inset-0 mix-blend-soft-light">
             <LiquidGradientCanvas
               colors={current.colors}
               seed={current.seed}
@@ -156,15 +184,13 @@ export default function LiquidIndex() {
           <div
             className={
               isPhone
-                ? "relative z-[2] aspect-square w-9 shrink-0 overflow-visible"
-                : "relative z-[2] aspect-square w-14 shrink-0 overflow-visible"
+                ? "relative z-[2] flex size-9 items-center justify-center text-white"
+                : "relative z-[2] flex size-14 items-center justify-center text-white"
             }
           >
             <AnimatePresence initial={false} mode="sync">
-              <motion.img
-                key={current.logo}
-                src={current.logo}
-                alt=""
+              <motion.span
+                key={current.title}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -172,9 +198,15 @@ export default function LiquidIndex() {
                   duration: reduceMotion ? 0 : 0.18,
                   ease: COLOR_EASE,
                 }}
-                className="absolute inset-0 size-full object-cover"
-                draggable={false}
-              />
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <Icon
+                  className={isPhone ? "size-7" : "size-10"}
+                  fill="currentColor"
+                  strokeWidth={0}
+                  aria-hidden
+                />
+              </motion.span>
             </AnimatePresence>
           </div>
         </motion.div>
@@ -223,7 +255,9 @@ export default function LiquidIndex() {
                       : "w-auto select-none text-[44px] font-semibold leading-[1.1em] tracking-[-0.04em] whitespace-nowrap"
                   }
                   animate={{
-                    color: inactive ? "rgb(199, 199, 204)" : "rgb(29, 29, 31)",
+                    color: inactive
+                      ? "var(--muted-foreground)"
+                      : "var(--foreground)",
                   }}
                   transition={{
                     duration: reduceMotion ? 0 : 0.18,
@@ -239,7 +273,7 @@ export default function LiquidIndex() {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={transition}
-                      className="max-w-[520px] overflow-hidden text-[17px] font-medium leading-[1.45em] tracking-[-0.018em] text-balance text-[rgb(110,110,115)]"
+                      className="max-w-[520px] overflow-hidden text-[17px] font-medium leading-[1.45em] tracking-[-0.018em] text-pretty text-muted-foreground"
                     >
                       {item.description}
                     </motion.p>
@@ -265,7 +299,7 @@ export default function LiquidIndex() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={transition}
-                className="text-[22px] font-medium leading-[1.42em] tracking-[-0.025em] text-balance text-[rgb(110,110,115)]"
+                className="text-[22px] font-medium leading-[1.42em] tracking-[-0.025em] text-pretty text-muted-foreground"
               >
                 {current.description}
               </motion.p>

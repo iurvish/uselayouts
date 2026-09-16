@@ -13,7 +13,7 @@ import {
   PlusSignCircleIcon,
 } from "@hugeicons/core-free-icons";
 
-export function CreateMenu() {
+export default function CreateMenu() {
   const [view, setView] = useState<"button" | "dropdown">("button");
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +42,11 @@ export function CreateMenu() {
           borderRadius: view === "button" ? 22 : 12,
           transformOrigin: "top left",
         }}
-        className="absolute z-20 w-fit cursor-pointer overflow-hidden rounded-full bg-popover text-foreground shadow-sm ring-1 ring-gray-300/50 ring-inset"
+        className={
+          view === "button"
+            ? "absolute z-20 w-fit overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm"
+            : "absolute z-20 w-fit overflow-hidden rounded-[12px] bg-popover text-popover-foreground shadow-sm ring-1 ring-border ring-inset"
+        }
       >
         <motion.div
           layout
@@ -67,7 +71,7 @@ function NewButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className="z-10 flex w-fit items-center justify-center gap-1.5 px-4 py-2 pl-3.5"
+      className="z-10 flex w-fit cursor-pointer items-center justify-center gap-1.5 px-4 py-2 pl-3.5"
       onClick={onClick}
     >
       <HugeiconsIcon icon={PlusSignCircleIcon} className="size-4" />
@@ -92,7 +96,7 @@ function MenuItems() {
         <button
           key={item.label}
           type="button"
-          className="flex w-full items-center gap-2 rounded-md bg-muted px-3 py-2 pl-2.5 text-sm text-accent-foreground transition-colors hover:bg-muted/60"
+          className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-muted px-3 py-2 pl-2.5 text-sm text-foreground transition-colors duration-150 ease-out hover:bg-accent hover:text-accent-foreground"
         >
           <HugeiconsIcon icon={item.icon} strokeWidth={1.6} className="size-4" />
           <span className="whitespace-nowrap">{item.label}</span>
@@ -102,42 +106,3 @@ function MenuItems() {
   );
 }
 
-export default function CreateMenuPreview() {
-  return (
-    <div className="flex aspect-[16/10] w-full max-w-[860px] overflow-visible rounded-xl border border-zinc-200 bg-zinc-50">
-      <div className="flex w-[240px] shrink-0 flex-col gap-3 border-r border-zinc-200 bg-white p-3">
-        <div className="mb-1 flex items-center gap-2 px-1">
-          <div className="size-7 rounded-lg bg-zinc-100" />
-          <div className="h-3 w-24 rounded bg-zinc-100" />
-        </div>
-        <CreateMenu />
-        <div className="mt-1 space-y-2 px-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="size-4 rounded bg-zinc-100" />
-              <div
-                className="h-3 rounded bg-zinc-100"
-                style={{ width: `${58 + (i % 3) * 12}%` }}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-auto space-y-2 px-1 pb-1">
-          <div className="h-3 w-16 rounded bg-zinc-100" />
-          <div className="h-9 w-full rounded-lg bg-zinc-100" />
-        </div>
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-4 p-5">
-        <div className="flex items-center justify-between">
-          <div className="h-4 w-32 rounded bg-zinc-200/80" />
-          <div className="h-8 w-8 rounded-md bg-zinc-200/70" />
-        </div>
-        <div className="grid flex-1 grid-cols-2 gap-3">
-          <div className="rounded-xl bg-zinc-100" />
-          <div className="rounded-xl bg-zinc-100" />
-          <div className="col-span-2 rounded-xl bg-zinc-100" />
-        </div>
-      </div>
-    </div>
-  );
-}

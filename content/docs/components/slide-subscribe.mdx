@@ -1,0 +1,31 @@
+---
+title: Slide Subscribe
+description: Choose a billing period, then slide to start the trial.
+---
+
+## Features
+
+- **Plan select**: Annual, monthly, and enterprise share a moving border.
+- **Slide to confirm**: The handle has to travel the full track — not a tap.
+- **Shimmer copy**: Track text shifts when you’re dragging.
+- **Done state**: A check and dashboard button after unlock.
+
+## Usage
+
+Wire `onUnlock` to your checkout or trial API. Edit `pricingOptions` for amounts and trial length. Keep the column near 380px.
+
+```tsx
+import SlideSubscribe from "@/components/slide-subscribe";
+
+export default function Page() {
+  return <SlideSubscribe />;
+}
+```
+
+## Where to use
+
+- Paywalls and upgrade screens
+- Trial start in onboarding
+- Mobile-ish checkout
+- Plan change confirmations
+- Pro feature gates

@@ -16,6 +16,12 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "perspective-text-scroll",
   "wheel-carousel",
   "editorial-deck",
+  "client-card",
+  "coverflow-drag",
+  "create-menu",
+  "liquid-index",
+  "photo-albums",
+  "slide-subscribe",
 ]);
 
 export function isNewComponent(slug: string) {

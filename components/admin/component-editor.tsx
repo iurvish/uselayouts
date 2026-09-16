@@ -112,6 +112,7 @@ export function ComponentEditor({
   const [hintKind, setHintKind] = useState<PreviewHintKind>("click");
   const [hintHeading, setHintHeading] = useState("");
   const [hintDescription, setHintDescription] = useState("");
+  const [hintHideOnScroll, setHintHideOnScroll] = useState(false);
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark");
   const [previewKey, setPreviewKey] = useState(0);
   const [depsLocked, setDepsLocked] = useState(false);
@@ -155,6 +156,7 @@ export function ComponentEditor({
         setHintKind(hint.kind);
         setHintHeading(hint.heading);
         setHintDescription(hint.description);
+        setHintHideOnScroll(hint.hideOnScroll);
         setPosterUrl(data.controls?.posterUrl ?? null);
         setVideoUrl(data.controls?.videoUrl ?? null);
       })
@@ -256,6 +258,7 @@ export function ComponentEditor({
       hintKind,
       hintHeading,
       hintDescription,
+      hintHideOnScroll,
     };
 
     const res = await fetch(
@@ -379,6 +382,7 @@ export function ComponentEditor({
     kind: hintKind,
     heading: hintHeading,
     description: hintDescription,
+    hideOnScroll: hintHideOnScroll,
   });
   const hintTone = hintToneForBackground(activePreviewBackground);
 
@@ -599,7 +603,7 @@ export function ComponentEditor({
                       <Field label="Heading">
                         <Input
                           value={hintHeading}
-                          placeholder="Click to open"
+                          placeholder="Click"
                           onChange={(e) => setHintHeading(e.target.value)}
                         />
                       </Field>
@@ -607,7 +611,7 @@ export function ComponentEditor({
                         <Textarea
                           rows={2}
                           value={hintDescription}
-                          placeholder="Click the folder to read the letter"
+                          placeholder="Click to try it"
                           onChange={(e) => setHintDescription(e.target.value)}
                         />
                       </Field>
@@ -619,6 +623,16 @@ export function ComponentEditor({
                       {PREVIEW_HINT_PRESETS[hintKind].description}
                     </p>
                   )}
+                  <label className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-medium">Hide when scrolling</span>
+                    <input
+                      type="checkbox"
+                      checked={hintHideOnScroll}
+                      aria-label="Hide hint when scrolling"
+                      className="size-4 accent-foreground"
+                      onChange={(e) => setHintHideOnScroll(e.target.checked)}
+                    />
+                  </label>
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-3">
                       <Label className="text-xs text-muted-foreground">Hint top</Label>
@@ -726,7 +740,7 @@ export function ComponentEditor({
                       heading={previewHint.heading}
                       description={previewHint.description}
                       tone={hintTone}
-                      absolute={previewName !== "perspective-text-scroll"}
+                      hideOnScroll={previewHint.hideOnScroll}
                       className="w-full self-stretch"
                     >
                       <div
