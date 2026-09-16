@@ -24,7 +24,7 @@ export function OpenComponentView({
   data: OpenComponentData;
   docsContent?: React.ReactNode;
 }) {
-  const { panel, setPanel } = useOpenPanel();
+  const { panel, setPanel, stage } = useOpenPanel();
   const [manager, setManager] = usePackageManager();
   const backgrounds = React.useMemo(
     () => parsePreviewBackgrounds(data.previewBackground),
@@ -55,14 +55,16 @@ export function OpenComponentView({
         />
       </main>
 
-      <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
-        <OpenCliBar
-          registryItem={data.registryItem}
-          manager={manager}
-          onManagerChange={setManager}
-          html={data.cliHtml}
-        />
-      </div>
+      {stage ? null : (
+        <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
+          <OpenCliBar
+            registryItem={data.registryItem}
+            manager={manager}
+            onManagerChange={setManager}
+            html={data.cliHtml}
+          />
+        </div>
+      )}
 
       <OpenDrawer
         open={panel === "code"}

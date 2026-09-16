@@ -209,6 +209,7 @@ export default function StackScrollReveal() {
 
   return (
     <div className="bg-[oklch(0.97_0.008_85)] font-sans text-[oklch(0.28_0.03_75)] antialiased">
+      <div className="h-[400px]" aria-hidden />
       <section className="px-4 sm:px-5">
         <div ref={trackRef} className="relative h-[570vh]">
           <div className="sticky top-0 flex h-[100dvh] items-center justify-center [perspective:1200px]">

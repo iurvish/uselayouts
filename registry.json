@@ -789,6 +789,96 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "client-card",
+      "type": "registry:component",
+      "title": "Client Card",
+      "description": "A client CRM card with payment and deadline rings, plus a morphing avatar stack.",
+      "dependencies": ["motion", "lucide-react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/default/example/client-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "coverflow-drag",
+      "type": "registry:component",
+      "title": "Coverflow Drag",
+      "description": "A drag coverflow of portraits that scale, dim, and snap as you swipe.",
+      "dependencies": ["motion"],
+      "files": [
+        {
+          "path": "registry/default/example/coverflow-drag.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "create-menu",
+      "type": "registry:component",
+      "title": "Create Menu",
+      "description": "A Start Creating pill that springs open into a list of create actions.",
+      "dependencies": ["motion", "@hugeicons/react", "@hugeicons/core-free-icons"],
+      "files": [
+        {
+          "path": "registry/default/example/create-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "liquid-index",
+      "type": "registry:component",
+      "title": "Liquid Index",
+      "description": "A feature list whose hover badge is a WebGL liquid gradient that tracks the row.",
+      "dependencies": ["motion"],
+      "files": [
+        {
+          "path": "registry/default/example/liquid-index.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/liquid-index-canvas.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "photo-albums",
+      "type": "registry:component",
+      "title": "Photo Albums",
+      "description": "Tilted album stacks that expand into a shared-element photo grid.",
+      "dependencies": ["motion", "lucide-react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/default/example/photo-albums.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "slide-subscribe",
+      "type": "registry:component",
+      "title": "Slide Subscribe",
+      "description": "Pick a billing period, then slide to start a trial.",
+      "dependencies": ["motion", "@hugeicons/react", "@hugeicons/core-free-icons", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/default/example/slide-subscribe.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/slide-subscribe-unlock.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/slide-subscribe-shimmer.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

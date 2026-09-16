@@ -13,6 +13,7 @@ import { OpenPanelProvider, useOpenPanel } from "@/components/open/open-panel-co
 import { OpenSwitcher } from "@/components/open/open-switcher";
 import {
   SidebarHoverPreview,
+  PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
 import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/ui";
@@ -252,7 +253,7 @@ function OpenExperienceShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { panel, setPanel } = useOpenPanel();
+  const { panel, setPanel, stage, setStage } = useOpenPanel();
   const isMobile = useIsMobile();
   const [pinned, setPinned] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -287,6 +288,18 @@ function OpenExperienceShell({
     }
   }, [isMobile]);
 
+  React.useEffect(() => {
+    if (!stage) return;
+    setPeek(false);
+    setHoverPreview(null);
+    setMobileOpen(false);
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setStage(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [stage, setStage]);
+
   function updatePinned(value: boolean) {
     setPinned(value);
     writePinned(value);
@@ -304,8 +317,8 @@ function OpenExperienceShell({
         exit: { opacity: 0, transform: "translateX(-8px) scale(0.98)" },
       };
 
-  const showDesktopPinned = pinned && !isMobile;
-  const showToggle = !showDesktopPinned;
+  const showDesktopPinned = pinned && !isMobile && !stage;
+  const showToggle = !stage && !showDesktopPinned;
 
   return (
     <div className="dark flex h-dvh overflow-hidden bg-[hsl(240_6%_7%)] text-foreground">
@@ -397,7 +410,7 @@ function OpenExperienceShell({
                   <motion.div
                     ref={peekPanelRef}
                     className="pointer-events-auto absolute top-11 left-0 z-40 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
-                    style={{ width: SIDEBAR_WIDTH + 8 + 177 }}
+                    style={{ width: SIDEBAR_WIDTH + 8 + PREVIEW_W }}
                     initial={sidebarMotion.initial}
                     animate={sidebarMotion.animate}
                     exit={sidebarMotion.exit}
@@ -416,13 +429,11 @@ function OpenExperienceShell({
                           }
                           const panelBox = peekPanelRef.current.getBoundingClientRect();
                           const rowBox = anchor.getBoundingClientRect();
-                          const rawTop = rowBox.top + rowBox.height / 2 - panelBox.top - 117 / 2;
-                          const maxTop = Math.max(0, panelBox.height - 117);
-                          const top = Math.min(Math.max(0, rawTop), maxTop);
                           setHoverPreview({
                             slug: item.slug,
                             title: item.title,
-                            top,
+                            rowMid: rowBox.top + rowBox.height / 2 - panelBox.top,
+                            panelHeight: panelBox.height,
                           });
                         }}
                       />
@@ -436,11 +447,13 @@ function OpenExperienceShell({
         ) : null}
 
         {/* Above preview layers that escape stacking (e.g. magnified-bento lens z-40). Drawer portal is z-[110] so it covers this chrome. */}
-        <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
-          <div className={cn(showToggle && "w-10")} />
-          {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
-          <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />
-        </header>
+        {stage ? null : (
+          <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
+            <div className={cn(showToggle && "w-10")} />
+            {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
+            <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />
+          </header>
+        )}
 
         {children}
       </div>

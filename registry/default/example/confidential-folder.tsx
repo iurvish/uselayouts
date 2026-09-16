@@ -39,6 +39,8 @@ export interface ConfidentialFolderProps
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Letter sheet color. Default is near-white paper. */
+  paper?: string;
 }
 
 const SLEEVE = "oklch(0.26 0.01 260)";
@@ -249,6 +251,7 @@ export const ConfidentialFolder = forwardRef<
       open: controlledOpen,
       defaultOpen = false,
       onOpenChange,
+      paper = PAPER,
       className,
       ...props
     },
@@ -434,7 +437,7 @@ export const ConfidentialFolder = forwardRef<
               boxShadow: inFront
                 ? "0 0 0 1px rgb(0 0 0 / 0.08), 0 24px 48px -12px rgb(0 0 0 / 0.35)"
                 : "0 0 0 1px rgb(0 0 0 / 0.06), 0 2px 6px rgb(0 0 0 / 0.08)",
-              background: PAPER,
+              background: paper,
             }}
           >
             <div
@@ -443,7 +446,7 @@ export const ConfidentialFolder = forwardRef<
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
                 transform: "rotateY(0deg) translateZ(1px)",
-                background: PAPER,
+                background: paper,
               }}
             >
               {letterFront ?? (
@@ -477,7 +480,7 @@ export const ConfidentialFolder = forwardRef<
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
                 transform: "rotateY(180deg) translateZ(1px)",
-                background: PAPER,
+                background: paper,
               }}
             >
               {letterBack ?? (

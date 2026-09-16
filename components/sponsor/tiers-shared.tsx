@@ -6,8 +6,16 @@ import { SPONSOR_HREF } from "./shared";
 export { SPONSOR_HREF };
 import { RibbonField, RibbonFieldDial, type RibbonPatternMode } from "./ribbon-pattern";
 import { cn } from "@/lib/utils";
+import { startSponsorCheckout } from "@/lib/sponsor/checkout";
+import { SPONSOR_PLANS, type SponsorTier } from "@/lib/sponsor/plans";
 
 export const TIERS = ["Gold", "Silver", "Bronze"] as const;
+
+const TIER_KEY: Record<(typeof TIERS)[number], SponsorTier> = {
+  Gold: "gold",
+  Silver: "silver",
+  Bronze: "bronze",
+};
 
 export type SponsorLogoMode = "marks" | "names" | "mixed" | "chips" | "rows";
 
@@ -92,6 +100,24 @@ function EmptySlotCta() {
   );
 }
 
+function useSponsorCheckout(tier: SponsorTier) {
+  const [pending, setPending] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const onClick = React.useCallback(async () => {
+    setError(null);
+    setPending(true);
+    try {
+      await startSponsorCheckout(tier);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Checkout failed");
+      setPending(false);
+    }
+  }, [tier]);
+
+  return { pending, error, onClick };
+}
+
 function TicketSlotContent({
   sponsor,
   mode,
@@ -127,69 +153,115 @@ function TicketSlotContent({
 export function SponsorTicketSlot({
   sponsor,
   shape,
+  tier,
   mode = "marks",
 }: {
   sponsor: SponsorEntry | null;
   shape: (typeof SLOT_SHAPES)[number];
+  tier: SponsorTier;
   mode?: SponsorLogoMode;
 }) {
+  const checkout = useSponsorCheckout(tier);
+  const plan = SPONSOR_PLANS[tier];
   const label = sponsor
     ? `Visit ${sponsor.name} sponsor page`
-    : "Become a sponsor";
+    : `Become a ${plan.label} sponsor, $${plan.priceUsd}/mo`;
+
+  if (!sponsor) {
+    return (
+      <div className="relative min-w-0 flex-1">
+        <button
+          type="button"
+          onClick={() => void checkout.onClick()}
+          disabled={checkout.pending}
+          className="group relative block w-full min-w-0 transition-opacity duration-150 hover:opacity-90 active:scale-[0.99] disabled:opacity-60"
+          aria-label={label}
+        >
+          <TicketFace sponsor={null} shape={shape} mode={mode} />
+        </button>
+        {checkout.error ? (
+          <p className="mt-1 text-center text-[11px] text-red-700" role="alert">
+            {checkout.error}
+          </p>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <a
-      href={sponsor?.href ?? SPONSOR_HREF}
+      href={sponsor.href}
       target="_blank"
       rel="noreferrer"
       className="group relative block min-w-0 flex-1 transition-opacity duration-150 hover:opacity-90 active:scale-[0.99]"
       aria-label={label}
     >
-      <div className="relative mx-auto h-[100px] w-full max-w-full min-w-0 sm:h-[120px] [&_img]:pointer-events-none">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[#FDFCFC]"
-          style={{
-            maskImage: `url(${shape.src})`,
-            WebkitMaskImage: `url(${shape.src})`,
-            maskSize: "contain",
-            WebkitMaskSize: "contain",
-            maskRepeat: "no-repeat",
-            WebkitMaskRepeat: "no-repeat",
-            maskPosition: "center",
-            WebkitMaskPosition: "center",
-          }}
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={shape.src}
-          alt=""
-          width={shape.w}
-          height={shape.h}
-          className="absolute inset-0 size-full object-contain object-center mix-blend-multiply"
-          draggable={false}
-        />
-        <span className="absolute inset-0 flex items-center justify-center px-3">
-          <TicketSlotContent sponsor={sponsor} mode={mode} />
-        </span>
-      </div>
+      <TicketFace sponsor={sponsor} shape={shape} mode={mode} />
     </a>
   );
 }
 
-export function SponsorChip({ sponsor }: { sponsor: SponsorEntry | null }) {
+function TicketFace({
+  sponsor,
+  shape,
+  mode,
+}: {
+  sponsor: SponsorEntry | null;
+  shape: (typeof SLOT_SHAPES)[number];
+  mode: SponsorLogoMode;
+}) {
+  return (
+    <div className="relative mx-auto h-[100px] w-full max-w-full min-w-0 sm:h-[120px] [&_img]:pointer-events-none">
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[#FDFCFC]"
+        style={{
+          maskImage: `url(${shape.src})`,
+          WebkitMaskImage: `url(${shape.src})`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+        }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={shape.src}
+        alt=""
+        width={shape.w}
+        height={shape.h}
+        className="absolute inset-0 size-full object-contain object-center mix-blend-multiply"
+        draggable={false}
+      />
+      <span className="absolute inset-0 flex items-center justify-center px-3">
+        <TicketSlotContent sponsor={sponsor} mode={mode} />
+      </span>
+    </div>
+  );
+}
+
+export function SponsorChip({
+  sponsor,
+  tier,
+}: {
+  sponsor: SponsorEntry | null;
+  tier: SponsorTier;
+}) {
+  const checkout = useSponsorCheckout(tier);
   if (!sponsor) {
     return (
-      <a
-        href={SPONSOR_HREF}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-dashed border-[#071A31]/20 bg-white/60 px-4 text-[13px] font-medium text-[#071A31]/55 transition-[background-color,border-color] duration-150 hover:border-[#071A31]/35 hover:bg-white active:scale-[0.99]"
-        aria-label="Become a sponsor"
+      <button
+        type="button"
+        onClick={() => void checkout.onClick()}
+        disabled={checkout.pending}
+        className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-dashed border-[#071A31]/20 bg-white/60 px-4 text-[13px] font-medium text-[#071A31]/55 transition-[background-color,border-color] duration-150 hover:border-[#071A31]/35 hover:bg-white active:scale-[0.99] disabled:opacity-60"
+        aria-label={`Become a ${SPONSOR_PLANS[tier].label} sponsor`}
       >
         <PlusIcon />
-        Open slot
-      </a>
+        {checkout.pending ? "Opening…" : `$${SPONSOR_PLANS[tier].priceUsd}/mo`}
+      </button>
     );
   }
   return (
@@ -209,19 +281,30 @@ export function SponsorChip({ sponsor }: { sponsor: SponsorEntry | null }) {
   );
 }
 
-export function SponsorGridCard({ sponsor }: { sponsor: SponsorEntry | null }) {
+export function SponsorGridCard({
+  sponsor,
+  tier,
+}: {
+  sponsor: SponsorEntry | null;
+  tier: SponsorTier;
+}) {
+  const checkout = useSponsorCheckout(tier);
   if (!sponsor) {
     return (
-      <a
-        href={SPONSOR_HREF}
-        target="_blank"
-        rel="noreferrer"
-        className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-[14px] border border-dashed border-[#071A31]/18 bg-[#f9f8f5] text-[#071A31]/50 transition-[border-color,background-color] duration-150 hover:border-[#071A31]/30 hover:bg-white active:scale-[0.99]"
-        aria-label="Become a sponsor"
+      <button
+        type="button"
+        onClick={() => void checkout.onClick()}
+        disabled={checkout.pending}
+        className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-[14px] border border-dashed border-[#071A31]/18 bg-[#f9f8f5] text-[#071A31]/50 transition-[border-color,background-color] duration-150 hover:border-[#071A31]/30 hover:bg-white active:scale-[0.99] disabled:opacity-60"
+        aria-label={`Become a ${SPONSOR_PLANS[tier].label} sponsor`}
       >
         <PlusIcon />
-        <span className="text-[12px] font-medium">Open slot</span>
-      </a>
+        <span className="text-[12px] font-medium">
+          {checkout.pending
+            ? "Opening…"
+            : `$${SPONSOR_PLANS[tier].priceUsd}/mo`}
+        </span>
+      </button>
     );
   }
   return (
@@ -277,13 +360,25 @@ export function TierTickets({
   compact?: boolean;
 }) {
   const sponsors = TIER_SPONSORS[label];
+  const tier = TIER_KEY[label];
+  const plan = SPONSOR_PLANS[tier];
   return (
     <section
       className="w-full overflow-hidden rounded-[14px] border border-[#e2e2e2] shadow-[0px_1px_1px_0px_rgba(0,0,0,0.02)]"
       aria-label={`${label} sponsors`}
     >
-      <div className={cn("flex items-center px-4", compact ? "py-2.5" : "py-3")}>
-        <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">{label}</h2>
+      <div
+        className={cn(
+          "flex items-baseline justify-between gap-3 px-4",
+          compact ? "py-2.5" : "py-3",
+        )}
+      >
+        <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">
+          {label}
+        </h2>
+        <p className="font-[family-name:var(--font-geist-mono)] text-[12px] tracking-[0.04em] text-[#071A31]/55">
+          ${plan.priceUsd}/mo
+        </p>
       </div>
       <div
         className={cn(
@@ -296,6 +391,7 @@ export function TierTickets({
             key={`${label}-${shape.src}`}
             sponsor={sponsors[i] ?? null}
             shape={shape}
+            tier={tier}
           />
         ))}
       </div>
@@ -311,7 +407,7 @@ export function TierChips({ label }: { label: (typeof TIERS)[number] }) {
       <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">{label}</h2>
       <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {slots.map((s, i) => (
-          <SponsorChip key={`${label}-${i}`} sponsor={s} />
+          <SponsorChip key={`${label}-${i}`} sponsor={s} tier={TIER_KEY[label]} />
         ))}
       </div>
     </section>
