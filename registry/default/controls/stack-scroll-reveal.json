@@ -15,8 +15,8 @@
   "disabled": [],
   "updatedAt": "2026-09-14T14:53:52.268Z",
   "previewBackground": {
-    "light": "#f7f7f7",
-    "dark": "#f7f7f7"
+    "light": "#f6f3ee",
+    "dark": "#f6f3ee"
   },
   "hintTop": 80,
   "showHint": true,

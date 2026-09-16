@@ -5,7 +5,7 @@ export default function StackScrollRevealDemo() {
     <iframe
       title="Stack Scroll Reveal"
       src="/preview/stack-scroll-reveal"
-      className="h-full min-h-0 w-full self-stretch border-0 bg-white"
+      className="h-full min-h-0 w-full self-stretch border-0 bg-[oklch(0.97_0.008_85)]"
     />
   );
 }

@@ -11,9 +11,6 @@ import {
   Playlist01Icon,
   GridViewIcon,
   Layers01Icon,
-  StarIcon,
-  Camera01Icon,
-  BrushIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
@@ -24,7 +21,6 @@ interface CollectionItem {
   subtitle: string;
   idNumber: string;
   image: string;
-  icon: typeof Camera01Icon;
 }
 
 const ITEMS: CollectionItem[] = [
@@ -35,7 +31,6 @@ const ITEMS: CollectionItem[] = [
     idNumber: "209",
     image:
       "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=400&h=400&auto=format&fit=crop",
-    icon: Camera01Icon,
   },
   {
     id: "2",
@@ -44,7 +39,6 @@ const ITEMS: CollectionItem[] = [
     idNumber: "808",
     image:
       "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=400&h=400&auto=format&fit=crop",
-    icon: BrushIcon,
   },
 ];
 
@@ -123,7 +117,8 @@ export default function LayoutSwitcher() {
                 "relative w-full",
                 view === "list" && "flex flex-col gap-3",
                 view === "card" && "grid grid-cols-2 gap-4",
-                view === "pack" && "flex h-[22rem] items-center justify-center"
+                view === "pack" &&
+                  "absolute inset-x-0 top-0 bottom-16 flex items-center justify-center"
               )}
             >
               {ITEMS.map((item, index) => (
@@ -137,7 +132,7 @@ export default function LayoutSwitcher() {
                     view === "list" && "w-full gap-4",
                     view === "card" && "w-full flex-col items-start gap-3",
                     view === "pack" &&
-                      "absolute size-56 items-center justify-center"
+                      "absolute size-52 items-center justify-center"
                   )}
                   style={{
                     zIndex: view === "pack" ? ITEMS.length - index : 1,
@@ -188,7 +183,7 @@ export default function LayoutSwitcher() {
                         exit={{ opacity: 0, filter: "blur(4px)" }}
                         transition={fadeMeta}
                         className={cn(
-                          "flex min-w-0 flex-1 items-center justify-between",
+                          "min-w-0 flex-1",
                           view === "card" && "w-full px-0.5"
                         )}
                       >
@@ -196,23 +191,10 @@ export default function LayoutSwitcher() {
                           <h3 className="truncate text-[15px] font-medium leading-tight tracking-tight text-foreground">
                             {item.title}
                           </h3>
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                            <HugeiconsIcon
-                              icon={item.icon}
-                              size={12}
-                              className="shrink-0 text-primary/70"
-                            />
-                            <span className="truncate">{item.subtitle}</span>
-                          </div>
-                        </div>
-
-                        <div className="ml-2 flex shrink-0 items-center gap-1 rounded-full bg-primary/5 px-2 py-1 text-[10px] font-medium text-primary">
-                          <HugeiconsIcon
-                            icon={StarIcon}
-                            size={10}
-                            className="text-yellow-500"
-                          />
-                          <span className="tabular-nums">#{item.idNumber}</span>
+                          <p className="m-0 truncate text-xs text-muted-foreground">
+                            {item.subtitle}
+                            <span className="tabular-nums"> · {item.idNumber}</span>
+                          </p>
                         </div>
                       </motion.div>
                     )}
@@ -229,12 +211,12 @@ export default function LayoutSwitcher() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={fadeMeta}
-                className="pointer-events-none absolute inset-x-0 bottom-6 flex flex-col items-center gap-1 text-center"
+                className="absolute inset-x-0 bottom-4 flex flex-col items-center gap-1 text-center"
               >
-                <p className="text-sm font-medium tracking-tight text-foreground">
+                <p className="m-0 max-w-[28ch] text-sm font-medium tracking-tight text-balance text-foreground">
                   {ITEMS.map((item) => item.title).join(" · ")}
                 </p>
-                <p className="text-xs tabular-nums text-muted-foreground">
+                <p className="m-0 text-xs tabular-nums text-muted-foreground">
                   {ITEMS.length} pieces
                 </p>
               </motion.div>
