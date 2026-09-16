@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useId } from "react"
-import { motion, LayoutGroup, AnimatePresence } from "motion/react"
+import { motion, LayoutGroup } from "motion/react"
 import { ChevronLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -151,39 +151,33 @@ export default function PhotoAlbums() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const layoutGroupId = useId()
   const selectedCollection = COLLECTIONS.find((c) => c.id === selectedId)
-  const visible = COLLECTIONS.filter(
-    (collection) => !selectedId || collection.id === selectedId,
-  )
 
   return (
-    <div className="flex h-full w-full items-center justify-center overflow-x-hidden font-sans text-foreground">
+    <div className="flex h-full min-h-0 w-full flex-col items-center overflow-hidden px-8 pt-28 pb-32 font-sans text-foreground">
       <LayoutGroup id={layoutGroupId}>
-        <main className="w-full max-w-md px-8">
-          <div
-            className={cn(
-              "grid gap-x-12 gap-y-24",
-              selectedId ? "grid-cols-1" : "grid-cols-2",
-            )}
-          >
-            <AnimatePresence mode="popLayout">
-              {visible.map((collection) =>
-                selectedId === collection.id && selectedCollection ? (
-                  <ExpandedAlbum
-                    key={collection.id}
-                    collection={selectedCollection}
-                    onBack={() => setSelectedId(null)}
-                  />
-                ) : (
-                  <CollectionCard
-                    key={collection.id}
-                    collection={collection}
-                    onClick={() => setSelectedId(collection.id)}
-                  />
-                ),
-              )}
-            </AnimatePresence>
-          </div>
-        </main>
+        <div
+          className={cn(
+            "flex w-full max-w-md min-h-0 flex-col",
+            selectedId ? "flex-1 overflow-hidden" : "my-auto",
+          )}
+        >
+          {selectedCollection ? (
+            <ExpandedAlbum
+              collection={selectedCollection}
+              onBack={() => setSelectedId(null)}
+            />
+          ) : (
+            <div className="grid grid-cols-2 gap-x-12 gap-y-24">
+              {COLLECTIONS.map((collection) => (
+                <CollectionCard
+                  key={collection.id}
+                  collection={collection}
+                  onClick={() => setSelectedId(collection.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </LayoutGroup>
     </div>
   )
@@ -199,49 +193,47 @@ function ExpandedAlbum({
   const stacked = new Set(collection.photos.slice(0, 3).map((photo) => photo.id))
 
   return (
-    <motion.div
-      layout
-      className="flex flex-col"
-      exit={{ opacity: 0 }}
-      transition={transition}
-    >
-      <motion.button
-        type="button"
-        layout
-        onClick={onBack}
-        className="mb-8 flex size-12 cursor-pointer items-center justify-center rounded-full bg-muted text-foreground transition-transform duration-150 ease-out active:scale-[0.96]"
-      >
-        <ChevronLeft size={24} strokeWidth={2.5} />
-        <span className="sr-only">Go back</span>
-      </motion.button>
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="flex shrink-0 flex-col gap-5 pb-5">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex size-12 cursor-pointer items-center justify-center rounded-full bg-muted text-foreground transition-transform duration-150 ease-out active:scale-[0.96]"
+        >
+          <ChevronLeft size={24} strokeWidth={2.5} />
+          <span className="sr-only">Go back</span>
+        </button>
 
-      <motion.h2
-        layoutId={`title-${collection.id}`}
-        className="mb-6 text-3xl leading-tight font-medium tracking-tight text-foreground"
-        transition={transition}
-      >
-        {collection.title}
-      </motion.h2>
-
-      <div className="grid grid-cols-2 gap-6">
-        {collection.photos.map((photo) => (
-          <motion.div
-            key={photo.id}
-            layoutId={`photo-${photo.id}`}
-            className="aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-border"
-            initial={stacked.has(photo.id) ? false : { opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={transition}
-          >
-            <img
-              src={photo.src}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          </motion.div>
-        ))}
+        <motion.h2
+          layoutId={`title-${collection.id}`}
+          className="text-3xl leading-tight font-medium tracking-tight text-balance text-foreground"
+          transition={transition}
+        >
+          {collection.title}
+        </motion.h2>
       </div>
-    </motion.div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        <div className="grid grid-cols-2 gap-6 pb-2">
+          {collection.photos.map((photo) => (
+            <motion.div
+              key={photo.id}
+              layoutId={`photo-${photo.id}`}
+              className="aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-border"
+              initial={stacked.has(photo.id) ? false : { opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={transition}
+            >
+              <img
+                src={photo.src}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -255,9 +247,6 @@ function CollectionCard({
   return (
     <motion.button
       type="button"
-      layout
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={transition}
       onClick={onClick}
       className="group flex cursor-pointer flex-col items-center outline-none select-none"
     >
