@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Tiers } from "@/proto/sponsor/tiers";
+import { Tiers } from "@/components/sponsor/tiers";
 
 export const metadata: Metadata = {
   title: "Sponsor",
