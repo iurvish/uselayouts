@@ -153,12 +153,12 @@ export default function PhotoAlbums() {
   const selectedCollection = COLLECTIONS.find((c) => c.id === selectedId)
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col items-center overflow-hidden px-8 pt-28 pb-32 font-sans text-foreground">
+    <div className="flex h-full min-h-0 w-full flex-col items-center overflow-x-hidden px-8 pt-28 pb-32 font-sans text-foreground">
       <LayoutGroup id={layoutGroupId}>
         <div
           className={cn(
             "flex w-full max-w-md min-h-0 flex-col",
-            selectedId ? "flex-1 overflow-hidden" : "my-auto",
+            selectedId ? "flex-1" : "my-auto",
           )}
         >
           {selectedCollection ? (
@@ -193,7 +193,7 @@ function ExpandedAlbum({
   const stacked = new Set(collection.photos.slice(0, 3).map((photo) => photo.id))
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex shrink-0 flex-col gap-5 pb-5">
         <button
           type="button"
@@ -213,13 +213,13 @@ function ExpandedAlbum({
         </motion.h2>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-visible overscroll-contain">
         <div className="grid grid-cols-2 gap-6 pb-2">
           {collection.photos.map((photo) => (
             <motion.div
               key={photo.id}
               layoutId={`photo-${photo.id}`}
-              className="aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-border"
+              className="aspect-square overflow-visible rounded-2xl bg-muted ring-1 ring-border"
               initial={stacked.has(photo.id) ? false : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={transition}
@@ -227,7 +227,7 @@ function ExpandedAlbum({
               <img
                 src={photo.src}
                 alt=""
-                className="h-full w-full object-cover"
+                className="h-full w-full rounded-2xl object-cover"
               />
             </motion.div>
           ))}
@@ -250,7 +250,7 @@ function CollectionCard({
       onClick={onClick}
       className="group flex cursor-pointer flex-col items-center outline-none select-none"
     >
-      <div className="relative mb-3 flex aspect-square w-full items-center justify-center">
+      <div className="relative mb-3 flex aspect-square w-full items-center justify-center overflow-visible">
         {collection.photos.slice(0, 3).map((photo, i) => {
           const rotations = [-14, 14, 0]
           const yOffsets = [-2, -2, 0]
@@ -259,7 +259,7 @@ function CollectionCard({
             <motion.div
               key={photo.id}
               layoutId={`photo-${photo.id}`}
-              className="absolute h-34 w-34 overflow-hidden rounded-3xl bg-muted ring-1 ring-border"
+              className="absolute h-34 w-34 overflow-visible rounded-3xl bg-muted ring-1 ring-border"
               animate={{ rotate: rotations[i] }}
               whileHover={{
                 scale: 1.05,
@@ -271,7 +271,7 @@ function CollectionCard({
               <img
                 src={photo.src}
                 alt=""
-                className="pointer-events-none h-full w-full object-cover select-none"
+                className="pointer-events-none h-full w-full rounded-3xl object-cover select-none"
               />
             </motion.div>
           )

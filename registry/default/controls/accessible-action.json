@@ -13,8 +13,11 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T08:24:36.590Z",
-  "previewBackground": "#212121",
+  "updatedAt": "2026-09-16T19:14:26.098Z",
+  "previewBackground": {
+    "light": "#212121",
+    "dark": "#212121"
+  },
   "showHint": true,
   "hintKind": "swipe",
   "hintHeading": "",
@@ -24,5 +27,6 @@
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "hintTop": 110
 }

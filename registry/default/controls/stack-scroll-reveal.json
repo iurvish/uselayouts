@@ -13,12 +13,12 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-14T14:53:52.268Z",
+  "updatedAt": "2026-09-16T19:12:59.835Z",
   "previewBackground": {
     "light": "#f6f3ee",
     "dark": "#f6f3ee"
   },
-  "hintTop": 80,
+  "hintTop": 184,
   "showHint": true,
   "hintKind": "scroll",
   "hintHeading": "",
