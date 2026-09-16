@@ -62,5 +62,17 @@
   "discrete-tabs": {
     "posterUrl": "https://cdn.uselayouts.com/components/discrete-tabs/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/discrete-tabs/video.mp4"
+  },
+  "filter-interaction": {
+    "posterUrl": "https://cdn.uselayouts.com/components/filter-interaction/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/filter-interaction/video.mp4"
+  },
+  "3d-book": {
+    "posterUrl": "https://cdn.uselayouts.com/components/3d-book/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/3d-book/video.mp4"
+  },
+  "multi-step-form": {
+    "posterUrl": "https://cdn.uselayouts.com/components/multi-step-form/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/multi-step-form/video.mp4"
   }
 }

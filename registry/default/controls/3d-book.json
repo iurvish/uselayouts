@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-13T11:17:06.022Z",
+  "updatedAt": "2026-09-16T16:48:38.337Z",
   "previewBackground": {
     "light": "#ffffff",
     "dark": "#f2f2f2"
@@ -19,5 +19,7 @@
       }
     ]
   },
-  "hintTop": 80
+  "hintTop": 80,
+  "posterUrl": "https://cdn.uselayouts.com/components/3d-book/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/3d-book/video.mp4"
 }
