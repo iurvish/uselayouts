@@ -61,7 +61,7 @@ const SEEDS: Seed[] = [
   { slug: "feature-carousel", title: "Feature Carousel", description: "One idea at a time.", category: "Display" },
   { slug: "folder-interaction", title: "Folder Interaction", description: "Files that feel physical.", category: "Display" },
   { slug: "inline-edit", title: "Inline Edit", description: "Read and write in one field.", category: "Input" },
-  { slug: "list-item", title: "List Item", description: "Rows that answer the cursor.", category: "List" },
+  { slug: "filter-interaction", title: "List Item", description: "Rows that answer the cursor.", category: "List" },
   { slug: "morphing-input", title: "Morphing Input", description: "One field, many shapes.", category: "Input" },
   { slug: "multi-step-form", title: "Multi Step Form", description: "Long forms made short.", category: "Input" },
   { slug: "pricing-card", title: "Pricing Card", description: "Hierarchy that sells itself.", category: "Display" },

@@ -46,5 +46,21 @@
   "stacked-list": {
     "posterUrl": "https://cdn.uselayouts.com/components/stacked-list/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/stacked-list/video.mp4"
+  },
+  "dynamic-toolbar": {
+    "posterUrl": "https://cdn.uselayouts.com/components/dynamic-toolbar/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/dynamic-toolbar/video.mp4"
+  },
+  "bottom-menu": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bottom-menu/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bottom-menu/video.mp4"
+  },
+  "day-picker": {
+    "posterUrl": "https://cdn.uselayouts.com/components/day-picker/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/day-picker/video.mp4"
+  },
+  "discrete-tabs": {
+    "posterUrl": "https://cdn.uselayouts.com/components/discrete-tabs/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/discrete-tabs/video.mp4"
   }
 }

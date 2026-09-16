@@ -1,0 +1,14 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-16T16:45:38.403Z",
+  "previewBackground": {
+    "light": "hsl(0 0% 100%)",
+    "dark": "hsl(225 7% 11%)"
+  },
+  "hintTop": 80,
+  "showHint": false,
+  "hintKind": "click",
+  "hintHeading": "",
+  "hintDescription": ""
+}

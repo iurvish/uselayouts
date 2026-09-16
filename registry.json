@@ -359,6 +359,25 @@
       ]
     },
     {
+      "name": "filter-interaction",
+      "type": "registry:component",
+      "title": "Filter Interaction",
+      "description": "Interactive list items with hover and focus effects.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/filter-interaction.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "fluid-expanding-grid",
       "type": "registry:component",
       "title": "Fluid Expanding Grid",
@@ -446,25 +465,6 @@
       "files": [
         {
           "path": "registry/default/example/inline-edit.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "list-item",
-      "type": "registry:component",
-      "title": "List Item",
-      "description": "Interactive list items with hover and focus effects.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/list-item.tsx",
           "type": "registry:component"
         }
       ]
