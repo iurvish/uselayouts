@@ -22,5 +22,29 @@
   "shake-testimonial-card": {
     "posterUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/video.mp4"
+  },
+  "vertical-tabs": {
+    "posterUrl": "https://cdn.uselayouts.com/components/vertical-tabs/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/vertical-tabs/video.mp4"
+  },
+  "delete-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/delete-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/delete-button/video.mp4"
+  },
+  "fluid-expanding-grid": {
+    "posterUrl": "https://cdn.uselayouts.com/components/fluid-expanding-grid/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/fluid-expanding-grid/video.mp4"
+  },
+  "smooth-dropdown": {
+    "posterUrl": "https://cdn.uselayouts.com/components/smooth-dropdown/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/smooth-dropdown/video.mp4"
+  },
+  "pricing-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/pricing-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/pricing-card/video.mp4"
+  },
+  "stacked-list": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stacked-list/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stacked-list/video.mp4"
   }
 }

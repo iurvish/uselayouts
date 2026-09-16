@@ -35,24 +35,31 @@ const SERVICES = [
 
 const AUTO_PLAY_DURATION = 5000;
 
+const slideTransition = {
+  duration: 0.34,
+  ease: [0.32, 0.72, 0, 1] as const,
+};
+
+const slideVariants = {
+  enter: { y: "-100%" },
+  center: { y: 0 },
+  exit: { y: "100%" },
+};
+
 export default function VerticalTabs() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   const handleNext = useCallback(() => {
-    setDirection(1);
     setActiveIndex((prev) => (prev + 1) % SERVICES.length);
   }, []);
 
   const handlePrev = useCallback(() => {
-    setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + SERVICES.length) % SERVICES.length);
   }, []);
 
   const handleTabClick = (index: number) => {
     if (index === activeIndex) return;
-    setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
     setIsPaused(false);
   };
@@ -67,26 +74,11 @@ export default function VerticalTabs() {
     return () => clearInterval(interval);
   }, [activeIndex, isPaused, handleNext]);
 
-  const variants = {
-    enter: (direction: number) => ({
-      y: direction > 0 ? "-100%" : "100%",
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      y: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      y: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-  };
+  const active = SERVICES[activeIndex]!;
 
   return (
     <section className="@container w-full bg-background py-8 md:py-16">
-      <div className="mx-auto w-full px-4 md:px-8">
+      <div className="mx-auto w-full px-6 sm:px-10 md:px-16 lg:px-24 xl:px-28">
         <div className="grid grid-cols-1 items-start gap-10 @min-[720px]:grid-cols-12 @min-[720px]:gap-12">
           <div className="flex flex-col justify-center order-2 pt-4 @min-[720px]:col-span-5 @min-[720px]:order-1">
             <div className="space-y-1 mb-12">
@@ -175,33 +167,12 @@ export default function VerticalTabs() {
               onMouseLeave={() => setIsPaused(false)}
             >
               <div className="relative aspect-4/5 overflow-hidden rounded-3xl border border-border/40 bg-muted/30 md:aspect-4/3 md:rounded-[2.5rem] @min-[720px]:aspect-16/11">
-                <AnimatePresence
-                  initial={false}
-                  custom={direction}
-                  mode="popLayout"
-                >
-                  <motion.div
-                    key={activeIndex}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      y: { type: "spring", stiffness: 260, damping: 32 },
-                      opacity: { duration: 0.4 },
-                    }}
-                    className="absolute inset-0 w-full h-full cursor-pointer"
+                <AnimatePresence initial={false}>
+                  <GallerySlide
+                    key={active.id}
+                    service={active}
                     onClick={handleNext}
-                  >
-                    <img
-                      src={SERVICES[activeIndex].image}
-                      alt={SERVICES[activeIndex].title}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 m-0! p-0! block"
-                    />
-
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-60" />
-                  </motion.div>
+                  />
                 </AnimatePresence>
 
                 <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex gap-2 md:gap-3 z-20">
@@ -232,5 +203,32 @@ export default function VerticalTabs() {
         </div>
       </div>
     </section>
+  );
+}
+
+function GallerySlide({
+  service,
+  onClick,
+}: {
+  service: (typeof SERVICES)[number];
+  onClick: () => void;
+}) {
+  return (
+    <motion.div
+      variants={slideVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      transition={slideTransition}
+      className="absolute inset-0 h-full w-full cursor-pointer"
+      onClick={onClick}
+    >
+      <img
+        src={service.image}
+        alt={service.title}
+        className="m-0! block size-full object-cover p-0!"
+      />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-60" />
+    </motion.div>
   );
 }

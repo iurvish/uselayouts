@@ -21,7 +21,7 @@ const FEATURES = [
     label: "Sustainable Sourcing",
     icon: Pizza04Icon,
     image:
-      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1200",
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop",
     description: "Ethically sourced ingredients from local farmers.",
   },
   {
@@ -29,7 +29,7 @@ const FEATURES = [
     label: "Community Focused",
     icon: CommandFreeIcons,
     image:
-      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1200",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop",
     description: "Building stronger bonds through shared experiences.",
   },
   {
@@ -37,7 +37,7 @@ const FEATURES = [
     label: "Global Reach",
     icon: GlobalSearchIcon,
     image:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1200",
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop",
     description: "Connecting visionaries across all continents.",
   },
   {
@@ -45,7 +45,7 @@ const FEATURES = [
     label: "Award Winning",
     icon: CheckmarkCircle01Icon,
     image:
-      "https://images.unsplash.com/photo-1578574577315-3fbeb0cecdc2?q=80&w=1200",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&auto=format&fit=crop",
     description: "Recognized excellence in design and innovation.",
   },
   {
@@ -53,7 +53,7 @@ const FEATURES = [
     label: "Cloud Ready",
     icon: AiCloudIcon,
     image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
     description: "Scale your infrastructure with seamless ease.",
   },
   {
@@ -61,7 +61,7 @@ const FEATURES = [
     label: "Mobile First",
     icon: SmartPhone01Icon,
     image:
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1200",
+      "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop",
     description: "A world-class experience on every single device.",
   },
   {
@@ -69,7 +69,7 @@ const FEATURES = [
     label: "Real-time Analytics",
     icon: DashboardSquare01Icon,
     image:
-      "https://images.unsplash.com/photo-1551288049-bbda38a10ad5?q=80&w=1200",
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
     description: "Insights at your fingertips, updated in real-time.",
   },
   {
@@ -77,7 +77,7 @@ const FEATURES = [
     label: "Enterprise Security",
     icon: CheckmarkCircle01Icon,
     image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200",
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1200&auto=format&fit=crop",
     description: "Bank-grade security protocols for your data.",
   },
   {
@@ -85,7 +85,7 @@ const FEATURES = [
     label: "Magic Automations",
     icon: MagicWandIcon,
     image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1200",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop",
     description: "Let AI handle the repetitive tasks for you.",
   },
   {
@@ -93,7 +93,7 @@ const FEATURES = [
     label: "Locally Owned",
     icon: CheckmarkCircle01Icon,
     image:
-      "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1200",
+      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1200&auto=format&fit=crop",
     description: "Supporting local businesses and creators.",
   },
 ];
@@ -107,8 +107,16 @@ function shortestOffset(index: number, current: number, len: number) {
   return d;
 }
 
-const chipSpring = { type: "spring" as const, duration: 0.45, bounce: 0 };
-const cardSpring = { type: "spring" as const, duration: 0.4, bounce: 0 };
+const chipSpring = {
+  type: "tween" as const,
+  duration: 0.42,
+  ease: [0.4, 0, 0.2, 1] as const,
+};
+const cardSpring = {
+  type: "tween" as const,
+  duration: 0.38,
+  ease: [0.4, 0, 0.2, 1] as const,
+};
 
 export default function FeatureCarousel() {
   const [step, setStep] = useState(0);
@@ -226,18 +234,6 @@ export default function FeatureCarousel() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-
-                  <div
-                    className={cn(
-                      "absolute top-8 left-8 flex items-center gap-3 transition-opacity duration-150 ease-out",
-                      isActive ? "opacity-100" : "opacity-0"
-                    )}
-                  >
-                    <div className="h-2 w-2 rounded-full bg-white shadow-[0_0_10px_white]" />
-                    <span className="font-mono text-[10px] font-normal uppercase tracking-[0.3em] text-white/80">
-                      Live Session
-                    </span>
-                  </div>
                 </motion.div>
               );
             })}
@@ -283,9 +279,15 @@ function FeatureChip({
       style={{ height: ITEM_HEIGHT, width: "fit-content" }}
       animate={{
         y: offset * ITEM_HEIGHT,
-        opacity: Math.max(0, 1 - Math.abs(offset) * 0.25),
+        opacity: Math.max(0, 1 - Math.abs(offset) * 0.22),
       }}
-      transition={reduceMotion || jumped ? { duration: 0 } : chipSpring}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : jumped
+            ? { duration: 0 }
+            : chipSpring
+      }
       className="absolute flex items-center justify-start"
     >
       <button
