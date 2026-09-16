@@ -103,6 +103,17 @@ export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {
   };
 });
 
+/** Poster always; video only if uploaded in admin (no placeholder clips). */
+export function browseUploadedMedia(slug: string) {
+  const item = browseItems.find((entry) => entry.slug === slug);
+  const uploaded = MEDIA_OVERRIDES[slug]?.videoUrl?.trim() ?? "";
+  return {
+    poster: item?.poster ?? "",
+    video: uploaded,
+    title: item?.title ?? slug,
+  };
+}
+
 export const browseCategories = [
   "All",
   ...Array.from(new Set(browseItems.map((item) => item.category))).sort(),
