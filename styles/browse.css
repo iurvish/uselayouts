@@ -78,6 +78,15 @@
   inset: 0;
 }
 
+.browse-pin .browse-preview {
+  position: relative;
+  inset: auto;
+}
+
+.browse-pin .browse-preview img {
+  height: auto;
+}
+
 .browse-masonry {
   column-count: 1;
   column-gap: 18px;

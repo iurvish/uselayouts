@@ -6,17 +6,30 @@ import { firstFrameJpeg } from "@/lib/media/video-frame";
 import { reencodeVideoToMp4 } from "@/lib/media/reencode-video";
 import { uploadToR2 } from "@/lib/r2/upload";
 
-const POSTER_WIDTH = 880;
-const THUMB_WIDTH = 640;
+/** 2× a ~640px browse column — enough for retina without smearing UI text. */
+const POSTER_WIDTH = 1280;
+/** AVIF 85 ≈ visually lossless for screenshots; much smaller than PNG/JPEG. */
+const POSTER_QUALITY = 85;
 
 export type ComponentMediaResult = {
   posterUrl: string;
   videoUrl: string | null;
+  posterBytes: number;
+  videoSourceBytes: number | null;
+  videoDeliveryBytes: number | null;
 };
 
+async function encodePoster(input: Buffer) {
+  return sharp(input, { failOn: "none" })
+    .rotate()
+    .resize({ width: POSTER_WIDTH, withoutEnlargement: true })
+    .avif({ quality: POSTER_QUALITY, effort: 5 })
+    .toBuffer();
+}
+
 /**
- * Compress + upload component browse media to R2 (same technique as internetdesigns):
- * - Image → AVIF poster (long-lived CDN cache)
+ * Compress + upload component browse media to R2:
+ * - Image → AVIF poster
  * - Video → H.264 CRF 23, ≤1080p, ≤45s, muted, +faststart
  * - Optional first-frame poster fallback if no image provided
  */
@@ -27,18 +40,16 @@ export async function processComponentMedia(input: {
 }): Promise<ComponentMediaResult> {
   const keyPrefix = `components/${input.slug}`;
   let posterUrl: string | null = null;
+  let posterBytes = 0;
   let videoUrl: string | null = null;
   let deliveryVideo: Buffer | null = null;
+  let videoSourceBytes: number | null = null;
+  let videoDeliveryBytes: number | null = null;
 
   if (input.video && input.video.length > 0) {
-    const encoded = await reencodeVideoToMp4(input.video);
-    deliveryVideo = encoded ?? input.video;
-    if (!encoded) {
-      console.warn(
-        "[processComponentMedia] re-encode failed or ffmpeg missing; uploading source bytes",
-        input.slug,
-      );
-    }
+    videoSourceBytes = input.video.length;
+    deliveryVideo = await reencodeVideoToMp4(input.video);
+    videoDeliveryBytes = deliveryVideo.length;
     videoUrl = await uploadToR2({
       key: `${keyPrefix}/video.mp4`,
       body: deliveryVideo,
@@ -47,11 +58,8 @@ export async function processComponentMedia(input: {
   }
 
   if (input.image && input.image.length > 0) {
-    const posterAvif = await sharp(input.image, { failOn: "none" })
-      .rotate()
-      .resize({ width: POSTER_WIDTH, withoutEnlargement: true })
-      .avif({ quality: 68, effort: 4 })
-      .toBuffer();
+    const posterAvif = await encodePoster(input.image);
+    posterBytes = posterAvif.length;
     posterUrl = await uploadToR2({
       key: `${keyPrefix}/poster.avif`,
       body: posterAvif,
@@ -60,11 +68,8 @@ export async function processComponentMedia(input: {
   } else if (deliveryVideo) {
     const frame = await firstFrameJpeg(deliveryVideo);
     if (frame) {
-      const posterAvif = await sharp(frame, { failOn: "none" })
-        .rotate()
-        .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
-        .avif({ quality: 60, effort: 4 })
-        .toBuffer();
+      const posterAvif = await encodePoster(frame);
+      posterBytes = posterAvif.length;
       posterUrl = await uploadToR2({
         key: `${keyPrefix}/poster.avif`,
         body: posterAvif,
@@ -77,5 +82,11 @@ export async function processComponentMedia(input: {
     throw new Error("Upload an image (or a video we can posterize).");
   }
 
-  return { posterUrl, videoUrl };
+  return {
+    posterUrl,
+    videoUrl,
+    posterBytes,
+    videoSourceBytes,
+    videoDeliveryBytes,
+  };
 }

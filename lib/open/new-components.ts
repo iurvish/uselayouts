@@ -12,6 +12,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "pop-tilt-cards",
   "rollingcardstack",
   "scroll-stack-deck",
+  "stack-scroll-reveal",
   "perspective-text-scroll",
   "wheel-carousel",
   "editorial-deck",

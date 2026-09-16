@@ -50,6 +50,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -114,6 +122,8 @@ export function ComponentEditor({
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadingMedia, setUploadingMedia] = useState(false);
   const [removingMedia, setRemovingMedia] = useState<"poster" | "video" | null>(null);
+  const [framePickerOpen, setFramePickerOpen] = useState(false);
+  const [mediaNote, setMediaNote] = useState<string | null>(null);
 
   const imagePreviewUrl = useObjectUrl(imageFile);
   const videoPreviewUrl = useObjectUrl(videoFile);
@@ -294,6 +304,7 @@ export function ComponentEditor({
     setUploadingMedia(true);
     setError(null);
     setMessage(null);
+    setMediaNote(null);
 
     const body = new FormData();
     if (imageFile) body.append("image", imageFile);
@@ -315,7 +326,7 @@ export function ComponentEditor({
     setVideoUrl(data.videoUrl ?? null);
     setImageFile(null);
     setVideoFile(null);
-    setMessage("Browse media uploaded to R2.");
+    setMediaNote(uploadNote(data));
     router.refresh();
   }
 
@@ -335,6 +346,7 @@ export function ComponentEditor({
     setRemovingMedia(kind);
     setError(null);
     setMessage(null);
+    setMediaNote(null);
 
     const res = await fetch(`/api/admin/components/${slug}/media`, {
       method: "DELETE",
@@ -353,7 +365,7 @@ export function ComponentEditor({
 
     setPosterUrl(data.posterUrl ?? null);
     setVideoUrl(data.videoUrl ?? null);
-    setMessage(kind === "poster" ? "Poster removed." : "Video removed.");
+    setMediaNote(kind === "poster" ? "Poster removed." : "Video removed.");
     router.refresh();
   }
 
@@ -745,7 +757,8 @@ export function ComponentEditor({
             <CardHeader>
               <CardTitle>Browse media</CardTitle>
               <CardDescription>
-                Poster + video for browse cards. Preview before upload.
+                Poster + video for browse cards. Grab a still from the video, or
+                upload an image.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -762,7 +775,13 @@ export function ComponentEditor({
                       accept="image/*"
                       hasMedia={Boolean(showPoster)}
                       removing={removingMedia === "poster"}
-                      onPick={(file) => setImageFile(file)}
+                      onPick={(file) => {
+                        setImageFile(file);
+                        setMediaNote(null);
+                      }}
+                      onPickFromVideo={
+                        showVideo ? () => setFramePickerOpen(true) : undefined
+                      }
                       onRemove={() => handleRemoveMedia("poster")}
                     >
                       {imagePreviewUrl || posterUrl ? (
@@ -781,7 +800,10 @@ export function ComponentEditor({
                       accept="video/*"
                       hasMedia={Boolean(showVideo)}
                       removing={removingMedia === "video"}
-                      onPick={(file) => setVideoFile(file)}
+                      onPick={(file) => {
+                        setVideoFile(file);
+                        setMediaNote(null);
+                      }}
                       onRemove={() => handleRemoveMedia("video")}
                     >
                       {videoPreviewUrl || videoUrl ? (
@@ -805,7 +827,17 @@ export function ComponentEditor({
                     </p>
                   )}
 
-                  <div className="flex justify-center pt-1">
+                  <FramePickerDialog
+                    open={framePickerOpen}
+                    src={videoPreviewUrl || videoUrl}
+                    onOpenChange={setFramePickerOpen}
+                    onPick={(file) => {
+                      setImageFile(file);
+                      setFramePickerOpen(false);
+                    }}
+                  />
+
+                  <div className="flex flex-col items-center gap-2 pt-1">
                     <Button
                       type="button"
                       disabled={uploadingMedia || (!imageFile && !videoFile)}
@@ -823,6 +855,15 @@ export function ComponentEditor({
                         </>
                       )}
                     </Button>
+                    {mediaNote ? (
+                      <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-1.5 text-center text-sm text-emerald-700">
+                        {mediaNote}
+                      </p>
+                    ) : error ? (
+                      <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-1.5 text-center text-sm text-destructive">
+                        {error}
+                      </p>
+                    ) : null}
                   </div>
                 </>
               )}
@@ -832,6 +873,28 @@ export function ComponentEditor({
       </div>
     </form>
   );
+}
+
+function formatBytes(n: number) {
+  if (n < 1024 * 1024) return `${Math.max(1, Math.round(n / 1024))} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function uploadNote(data: {
+  posterBytes?: number;
+  videoSourceBytes?: number | null;
+  videoDeliveryBytes?: number | null;
+}) {
+  const parts = ["Uploaded to R2."];
+  if (data.videoSourceBytes && data.videoDeliveryBytes) {
+    parts.push(
+      `Video ${formatBytes(data.videoSourceBytes)} → ${formatBytes(data.videoDeliveryBytes)}.`,
+    );
+  }
+  if (data.posterBytes) {
+    parts.push(`Poster ${formatBytes(data.posterBytes)}.`);
+  }
+  return parts.join(" ");
 }
 
 function useObjectUrl(file: File | null) {
@@ -856,6 +919,189 @@ function useObjectUrl(file: File | null) {
   return url;
 }
 
+function formatTimecode(seconds: number) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function videoDuration(video: HTMLVideoElement) {
+  if (Number.isFinite(video.duration) && video.duration > 0) return video.duration;
+  if (video.seekable.length > 0) {
+    const end = video.seekable.end(video.seekable.length - 1);
+    if (Number.isFinite(end) && end > 0) return end;
+  }
+  return 0;
+}
+
+function waitForSeek(video: HTMLVideoElement) {
+  if (!video.seeking) return Promise.resolve();
+  return new Promise<void>((resolve) => {
+    video.addEventListener("seeked", () => resolve(), { once: true });
+  });
+}
+
+function FramePickerDialog({
+  open,
+  src,
+  onOpenChange,
+  onPick,
+}: {
+  open: boolean;
+  src: string | null;
+  onOpenChange: (open: boolean) => void;
+  onPick: (file: File) => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [duration, setDuration] = useState(0);
+  const [time, setTime] = useState(0);
+  const [ready, setReady] = useState(false);
+  const [capturing, setCapturing] = useState(false);
+  const [captureError, setCaptureError] = useState<string | null>(null);
+  const remote = Boolean(src && !src.startsWith("blob:"));
+
+  useEffect(() => {
+    if (!open) {
+      setDuration(0);
+      setTime(0);
+      setReady(false);
+      setCapturing(false);
+      setCaptureError(null);
+    }
+  }, [open, src]);
+
+  function seekTo(next: number) {
+    setTime(next);
+    const video = videoRef.current;
+    if (video) video.currentTime = next;
+  }
+
+  async function useFrame() {
+    const video = videoRef.current;
+    if (!video || video.videoWidth === 0) return;
+    setCapturing(true);
+    setCaptureError(null);
+    await waitForSeek(video);
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      setCapturing(false);
+      setCaptureError("Could not capture this frame.");
+      return;
+    }
+    ctx.drawImage(video, 0, 0);
+    let blob: Blob | null = null;
+    try {
+      blob = await new Promise((resolve) =>
+        canvas.toBlob(resolve, "image/jpeg", 0.92),
+      );
+    } catch {
+      blob = null;
+    }
+    setCapturing(false);
+    if (!blob) {
+      setCaptureError(
+        remote
+          ? "This hosted video can’t be captured. Choose the video file again, then pick a frame."
+          : "Could not capture this frame.",
+      );
+      return;
+    }
+    onPick(new File([blob], "poster.jpg", { type: "image/jpeg" }));
+  }
+
+  const span = Number.isFinite(duration) && duration > 0 ? duration : 0;
+
+  function syncDuration(video: HTMLVideoElement) {
+    setDuration(videoDuration(video));
+    setReady(video.videoWidth > 0);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="light bg-background text-foreground sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Pick a frame</DialogTitle>
+          <DialogDescription>
+            Scrub the video and use the current frame as the poster.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="relative overflow-hidden rounded-lg bg-muted">
+            {open && src ? (
+              <video
+                ref={videoRef}
+                src={src}
+                muted
+                playsInline
+                preload="auto"
+                crossOrigin={remote ? "anonymous" : undefined}
+                className="aspect-[4/3] w-full object-contain"
+                onLoadedMetadata={(e) => {
+                  const video = e.currentTarget;
+                  const next = videoDuration(video);
+                  setDuration(next);
+                  setReady(video.videoWidth > 0);
+                  if (next > 0) {
+                    video.currentTime = Math.min(0.04, next);
+                    setTime(video.currentTime);
+                  }
+                }}
+                onDurationChange={(e) => syncDuration(e.currentTarget)}
+              />
+            ) : null}
+          </div>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="frame-picker-time" className="text-xs text-muted-foreground">
+                Frame
+              </Label>
+              <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                {formatTimecode(time)}
+                {span > 0 ? ` / ${formatTimecode(span)}` : null}
+              </span>
+            </div>
+            <input
+              id="frame-picker-time"
+              type="range"
+              min={0}
+              max={span}
+              step={0.04}
+              value={Math.min(time, span)}
+              disabled={!ready || span <= 0}
+              aria-label="Video frame"
+              className="h-8 w-full cursor-pointer accent-foreground disabled:cursor-not-allowed"
+              onChange={(e) => seekTo(Number(e.target.value))}
+            />
+          </div>
+          {captureError ? (
+            <p className="text-xs text-destructive">{captureError}</p>
+          ) : null}
+        </div>
+        <DialogFooter>
+          <Button
+            type="button"
+            disabled={!ready || capturing}
+            onClick={useFrame}
+          >
+            {capturing ? (
+              <>
+                <Loader2 data-icon="inline-start" className="animate-spin" />
+                Capturing…
+              </>
+            ) : (
+              "Use this frame"
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function MediaSlot({
   label,
   icon,
@@ -863,6 +1109,7 @@ function MediaSlot({
   hasMedia,
   removing,
   onPick,
+  onPickFromVideo,
   onRemove,
   children,
 }: {
@@ -872,6 +1119,7 @@ function MediaSlot({
   hasMedia: boolean;
   removing: boolean;
   onPick: (file: File) => void;
+  onPickFromVideo?: () => void;
   onRemove: () => void;
   children?: React.ReactNode;
 }) {
@@ -885,7 +1133,10 @@ function MediaSlot({
         ) : (
           <button
             type="button"
-            className="flex size-full flex-col items-center justify-center gap-2 px-3 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+            className={cn(
+              "flex size-full flex-col items-center justify-center gap-2 px-3 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground",
+              onPickFromVideo && "pb-9",
+            )}
             onClick={() => inputRef.current?.click()}
           >
             {icon}
@@ -893,6 +1144,16 @@ function MediaSlot({
             <span className="text-[11px] text-muted-foreground">Click to choose</span>
           </button>
         )}
+
+        {!hasMedia && onPickFromVideo ? (
+          <button
+            type="button"
+            className="absolute inset-x-0 bottom-0 z-10 flex h-9 items-center justify-center border-t border-border bg-background/90 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+            onClick={onPickFromVideo}
+          >
+            Pick from video
+          </button>
+        ) : null}
 
         {hasMedia ? (
           <>
@@ -903,7 +1164,21 @@ function MediaSlot({
               onClick={() => inputRef.current?.click()}
             />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/50 to-transparent px-2 pb-2 pt-8">
-              <p className="text-[11px] font-medium text-white">{label}</p>
+              <div className="flex items-end justify-between gap-2">
+                <p className="text-[11px] font-medium text-white">{label}</p>
+                {onPickFromVideo ? (
+                  <button
+                    type="button"
+                    className="pointer-events-auto relative z-20 text-[11px] font-medium text-white underline-offset-2 hover:underline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPickFromVideo();
+                    }}
+                  >
+                    From video
+                  </button>
+                ) : null}
+              </div>
             </div>
             <button
               type="button"

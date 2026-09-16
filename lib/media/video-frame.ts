@@ -5,15 +5,19 @@ import { randomUUID } from "node:crypto";
 import { unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import ffmpegStatic from "ffmpeg-static";
 
-const ffmpegPath = ffmpegStatic as unknown as string | null;
+import { ffmpegBin } from "@/lib/media/ffmpeg-bin";
 
 function runFfmpeg(inputArgs: string[]): Promise<Buffer | null> {
-  if (!ffmpegPath) return Promise.resolve(null);
+  let bin: string;
+  try {
+    bin = ffmpegBin();
+  } catch {
+    return Promise.resolve(null);
+  }
   return new Promise((resolve) => {
     const proc = spawn(
-      ffmpegPath,
+      bin,
       [
         "-hide_banner",
         "-loglevel",
@@ -55,7 +59,7 @@ function runFfmpeg(inputArgs: string[]): Promise<Buffer | null> {
 
 /** First frame of a video buffer as JPEG, or null if unavailable. */
 export async function firstFrameJpeg(input: Buffer): Promise<Buffer | null> {
-  if (!ffmpegPath || input.length === 0) return null;
+  if (input.length === 0) return null;
   const path = join(tmpdir(), `ul-frame-${randomUUID()}.mp4`);
   try {
     await writeFile(path, input);

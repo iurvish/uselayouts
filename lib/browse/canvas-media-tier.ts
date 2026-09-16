@@ -17,7 +17,7 @@ export function canvasMediaTier(
   return inViewport ? "video" : "image";
 }
 
-/** Pan/coast: demote video → poster so decode doesn't fight the compositor. */
-export function canvasAllowVideo(media: "video" | "image", interacting: boolean) {
-  return media === "video" && !interacting;
+/** Pan/coast: keep in-view videos playing; overscan stays poster-only. */
+export function canvasAllowVideo(media: "video" | "image") {
+  return media === "video";
 }

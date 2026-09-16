@@ -30,7 +30,7 @@ export function BrowseCard({
   className,
   style,
   surface = "canvas",
-  pinHeight = 320,
+  pinHeight,
   paused = false,
   allowVideo = true,
   observeVisibility = false,
@@ -51,7 +51,10 @@ export function BrowseCard({
           </h3>
         </div>
         <div className="browse-chrome-media">
-          <div className="browse-card browse-pin-media" style={{ height: pinHeight }}>
+          <div
+            className="browse-card browse-pin-media"
+            style={pinHeight ? { height: pinHeight } : undefined}
+          >
             <BrowsePreview
               poster={item.poster}
               video={item.video}

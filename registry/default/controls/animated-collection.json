@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-08-16T09:06:20.916Z",
+  "updatedAt": "2026-09-15T12:35:50.931Z",
   "interactionHints": {
     "duration": 5,
     "scale": 78,
@@ -19,5 +19,7 @@
         "y": 19.2
       }
     ]
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/animated-collection/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4"
 }

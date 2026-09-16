@@ -10,5 +10,13 @@
   "scroll-stack-deck": {
     "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=880&q=68",
     "videoUrl": ""
+  },
+  "feature-carousel": {
+    "posterUrl": "https://cdn.uselayouts.com/components/feature-carousel/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/feature-carousel/video.mp4"
+  },
+  "animated-collection": {
+    "posterUrl": "https://cdn.uselayouts.com/components/animated-collection/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4"
   }
 }

@@ -5,7 +5,7 @@ import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
 import { canvasAllowVideo, canvasMediaTier } from "@/lib/browse/canvas-media-tier";
-import { mediaHeight, tileHeight } from "@/lib/browse/media";
+import { posterMediaHeight, tileHeight, tileHeightFor } from "@/lib/browse/media";
 import { priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
 
@@ -30,7 +30,7 @@ type TileSpec = {
  * Camera-space infinite canvas (tldraw / Figma style):
  * world positions live on a masonry column grid; a camera offset is added in
  * `translate3d`. Only tiles whose AABB overlaps the viewport (+ image overscan)
- * are mounted. Video mounts only for tiles that intersect the true viewport;
+ * are mounted. Video mounts for tiles that intersect the true viewport;
  * the overscan ring preloads posters so pans feel instant. Pan follows the
  * pointer 1:1; clicks are preserved until the drag threshold, then pointer
  * capture starts.
@@ -55,13 +55,27 @@ function tileIndex(col: number, row: number, count: number) {
   return mod(row + col, count);
 }
 
-function packColumn(col: number, count: number, gap: number) {
+function packColumn(
+  col: number,
+  count: number,
+  gap: number,
+  heights: number[],
+) {
   const prefix = Array<number>(count + 1);
   prefix[0] = 0;
   for (let row = 0; row < count; row += 1) {
-    prefix[row + 1] = prefix[row] + tileHeight(tileIndex(col, row, count)) + gap;
+    prefix[row + 1] =
+      prefix[row] + (heights[tileIndex(col, row, count)] ?? tileHeight(0)) + gap;
   }
   return { prefix, periodH: prefix[count] };
+}
+
+function heightsFor(
+  list: BrowseItem[],
+  cardW: number,
+  aspects: Record<string, number>,
+) {
+  return list.map((item, index) => tileHeightFor(cardW, aspects[item.slug], index));
 }
 
 function sameTiles(a: TileSpec[], b: TileSpec[]) {
@@ -81,9 +95,48 @@ function sameTiles(a: TileSpec[], b: TileSpec[]) {
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
+function usePosterAspects(items: BrowseItem[]) {
+  const [aspects, setAspects] = React.useState<Record<string, number>>({});
+  const key = items.map((item) => `${item.slug}:${item.poster}`).join("|");
+
+  React.useEffect(() => {
+    let live = true;
+    if (items.length === 0) {
+      setAspects({});
+      return;
+    }
+
+    const next: Record<string, number> = {};
+    let pending = items.length;
+    const done = () => {
+      pending -= 1;
+      if (live && pending === 0) setAspects(next);
+    };
+
+    for (const item of items) {
+      const img = new Image();
+      img.onload = () => {
+        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+          next[item.slug] = img.naturalWidth / img.naturalHeight;
+        }
+        done();
+      };
+      img.onerror = done;
+      img.src = item.poster;
+    }
+
+    return () => {
+      live = false;
+    };
+  }, [key]);
+
+  return aspects;
+}
+
 export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const nodes = React.useRef(new Map<string, HTMLDivElement>());
+  const aspects = usePosterAspects(items);
 
   const camera = React.useRef({ x: 0, y: 0 });
   const velocity = React.useRef({ x: 0, y: 0 });
@@ -103,7 +156,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
   const [metrics, setMetrics] = React.useState({ cardW: 340, gap: 54 });
   const [tiles, setTiles] = React.useState<TileSpec[]>([]);
-  /** True from pan threshold until settle — freezes React tile sync + demotes video. */
+  /** True from pan threshold until settle — grab cursor. */
   const [isDragging, setIsDragging] = React.useState(false);
 
   const cellW = metrics.cardW + metrics.gap;
@@ -114,16 +167,17 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     cardW: metrics.cardW,
     gap: metrics.gap,
     count: itemCount,
+    heights: [] as number[],
   });
   const packs = React.useRef(new Map<number, { prefix: number[]; periodH: number }>());
 
   const getPack = React.useCallback((col: number) => {
-    const { count, gap } = geometry.current;
+    const { count, gap, heights } = geometry.current;
     if (count <= 0) return { prefix: [0], periodH: 1 };
     const key = mod(col, count);
     const cached = packs.current.get(key);
     if (cached) return cached;
-    const next = packColumn(key, count, gap);
+    const next = packColumn(key, count, gap, heights);
     packs.current.set(key, next);
     return next;
   }, []);
@@ -168,7 +222,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         for (let local = 0; local < count; local += 1) {
           const row = cycle * count + local;
           const index = tileIndex(col, row, count);
-          const height = tileHeight(index);
+          const height = geometry.current.heights[index] ?? tileHeight(index);
           const x = col * cw + camX;
           const y = cycle * period + pack.prefix[local] + camY;
 
@@ -219,7 +273,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     setTiles((current) => (sameTiles(current, next) ? current : next));
   }, [applyTransforms, collectVisible]);
 
-  /** Throttled remount during motion — posters only while isDragging. */
+  /** Throttled remount during motion so newly visible tiles appear. */
   const syncVisibleThrottled = React.useCallback(() => {
     const now = performance.now();
     if (now - lastPanSync.current < PAN_SYNC_MS) return;
@@ -328,9 +382,15 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   );
 
   useIsomorphicLayoutEffect(() => {
-    geometry.current = { cellW, cardW: metrics.cardW, gap: metrics.gap, count: itemCount };
+    geometry.current = {
+      cellW,
+      cardW: metrics.cardW,
+      gap: metrics.gap,
+      count: itemCount,
+      heights: heightsFor(items, metrics.cardW, aspects),
+    };
     packs.current.clear();
-  }, [cellW, metrics.cardW, metrics.gap, itemCount]);
+  }, [cellW, metrics.cardW, metrics.gap, itemCount, items, aspects]);
 
   useIsomorphicLayoutEffect(() => {
     applyTransforms();
@@ -350,11 +410,18 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
       if (!didCenter.current) {
         camera.current.x = (rect.width - cardW) / 2;
-        camera.current.y = (rect.height - tileHeight(0)) / 2;
+        camera.current.y =
+          (rect.height - tileHeightFor(cardW, aspects[items[0]?.slug ?? ""], 0)) / 2;
         didCenter.current = true;
       }
 
-      geometry.current = { cellW: cardW + gap, cardW, gap, count: items.length };
+      geometry.current = {
+        cellW: cardW + gap,
+        cardW,
+        gap,
+        count: items.length,
+        heights: heightsFor(items, cardW, aspects),
+      };
       packs.current.clear();
       setMetrics({ cardW, gap });
       setTiles(collectVisible());
@@ -365,7 +432,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     const observer = new ResizeObserver(measure);
     observer.observe(node);
     return () => observer.disconnect();
-  }, [applyTransforms, collectVisible, items.length]);
+  }, [applyTransforms, collectVisible, items, aspects]);
 
   React.useEffect(() => {
     const node = viewportRef.current;
@@ -379,7 +446,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       velocity.current.x = 0;
       velocity.current.y = 0;
       applyTransforms();
-      // Keep the field filled while scrolling; videos resume after settle.
+      // Keep the field filled while scrolling.
       mediaFrozen.current = true;
       setIsDragging(true);
       if (!wheelSyncRaf.current) {
@@ -507,10 +574,14 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
                 item={item}
                 index={tile.index}
                 eager
-                allowVideo={canvasAllowVideo(tile.media, isDragging)}
+                allowVideo={canvasAllowVideo(tile.media)}
                 playbackPriority={tile.priority || undefined}
                 surface="canvas"
-                pinHeight={mediaHeight(tile.index)}
+                pinHeight={posterMediaHeight(
+                  metrics.cardW,
+                  aspects[item.slug],
+                  tile.index,
+                )}
                 className="size-full"
                 paused={paused}
               />

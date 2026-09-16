@@ -23,9 +23,9 @@ export function OpenPreview({
   const Component = Index[name]?.component as React.ComponentType<{ size?: string }> | undefined;
   // Tall sticky demos that scroll <main> must size to content, not the viewport.
   const fill = name !== "perspective-text-scroll";
-  // This demo is its own scrollport (`overflow-y-auto`). min-h-0 stops the
+  // This demo is its own scrollport (`overflow-y-auto` or iframe). min-h-0 stops the
   // 5×110vh track from inflating this grid item so <main> never becomes the scroller.
-  const nestedPageScroll = name === "scroll-stack-deck";
+  const nestedPageScroll = name === "scroll-stack-deck" || name === "stack-scroll-reveal";
 
   const inner = Component ? (
     <div

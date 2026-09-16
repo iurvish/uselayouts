@@ -11,7 +11,7 @@ import { r2Configured } from "@/lib/r2/client";
 
 export const runtime = "nodejs";
 /** Video re-encode can take a while. */
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 type Params = { params: Promise<{ name: string }> };
 
@@ -86,7 +86,13 @@ export async function POST(request: Request, { params }: Params) {
       videoUrl: processed.videoUrl ?? existingVideo ?? null,
     });
 
-    return NextResponse.json({ ok: true, ...result });
+    return NextResponse.json({
+      ok: true,
+      ...result,
+      posterBytes: processed.posterBytes,
+      videoSourceBytes: processed.videoSourceBytes,
+      videoDeliveryBytes: processed.videoDeliveryBytes,
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Upload failed";
     const status = message.includes("development")

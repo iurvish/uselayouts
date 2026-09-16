@@ -695,6 +695,25 @@
       ]
     },
     {
+      "name": "stack-scroll-reveal",
+      "type": "registry:component",
+      "title": "Stack Scroll Reveal",
+      "description": "Scroll-linked case-study cards that pin in the viewport and peel, scale, and fade as you move down the page.",
+      "dependencies": [
+        "clsx",
+        "lenis",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stack-scroll-reveal.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "stacked-list",
       "type": "registry:component",
       "title": "Stacked List",

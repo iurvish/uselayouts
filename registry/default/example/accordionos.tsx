@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import React, { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 // ==========================================
@@ -151,56 +151,55 @@ export interface AccordionOSProps {
   onItemChange?: (index: number | null) => void;
 }
 
-// Direct High-Speed CDN Monochrome Images (Works out of the box everywhere)
 const DEFAULT_ITEMS: AccordionItem[] = [
   {
     id: 1,
-    title: "Dynamic Visuals",
+    title: "Wet Clay",
     badge: "01",
     claim:
-      "Transform static layouts into responsive, interactive canvases with fluid spring physics and cinematic transitions.",
-    image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80",
-    alt: "Dynamic Visuals presentation",
+      "Center the lump on the wheel, find the axis, then pull walls thin enough you can hear the room breathe.",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
+    alt: "Hands shaping clay on a pottery wheel",
   },
   {
     id: 2,
-    title: "Spatial Layering",
+    title: "Safelight",
     badge: "02",
     claim:
-      "Glassmorphic frosted depth with real-time blur, reactive light tracking, and tactile micro-interactions.",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-    alt: "Spatial Layering presentation",
+      "Chemistry needs darkness. A red bulb, a tray of developer, and thirty seconds of faith before the image appears.",
+    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80",
+    alt: "Photographs developing in a darkroom under red safelight",
   },
   {
     id: 3,
-    title: "Adaptive Accordion",
+    title: "Type Metal",
     badge: "03",
     claim:
-      "Collapsible drawer units that automatically recalculate physics coordinates with layout morphing.",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
-    alt: "Adaptive Accordion presentation",
+      "Lead slugs lock into a chase. Ink hits paper with a kiss—not a smear—and every impression matches by hand.",
+    image: "https://images.unsplash.com/photo-1586281384340-47ca3c376274?auto=format&fit=crop&w=1200&q=80",
+    alt: "Vintage letterpress printing blocks and type",
   },
   {
     id: 4,
-    title: "Gestural Control",
+    title: "Groove Cut",
     badge: "04",
     claim:
-      "Full tactile navigation supporting keyboard shortcuts, rapid arrow stepping, and intuitive touch feedback.",
-    image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-    alt: "Gestural Control presentation",
+      "A diamond tip rides a spiral cut into lacquer. One scratch holds an entire afternoon of sound.",
+    image: "https://images.unsplash.com/photo-1603048297170-b37150c710d0?auto=format&fit=crop&w=1200&q=80",
+    alt: "Vinyl record spinning on a turntable",
   },
   {
     id: 5,
-    title: "Ultra Performance",
+    title: "Warp & Weft",
     badge: "05",
     claim:
-      "GPU-accelerated hardware layers engineered for 120fps buttery smoothness across all screen resolutions.",
-    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80",
-    alt: "Ultra Performance presentation",
+      "Shuttle passes, threads cross. The pattern only shows itself after the twentieth row.",
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    alt: "Handloom weaving with colorful threads",
   },
 ];
 
-const DEFAULT_STATIC_IMAGE = "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=1200&q=80";
+const DEFAULT_STATIC_IMAGE = "https://images.unsplash.com/photo-1452860606245-b0798529a591?auto=format&fit=crop&w=1200&q=80";
 
 const springPhysics = {
   type: "spring" as const,
@@ -229,20 +228,6 @@ export function AccordionOS({
 }: AccordionOSProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(defaultActiveIndex);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Mouse tilt / flashlight tracking effect
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothMouseX = useSpring(mouseX, { stiffness: 200, damping: 25 });
-  const smoothMouseY = useSpring(mouseY, { stiffness: 200, damping: 25 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
 
   const handleToggle = useCallback(
     (index: number) => {
@@ -318,8 +303,6 @@ export function AccordionOS({
 
   return (
     <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`accordion-os-root ${className}`}
@@ -337,15 +320,6 @@ export function AccordionOS({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Interactive Mouse Light Overlay */}
-        <motion.div
-          className="accordion-os-glow-effect"
-          style={{
-            left: smoothMouseX,
-            top: smoothMouseY,
-          }}
-        />
-
         {/* Left Interactive Column */}
         <div className="accordion-os-sidebar">
           {/* Accordion Items */}
@@ -501,7 +475,7 @@ export function AccordionOS({
           >
             <img
               src={staticImage}
-              alt="Default Static Visual"
+              alt="A cluttered maker studio desk with tools and materials"
               className="accordion-os-image"
               loading="eager"
               decoding="async"
@@ -561,18 +535,6 @@ export function AccordionOS({
           overflow: hidden;
           width: 100%;
           box-sizing: border-box;
-        }
-
-        .accordion-os-glow-effect {
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
-          border-radius: 9999px;
-          pointer-events: none;
-          transform: translate(-50%, -50%);
-          z-index: 5;
-          mix-blend-mode: overlay;
         }
 
         .accordion-os-sidebar {

@@ -1,0 +1,26 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-14T14:53:52.268Z",
+  "previewBackground": {
+    "light": "#f7f7f7",
+    "dark": "#f7f7f7"
+  },
+  "hintTop": 80,
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Scroll to peel through the stack",
+  "hintDescription": "Cards pin, scale, and lift away as you move down the page."
+}

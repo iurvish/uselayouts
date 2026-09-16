@@ -666,6 +666,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "stack-scroll-reveal": {
+    name: "stack-scroll-reveal",
+    description: "Scroll-linked case-study cards that pin in the viewport and peel, scale, and fade as you move down the page.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/stack-scroll-reveal.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/stack-scroll-reveal-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "stack-scroll-reveal"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "stacked-list": {
     name: "stacked-list",
     description: "An expandable list widget with a stacked layout and smooth morphing transitions.",

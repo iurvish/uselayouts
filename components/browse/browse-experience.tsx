@@ -29,24 +29,16 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
   return (
     <div
       data-quality={quality}
-      className={cn(
-        "dark flex min-h-dvh cursor-auto flex-col bg-background font-[family-name:var(--font-geist-sans)] text-foreground",
-        isCanvas && "h-dvh overflow-hidden",
-      )}
+      className="dark flex h-dvh cursor-auto flex-col overflow-hidden bg-background font-[family-name:var(--font-geist-sans)] text-foreground"
     >
       <BrowseHeader query={query} onQueryChange={setQuery} />
 
-      <div
-        className={cn(
-          "flex min-h-0 flex-1 px-3 pt-0.5 pb-2.5",
-          isCanvas && "overflow-hidden",
-        )}
-      >
+      <div className="flex min-h-0 flex-1 overflow-hidden px-3 pt-0.5 pb-2.5">
         <div
           data-view={isCanvas ? "canvas" : "grid"}
           className={cn(
-            "relative min-h-0 w-full flex-1 overflow-hidden rounded-2xl bg-muted p-4 sm:p-[18px]",
-            !isCanvas && "overflow-auto",
+            "relative min-h-0 w-full flex-1 rounded-2xl bg-muted p-4 sm:p-[18px]",
+            isCanvas ? "overflow-hidden" : "overflow-auto",
           )}
         >
           {isEmpty ? (

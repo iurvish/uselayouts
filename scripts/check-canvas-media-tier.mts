@@ -7,10 +7,8 @@ assert.equal(canvasMediaTier(-900, 100, 300, 400, 1200, 800, 480), null);
 assert.equal(canvasMediaTier(1250, 100, 300, 400, 1200, 800, 480), "image");
 assert.equal(canvasMediaTier(1800, 100, 300, 400, 1200, 800, 480), null);
 
-assert.equal(canvasAllowVideo("video", false), true);
-assert.equal(canvasAllowVideo("video", true), false);
-assert.equal(canvasAllowVideo("image", false), false);
-assert.equal(canvasAllowVideo("image", true), false);
+assert.equal(canvasAllowVideo("video"), true);
+assert.equal(canvasAllowVideo("image"), false);
 console.log("canvas-media-tier: ok");
 
 // Infinite canvas tileIndex must visit every item (old col*7+row*3 skipped when gcd>1).

@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import type { BrowseItem } from "@/lib/browse/items";
-import { mediaHeight } from "@/lib/browse/media";
 import { BrowseCard } from "./glass-card";
 
 const BATCH = 12;
@@ -44,7 +43,6 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
             index={index}
             eager={index < 6}
             surface="pin"
-            pinHeight={mediaHeight(index)}
             paused={paused}
             observeVisibility
           />

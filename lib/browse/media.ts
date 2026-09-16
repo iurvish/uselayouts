@@ -12,8 +12,28 @@ export function mediaHeight(index: number) {
   return MEDIA_HEIGHTS[index % MEDIA_HEIGHTS.length];
 }
 
+/** Height of the media box at `cardW` given poster width/height. */
+export function posterMediaHeight(
+  cardW: number,
+  aspect: number | undefined,
+  index: number,
+) {
+  if (aspect && Number.isFinite(aspect) && aspect > 0) {
+    return Math.round(cardW / aspect);
+  }
+  return mediaHeight(index);
+}
+
 export function tileHeight(index: number) {
   return mediaHeight(index) + BROWSE_CHROME_EXTRA;
+}
+
+export function tileHeightFor(
+  cardW: number,
+  aspect: number | undefined,
+  index: number,
+) {
+  return posterMediaHeight(cardW, aspect, index) + BROWSE_CHROME_EXTRA;
 }
 
 export function browsePoster(slug: string) {
