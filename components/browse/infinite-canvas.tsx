@@ -4,6 +4,11 @@ import * as React from "react";
 import { animate } from "motion/react";
 
 import type { BrowseItem } from "@/lib/browse/items";
+import {
+  canvasGridPeriod,
+  canvasTileIndex,
+  packCanvasColumn,
+} from "@/lib/browse/canvas-layout";
 import { canvasAllowVideo, canvasMediaTier } from "@/lib/browse/canvas-media-tier";
 import { posterMediaHeight, tileHeight, tileHeightFor } from "@/lib/browse/media";
 import { priorityFromCenter } from "@/lib/browse/video-pool";
@@ -47,27 +52,6 @@ const IMAGE_OVERSCAN = 720;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
-}
-
-function tileIndex(col: number, row: number, count: number) {
-  // Sequential through every component, then wrap — true infinite repeat.
-  // (Old col*7+row*3 hashing skipped items when gcd(3, count) > 1.)
-  return mod(row + col, count);
-}
-
-function packColumn(
-  col: number,
-  count: number,
-  gap: number,
-  heights: number[],
-) {
-  const prefix = Array<number>(count + 1);
-  prefix[0] = 0;
-  for (let row = 0; row < count; row += 1) {
-    prefix[row + 1] =
-      prefix[row] + (heights[tileIndex(col, row, count)] ?? tileHeight(0)) + gap;
-  }
-  return { prefix, periodH: prefix[count] };
 }
 
 function heightsFor(
@@ -169,15 +153,18 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     count: itemCount,
     heights: [] as number[],
   });
-  const packs = React.useRef(new Map<number, { prefix: number[]; periodH: number }>());
+  const packs = React.useRef(
+    new Map<number, { prefix: number[]; periodH: number; cols: number; rows: number }>(),
+  );
 
   const getPack = React.useCallback((col: number) => {
     const { count, gap, heights } = geometry.current;
-    if (count <= 0) return { prefix: [0], periodH: 1 };
-    const key = mod(col, count);
+    if (count <= 0) return { prefix: [0], periodH: 1, cols: 1, rows: 1 };
+    const { cols } = canvasGridPeriod(count);
+    const key = mod(col, cols);
     const cached = packs.current.get(key);
     if (cached) return cached;
-    const next = packColumn(key, count, gap, heights);
+    const next = packCanvasColumn(key, count, gap, heights, tileHeight(0));
     packs.current.set(key, next);
     return next;
   }, []);
@@ -187,8 +174,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       const { count } = geometry.current;
       if (count <= 0) return 0;
       const pack = getPack(col);
-      const local = mod(row, count);
-      return Math.floor(row / count) * pack.periodH + pack.prefix[local];
+      const local = mod(row, pack.rows);
+      return Math.floor(row / pack.rows) * pack.periodH + pack.prefix[local];
     },
     [getPack],
   );
@@ -219,9 +206,10 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       const k1 = Math.floor(worldBottom / period) + 1;
 
       for (let cycle = k0; cycle <= k1; cycle += 1) {
-        for (let local = 0; local < count; local += 1) {
-          const row = cycle * count + local;
-          const index = tileIndex(col, row, count);
+        for (let local = 0; local < pack.rows; local += 1) {
+          const row = cycle * pack.rows + local;
+          const index = canvasTileIndex(col, row, count);
+          if (index == null) continue;
           const height = geometry.current.heights[index] ?? tileHeight(index);
           const x = col * cw + camX;
           const y = cycle * period + pack.prefix[local] + camY;
