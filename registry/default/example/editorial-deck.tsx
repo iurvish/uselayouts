@@ -209,7 +209,6 @@ export function EditorialDeck({
                     ? LIFT_SCALE - dragShrink * 0.25
                     : 1 - vis * STACK_SCALE - dragShrink,
                   rotate: peelX * 0.06,
-                  opacity: lifting ? 0.72 : 1,
                 }}
                 transition={
                   peeling

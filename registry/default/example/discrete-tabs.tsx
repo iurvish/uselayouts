@@ -158,7 +158,7 @@ function Button({
           },
         }}
         className={cn(
-          "flex items-center font-mono uppercase gap-1.5 bg-secondary outline outline-2 outline-background overflow-hidden shadow-md transition-colors duration-75 ease-out  p-3 cursor-pointer",
+          "flex items-center font-mono uppercase gap-1.5 bg-secondary outline outline-2 outline-border overflow-hidden shadow-md transition-colors duration-75 ease-out  p-3 cursor-pointer",
           isActive && activeColor,
           isActive ? "px-4" : "px-3"
         )}
