@@ -52,6 +52,7 @@ export function OpenComponentView({
           hintTop={data.hintTop}
           hint={data.previewHint}
           hintTone={hintTone}
+          hideHintOnScroll={stage}
         />
       </main>
 

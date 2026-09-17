@@ -67,7 +67,7 @@ const SEEDS: Seed[] = [
   { slug: "pricing-card", title: "Pricing Card", description: "Hierarchy that sells itself.", category: "Display" },
   { slug: "shake-testimonial-card", title: "Shake Testimonial", description: "Praise with a pulse.", category: "Display" },
   { slug: "smooth-dropdown", title: "Smooth Dropdown", description: "Menus that never jump.", category: "Navigation" },
-  { slug: "status-button", title: "Status Button", description: "Idle, loading, done.", category: "Button" },
+  { slug: "save-button", title: "Status Button", description: "Idle, loading, done.", category: "Button" },
   { slug: "vertical-tabs", title: "Vertical Tabs", description: "Switching along the edge.", category: "Navigation" },
   { slug: "stacked-list", title: "Stacked List", description: "A stack that unfolds.", category: "List" },
   { slug: "bucket", title: "Bucket", description: "Chips tossed with physics.", category: "Display" },

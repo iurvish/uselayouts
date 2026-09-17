@@ -12,11 +12,8 @@ import Lenis from "lenis";
 
 type Card = {
   index: string;
-  category: string;
   title: string;
   description: string;
-  paper: string;
-  ink: string;
   image: string;
 };
 
@@ -25,42 +22,30 @@ const IMG = "auto=format&fit=crop&w=1200&q=80";
 const CARDS: Card[] = [
   {
     index: "01",
-    category: "Fintech",
-    title: "Boosted Conversion by 42% with a Product-Led Redesign",
+    title: "Thrown forms, quiet finishes",
     description:
-      "We restructured the onboarding flow and clarified the value proposition, helping the platform turn more visitors into activated users.",
-    paper: "oklch(0.94 0.028 75)",
-    ink: "oklch(0.28 0.04 55)",
-    image: `https://images.unsplash.com/photo-1615529328331-f8917597711f?${IMG}`,
+      "Hand-built ceramics that reward a slow look — soft glaze, honest weight, and surfaces that feel made rather than manufactured.",
+    image: `https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?${IMG}`,
   },
   {
     index: "02",
-    category: "SaaS",
-    title: "From Confusing to Clear: A Homepage That Actually Converts",
+    title: "Light through linen and clay",
     description:
-      "Through sharper messaging and a modular design system, the brand saw a measurable lift in demo requests within weeks.",
-    paper: "oklch(0.94 0.022 220)",
-    ink: "oklch(0.28 0.04 220)",
+      "A studio catalog built around texture and restraint, where each frame leaves room for the object to breathe.",
     image: `https://images.unsplash.com/photo-1589939705384-5185137a7f0f?${IMG}`,
   },
   {
     index: "03",
-    category: "Startup",
-    title: "Launched a New Brand That Closed Funding in 90 Days",
+    title: "Objects with a longer memory",
     description:
-      "We built a high-trust visual identity and pitch narrative that helped the founders move faster with investors.",
-    paper: "oklch(0.94 0.03 350)",
-    ink: "oklch(0.28 0.05 350)",
+      "Pieces shaped to outlast trends — matte stoneware, warm ash glaze, and forms that settle into daily use.",
     image: `https://images.unsplash.com/photo-1541123603104-512919d6a96c?${IMG}`,
   },
   {
     index: "04",
-    category: "Brand strategy",
-    title: "Repositioned the Brand for a Higher-Value Audience",
+    title: "A shelf worth returning to",
     description:
-      "We refined the messaging and visual direction to attract more qualified leads and elevate perceived value.",
-    paper: "oklch(0.94 0.025 145)",
-    ink: "oklch(0.28 0.04 145)",
+      "Curated vessels and tableware arranged like a small exhibition — tactile, calm, and easy to browse.",
     image: `https://images.unsplash.com/photo-1513519245088-0e12902e5a38?${IMG}`,
   },
 ];
@@ -126,41 +111,38 @@ function StackCard({
         style={{ y: wrapY, scale: wrapScale, transformOrigin: "50% 100%" }}
       >
         <motion.article
-          className="grid h-auto w-full grid-cols-1 overflow-hidden rounded-[28px] p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)] md:h-[500px] md:grid-cols-[minmax(0,1fr)_400px] md:gap-8 md:p-4"
+          className="relative h-[min(72dvh,520px)] w-full overflow-hidden rounded-[28px] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_50px_-24px_rgba(0,0,0,0.55)]"
           style={{
-            backgroundColor: card.paper,
-            color: card.ink,
             y: innerY,
             rotateX: innerRx,
             transformPerspective: 500,
             transformOrigin: "50% 100%",
           }}
         >
-          <div className="flex min-w-0 flex-col justify-between gap-6 px-3 py-5 md:px-6 md:py-8">
-            <p className="m-0 font-mono text-sm font-medium tabular-nums tracking-[0.08em] opacity-55">
+          <img
+            src={card.image}
+            alt=""
+            width={1200}
+            height={800}
+            draggable={false}
+            className="pointer-events-none absolute inset-0 block size-full object-cover"
+          />
+          <div
+            className="absolute inset-0 bg-linear-to-t from-black/75 via-black/35 to-black/10"
+            aria-hidden
+          />
+          <div className="relative flex h-full flex-col justify-between p-8 text-white md:p-10">
+            <p className="m-0 font-mono text-lg font-medium tabular-nums tracking-[0.06em]">
               {card.index}
             </p>
-            <div className="flex flex-col gap-3">
-              <p className="m-0 text-[11px] font-medium uppercase tracking-[0.16em] opacity-60">
-                {card.category}
-              </p>
-              <h2 className="m-0 max-w-[18ch] text-[clamp(1.4rem,2.4vw,2.35rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-balance">
+            <div className="flex max-w-[34rem] flex-col gap-3">
+              <h2 className="m-0 text-[clamp(1.5rem,3.2vw,2.35rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-balance">
                 {card.title}
               </h2>
-              <p className="m-0 max-w-[42ch] text-[0.98rem] leading-relaxed text-pretty opacity-75">
+              <p className="m-0 text-[0.98rem] leading-relaxed text-pretty text-white/78">
                 {card.description}
               </p>
             </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl outline outline-1 outline-black/10 md:aspect-auto md:h-full">
-            <img
-              src={card.image}
-              alt=""
-              width={800}
-              height={600}
-              draggable={false}
-              className="pointer-events-none absolute inset-0 block size-full object-cover"
-            />
           </div>
         </motion.article>
       </motion.div>
@@ -216,7 +198,7 @@ export default function StackScrollReveal() {
             <div
               className="relative w-full max-w-[1000px] [transform-style:preserve-3d]"
               style={{
-                height: `calc(500px + ${PEEK * 3}px)`,
+                height: `calc(min(72dvh, 520px) + ${PEEK * 3}px)`,
                 maxHeight: `calc(78dvh + ${PEEK * 3}px)`,
               }}
             >

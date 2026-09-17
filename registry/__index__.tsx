@@ -154,6 +154,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "client-card": {
+    name: "client-card",
+    description: "A client CRM card with payment and deadline rings, plus a morphing avatar stack.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/client-card.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/client-card-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "client-card"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "confidential-folder": {
     name: "confidential-folder",
     description: "A charcoal sleeve that pulls a letter out, flips it, and lands it in front of you.",
@@ -185,6 +203,42 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/corner-video-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "corner-video"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "coverflow-drag": {
+    name: "coverflow-drag",
+    description: "A drag coverflow of portraits that scale, dim, and snap as you swipe.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/coverflow-drag.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/coverflow-drag-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "coverflow-drag"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "create-menu": {
+    name: "create-menu",
+    description: "A Start Creating pill that springs open into a list of create actions.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/create-menu.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/create-menu-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "create-menu"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -464,6 +518,28 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "liquid-index": {
+    name: "liquid-index",
+    description: "A feature list whose hover badge is a WebGL liquid gradient that tracks the row.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/liquid-index.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/liquid-index-canvas.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/liquid-index-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "liquid-index"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "magnified-bento": {
     name: "magnified-bento",
     description: "A bento card component with a draggable magnifying lens effect over scrolling chips.",
@@ -531,6 +607,24 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/perspective-text-scroll-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "perspective-text-scroll"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "photo-albums": {
+    name: "photo-albums",
+    description: "Tilted album stacks that expand into a shared-element photo grid.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/photo-albums.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/photo-albums-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "photo-albums"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -608,6 +702,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "save-button": {
+    name: "save-button",
+    description: "A button with animated states for idle, loading, and success.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/save-button.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/save-button.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "save-button"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "scroll-stack-deck": {
     name: "scroll-stack-deck",
     description: "Scroll-linked project cards that pin in the viewport and stack, scale, and settle as you move down the page.",
@@ -639,6 +751,32 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/shake-testimonial-card.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "shake-testimonial-card"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "slide-subscribe": {
+    name: "slide-subscribe",
+    description: "Pick a billing period, then slide to start a trial.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/slide-subscribe.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/slide-subscribe-unlock.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/slide-subscribe-shimmer.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/slide-subscribe-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "slide-subscribe"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -698,24 +836,6 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "status-button": {
-    name: "status-button",
-    description: "A button with animated states for idle, loading, and success.",
-    type: "registry:component",
-    registryDependencies: ["button"],
-    files: [{
-      path: "registry/default/example/status-button.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/status-button.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "status-button"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
   "vertical-tabs": {
     name: "vertical-tabs",
     description: "A vertical tab interaction with smooth content switching.",
@@ -747,126 +867,6 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/wheel-carousel.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "wheel-carousel"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "client-card": {
-    name: "client-card",
-    description: "A client CRM card with payment and deadline rings, plus a morphing avatar stack.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/client-card.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/client-card-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "client-card"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "coverflow-drag": {
-    name: "coverflow-drag",
-    description: "A drag coverflow of portraits that scale, dim, and snap as you swipe.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/coverflow-drag.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/coverflow-drag-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "coverflow-drag"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "create-menu": {
-    name: "create-menu",
-    description: "A Start Creating pill that springs open into a list of create actions.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/create-menu.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/create-menu-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "create-menu"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "liquid-index": {
-    name: "liquid-index",
-    description: "A feature list whose hover badge is a WebGL liquid gradient that tracks the row.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/liquid-index.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "registry/default/example/liquid-index-canvas.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/liquid-index-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "liquid-index"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "photo-albums": {
-    name: "photo-albums",
-    description: "Tilted album stacks that expand into a shared-element photo grid.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/photo-albums.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/photo-albums-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "photo-albums"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
-  "slide-subscribe": {
-    name: "slide-subscribe",
-    description: "Pick a billing period, then slide to start a trial.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/slide-subscribe.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "registry/default/example/slide-subscribe-unlock.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "registry/default/example/slide-subscribe-shimmer.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/slide-subscribe-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "slide-subscribe"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

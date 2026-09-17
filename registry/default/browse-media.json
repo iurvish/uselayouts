@@ -74,5 +74,25 @@
   "multi-step-form": {
     "posterUrl": "https://cdn.uselayouts.com/components/multi-step-form/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/multi-step-form/video.mp4"
+  },
+  "folder-interaction": {
+    "posterUrl": "https://cdn.uselayouts.com/components/folder-interaction/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/folder-interaction/video.mp4"
+  },
+  "inline-edit": {
+    "posterUrl": "https://cdn.uselayouts.com/components/inline-edit/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/inline-edit/video.mp4"
+  },
+  "save-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/save-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/save-button/video.mp4"
+  },
+  "discover-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/discover-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/discover-button/video.mp4"
+  },
+  "morphing-input": {
+    "posterUrl": "https://cdn.uselayouts.com/components/morphing-input/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/morphing-input/video.mp4"
   }
 }

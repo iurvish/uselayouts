@@ -20,9 +20,20 @@ function nearestScroller(el: HTMLElement): HTMLElement | null {
 }
 
 function scrollTopOf(target: HTMLElement | Window) {
-  // iframe windows fail `instanceof Window` (different realm).
+  // iframe windows fail `instanceof Window` (different realm); document can be null pre-load / cross-origin.
   if ("scrollY" in target) {
-    return target.scrollY || target.document.documentElement.scrollTop || 0;
+    try {
+      const doc = target.document;
+      if (!doc) return target.scrollY || 0;
+      return (
+        target.scrollY ||
+        doc.documentElement?.scrollTop ||
+        doc.body?.scrollTop ||
+        0
+      );
+    } catch {
+      return target.scrollY || 0;
+    }
   }
   return target.scrollTop;
 }
@@ -102,7 +113,7 @@ function HintOverlay({
       let stop: (() => void) | undefined;
       const attach = () => {
         const win = iframe.contentWindow;
-        if (!win) return;
+        if (!win?.document) return;
         stop?.();
         stop = watchTop(() => scrollTopOf(win), apply);
       };

@@ -1,0 +1,22 @@
+---
+title: Save Button
+description: A button with animated states for idle, loading, and success.
+---
+
+## Usage
+
+```tsx
+import SaveButton from "@/components/save-button";
+
+export default function Example() {
+  return <SaveButton />;
+}
+```
+
+## Features
+
+- Three states: Idle, loading, success in one control.
+- Letter morph: Characters blur and scale as the word changes — not a spinner-only trick.
+- Corner pip: A small indicator appears while it’s working or done.
+- Disabled mid-flight: You can’t double-submit while it’s saving.
+- Back to idle: After success it returns so you can save again.

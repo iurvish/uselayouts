@@ -57,7 +57,13 @@ function SidebarToggleIcon() {
   );
 }
 
-function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
+function PinnedSidebarHeader({
+  componentCount,
+  onClose,
+}: {
+  componentCount: number;
+  onClose: () => void;
+}) {
   return (
     <header
       className={cn(
@@ -114,7 +120,7 @@ function PinnedSidebarHeader({ onClose }: { onClose: () => void }) {
           </span>
           <span className="inline-flex items-center overflow-hidden rounded-[14px] bg-white px-2 py-px">
             <span className="bg-linear-to-b from-[hsl(240_3%_14%)] to-[hsl(240_3%_20%)] bg-clip-text text-lg leading-[1.3] font-medium tracking-[-0.54px] text-transparent capitalize">
-              50+
+              {componentCount}
             </span>
           </span>
           <span className="text-lg leading-[1.3] font-light tracking-[-0.18px] text-[hsl(240_7%_70%)] capitalize">
@@ -329,6 +335,7 @@ function OpenExperienceShell({
           data-sidebar="pinned"
         >
           <PinnedSidebarHeader
+            componentCount={navItems.length}
             onClose={() => {
               updatePinned(false);
               setHoverPreview(null);
@@ -350,7 +357,10 @@ function OpenExperienceShell({
           className="dark flex h-full max-w-[min(262px,85vw)] flex-col gap-0 border-r-0 bg-[hsl(240_6%_7%)] p-0 text-foreground sm:max-w-[262px]"
           style={{ width: `min(${SIDEBAR_WIDTH}px, 85vw)` }}
         >
-          <PinnedSidebarHeader onClose={() => setMobileOpen(false)} />
+          <PinnedSidebarHeader
+            componentCount={navItems.length}
+            onClose={() => setMobileOpen(false)}
+          />
           <SidebarList items={navItems} activeHref={current.href} surface="background" />
         </SheetContent>
       </Sheet>

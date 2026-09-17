@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-16T16:14:18.688Z",
+  "updatedAt": "2026-09-17T16:50:14.540Z",
   "previewBackground": {
     "light": "hsl(0 0% 100%)",
     "dark": "#f5f5f5"
@@ -10,5 +10,7 @@
   "showHint": false,
   "hintKind": "click",
   "hintHeading": "",
-  "hintDescription": ""
+  "hintDescription": "",
+  "posterUrl": "https://cdn.uselayouts.com/components/folder-interaction/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/folder-interaction/video.mp4"
 }
