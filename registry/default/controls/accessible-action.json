@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-16T19:14:26.098Z",
+  "updatedAt": "2026-09-17T17:54:50.934Z",
   "previewBackground": {
     "light": "#212121",
     "dark": "#212121"
@@ -28,5 +28,7 @@
     "scale": 70,
     "items": []
   },
-  "hintTop": 110
+  "hintTop": 110,
+  "posterUrl": "https://cdn.uselayouts.com/components/accessible-action/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/accessible-action/video.mp4"
 }
