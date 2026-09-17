@@ -111,7 +111,7 @@ function StackCard({
         style={{ y: wrapY, scale: wrapScale, transformOrigin: "50% 100%" }}
       >
         <motion.article
-          className="relative h-[min(72dvh,520px)] w-full overflow-hidden rounded-[28px] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_50px_-24px_rgba(0,0,0,0.55)]"
+          className="relative h-[min(72dvh,520px)] w-full overflow-hidden rounded-[28px]"
           style={{
             y: innerY,
             rotateX: innerRx,
@@ -132,7 +132,7 @@ function StackCard({
             aria-hidden
           />
           <div className="relative flex h-full flex-col justify-between p-8 text-white md:p-10">
-            <p className="m-0 font-mono text-lg font-medium tabular-nums tracking-[0.06em]">
+            <p className="m-0 text-[clamp(2.75rem,7vw,4.5rem)] font-light leading-none tabular-nums tracking-[-0.04em]">
               {card.index}
             </p>
             <div className="flex max-w-[34rem] flex-col gap-3">

@@ -17,11 +17,20 @@
     "imageUrl4": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1600&q=85"
   },
   "disabled": [],
-  "updatedAt": "2026-08-27T12:25:34.622Z",
-  "previewBackground": "#e5e5e0",
+  "updatedAt": "2026-09-17T17:07:10.903Z",
+  "previewBackground": {
+    "light": "#e5e5e0",
+    "dark": "#e5e5e0"
+  },
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "hintTop": 80,
+  "showHint": false,
+  "hintKind": "click",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false
 }

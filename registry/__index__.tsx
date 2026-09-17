@@ -684,19 +684,19 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "rollingcardstack": {
-    name: "rollingcardstack",
+  "rolling-card-stack": {
+    name: "rolling-card-stack",
     description: "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{
-      path: "registry/default/example/rollingcardstack.tsx",
+      path: "registry/default/example/rolling-card-stack.tsx",
       type: "registry:component",
       target: ""
     }],
     component: React.lazy(async () => {
-      const mod = await import("@/registry/default/example/rollingcardstack.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "rollingcardstack"
+      const mod = await import("@/registry/default/example/rolling-card-stack.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "rolling-card-stack"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

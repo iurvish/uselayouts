@@ -50,9 +50,8 @@ export function OpenComponentView({
         <OpenPreview
           name={data.slug}
           hintTop={data.hintTop}
-          hint={data.previewHint}
+          hint={stage ? null : data.previewHint}
           hintTone={hintTone}
-          hideHintOnScroll={stage}
         />
       </main>
 

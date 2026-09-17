@@ -86,7 +86,7 @@ const SEEDS: Seed[] = [
   { slug: "logoshift", title: "LogoShift", description: "Logos that trade places.", category: "Display" },
   { slug: "polaroid-drag", title: "Polaroid Drag", description: "Photos that stack and tilt.", category: "Display" },
   { slug: "pop-tilt-cards", title: "Pop Tilt Cards", description: "A deck that pops toward the cursor.", category: "Display" },
-  { slug: "rollingcardstack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
+  { slug: "rolling-card-stack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
   { slug: "scroll-stack-deck", title: "Scroll Stack Deck", description: "Cards that stack as you scroll.", category: "Display" },
   { slug: "stack-scroll-reveal", title: "Stack Scroll Reveal", description: "Cards that peel off a stack as you scroll.", category: "Display" },
   { slug: "perspective-text-scroll", title: "Perspective Text Scroll", description: "Text that tilts through scroll perspective.", category: "Display" },

@@ -706,9 +706,9 @@
       ]
     },
     {
-      "name": "rollingcardstack",
+      "name": "rolling-card-stack",
       "type": "registry:component",
-      "title": "RollingCardStack",
+      "title": "Rolling Card Stack",
       "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
       "dependencies": [
         "motion",
@@ -717,7 +717,7 @@
       ],
       "files": [
         {
-          "path": "registry/default/example/rollingcardstack.tsx",
+          "path": "registry/default/example/rolling-card-stack.tsx",
           "type": "registry:component"
         }
       ]

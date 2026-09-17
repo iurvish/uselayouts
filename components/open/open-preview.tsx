@@ -13,15 +13,12 @@ export function OpenPreview({
   hintTop,
   hint,
   hintTone = "dark",
-  hideHintOnScroll = false,
 }: {
   name: string;
   className?: string;
   hintTop?: number;
   hint?: ResolvedPreviewHint | null;
   hintTone?: "dark" | "light";
-  /** Stage/fullscreen only: fade the hint as the preview scrolls. */
-  hideHintOnScroll?: boolean;
 }) {
   const Component = Index[name]?.component as React.ComponentType<{ size?: string }> | undefined;
   // Tall sticky demos that scroll <main> must size to content, not the viewport.
@@ -66,7 +63,7 @@ export function OpenPreview({
           heading={hint.heading}
           description={hint.description}
           tone={hintTone}
-          hideOnScroll={hideHintOnScroll || hint.hideOnScroll}
+          hideOnScroll={hint.hideOnScroll}
           className={fill ? "h-full" : "h-auto"}
         >
           {inner}

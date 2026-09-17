@@ -10,7 +10,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "logoshift",
   "polaroid-drag",
   "pop-tilt-cards",
-  "rollingcardstack",
+  "rolling-card-stack",
   "scroll-stack-deck",
   "stack-scroll-reveal",
   "perspective-text-scroll",
