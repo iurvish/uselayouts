@@ -552,6 +552,23 @@
       ]
     },
     {
+      "name": "holographic-referral-card",
+      "type": "registry:component",
+      "title": "Holographic Referral Card",
+      "description": "A dark invite card that tilts in 3D with the pointer. A holographic glow follows. Touch stays still. Tab for a quiet glow.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/holographic-referral-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "infinite-grid",
       "type": "registry:component",
       "title": "Infinite Canvas",

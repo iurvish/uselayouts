@@ -1,0 +1,50 @@
+---
+title: Holographic Referral Card
+description: A dark invite card that tilts in 3D with the pointer. A holographic glow follows. Touch stays still. Tab for a quiet glow.
+---
+
+## Features
+
+- **Pointer tilt**: `rotateX`, `rotateY`, and `translateZ` spring from the pointer.
+- **Holographic glow**: A radial overlay tracks the pointer with `mix-blend-overlay`.
+- **Fine pointer only**: Touch does not drive the tilt.
+- **Keyboard**: Focus reveals the glow. Blur resets the card.
+- **Reduced motion**: The transform stays put. The card still works.
+
+Needs `motion`. This is a visual invite, not a form.
+
+## Usage
+
+```tsx
+import HolographicReferralCard from "@/components/holographic-referral-card";
+
+export default function Example() {
+  return (
+    <HolographicReferralCard
+      image="https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg"
+      imageAlt="Invite background"
+      title="Comet"
+      description="#diip3sh"
+      secondLogoHref="https://x.com/diip3sh"
+    />
+  );
+}
+```
+
+## Customize
+
+- **Image**: `image` and `imageAlt`. The frame is `aspect-[3/4]` with `object-cover`.
+- **Logos**: `logo` and `secondLogo` take a URL string, `{ src, alt, className }`, or a node. The X link uses `secondLogoHref`.
+- **Copy**: `title` on the left, `description` on the right. Both truncate.
+- **Shadow**: The stacked `shadow-[…]` on the article. Soften or shorten the last two layers.
+- **Tilt**: `(yProgress - 0.5) * 20` and `(xProgress - 0.5) * -20`. Raise 20 for more lean. `translateZ` is the lift.
+- **Glow**: The `rgba(255,255,255,0.9)` stop. Lower it to quiet the overlay.
+- **Spring**: `stiffness: 260`, `damping: 28`, `mass: 0.7`.
+
+## Where to use
+
+- Referral and invite cards
+- Portfolio project tiles
+- Membership or drop passes
+- Profile and credit cards
+- Product launches

@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#eceff2",
+    "dark": "#0c0c0d"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Move the pointer",
+  "hintDescription": "The card tilts toward the pointer. A holographic glow follows. Touch stays still. Tab to see a quiet glow."
+}
