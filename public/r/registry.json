@@ -740,6 +740,27 @@
       ]
     },
     {
+      "name": "prompt-box",
+      "type": "registry:component",
+      "title": "Prompt Box",
+      "description": "A collapsed chat composer that expands into a textarea with a model menu and send control.",
+      "dependencies": [
+        "motion",
+        "@base-ui/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/prompt-box.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/prompt-box-icons.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "rolling-card-stack",
       "type": "registry:component",
       "title": "Rolling Card Stack",

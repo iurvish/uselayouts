@@ -710,6 +710,28 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "prompt-box": {
+    name: "prompt-box",
+    description: "A collapsed chat composer that expands into a textarea with a model menu and send control.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/prompt-box.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/prompt-box-icons.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/prompt-box-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "prompt-box"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "rolling-card-stack": {
     name: "rolling-card-stack",
     description: "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",

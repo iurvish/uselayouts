@@ -1,0 +1,32 @@
+---
+title: Prompt Box
+description: A collapsed chat composer that expands into a textarea with a model menu, send control, and a hover preview of the selected model.
+---
+
+## Features
+
+- **Collapsed to compose**: One tap opens a growing textarea. Empty blur snaps it back.
+- **Model menu**: Featured options stagger in. The highlight slides under the pointer.
+- **Send and voice**: The send control scales in. Empty shows a mic, typed text swaps in an arrow.
+- **Hover tell**: On a fine pointer, the collapsed field shows the selected model with a spin-in icon.
+- **Reduced motion**: Springs and spins become short fades. The composer still opens and submits.
+
+## Usage
+
+Needs `@base-ui/react`. Pass `settingGroups` for the model menu and `onSubmit` for send.
+
+```tsx
+import PromptBox from "@/components/prompt-box";
+
+export default function Example() {
+  return <PromptBox />;
+}
+```
+
+## Where to use
+
+- Chat and agent composers
+- Search bars that grow into prompts
+- Support widgets
+- AI playgrounds
+- Command boxes with a model picker
