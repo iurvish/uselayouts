@@ -112,7 +112,7 @@ export function BrowsePreview({
           loop
           playsInline
           autoPlay
-          preload="metadata"
+          preload={eager ? "auto" : "metadata"}
           draggable={false}
           onLoadedData={(event) => {
             setReady(true);

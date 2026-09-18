@@ -20,9 +20,10 @@ export function maxConcurrentVideos(nav?: NavHint | null) {
   const cores = nav.hardwareConcurrency ?? 8;
   const memory = nav.deviceMemory ?? 8;
   // Hardware decoders are scarce; compositor cost is ~linear in playing count.
-  if (cores <= 4 || memory <= 4) return 2;
-  if (cores <= 8) return 4;
-  return 6;
+  // Predict ring needs spare slots so clips are already running when they enter.
+  if (cores <= 4 || memory <= 4) return 4;
+  if (cores <= 8) return 8;
+  return 10;
 }
 
 function maxConcurrent() {
@@ -79,16 +80,17 @@ export function releasePlayback(video: HTMLVideoElement) {
 export const PRIORITY_VISIBLE = 100;
 export const PRIORITY_HOVER = 1000;
 
-/** Higher when closer to the viewport center (canvas). */
+/** Higher when closer to the viewport center. `pad` is the predict ring. */
 export function priorityFromCenter(
   tileCenterX: number,
   tileCenterY: number,
   viewW: number,
   viewH: number,
+  pad = 0,
 ) {
   const dx = tileCenterX - viewW / 2;
   const dy = tileCenterY - viewH / 2;
   const dist = Math.hypot(dx, dy);
-  const maxDist = Math.hypot(viewW / 2, viewH / 2) || 1;
+  const maxDist = Math.hypot(viewW / 2 + pad, viewH / 2 + pad) || 1;
   return PRIORITY_VISIBLE + Math.round((1 - Math.min(dist / maxDist, 1)) * 900);
 }

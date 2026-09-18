@@ -30,7 +30,7 @@ type TileSpec = {
   row: number;
   index: number;
   height: number;
-  /** video = intersects viewport (green); image = overscan ring (yellow) poster-only. */
+  /** video = viewport + four-sided predict ring; image = farther poster overscan. */
   media: "video" | "image";
   /** Quantized playback priority so the pool rebalances as the camera moves. */
   priority: number;
@@ -39,19 +39,22 @@ type TileSpec = {
 /**
  * Camera-space infinite canvas (tldraw / Figma style):
  * tiles sit in world space; the stage takes the camera as one `translate3d`
- * so pan is a single compositor update. In-view tiles keep playing; the
- * overscan ring is poster-only; farther tiles stay unmounted.
+ * so pan is a single compositor update. Videos play in the viewport plus a
+ * four-sided predict ring, so a clip is already running when it comes on
+ * screen. Farther overscan is poster-only; beyond that, unmounted.
  */
 const DRAG_THRESHOLD = 8;
 const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
-/** After pan/coast stops: remount tiles + resume video. */
-const SETTLE_MS = 180;
-/** While panning: remount posters this often so new areas never feel empty. */
-const PAN_SYNC_MS = 120;
-/** Yellow ring: mount posters ahead of the viewport. Farther tiles stay unmounted (red). */
-const IMAGE_OVERSCAN = 720;
-const IMAGE_OVERSCAN_LOW = 280;
+const SETTLE_MS = 160;
+const PAN_SYNC_MS = 80;
+const PAN_SYNC_MS_LOW = 140;
+/** Four-sided predict ring: start video before the tile hits the viewport. */
+const VIDEO_PREDICT = 520;
+const VIDEO_PREDICT_LOW = 300;
+/** Poster ring beyond predict. */
+const IMAGE_OVERSCAN = 880;
+const IMAGE_OVERSCAN_LOW = 480;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
@@ -193,6 +196,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     const camX = camera.current.x;
     const camY = camera.current.y;
     const overscan = quality === "low" ? IMAGE_OVERSCAN_LOW : IMAGE_OVERSCAN;
+    const predict = quality === "low" ? VIDEO_PREDICT_LOW : VIDEO_PREDICT;
     const viewLeft = -overscan;
     const viewRight = w + overscan;
     const viewTop = -overscan;
@@ -227,7 +231,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
           if (x + cardW < viewLeft || x > viewRight) continue;
           if (y + height < viewTop || y > viewBottom) continue;
 
-          const want = canvasMediaTier(x, y, cardW, height, w, h, overscan);
+          const want = canvasMediaTier(x, y, cardW, height, w, h, overscan, predict);
           if (!want) continue;
 
           const prev = previous?.get(`${col}:${row}`);
@@ -235,14 +239,9 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
           const rawPriority =
             media === "video"
-              ? priorityFromCenter(x + cardW / 2, y + height / 2, w, h)
+              ? priorityFromCenter(x + cardW / 2, y + height / 2, w, h, predict)
               : 0;
-          // Keep a playing tile's bucket during pan so the pool doesn't
-          // pause one clip to start another mid-gesture.
-          const priority =
-            frozen && prev?.media === "video"
-              ? (prev.priority ?? 0)
-              : Math.round(rawPriority / 80) * 80;
+          const priority = Math.round(rawPriority / 80) * 80;
 
           next.push({
             key: `${col}:${row}`,
@@ -283,11 +282,9 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
   /** Throttled remount during motion so newly visible tiles appear. */
   const syncVisibleThrottled = React.useCallback(() => {
-    // ponytail: low-end skips remounts while the camera is moving (empty
-    // edges until settle) so image decode never contends with the pan.
-    if (mediaFrozen.current && quality === "low") return;
+    const gap = quality === "low" ? PAN_SYNC_MS_LOW : PAN_SYNC_MS;
     const now = performance.now();
-    if (now - lastPanSync.current < PAN_SYNC_MS) return;
+    if (now - lastPanSync.current < gap) return;
     lastPanSync.current = now;
     syncVisible();
   }, [quality, syncVisible]);
@@ -512,6 +509,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     camera.current.y += dy;
     velocity.current.x = velocity.current.x * 0.55 + dx * 0.45;
     velocity.current.y = velocity.current.y * 0.55 + dy * 0.45;
+    applyCamera();
   };
 
   const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {

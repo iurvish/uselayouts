@@ -1,6 +1,8 @@
 /**
- * Canvas progressive media: green = viewport (video), yellow = overscan (poster),
- * red = outside overscan (unmounted).
+ * Canvas progressive media:
+ * green = viewport + predict ring (video playing),
+ * yellow = farther overscan (poster only),
+ * red = unmounted.
  */
 export function canvasMediaTier(
   x: number,
@@ -10,21 +12,25 @@ export function canvasMediaTier(
   viewW: number,
   viewH: number,
   imageOverscan: number,
+  videoPredict = 0,
 ): "video" | "image" | null {
   if (x + cardW < -imageOverscan || x > viewW + imageOverscan) return null;
   if (y + height < -imageOverscan || y > viewH + imageOverscan) return null;
-  const inViewport = x + cardW > 0 && x < viewW && y + height > 0 && y < viewH;
-  return inViewport ? "video" : "image";
+  const inPredict =
+    x + cardW > -videoPredict &&
+    x < viewW + videoPredict &&
+    y + height > -videoPredict &&
+    y < viewH + videoPredict;
+  return inPredict ? "video" : "image";
 }
 
-/** Pan/coast: keep in-view videos mounted; overscan stays poster-only. */
 export function canvasAllowVideo(media: "video" | "image") {
   return media === "video";
 }
 
 /**
- * During pan: on-screen tiles stay video (keep playing). Already-mounted
- * videos stay mounted so they don't flash a poster if they clip the edge.
+ * During pan: keep already-playing clips mounted, and start anything that
+ * has entered the predict ring so it is live before it hits the viewport.
  */
 export function canvasMediaWhilePanning(
   want: "video" | "image",
