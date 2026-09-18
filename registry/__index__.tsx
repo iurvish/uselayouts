@@ -632,7 +632,7 @@ export const Index: Record<string, any> = {
   },
   "overlapping-slider": {
     name: "overlapping-slider",
-    description: "A fanned card stack you drag sideways — cards tuck under each other and tilt as they leave.",
+    description: "A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{

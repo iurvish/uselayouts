@@ -1,7 +1,20 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import React, { useLayoutEffect, useRef, type RefObject } from "react";
+import { useMotionValue, type MotionValue } from "framer-motion";
+
+/** Piecewise linear mix. Stops may sit outside 0–1; we don't clamp them into WAAPI offsets. */
+export function mix(progress: number, stops: number[], values: number[]) {
+  if (progress <= stops[0]) return values[0];
+  for (let i = 1; i < stops.length; i++) {
+    if (progress <= stops[i]) {
+      const span = stops[i] - stops[i - 1];
+      const t = span === 0 ? 1 : (progress - stops[i - 1]) / span;
+      return values[i - 1] + (values[i] - values[i - 1]) * t;
+    }
+  }
+  return values[values.length - 1];
+}
 
 export interface CardItem {
   id: string | number;
@@ -17,6 +30,8 @@ export interface CardItem {
 export interface Scroll3DCardStackProps {
   items?: CardItem[];
   className?: string;
+  /** Scrollport to track. Omit to follow the page. */
+  containerRef?: RefObject<HTMLElement | null>;
 }
 
 const DEFAULT_CARDS: CardItem[] = [
@@ -66,92 +81,47 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card, index, totalCards, progress }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const accentRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const step = 1 / (totalCards - 1 || 1);
-  const targetProgress = index * step;
+  const at = index * step;
 
-  // Calculate transform ranges relative to card position
-  // Earlier cards move up, rotate back, blur, and fade out
-  // Later cards sit stacked underneath in 3D depth
-  const translateY = useTransform(
-    progress,
-    [
-      targetProgress - step,
-      targetProgress,
-      targetProgress + step * 0.5,
-      targetProgress + step,
-    ],
-    [50, 0, -120, -320]
-  );
-
-  const translateZ = useTransform(
-    progress,
-    [
-      targetProgress - step,
-      targetProgress,
-      targetProgress + step * 0.5,
-      targetProgress + step,
-    ],
-    [-150, 0, 80, 140]
-  );
-
-  const rotateX = useTransform(
-    progress,
-    [targetProgress, targetProgress + step * 0.6, targetProgress + step],
-    [0, -25, -64]
-  );
-
-  const scale = useTransform(
-    progress,
-    [
-      targetProgress - step,
-      targetProgress,
-      targetProgress + step * 0.5,
-      targetProgress + step,
-    ],
-    [0.9, 1, 0.96, 0.92]
-  );
-
-  const opacity = useTransform(
-    progress,
-    [
-      targetProgress - step,
-      targetProgress - step * 0.3,
-      targetProgress + step * 0.5,
-      targetProgress + step * 0.9,
-    ],
-    [0.4, 1, 0.9, 0]
-  );
-
-  const blur = useTransform(
-    progress,
-    [targetProgress, targetProgress + step * 0.5, targetProgress + step],
-    [0, 2, 9]
-  );
-
-  const filter = useTransform(blur, (v) => `blur(${v}px)`);
-
-  const accentOpacity = useTransform(
-    progress,
-    [
-      targetProgress - step * 0.5,
-      targetProgress,
-      targetProgress + step * 0.5,
-    ],
-    [0, 1, 0]
-  );
+  // ponytail: write styles by hand so Motion never calls element.animate()
+  // (nested preview scroll + filter/transform keyframes crash Chrome WAAPI)
+  useLayoutEffect(() => {
+    const yStops = [at - step, at, at + step * 0.5, at + step];
+    const paint = (p: number) => {
+      const el = cardRef.current;
+      if (!el) return;
+      const y = mix(p, yStops, [50, 0, -120, -320]);
+      const z = mix(p, yStops, [-150, 0, 80, 140]);
+      const rx = mix(p, [at, at + step * 0.6, at + step], [0, -25, -64]);
+      const s = mix(p, yStops, [0.9, 1, 0.96, 0.92]);
+      const op = mix(
+        p,
+        [at - step, at - step * 0.3, at + step * 0.5, at + step * 0.9],
+        [0.4, 1, 0.9, 0],
+      );
+      const blur = mix(p, [at, at + step * 0.5, at + step], [0, 2, 9]);
+      const accent = mix(p, [at - step * 0.5, at, at + step * 0.5], [0, 1, 0]);
+      el.style.transform = `translateY(${y}px) translateZ(${z}px) rotateX(${rx}deg) scale(${s})`;
+      el.style.opacity = String(op);
+      el.style.filter = `blur(${blur}px)`;
+      if (accentRef.current) accentRef.current.style.opacity = String(accent);
+      if (barRef.current) barRef.current.style.opacity = String(accent);
+    };
+    paint(progress.get());
+    return progress.on("change", paint);
+  }, [progress, at, step]);
 
   const formattedIndex = String(index + 1).padStart(2, "0");
   const formattedTotal = String(totalCards).padStart(2, "0");
 
   return (
-    <motion.div
+    <div
+      ref={cardRef}
       style={{
-        translateY,
-        translateZ,
-        rotateX,
-        scale,
-        opacity,
-        filter,
         backgroundColor: card.backgroundColor || "rgb(10, 10, 10)",
         zIndex: totalCards - index,
       }}
@@ -171,11 +141,11 @@ const Card: React.FC<CardProps> = ({ card, index, totalCards, progress }) => {
       </div>
 
       {/* Top Accent Dot */}
-      <motion.div
+      <div
+        ref={accentRef}
         style={{
           backgroundColor: card.accentColor,
           boxShadow: `0 0 20px ${card.accentColor}, 0 0 8px ${card.accentColor}`,
-          opacity: accentOpacity,
         }}
         className="absolute top-8 sm:top-10 md:top-12 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full pointer-events-none"
       />
@@ -191,15 +161,15 @@ const Card: React.FC<CardProps> = ({ card, index, totalCards, progress }) => {
       </div>
 
       {/* Bottom Accent Bar */}
-      <motion.div
+      <div
+        ref={barRef}
         style={{
           backgroundColor: card.accentColor,
           boxShadow: `0 0 14px ${card.accentColor}`,
-          opacity: accentOpacity,
         }}
         className="w-10 h-0.5 rounded-full pointer-events-none"
       />
-    </motion.div>
+    </div>
   );
 };
 
@@ -212,41 +182,60 @@ function StackDot({
   total: number;
   progress: MotionValue<number>;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
   const step = 1 / (total - 1 || 1);
   const target = index * step;
-  const dotScale = useTransform(
-    progress,
-    [target - step * 0.5, target, target + step * 0.5],
-    [0.9, 2.2, 0.9]
-  );
-  const dotOpacity = useTransform(
-    progress,
-    [target - step * 0.5, target, target + step * 0.5],
-    [0.3, 0.95, 0.3]
-  );
 
-  return (
-    <motion.div
-      style={{ scale: dotScale, opacity: dotOpacity }}
-      className="h-1 w-1 rounded-full bg-white"
-    />
-  );
+  useLayoutEffect(() => {
+    const stops = [target - step * 0.5, target, target + step * 0.5];
+    const paint = (p: number) => {
+      const el = ref.current;
+      if (!el) return;
+      el.style.transform = `scale(${mix(p, stops, [0.9, 2.2, 0.9])})`;
+      el.style.opacity = String(mix(p, stops, [0.3, 0.95, 0.3]));
+    };
+    paint(progress.get());
+    return progress.on("change", paint);
+  }, [progress, target, step]);
+
+  return <div ref={ref} className="h-1 w-1 rounded-full bg-white" />;
 }
 
 export const Scroll3DCardStack: React.FC<Scroll3DCardStackProps> = ({
   items = DEFAULT_CARDS,
   className = "",
+  containerRef,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const scroller = containerRef?.current ?? null;
+
+    const update = () => {
+      const viewH = scroller ? scroller.clientHeight : window.innerHeight;
+      const rect = track.getBoundingClientRect();
+      const parentTop = scroller ? scroller.getBoundingClientRect().top : 0;
+      const range = rect.height - viewH;
+      const p = range <= 0 ? 0 : -(rect.top - parentTop) / range;
+      scrollYProgress.set(Math.min(1, Math.max(0, p)));
+    };
+
+    const node: EventTarget = scroller ?? window;
+    node.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+    return () => {
+      node.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [containerRef, scrollYProgress]);
 
   return (
     <div
-      ref={containerRef}
+      ref={trackRef}
       style={{ height: `${items.length * 100}vh` }}
       className={`relative w-full bg-black ${className}`}
     >

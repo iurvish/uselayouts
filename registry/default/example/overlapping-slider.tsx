@@ -21,6 +21,16 @@ export function snapSliderIndex(
   return Math.max(0, Math.min(index, total - 1));
 }
 
+/** diff = index − activeExact. Cards to the left recede; the rest stay put. */
+export function cardLeave(diff: number) {
+  const t = Math.min(1, Math.max(0, -diff));
+  return {
+    scale: 1 - t * 0.16,
+    y: t * 36,
+    rotate: 0,
+  };
+}
+
 export type OverlappingSliderProps<T> = {
   items?: T[];
   renderItem?: (item: T, index: number, isActive: boolean) => ReactNode;
@@ -41,13 +51,13 @@ export function OverlappingSlider<T>({
   items,
   renderItem,
   children,
-  cardWidth = 260,
-  cardHeight = 360,
-  overlapFactor = 0.5,
-  cardGap = 16,
-  maxRotation = 4,
-  transformOrigin = "50% 80%",
-  showDots = true,
+  cardWidth = 340,
+  cardHeight = 460,
+  overlapFactor = 0.04,
+  cardGap = 18,
+  maxRotation = 0,
+  transformOrigin = "50% 90%",
+  showDots = false,
   showArrows = true,
   className = "",
   onActiveChange,
@@ -73,7 +83,7 @@ export function OverlappingSlider<T>({
     offsetRef.current = x;
     const track = trackRef.current;
     if (!track) return;
-    const transition = animate ? "transform 300ms ease-out" : "none";
+    const transition = animate ? "transform 380ms cubic-bezier(0.22, 1, 0.36, 1)" : "none";
     track.style.transition = transition;
     track.style.setProperty("--ox", `${x}px`);
     const activeExact = -x / step;
@@ -81,14 +91,15 @@ export function OverlappingSlider<T>({
     for (let i = 0; i < track.children.length; i++) {
       const card = track.children[i] as HTMLElement;
       const diff = i - activeExact;
-      const rotate = Math.min(Math.max(diff * 1.6, -maxRotation), maxRotation);
-      const scale = Math.max(0.94, 1 - Math.abs(diff) * 0.03);
-      const y = Math.abs(diff) * 4;
+      const leave = cardLeave(diff);
+      const rotate = maxRotation
+        ? Math.min(Math.max(diff * 1.6, -maxRotation), maxRotation)
+        : 0;
       card.style.transition = transition;
-      card.style.zIndex = String(total - Math.abs(i - active));
-      card.style.setProperty("--y", `${y}px`);
+      card.style.zIndex = String(i);
+      card.style.setProperty("--y", `${leave.y}px`);
       card.style.setProperty("--r", `${rotate}deg`);
-      card.style.setProperty("--s", String(scale));
+      card.style.setProperty("--s", String(leave.scale));
     }
   };
 
@@ -144,10 +155,10 @@ export function OverlappingSlider<T>({
   };
 
   return (
-    <div className={`relative mx-auto flex w-full max-w-[880px] select-none flex-col ${className}`}>
+    <div className={`relative flex w-full select-none flex-col ${className}`}>
       <div
-        className="flex w-full cursor-grab touch-pan-y items-center overflow-hidden py-8 active:cursor-grabbing"
-        style={{ minHeight: cardHeight + 56 }}
+        className="flex w-full cursor-grab touch-pan-y items-center overflow-hidden py-10 active:cursor-grabbing"
+        style={{ minHeight: cardHeight + 72 }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -155,7 +166,7 @@ export function OverlappingSlider<T>({
       >
         <div
           ref={trackRef}
-          className="flex items-center pl-4 sm:pl-8"
+          className="flex items-end pl-8 sm:pl-12"
           style={{ transform: "translate3d(var(--ox, 0px), 0, 0)" }}
         >
           {Array.from({ length: total }, (_, index) => (
@@ -165,8 +176,8 @@ export function OverlappingSlider<T>({
               style={{
                 width: cardWidth,
                 height: cardHeight,
-                marginRight: -cardWidth * overlapFactor,
-                zIndex: total - index,
+                marginRight: cardGap - cardWidth * overlapFactor,
+                zIndex: index,
                 transformOrigin,
                 transform: "translateY(var(--y, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1))",
               }}
@@ -183,9 +194,27 @@ export function OverlappingSlider<T>({
       </div>
 
       {(showDots || showArrows) && (
-        <div className="mt-1 flex w-full items-center justify-between px-4 sm:px-8">
-          {showDots && (
+        <div className="mt-1 flex w-full items-center px-8 sm:px-12">
+          {showArrows && (
             <div className="flex items-center gap-2">
+              <ArrowButton
+                label="Previous"
+                disabled={activeIndex === 0}
+                onClick={() => goTo(activeIndex - 1)}
+              >
+                <ChevronLeft className="size-4" strokeWidth={2.25} />
+              </ArrowButton>
+              <ArrowButton
+                label="Next"
+                disabled={activeIndex === total - 1}
+                onClick={() => goTo(activeIndex + 1)}
+              >
+                <ChevronRight className="size-4" strokeWidth={2.25} />
+              </ArrowButton>
+            </div>
+          )}
+          {showDots && (
+            <div className="ml-auto flex items-center gap-2">
               {Array.from({ length: total }, (_, i) => (
                 <button
                   key={i}
@@ -199,24 +228,6 @@ export function OverlappingSlider<T>({
                   aria-label={`Go to slide ${i + 1}`}
                 />
               ))}
-            </div>
-          )}
-          {showArrows && (
-            <div className="ml-auto flex items-center gap-2">
-              <ArrowButton
-                label="Previous"
-                disabled={activeIndex === 0}
-                onClick={() => goTo(activeIndex - 1)}
-              >
-                <ChevronLeft className="size-[18px]" strokeWidth={2} />
-              </ArrowButton>
-              <ArrowButton
-                label="Next"
-                disabled={activeIndex === total - 1}
-                onClick={() => goTo(activeIndex + 1)}
-              >
-                <ChevronRight className="size-[18px]" strokeWidth={2} />
-              </ArrowButton>
             </div>
           )}
         </div>
@@ -242,7 +253,7 @@ function ArrowButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-10 items-center justify-center rounded-full border border-black/8 bg-white text-neutral-800 transition enabled:hover:scale-105 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
+      className="flex size-9 items-center justify-center rounded-full bg-[#dce7ee] text-neutral-500 transition enabled:hover:bg-[#cfdbe3] enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35"
     >
       {children}
     </button>
@@ -258,60 +269,57 @@ export type CardProfile = {
   gradient?: string;
 };
 
+const shot = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`;
+
 export const DEFAULT_PROFILES: CardProfile[] = [
   {
     id: "1",
     name: "Sophie Bennett",
     handle: "@sophie34",
     role: "Product Designer",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(212 123 91))",
+    image: shot("1635631414456-6a9dc5051a3d"),
+    gradient: "linear-gradient(transparent, rgb(232 141 122))",
   },
   {
     id: "2",
     name: "Luna Hart",
     handle: "@lunahart",
     role: "UI/UX Designer",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(184 212 91))",
+    image: shot("1525187030628-9bb40ba289f4"),
+    gradient: "linear-gradient(transparent, rgb(196 196 92))",
   },
   {
     id: "3",
     name: "Maya Rivera",
     handle: "@mayacodes",
     role: "Frontend Developer",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(153 209 255))",
+    image: shot("1488426862026-3ee34a7d66df"),
+    gradient: "linear-gradient(transparent, rgb(232 148 96))",
   },
   {
     id: "4",
     name: "Zoe Bennett",
     handle: "@zoe",
     role: "Product Designer",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(190 149 255))",
+    image: shot("1619785690726-89c6b3bd3849"),
+    gradient: "linear-gradient(transparent, rgb(156 122 214))",
   },
   {
     id: "5",
     name: "Isla Morgan",
     handle: "@islaui",
     role: "UI/UX Designer",
-    image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(255 175 90))",
+    image: shot("1469334031218-e382a71b716b"),
+    gradient: "linear-gradient(transparent, rgb(214 176 72))",
   },
   {
     id: "6",
     name: "Sofia Laurent",
     handle: "@itssofia",
     role: "Product Designer",
-    image:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
-    gradient: "linear-gradient(transparent, rgb(110 231 183))",
+    image: shot("1581044777550-4cfa60707c03"),
+    gradient: "linear-gradient(transparent, rgb(214 132 148))",
   },
 ];
 
@@ -319,12 +327,12 @@ export function ProfileCard({ card }: { card: CardProfile }) {
   const [following, setFollowing] = useState(false);
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[28px] bg-neutral-900 p-5">
+    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[40px] bg-neutral-900 p-5">
       <img
         src={card.image}
         alt=""
         draggable={false}
-        className="pointer-events-none absolute inset-0 size-full object-cover"
+        className="pointer-events-none absolute inset-0 size-full object-cover object-[50%_18%]"
       />
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
@@ -347,7 +355,7 @@ export function ProfileCard({ card }: { card: CardProfile }) {
             src={card.image}
             alt=""
             draggable={false}
-            className="size-11 shrink-0 rounded-full object-cover ring-2 ring-white/20"
+            className="size-11 shrink-0 rounded-full object-cover object-[50%_18%] ring-2 ring-white/20"
           />
           <div className="min-w-0 text-left">
             <div className="truncate text-sm font-medium text-white drop-shadow">{card.handle}</div>
@@ -360,7 +368,7 @@ export function ProfileCard({ card }: { card: CardProfile }) {
             e.stopPropagation();
             setFollowing((v) => !v);
           }}
-          className={`flex shrink-0 items-center gap-1.5 rounded-2xl px-3.5 py-2 text-xs font-medium shadow transition active:scale-95 ${
+          className={`flex shrink-0 items-center gap-1.5 rounded-2xl px-3.5 py-2 text-xs font-medium shadow transition active:scale-[0.96] ${
             following ? "bg-white/30 text-white backdrop-blur-md" : "bg-white text-black"
           }`}
         >
@@ -376,9 +384,14 @@ export function ProfileCard({ card }: { card: CardProfile }) {
 
 export default function OverlappingSliderDemo() {
   return (
-    <OverlappingSlider
-      items={DEFAULT_PROFILES}
-      renderItem={(card) => <ProfileCard card={card} />}
-    />
+    <div className="flex h-full w-full flex-col justify-center bg-white">
+      <p className="px-8 pt-6 text-center font-mono text-[13px] font-normal uppercase leading-tight tracking-tight text-[#FF9180]">
+        Turn any custom component into an overlapping slider.
+      </p>
+      <OverlappingSlider
+        items={DEFAULT_PROFILES}
+        renderItem={(card) => <ProfileCard card={card} />}
+      />
+    </div>
   );
 }

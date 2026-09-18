@@ -644,7 +644,7 @@
       "name": "overlapping-slider",
       "type": "registry:component",
       "title": "Overlapping Slider",
-      "description": "A fanned card stack you drag sideways — cards tuck under each other and tilt as they leave.",
+      "description": "A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.",
       "dependencies": [
         "lucide-react"
       ],

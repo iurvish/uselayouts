@@ -1,19 +1,19 @@
 ---
 title: Overlapping Slider
-description: A fanned card stack you drag sideways — each card tucks under the next and tilts as it leaves.
+description: A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.
 ---
 
 ## Features
 
-- **Overlap**: Cards sit at a negative margin so each one covers most of the last. Tune `overlapFactor` (0.1–0.85).
-- **Drag then snap**: Pointer drag with a flick threshold — a fast swipe jumps a card, a slow one settles on the nearest.
-- **Tilt as they leave**: Off-center cards rotate from the bottom-left, shrink a little, and drop.
-- **Dots and arrows**: Jump, or step one at a time. Hide either with `showDots` / `showArrows`.
-- **Any card**: Pass `children`, or `items` plus `renderItem`. The demo uses portrait cards; swap in products, quotes, anything.
+- **Landing width**: Cards are 340×460 and run edge to edge. Four sit on a typical desktop; the next one peeks.
+- **Stable until you move**: No tilt at rest. Drag, click a card, or use the arrows.
+- **Left card recedes**: The card you leave behind scales down and drops back. The rest stay put.
+- **Arrows on the left**: Step one at a time. Dots are off by default; turn them on with `showDots`.
+- **Any card**: Pass `children`, or `items` plus `renderItem`.
 
 ## Usage
 
-Needs a wide stage so the fan can breathe (the demo cards are 260×360). Drop in your own slides, or keep the built-in profiles.
+Give it the full page width. Don’t drop it in a narrow column.
 
 ```tsx
 import OverlappingSlider from "@/components/overlapping-slider";
@@ -31,16 +31,15 @@ import { OverlappingSlider, ProfileCard } from "@/components/overlapping-slider"
 <OverlappingSlider
   items={profiles}
   renderItem={(card) => <ProfileCard card={card} />}
-  cardWidth={260}
-  cardHeight={360}
-  overlapFactor={0.5}
+  cardWidth={340}
+  cardHeight={460}
 />
 ```
 
 ## Where to use
 
+- Marketing homepages
 - Team or speaker lineups
-- Profile or dating browse
 - Lookbooks
 - Testimonial portraits
-- Product pickers that should feel like a stack, not a strip
+- Product pickers that should feel like a row, not a strip
