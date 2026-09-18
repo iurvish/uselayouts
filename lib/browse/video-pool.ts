@@ -2,11 +2,15 @@
  * Keeps only the most relevant previews decoding at once. Callers should only
  * register tiles that are actually on-screen; the pool then plays the top slice
  * and pauses the rest so a dense canvas doesn't melt the GPU.
+ *
+ * Phones often report 6–8 cores and omit deviceMemory, so core-count alone
+ * treats iOS as a desktop. Touch + saveData are the real budget signal.
  */
 
 type NavHint = {
   hardwareConcurrency?: number;
   deviceMemory?: number;
+  maxTouchPoints?: number;
   connection?: { saveData?: boolean };
 };
 
@@ -14,21 +18,55 @@ const candidates = new Map<HTMLVideoElement, number>();
 let frame = 0;
 let watching = false;
 
-export function maxConcurrentVideos(nav?: NavHint | null) {
+export function isConstrainedDevice(
+  nav?: NavHint | null,
+  win?: { matchMedia: (q: string) => { matches: boolean }; innerWidth: number } | null,
+) {
+  if (!nav) return false;
+  if (nav.connection?.saveData) return true;
+  if ((nav.deviceMemory ?? Infinity) <= 4) return true;
+  if ((nav.hardwareConcurrency ?? 8) <= 4) return true;
+  if (!win) return false;
+  if (win.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+  if (win.matchMedia("(pointer: coarse)").matches) return true;
+  if ((nav.maxTouchPoints ?? 0) > 0 && win.innerWidth < 900) return true;
+  return false;
+}
+
+export function maxConcurrentVideos(
+  nav?: NavHint | null,
+  constrained = false,
+) {
   if (!nav) return 4;
   if (nav.connection?.saveData) return 1;
+  if (constrained) return 2;
   const cores = nav.hardwareConcurrency ?? 8;
   const memory = nav.deviceMemory ?? 8;
-  // Hardware decoders are scarce; compositor cost is ~linear in playing count.
-  // Predict ring needs spare slots so clips are already running when they enter.
-  if (cores <= 4 || memory <= 4) return 4;
-  if (cores <= 8) return 8;
-  return 10;
+  if (cores <= 4 || memory <= 4) return 2;
+  if (cores <= 8) return 6;
+  return 8;
+}
+
+/** How many <video> nodes may exist. Paused decoders still cost RAM on iOS. */
+export function maxMountedVideos(
+  nav?: NavHint | null,
+  constrained = false,
+) {
+  if (constrained || nav?.connection?.saveData) return 3;
+  return Math.max(maxConcurrentVideos(nav, constrained) + 2, 8);
+}
+
+function constrainedNow() {
+  if (typeof navigator === "undefined") return false;
+  return isConstrainedDevice(
+    navigator as NavHint,
+    typeof window === "undefined" ? null : window,
+  );
 }
 
 function maxConcurrent() {
   if (typeof navigator === "undefined") return 4;
-  return maxConcurrentVideos(navigator as NavHint);
+  return maxConcurrentVideos(navigator as NavHint, constrainedNow());
 }
 
 function ensureWatch() {

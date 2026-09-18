@@ -13,10 +13,11 @@ import {
   canvasAllowVideo,
   canvasMediaTier,
   canvasMediaWhilePanning,
+  capVideoTiles,
 } from "@/lib/browse/canvas-media-tier";
 import { posterMediaHeight, tileHeight, tileHeightFor } from "@/lib/browse/media";
 import { useRenderQuality } from "@/lib/browse/use-render-quality";
-import { priorityFromCenter } from "@/lib/browse/video-pool";
+import { maxMountedVideos, priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
 
 type InfiniteCanvasProps = {
@@ -48,13 +49,13 @@ const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
 const SETTLE_MS = 160;
 const PAN_SYNC_MS = 80;
-const PAN_SYNC_MS_LOW = 140;
+const PAN_SYNC_MS_LOW = 200;
 /** Four-sided predict ring: start video before the tile hits the viewport. */
 const VIDEO_PREDICT = 520;
-const VIDEO_PREDICT_LOW = 300;
+const VIDEO_PREDICT_LOW = 96;
 /** Poster ring beyond predict. */
 const IMAGE_OVERSCAN = 880;
-const IMAGE_OVERSCAN_LOW = 480;
+const IMAGE_OVERSCAN_LOW = 220;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
@@ -235,7 +236,9 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
           if (!want) continue;
 
           const prev = previous?.get(`${col}:${row}`);
-          const media = frozen ? canvasMediaWhilePanning(want, prev?.media) : want;
+          const media = frozen
+            ? canvasMediaWhilePanning(want, prev?.media, quality === "low")
+            : want;
 
           const rawPriority =
             media === "video"
@@ -257,7 +260,11 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     }
 
     next.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
-    return next;
+    const mountCap = maxMountedVideos(
+      typeof navigator === "undefined" ? undefined : navigator,
+      quality === "low",
+    );
+    return capVideoTiles(next, mountCap);
   }, [getPack, quality]);
 
   const applyCamera = React.useCallback(() => {

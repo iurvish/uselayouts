@@ -29,13 +29,36 @@ export function canvasAllowVideo(media: "video" | "image") {
 }
 
 /**
- * During pan: keep already-playing clips mounted, and start anything that
- * has entered the predict ring so it is live before it hits the viewport.
+ * During pan: keep already-playing clips mounted.
+ * `noNewVideo` (phones): never start a new decoder mid-gesture, and drop
+ * clips that left the predict ring so video nodes don't accumulate.
  */
 export function canvasMediaWhilePanning(
   want: "video" | "image",
   previous?: "video" | "image",
+  noNewVideo = false,
 ): "video" | "image" {
+  if (noNewVideo) return previous === "video" && want === "video" ? "video" : "image";
   if (want === "video" || previous === "video") return "video";
   return "image";
+}
+
+/** Keep only the highest-priority video tiles; the rest become posters. */
+export function capVideoTiles<T extends { media: "video" | "image"; priority: number }>(
+  tiles: T[],
+  max: number,
+): T[] {
+  if (max <= 0) return tiles.map((tile) =>
+    tile.media === "video" ? { ...tile, media: "image" as const, priority: 0 } : tile,
+  );
+  const videos = tiles
+    .filter((tile) => tile.media === "video")
+    .sort((a, b) => b.priority - a.priority);
+  if (videos.length <= max) return tiles;
+  const keep = new Set(videos.slice(0, max));
+  return tiles.map((tile) =>
+    tile.media === "video" && !keep.has(tile)
+      ? { ...tile, media: "image" as const, priority: 0 }
+      : tile,
+  );
 }
