@@ -108,6 +108,7 @@ const SEEDS: Seed[] = [
   { slug: "analog-stick", title: "Analog Stick", description: "A metallic cap that tilts into the press.", category: "Button" },
   { slug: "paper-shred-button", title: "Paper Shred Button", description: "A delete button that shreds a page into strips.", category: "Button" },
   { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
+  { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {

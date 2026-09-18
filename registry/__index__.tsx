@@ -262,6 +262,32 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "curve-drawer": {
+    name: "curve-drawer",
+    description: "Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.",
+    type: "registry:component",
+    registryDependencies: ["button"],
+    files: [{
+      path: "registry/default/example/curve-drawer.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/curve-drawer-primitives.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/curve-drawer-curve.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/curve-drawer-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "curve-drawer"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "day-picker": {
     name: "day-picker",
     description: "A custom day picker component with smooth animations.",

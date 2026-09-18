@@ -252,6 +252,36 @@
       ]
     },
     {
+      "name": "curve-drawer",
+      "type": "registry:component",
+      "title": "Curve Drawer",
+      "description": "Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/curve-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/curve-drawer-primitives.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/curve-drawer-curve.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "day-picker",
       "type": "registry:component",
       "title": "Day Picker",
