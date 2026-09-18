@@ -9,8 +9,13 @@ import {
   canvasTileIndex,
   packCanvasColumn,
 } from "@/lib/browse/canvas-layout";
-import { canvasAllowVideo, canvasMediaTier } from "@/lib/browse/canvas-media-tier";
+import {
+  canvasAllowVideo,
+  canvasMediaTier,
+  canvasMediaWhilePanning,
+} from "@/lib/browse/canvas-media-tier";
 import { posterMediaHeight, tileHeight, tileHeightFor } from "@/lib/browse/media";
+import { useRenderQuality } from "@/lib/browse/use-render-quality";
 import { priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
 
@@ -33,22 +38,20 @@ type TileSpec = {
 
 /**
  * Camera-space infinite canvas (tldraw / Figma style):
- * world positions live on a masonry column grid; a camera offset is added in
- * `translate3d`. Only tiles whose AABB overlaps the viewport (+ image overscan)
- * are mounted. Video mounts for tiles that intersect the true viewport;
- * the overscan ring preloads posters so pans feel instant. Pan follows the
- * pointer 1:1; clicks are preserved until the drag threshold, then pointer
- * capture starts.
+ * tiles sit in world space; the stage takes the camera as one `translate3d`
+ * so pan is a single compositor update. In-view tiles keep playing; the
+ * overscan ring is poster-only; farther tiles stay unmounted.
  */
 const DRAG_THRESHOLD = 8;
 const MIN_VELOCITY = 0.35;
 const COAST_MULTIPLIER = 18;
 /** After pan/coast stops: remount tiles + resume video. */
-const SETTLE_MS = 220;
+const SETTLE_MS = 180;
 /** While panning: remount posters this often so new areas never feel empty. */
-const PAN_SYNC_MS = 72;
+const PAN_SYNC_MS = 120;
 /** Yellow ring: mount posters ahead of the viewport. Farther tiles stay unmounted (red). */
 const IMAGE_OVERSCAN = 720;
+const IMAGE_OVERSCAN_LOW = 280;
 
 function mod(value: number, length: number) {
   return ((value % length) + length) % length;
@@ -119,8 +122,10 @@ function usePosterAspects(items: BrowseItem[]) {
 
 export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
-  const nodes = React.useRef(new Map<string, HTMLDivElement>());
+  const stageRef = React.useRef<HTMLDivElement>(null);
+  const tilesRef = React.useRef<TileSpec[]>([]);
   const aspects = usePosterAspects(items);
+  const quality = useRenderQuality();
 
   const camera = React.useRef({ x: 0, y: 0 });
   const velocity = React.useRef({ x: 0, y: 0 });
@@ -187,10 +192,15 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
     const camX = camera.current.x;
     const camY = camera.current.y;
-    const viewLeft = -IMAGE_OVERSCAN;
-    const viewRight = w + IMAGE_OVERSCAN;
-    const viewTop = -IMAGE_OVERSCAN;
-    const viewBottom = h + IMAGE_OVERSCAN;
+    const overscan = quality === "low" ? IMAGE_OVERSCAN_LOW : IMAGE_OVERSCAN;
+    const viewLeft = -overscan;
+    const viewRight = w + overscan;
+    const viewTop = -overscan;
+    const viewBottom = h + overscan;
+    const frozen = mediaFrozen.current;
+    const previous = frozen
+      ? new Map(tilesRef.current.map((tile) => [tile.key, tile]))
+      : null;
 
     const c0 = Math.floor((viewLeft - camX - cardW) / cw);
     const c1 = Math.ceil((viewRight - camX) / cw);
@@ -217,15 +227,22 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
           if (x + cardW < viewLeft || x > viewRight) continue;
           if (y + height < viewTop || y > viewBottom) continue;
 
-          const media = canvasMediaTier(x, y, cardW, height, w, h, IMAGE_OVERSCAN);
-          if (!media) continue;
+          const want = canvasMediaTier(x, y, cardW, height, w, h, overscan);
+          if (!want) continue;
+
+          const prev = previous?.get(`${col}:${row}`);
+          const media = frozen ? canvasMediaWhilePanning(want, prev?.media) : want;
 
           const rawPriority =
             media === "video"
               ? priorityFromCenter(x + cardW / 2, y + height / 2, w, h)
               : 0;
-          // Bucket so tiny camera moves don't thrash React; big moves still rebalance.
-          const priority = Math.round(rawPriority / 80) * 80;
+          // Keep a playing tile's bucket during pan so the pool doesn't
+          // pause one clip to start another mid-gesture.
+          const priority =
+            frozen && prev?.media === "video"
+              ? (prev.priority ?? 0)
+              : Math.round(rawPriority / 80) * 80;
 
           next.push({
             key: `${col}:${row}`,
@@ -242,37 +259,52 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
     next.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
     return next;
-  }, [getPack]);
+  }, [getPack, quality]);
 
-  const applyTransforms = React.useCallback(() => {
-    const { cellW: cw, cardW } = geometry.current;
-    nodes.current.forEach((node, key) => {
-      const [col, row] = key.split(":").map(Number);
-      const x = col * cw + camera.current.x;
-      const y = worldY(col, row) + camera.current.y;
-      node.style.width = `${cardW}px`;
-      node.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  const applyCamera = React.useCallback(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    stage.style.transform = `translate3d(${camera.current.x}px, ${camera.current.y}px, 0)`;
+  }, []);
+
+  const setTilesSafe = React.useCallback((next: TileSpec[]) => {
+    setTiles((current) => {
+      if (sameTiles(current, next)) return current;
+      tilesRef.current = next;
+      return next;
     });
-  }, [worldY]);
+  }, []);
 
   const syncVisible = React.useCallback(() => {
     const next = collectVisible();
-    applyTransforms();
-    setTiles((current) => (sameTiles(current, next) ? current : next));
-  }, [applyTransforms, collectVisible]);
+    applyCamera();
+    setTilesSafe(next);
+  }, [applyCamera, collectVisible, setTilesSafe]);
 
   /** Throttled remount during motion so newly visible tiles appear. */
   const syncVisibleThrottled = React.useCallback(() => {
+    // ponytail: low-end skips remounts while the camera is moving (empty
+    // edges until settle) so image decode never contends with the pan.
+    if (mediaFrozen.current && quality === "low") return;
     const now = performance.now();
     if (now - lastPanSync.current < PAN_SYNC_MS) return;
     lastPanSync.current = now;
     syncVisible();
-  }, [syncVisible]);
+  }, [quality, syncVisible]);
+
+  const markDragging = React.useCallback(() => {
+    mediaFrozen.current = true;
+    const node = viewportRef.current;
+    if (node) node.dataset.dragging = "true";
+    setIsDragging(true);
+  }, []);
 
   const scheduleSettle = React.useCallback(() => {
     window.clearTimeout(settleTimer.current);
     settleTimer.current = window.setTimeout(() => {
       mediaFrozen.current = false;
+      const node = viewportRef.current;
+      if (node) node.dataset.dragging = "false";
       setIsDragging(false);
       syncVisible();
     }, SETTLE_MS);
@@ -282,10 +314,10 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
   // Pan loop: transform every frame; remount posters on a throttle so the field stays filled.
   const tick = React.useCallback(() => {
-    applyTransforms();
+    applyCamera();
     syncVisibleThrottled();
     frame.current = panning.current ? requestAnimationFrame(() => tickRef.current()) : 0;
-  }, [applyTransforms, syncVisibleThrottled]);
+  }, [applyCamera, syncVisibleThrottled]);
 
   React.useEffect(() => {
     tickRef.current = tick;
@@ -303,6 +335,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const springTo = React.useCallback(
     (toX: number, toY: number, { duration = 0.7, bounce = 0.16, velocityX = 0, velocityY = 0 } = {}) => {
       stopCoast();
+      markDragging();
       const fromX = camera.current.x;
       const fromY = camera.current.y;
       const spring = { type: "spring" as const, duration, bounce };
@@ -317,7 +350,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         velocity: velocityX,
         onUpdate: (value) => {
           camera.current.x = value;
-          applyTransforms();
+          applyCamera();
           syncVisibleThrottled();
         },
         onComplete: onDone,
@@ -327,14 +360,14 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         velocity: velocityY,
         onUpdate: (value) => {
           camera.current.y = value;
-          applyTransforms();
+          applyCamera();
           syncVisibleThrottled();
         },
         onComplete: onDone,
       });
       coast.current = [onX, onY];
     },
-    [stopCoast, applyTransforms, scheduleSettle, syncVisibleThrottled],
+    [stopCoast, markDragging, applyCamera, scheduleSettle, syncVisibleThrottled],
   );
 
   const springCoast = React.useCallback(() => {
@@ -342,7 +375,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     if (speed < MIN_VELOCITY) {
       velocity.current.x = 0;
       velocity.current.y = 0;
-      applyTransforms();
+      applyCamera();
       scheduleSettle();
       return;
     }
@@ -357,7 +390,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       velocityX: vx,
       velocityY: vy,
     });
-  }, [springTo, applyTransforms, scheduleSettle]);
+  }, [springTo, applyCamera, scheduleSettle]);
 
   React.useEffect(
     () => () => {
@@ -381,7 +414,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   }, [cellW, metrics.cardW, metrics.gap, itemCount, items, aspects]);
 
   useIsomorphicLayoutEffect(() => {
-    applyTransforms();
+    applyCamera();
   });
 
   useIsomorphicLayoutEffect(() => {
@@ -412,15 +445,15 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       };
       packs.current.clear();
       setMetrics({ cardW, gap });
-      setTiles(collectVisible());
-      applyTransforms();
+      setTilesSafe(collectVisible());
+      applyCamera();
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(node);
     return () => observer.disconnect();
-  }, [applyTransforms, collectVisible, items, aspects]);
+  }, [applyCamera, collectVisible, items, aspects, setTilesSafe]);
 
   React.useEffect(() => {
     const node = viewportRef.current;
@@ -429,14 +462,12 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     const onWheel = (event: WheelEvent) => {
       event.preventDefault();
       stopCoast();
+      markDragging();
       camera.current.x -= event.deltaX;
       camera.current.y -= event.deltaY;
       velocity.current.x = 0;
       velocity.current.y = 0;
-      applyTransforms();
-      // Keep the field filled while scrolling.
-      mediaFrozen.current = true;
-      setIsDragging(true);
+      applyCamera();
       if (!wheelSyncRaf.current) {
         wheelSyncRaf.current = requestAnimationFrame(() => {
           wheelSyncRaf.current = 0;
@@ -448,7 +479,7 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
 
     node.addEventListener("wheel", onWheel, { passive: false });
     return () => node.removeEventListener("wheel", onWheel);
-  }, [stopCoast, applyTransforms, syncVisibleThrottled, scheduleSettle]);
+  }, [stopCoast, markDragging, applyCamera, syncVisibleThrottled, scheduleSettle]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
@@ -471,10 +502,8 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
     if (!panning.current) {
       if (travelled.current < DRAG_THRESHOLD) return;
       panning.current = true;
-      mediaFrozen.current = true;
       lastPanSync.current = 0;
-      setIsDragging(true);
-      syncVisible();
+      markDragging();
       event.currentTarget.setPointerCapture(event.pointerId);
       ensureLoop();
     }
@@ -497,7 +526,6 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
       suppressClick.current = true;
       springCoast();
     } else if (mediaFrozen.current) {
-      // Interrupted coast / cancelled gesture — unfreeze media.
       scheduleSettle();
     }
   };
@@ -538,12 +566,12 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
         event.stopPropagation();
       }}
     >
-      <div className="canvas-stage">
+      <div ref={stageRef} className="canvas-stage">
         {tiles.map((tile) => {
           const item = items[tile.index];
           if (!item) return null;
-          const x = tile.col * cellW + camera.current.x;
-          const y = worldY(tile.col, tile.row) + camera.current.y;
+          const x = tile.col * cellW;
+          const y = worldY(tile.col, tile.row);
           return (
             <div
               key={tile.key}
@@ -552,10 +580,6 @@ export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
                 width: metrics.cardW,
                 height: tile.height,
                 transform: `translate3d(${x}px, ${y}px, 0)`,
-              }}
-              ref={(node) => {
-                if (node) nodes.current.set(tile.key, node);
-                else nodes.current.delete(tile.key);
               }}
             >
               <BrowseCard

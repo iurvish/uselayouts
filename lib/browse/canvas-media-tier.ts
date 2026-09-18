@@ -17,7 +17,19 @@ export function canvasMediaTier(
   return inViewport ? "video" : "image";
 }
 
-/** Pan/coast: keep in-view videos playing; overscan stays poster-only. */
+/** Pan/coast: keep in-view videos mounted; overscan stays poster-only. */
 export function canvasAllowVideo(media: "video" | "image") {
   return media === "video";
+}
+
+/**
+ * During pan: on-screen tiles stay video (keep playing). Already-mounted
+ * videos stay mounted so they don't flash a poster if they clip the edge.
+ */
+export function canvasMediaWhilePanning(
+  want: "video" | "image",
+  previous?: "video" | "image",
+): "video" | "image" {
+  if (want === "video" || previous === "video") return "video";
+  return "image";
 }

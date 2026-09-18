@@ -31,7 +31,6 @@ export function BrowsePreview({
 }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
-  const [playing, setPlaying] = React.useState(false);
   const [ready, setReady] = React.useState(false);
   const [inView, setInView] = React.useState(!observeVisibility);
 
@@ -62,7 +61,6 @@ export function BrowsePreview({
       if (prev && prev !== node) releasePlayback(prev);
       videoRef.current = node;
       if (!node) {
-        setPlaying(false);
         setReady(false);
         return;
       }
@@ -79,7 +77,6 @@ export function BrowsePreview({
     if (paused) {
       releasePlayback(node);
       node.pause();
-      setPlaying(false);
       return;
     }
 
@@ -88,15 +85,12 @@ export function BrowsePreview({
   }, [mountVideo, paused, playbackPriority]);
 
   React.useEffect(() => {
-    if (!mountVideo) {
-      setReady(false);
-      setPlaying(false);
-    }
+    if (!mountVideo) setReady(false);
   }, [mountVideo]);
 
   // Show the video layer once it has a frame — even if the pool hasn't started
   // playback yet — so in-view cards don't look stuck on the poster.
-  const showVideo = mountVideo && !paused && (playing || ready);
+  const showVideo = mountVideo && !paused && ready;
 
   return (
     <div ref={rootRef} className="browse-preview" aria-hidden>
@@ -118,16 +112,12 @@ export function BrowsePreview({
           loop
           playsInline
           autoPlay
-          preload="auto"
+          preload="metadata"
           draggable={false}
           onLoadedData={(event) => {
             setReady(true);
             if (!paused) requestPlayback(event.currentTarget, playbackPriority);
           }}
-          onPlaying={() => setPlaying(true)}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onEnded={() => setPlaying(false)}
           className={cn(!showVideo && "opacity-0")}
         />
       ) : null}

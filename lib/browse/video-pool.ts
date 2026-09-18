@@ -4,20 +4,47 @@
  * and pauses the rest so a dense canvas doesn't melt the GPU.
  */
 
+type NavHint = {
+  hardwareConcurrency?: number;
+  deviceMemory?: number;
+  connection?: { saveData?: boolean };
+};
+
 const candidates = new Map<HTMLVideoElement, number>();
 let frame = 0;
+let watching = false;
+
+export function maxConcurrentVideos(nav?: NavHint | null) {
+  if (!nav) return 4;
+  if (nav.connection?.saveData) return 1;
+  const cores = nav.hardwareConcurrency ?? 8;
+  const memory = nav.deviceMemory ?? 8;
+  // Hardware decoders are scarce; compositor cost is ~linear in playing count.
+  if (cores <= 4 || memory <= 4) return 2;
+  if (cores <= 8) return 4;
+  return 6;
+}
 
 function maxConcurrent() {
-  if (typeof navigator === "undefined") return 8;
-  const cores = navigator.hardwareConcurrency ?? 8;
-  // Enough for a typical laptop browse viewport; still capped on weak CPUs.
-  if (cores <= 4) return 5;
-  if (cores <= 8) return 8;
-  return 10;
+  if (typeof navigator === "undefined") return 4;
+  return maxConcurrentVideos(navigator as NavHint);
+}
+
+function ensureWatch() {
+  if (watching || typeof document === "undefined") return;
+  watching = true;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      for (const [video] of candidates) video.pause();
+      return;
+    }
+    schedule();
+  });
 }
 
 function reconcile() {
   frame = 0;
+  if (typeof document !== "undefined" && document.hidden) return;
   const limit = maxConcurrent();
   const ranked = [...candidates.entries()].sort((a, b) => b[1] - a[1]);
 
@@ -36,8 +63,9 @@ function schedule() {
 }
 
 export function requestPlayback(video: HTMLVideoElement, priority: number) {
+  ensureWatch();
   const prev = candidates.get(video);
-  if (prev === priority) return;
+  if (prev === priority && !video.paused) return;
   candidates.set(video, priority);
   schedule();
 }
