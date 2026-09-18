@@ -311,6 +311,18 @@
       ]
     },
     {
+      "name": "dynamic-grid-gallery",
+      "type": "registry:component",
+      "title": "Dynamic Grid Gallery",
+      "description": "A 3×2 photo grid that grows the hovered row and column so one still takes the stage.",
+      "files": [
+        {
+          "path": "registry/default/example/dynamic-grid-gallery.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "dynamic-toolbar",
       "type": "registry:component",
       "title": "Dynamic Toolbar",
@@ -476,6 +488,21 @@
       "files": [
         {
           "path": "registry/default/example/folder-interaction.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gooey-navbar",
+      "type": "registry:component",
+      "title": "Gooey Navbar",
+      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, glow, active dot.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/gooey-navbar.tsx",
           "type": "registry:component"
         }
       ]
@@ -757,6 +784,36 @@
       ]
     },
     {
+      "name": "scroll-3d-card-stack",
+      "type": "registry:component",
+      "title": "Scroll 3D Card Stack",
+      "description": "Cards that lift, tilt, and blur in perspective as you scroll down a long page.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-3d-card-stack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scroll-split-cards",
+      "type": "registry:component",
+      "title": "Scroll Split Cards",
+      "description": "One photograph that splits into three panels as you scroll, then flips to copy.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-split-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "scroll-stack-deck",
       "type": "registry:component",
       "title": "Scroll Stack Deck",
@@ -876,6 +933,21 @@
       "files": [
         {
           "path": "registry/default/example/stacked-list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "tactile-button",
+      "type": "registry:component",
+      "title": "Tactile Button",
+      "description": "A liquid-glass rocker that tilts into its well when you press it.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/tactile-button.tsx",
           "type": "registry:component"
         }
       ]

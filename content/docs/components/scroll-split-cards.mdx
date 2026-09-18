@@ -1,0 +1,44 @@
+---
+title: Scroll Split Cards
+description: One photograph that splits into three panels as you scroll, then flips to copy.
+---
+
+## Features
+
+- **One still, then a cut**: Three panels start flush so they read as a single image.
+- **Step apart**: The outer panels slide left and right, then settle in for the turn.
+- **Flip**: Each panel rotates on Y to show a title, a line of copy, and a color.
+- **Your shot**: Pass `imageSrc` and three `items`. Extra items are ignored.
+
+## Usage
+
+This needs a long page — the track is 400vh with a sticky stage. Don’t drop it in a short section. Swap the photograph and the three backs.
+
+```tsx
+import ScrollSplitCards from "@/components/scroll-split-cards";
+
+export default function Page() {
+  return <ScrollSplitCards />;
+}
+```
+
+With your own still and copy:
+
+```tsx
+<ScrollSplitCards
+  imageSrc="/hero.jpg"
+  items={[
+    { title: "Capture", description: "The wide shot.", bgColor: "#ece7df", textColor: "#1a1714" },
+    { title: "Cut", description: "Three panels.", bgColor: "#2f4f6f", textColor: "#f4f0e8" },
+    { title: "Flip", description: "Title and copy.", bgColor: "#161412", textColor: "#f4f0e8" },
+  ]}
+/>
+```
+
+## Where to use
+
+- Studio or agency homepages
+- Case-study openers
+- Lookbook or campaign films
+- Feature stories told in three beats
+- Product pages that start with one hero still

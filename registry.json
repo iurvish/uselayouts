@@ -799,6 +799,21 @@
       ]
     },
     {
+      "name": "scroll-split-cards",
+      "type": "registry:component",
+      "title": "Scroll Split Cards",
+      "description": "One photograph that splits into three panels as you scroll, then flips to copy.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-split-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "scroll-stack-deck",
       "type": "registry:component",
       "title": "Scroll Stack Deck",

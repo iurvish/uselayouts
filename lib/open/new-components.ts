@@ -27,6 +27,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "gooey-navbar",
   "dynamic-grid-gallery",
   "scroll-3d-card-stack",
+  "scroll-split-cards",
 ]);
 
 export function isNewComponent(slug: string) {
