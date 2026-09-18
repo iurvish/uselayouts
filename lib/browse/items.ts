@@ -103,6 +103,8 @@ const SEEDS: Seed[] = [
   { slug: "prompt-box", title: "Prompt Box", description: "A composer that expands into a prompt with a model menu.", category: "Input" },
   { slug: "get-in-touch", title: "Get In Touch", description: "A contact pill that merges you with a portrait.", category: "Button" },
   { slug: "theme-toggle", title: "Theme Toggle", description: "A dotted grip that slides across a recessed track.", category: "Button" },
+  { slug: "scan-document", title: "Scan Document", description: "A button that unfolds a page and scans it.", category: "Button" },
+  { slug: "polaroid-stack", title: "Polaroid Stack", description: "Prints that fan out from a pile on hover.", category: "Display" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {

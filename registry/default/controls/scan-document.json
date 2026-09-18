@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Click Scan",
+  "hintDescription": "A page unfolds, flips, and a light travels across it. When it says Done, it resets so you can scan again."
+}

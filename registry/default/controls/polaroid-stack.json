@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#18181b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Hover the stack",
+  "hintDescription": "Seven Polaroids stay piled until you hover. Then they fan from one corner, like a hand of cards."
+}

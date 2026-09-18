@@ -28,6 +28,8 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "prompt-box",
   "get-in-touch",
   "theme-toggle",
+  "scan-document",
+  "polaroid-stack",
 ]);
 
 export function isNewComponent(slug: string) {

@@ -722,6 +722,22 @@
       ]
     },
     {
+      "name": "polaroid-stack",
+      "type": "registry:component",
+      "title": "Polaroid Stack",
+      "description": "Seven Polaroids sit in a pile. Hover and they fan into an arc from one corner.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/polaroid-stack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "pop-tilt-cards",
       "type": "registry:component",
       "title": "Pop Tilt Cards",
@@ -813,6 +829,21 @@
       "files": [
         {
           "path": "registry/default/example/save-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scan-document",
+      "type": "registry:component",
+      "title": "Scan Document",
+      "description": "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scan-document.tsx",
           "type": "registry:component"
         }
       ]

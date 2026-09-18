@@ -696,6 +696,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "polaroid-stack": {
+    name: "polaroid-stack",
+    description: "Seven Polaroids sit in a pile. Hover and they fan into an arc from one corner.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/polaroid-stack.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/polaroid-stack-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "polaroid-stack"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "pop-tilt-cards": {
     name: "pop-tilt-cards",
     description: "Interactive tilt card deck with smooth hover animations, 3D popping effects, images, links, and customizable card styling.",
@@ -785,6 +803,24 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/save-button.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "save-button"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "scan-document": {
+    name: "scan-document",
+    description: "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/scan-document.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/scan-document-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "scan-document"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
