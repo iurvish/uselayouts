@@ -784,21 +784,6 @@
       ]
     },
     {
-      "name": "scroll-3d-card-stack",
-      "type": "registry:component",
-      "title": "Scroll 3D Card Stack",
-      "description": "Cards that lift, tilt, and blur in perspective as you scroll down a long page.",
-      "dependencies": [
-        "motion"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/scroll-3d-card-stack.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "scroll-split-cards",
       "type": "registry:component",
       "title": "Scroll Split Cards",

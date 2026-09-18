@@ -1,6 +1,11 @@
 {
   "dialConfig": {
-    "previewPadding": [24, 0, 96, 4],
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
     "spring": {
       "type": "spring",
       "visualDuration": 0.35,
@@ -8,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T17:30:00.000Z",
+  "updatedAt": "2026-09-18T18:09:30.199Z",
   "previewBackground": {
     "light": "#e8e8e8",
     "dark": "#e8e8e8"
@@ -17,5 +22,6 @@
   "hintKind": "click",
   "hintHeading": "",
   "hintDescription": "",
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "hintTop": 144
 }

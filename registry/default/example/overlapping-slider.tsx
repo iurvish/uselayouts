@@ -253,7 +253,7 @@ function ArrowButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-9 items-center justify-center rounded-full bg-[#dce7ee] text-neutral-500 transition enabled:hover:bg-[#cfdbe3] enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35"
+      className="flex size-9 items-center justify-center rounded-full bg-neutral-900 text-white transition enabled:hover:bg-neutral-800 enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400"
     >
       {children}
     </button>
@@ -385,9 +385,6 @@ export function ProfileCard({ card }: { card: CardProfile }) {
 export default function OverlappingSliderDemo() {
   return (
     <div className="flex h-full w-full flex-col justify-center bg-white">
-      <p className="px-8 pt-6 text-center font-mono text-[13px] font-normal uppercase leading-tight tracking-tight text-[#FF9180]">
-        Turn any custom component into an overlapping slider.
-      </p>
       <OverlappingSlider
         items={DEFAULT_PROFILES}
         renderItem={(card) => <ProfileCard card={card} />}

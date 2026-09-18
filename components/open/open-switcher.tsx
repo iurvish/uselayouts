@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronsUpDown, Search } from "lucide-react";
 
-import { scrollbarMinimal } from "@/components/open/ui";
+import { scrollbarMinimal, centerChildInScroller } from "@/components/open/ui";
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
@@ -34,6 +34,7 @@ export function OpenSwitcher({
   const pathname = usePathname();
   const rootRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [instant, setInstant] = React.useState(false);
@@ -111,6 +112,35 @@ export function OpenSwitcher({
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  React.useLayoutEffect(() => {
+    if (!open || query.trim()) return;
+    const scroller = listRef.current;
+    if (!scroller) return;
+
+    const until = performance.now() + 1000;
+    const run = () => {
+      if (performance.now() > until) return;
+      const active = scroller.querySelector<HTMLElement>('[aria-selected="true"]');
+      if (active) centerChildInScroller(scroller, active);
+    };
+
+    run();
+    const raf = requestAnimationFrame(run);
+    const ro = new ResizeObserver(run);
+    ro.observe(scroller);
+    const imgs = [...scroller.querySelectorAll("img")];
+    for (const img of imgs) {
+      if (!img.complete) img.addEventListener("load", run);
+    }
+    const t = window.setTimeout(run, 200);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+      ro.disconnect();
+      for (const img of imgs) img.removeEventListener("load", run);
+    };
+  }, [open, displayed.href, query, filtered]);
+
   function select(item: OpenNavItem) {
     close();
     if (item.href === pathname || item.href === current.href) return;
@@ -175,7 +205,10 @@ export function OpenSwitcher({
               </div>
             </div>
             {/* Figma 95:4696 — list gap 2; px 12 py 10 inset via padding so hover bg is full-bleed */}
-            <div className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}>
+            <div
+              ref={listRef}
+              className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}
+            >
               {filtered.length === 0 ? (
                 <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (

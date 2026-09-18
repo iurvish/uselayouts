@@ -13,7 +13,7 @@
     "light": "#ffffff",
     "dark": "#ffffff"
   },
-  "showHint": false,
+  "showHint": true,
   "hintKind": "drag",
   "hintHeading": "",
   "hintDescription": "",

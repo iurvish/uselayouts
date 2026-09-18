@@ -8,6 +8,7 @@ export type SplitCard = {
   description: string;
   bgColor: string;
   textColor: string;
+  kicker?: string;
 };
 
 export type ScrollSplitCardsProps = {
@@ -19,26 +20,32 @@ export type ScrollSplitCardsProps = {
 };
 
 export const DEFAULT_IMAGE =
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2400&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1759340642551-f7b6059fe2ba?q=80&w=2400&auto=format&fit=crop";
 
 export const DEFAULT_CARDS: SplitCard[] = [
   {
-    title: "Capture",
-    description: "One frame, shot wide. The still holds until you start scrolling.",
-    bgColor: "#ece7df",
-    textColor: "#1a1714",
+    title: "Fort Point",
+    kicker: "Presidio",
+    description:
+      "A Civil War battery under the south tower. The fog hits the brick before it hits the city.",
+    bgColor: "#ead9c4",
+    textColor: "#2a1810",
   },
   {
-    title: "Cut",
-    description: "The photograph splits into three panels and steps apart.",
-    bgColor: "#2f4f6f",
-    textColor: "#f4f0e8",
+    title: "The Span",
+    kicker: "1.7 miles",
+    description:
+      "International Orange, mixed to cut through fog. The deck hangs 220 feet over the strait.",
+    bgColor: "#c4452d",
+    textColor: "#fff4ec",
   },
   {
-    title: "Flip",
-    description: "Each panel turns. Title and copy sit on the back.",
-    bgColor: "#161412",
-    textColor: "#f4f0e8",
+    title: "Marin Head",
+    kicker: "North tower",
+    description:
+      "The walk from Battery Spencer. On a thick day the city is only a smear of lights.",
+    bgColor: "#2c3033",
+    textColor: "#e6e2da",
   },
 ];
 
@@ -116,20 +123,31 @@ function Panel({
       </motion.div>
 
       <motion.div
-        className="absolute inset-0 flex flex-col justify-end overflow-hidden p-6 [backface-visibility:hidden] sm:p-8"
+        className="absolute inset-0 flex flex-col justify-between overflow-hidden p-5 antialiased [backface-visibility:hidden] sm:p-6"
         style={{
           backgroundColor: card.bgColor,
           color: card.textColor,
           borderRadius: radius,
           transform: "rotateY(180deg)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.16)",
         }}
       >
-        <h3 className="text-[22px] font-semibold leading-tight tracking-tight sm:text-[26px]">
-          {card.title}
-        </h3>
-        <p className="mt-2 max-w-[18em] text-sm leading-relaxed opacity-80">
-          {card.description}
-        </p>
+        <div className="flex items-center justify-between gap-3 font-mono text-[10px] font-medium uppercase tracking-[0.16em] tabular-nums opacity-55">
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          {card.kicker ? <span className="truncate">{card.kicker}</span> : null}
+        </div>
+        <div>
+          <div
+            className="mb-4 h-px w-7 opacity-50"
+            style={{ backgroundColor: "currentColor" }}
+          />
+          <h3 className="text-[22px] font-semibold leading-[1.12] tracking-tight text-balance sm:text-[26px]">
+            {card.title}
+          </h3>
+          <p className="mt-2.5 text-[13px] leading-relaxed text-pretty opacity-80 sm:text-sm">
+            {card.description}
+          </p>
+        </div>
       </motion.div>
     </motion.div>
   );

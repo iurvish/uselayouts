@@ -28,7 +28,6 @@ export function OpenPreview({
   const nestedPageScroll =
     name === "scroll-stack-deck" ||
     name === "stack-scroll-reveal" ||
-    name === "scroll-3d-card-stack" ||
     name === "scroll-split-cards";
 
   const inner = Component ? (

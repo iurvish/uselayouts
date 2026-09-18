@@ -774,24 +774,6 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "scroll-3d-card-stack": {
-    name: "scroll-3d-card-stack",
-    description: "Cards that lift, tilt, and blur in perspective as you scroll down a long page.",
-    type: "registry:component",
-    registryDependencies: undefined,
-    files: [{
-      path: "registry/default/example/scroll-3d-card-stack.tsx",
-      type: "registry:component",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/demo/scroll-3d-card-stack-demo.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "scroll-3d-card-stack"
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
   "scroll-split-cards": {
     name: "scroll-split-cards",
     description: "One photograph that splits into three panels as you scroll, then flips to copy.",

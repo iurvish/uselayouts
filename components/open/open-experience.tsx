@@ -16,7 +16,7 @@ import {
   PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/ui";
+import { openIconBtn, openPressMotion, scrollbarNone, centerChildInScroller } from "@/components/open/ui";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -168,7 +168,15 @@ function SidebarList({
     const el = scrollRef.current;
     if (!el) return;
 
+    let until = performance.now() + 280;
+    const tryCenter = () => {
+      if (performance.now() > until || el.clientHeight === 0) return;
+      const active = el.querySelector<HTMLElement>("[aria-current=page]");
+      if (active) centerChildInScroller(el, active);
+    };
+
     const update = () => {
+      tryCenter();
       const { scrollTop, clientHeight, scrollHeight } = el;
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
@@ -184,7 +192,7 @@ function SidebarList({
       el.removeEventListener("scroll", update);
       ro.disconnect();
     };
-  }, [items]);
+  }, [items, activeHref]);
 
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>

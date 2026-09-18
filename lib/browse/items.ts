@@ -97,7 +97,6 @@ const SEEDS: Seed[] = [
   { slug: "tactile-button", title: "Tactile Button", description: "A glass rocker that tilts when you press.", category: "Button" },
   { slug: "gooey-navbar", title: "Gooey Navbar", description: "Pills that melt into each other.", category: "Navigation" },
   { slug: "dynamic-grid-gallery", title: "Dynamic Grid Gallery", description: "A grid that grows toward the cursor.", category: "Display" },
-  { slug: "scroll-3d-card-stack", title: "Scroll 3D Card Stack", description: "Cards that peel in perspective as you scroll.", category: "Display" },
   { slug: "scroll-split-cards", title: "Scroll Split Cards", description: "A still that splits into three cards, then flips.", category: "Display" },
   { slug: "create-menu", title: "Create Menu", description: "A create pill that opens into actions.", category: "Button" },
   { slug: "liquid-index", title: "Liquid Index", description: "A feature list with a liquid hover badge.", category: "Display" },

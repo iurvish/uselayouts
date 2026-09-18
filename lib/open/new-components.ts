@@ -26,7 +26,6 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "tactile-button",
   "gooey-navbar",
   "dynamic-grid-gallery",
-  "scroll-3d-card-stack",
   "scroll-split-cards",
 ]);
 
