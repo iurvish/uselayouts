@@ -12,7 +12,7 @@ import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
-const TITLE_SUFFIX = " | uselayouts";
+const TITLE_SUFFIX = " - useLayouts";
 
 /** Figma 91:4677 container shadow */
 const DROPDOWN_SHADOW =

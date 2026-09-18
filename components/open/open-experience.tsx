@@ -231,7 +231,7 @@ function SidebarList({
           items={items}
           activeHref={activeHref}
           onItemClick={(item) => {
-            document.title = `${item.title} | uselayouts`;
+            document.title = `${item.title} - useLayouts`;
           }}
           onItemHover={
             onItemHover
@@ -499,5 +499,5 @@ function OpenExperienceShell({
 
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
-  document.title = `${title} | uselayouts`;
+  document.title = `${title} - useLayouts`;
 }

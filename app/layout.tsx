@@ -22,14 +22,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "uselayouts | Free Premium Animated React & Framer Motion Components",
-    template: "%s | uselayouts",
+    default: "useLayouts | Free animated React components",
+    template: "%s - useLayouts",
   },
   description:
-    "Free premium animated React components and micro-interactions built with Framer Motion and Tailwind CSS. Modern, ready-to-use motion components for high-converting websites.",
+    "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
   authors: [{ name: "Urvish Mali" }],
-  creator: "uselayouts",
+  creator: "useLayouts",
   metadataBase: new URL("https://uselayouts.com"),
   icons: {
     icon: [
@@ -44,26 +43,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://uselayouts.com",
-    title:
-      "uselayouts | Free Premium Animated React & Framer Motion Components",
+    title: "useLayouts | Free animated React components",
     description:
-      "Free premium animated React components and micro-interactions built with Framer Motion and Tailwind CSS. Modern, ready-to-use motion components for high-converting websites.",
-    siteName: "uselayouts",
+      "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
+    siteName: "useLayouts",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "uselayouts - Premium Animated React Components",
+        alt: "useLayouts free animated React components",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "uselayouts | Free Premium Animated React & Framer Motion Components",
+    title: "useLayouts | Free animated React components",
     description:
-      "Free premium animated React components and micro-interactions built with Framer Motion and Tailwind CSS. Modern, ready-to-use motion components for high-converting websites.",
+      "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
     images: ["/og.png"],
     creator: "@0xUrvish",
   },
