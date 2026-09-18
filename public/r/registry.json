@@ -311,6 +311,40 @@
       ]
     },
     {
+      "name": "drawer-buttons",
+      "type": "registry:component",
+      "title": "Drawer Buttons",
+      "description": "Two buttons that open side drawers with a 3D fold. Payment comes from the right, cart from the left, and the fields stagger in.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea",
+        "select",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/drawer-buttons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/drawer-buttons-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/drawer-buttons-field.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "dynamic-toolbar",
       "type": "registry:component",
       "title": "Dynamic Toolbar",

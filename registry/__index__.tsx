@@ -316,6 +316,32 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "drawer-buttons": {
+    name: "drawer-buttons",
+    description: "Two buttons that open side drawers with a 3D fold. Payment comes from the right, cart from the left, and the fields stagger in.",
+    type: "registry:component",
+    registryDependencies: ["button","input","textarea","select","field"],
+    files: [{
+      path: "registry/default/example/drawer-buttons.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/drawer-buttons-drawer.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/drawer-buttons-field.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/drawer-buttons-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "drawer-buttons"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "dynamic-toolbar": {
     name: "dynamic-toolbar",
     description: "A toolbar that adapts its size and layout based on content.",

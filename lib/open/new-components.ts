@@ -24,6 +24,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "slide-subscribe",
   "set-timer",
   "stacked-outline-text",
+  "drawer-buttons",
 ]);
 
 export function isNewComponent(slug: string) {
