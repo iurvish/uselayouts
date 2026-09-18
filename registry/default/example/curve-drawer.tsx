@@ -36,7 +36,7 @@ export function CurveDrawerDemo() {
               Open left
             </button>
           </CurveDrawerTrigger>
-          <CurveDrawerContent>
+          <CurveDrawerContent curveSide="left">
             <CurveDrawerHeader className="flex-row items-start justify-between gap-4 border-b border-border">
               <div className="min-w-0">
                 <CurveDrawerTitle>Menu</CurveDrawerTitle>
@@ -80,7 +80,7 @@ export function CurveDrawerDemo() {
               Open right
             </button>
           </CurveDrawerTrigger>
-          <CurveDrawerContent>
+          <CurveDrawerContent curveSide="right">
             <CurveDrawerHeader className="flex-row items-start justify-between gap-4 border-b border-border">
               <div className="min-w-0">
                 <CurveDrawerTitle>Notes</CurveDrawerTitle>

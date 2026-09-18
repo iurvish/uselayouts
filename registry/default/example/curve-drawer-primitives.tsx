@@ -7,8 +7,14 @@ import { Drawer as DrawerPrimitive } from "vaul";
 
 import Curve from "./curve-drawer-curve";
 
-const CurveDrawerContext = React.createContext<{ open: boolean }>({
+type DrawerDirection = "top" | "bottom" | "left" | "right";
+
+const CurveDrawerContext = React.createContext<{
+  open: boolean;
+  direction: DrawerDirection;
+}>({
   open: false,
+  direction: "bottom",
 });
 const DRAWER_SLIDE_DURATION_MS = 800;
 const DRAWER_SLIDE_EASE = [0.76, 0, 0.24, 1] as const;
@@ -21,6 +27,7 @@ export function CurveDrawer({
   open: controlledOpen,
   onOpenChange,
   children,
+  direction = "bottom",
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
@@ -83,9 +90,10 @@ export function CurveDrawer({
   };
 
   return (
-    <CurveDrawerContext.Provider value={{ open: visualOpen }}>
+    <CurveDrawerContext.Provider value={{ open: visualOpen, direction }}>
       <DrawerPrimitive.Root
         data-slot="curve-drawer"
+        direction={direction}
         onOpenChange={handleOpenChange}
         open={mountedOpen}
         {...props}
@@ -144,51 +152,12 @@ export function CurveDrawerContent({
   style,
   ...props
 }: CurveDrawerContentProps) {
-  const { open } = React.useContext(CurveDrawerContext);
+  const { open, direction } = React.useContext(CurveDrawerContext);
   const shouldReduceMotion = Boolean(useReducedMotion());
-  const [inferredSide, setInferredSide] = React.useState<
-    "left" | "right" | false
-  >(false);
   const contentRef = React.useRef<HTMLDivElement>(null);
-
-  React.useLayoutEffect(() => {
-    if (curveSide !== undefined) {
-      return;
-    }
-
-    const el = contentRef.current;
-    if (!el) {
-      return;
-    }
-
-    const getDirection = () => {
-      const dir = el.getAttribute("data-vaul-drawer-direction") as
-        | "left"
-        | "right"
-        | "top"
-        | "bottom"
-        | null;
-      if (dir === "left" || dir === "right") {
-        return dir;
-      }
-      return false;
-    };
-
-    setInferredSide(getDirection());
-
-    const observer = new MutationObserver(() => {
-      setInferredSide(getDirection());
-    });
-
-    observer.observe(el, {
-      attributes: true,
-      attributeFilter: ["data-vaul-drawer-direction"],
-    });
-
-    return () => observer.disconnect();
-  }, [curveSide]);
-
-  const resolvedSide = curveSide ?? inferredSide;
+  const directionSide =
+    direction === "left" || direction === "right" ? direction : false;
+  const resolvedSide = curveSide ?? directionSide;
   const showCurve = resolvedSide === "left" || resolvedSide === "right";
   const drawerOffset =
     resolvedSide === "left"
@@ -211,7 +180,7 @@ export function CurveDrawerContent({
             },
           }}
           className={cn(
-            "group/curve-drawer-content fixed z-[110] flex h-auto flex-col bg-popover text-sm text-popover-foreground outline-none",
+            "group/curve-drawer-content fixed z-[110] flex h-auto flex-col overflow-visible bg-popover text-sm text-popover-foreground outline-none",
             "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:h-full data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:max-w-sm data-[vaul-drawer-direction=left]:rounded-r-none",
             "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:h-full data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:max-w-sm data-[vaul-drawer-direction=right]:rounded-l-none",
             "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-xl data-[vaul-drawer-direction=bottom]:border-t",

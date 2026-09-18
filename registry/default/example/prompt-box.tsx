@@ -1977,13 +1977,13 @@ export function PromptInput({
   return (
     <motion.div
       animate={{ maxWidth: expanded ? 440 : 320 }}
-      className="relative mx-auto h-0 w-full"
+      className="relative mx-auto w-full"
       initial={false}
       transition={shellTransition}
     >
       <motion.div
         animate={{ height: expanded ? expandedHeight : COLLAPSED_HEIGHT }}
-        className="absolute inset-x-0 bottom-0 overflow-hidden rounded-[24px] border-[0.5px] border-border bg-white p-0.5"
+        className="relative overflow-hidden rounded-[24px] border-[0.5px] border-border bg-white p-0.5"
         data-prompt-input-root=""
         initial={false}
         onBlur={handleBlur}
@@ -2184,7 +2184,7 @@ export default function PromptBox() {
     MODEL_PLACEHOLDERS[settings.model ?? ""] ?? "Ask Anything";
 
   return (
-    <div className="flex h-full w-full items-end justify-center px-4 pb-8">
+    <div className="flex h-full w-full items-center justify-center px-4">
       <PromptInput
         defaultSettings={defaultPromptSettings}
         onSettingsChange={setSettings}

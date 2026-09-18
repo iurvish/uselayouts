@@ -21,9 +21,6 @@ export default function Curve({
 }: CurveProps) {
   const shouldReduceMotion = Boolean(useReducedMotion());
   const svgRef = useRef<SVGSVGElement>(null);
-  const [height, setHeight] = useState(
-    typeof window !== "undefined" ? window.innerHeight : 800
-  );
   const [animHeight, setAnimHeight] = useState(0);
 
   useLayoutEffect(() => {
@@ -32,7 +29,6 @@ export default function Curve({
       const measured = parent
         ? parent.offsetHeight || window.innerHeight
         : window.innerHeight;
-      setHeight(measured);
       if (!animHeight) {
         setAnimHeight(measured);
       }
@@ -56,23 +52,27 @@ export default function Curve({
 
   const isLeft = side === "left";
   const w = curveWidth;
-  const h = animHeight || height;
+  const h = animHeight;
   const edgeX = isLeft ? 0 : w;
   const controlX = isLeft ? w * 2 : -w;
   const bulged = `M${edgeX} 0 L${edgeX} ${h} Q${controlX} ${h / 2} ${edgeX} 0`;
   const straight = `M${edgeX} 0 L${edgeX} ${h} Q${edgeX} ${h / 2} ${edgeX} 0`;
   const pathInitial = open ? bulged : straight;
   const pathAnimate = open ? straight : [straight, straight, bulged, straight];
-  const pathTransition = open
-    ? {
-        duration: shouldReduceMotion ? 0.01 : 1,
-        ease: CURVE_EASE,
-      }
-    : {
-        duration: shouldReduceMotion ? 0.01 : 0.8,
-        ease: CURVE_EASE,
-        times: [0, 0.36, 0.52, 1],
-      };
+  const pathTransition = shouldReduceMotion
+    ? { duration: 0.01 }
+    : open
+      ? {
+          type: "tween" as const,
+          duration: 1,
+          ease: CURVE_EASE,
+        }
+      : {
+          type: "tween" as const,
+          duration: 0.8,
+          ease: CURVE_EASE,
+          times: [0, 0.36, 0.52, 1],
+        };
 
   const offset = `-${w - 1}px`;
   const positionStyle: CSSProperties = isLeft
@@ -83,7 +83,7 @@ export default function Curve({
     <svg
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute top-0 z-10 h-full fill-popover",
+        "pointer-events-none absolute top-0 z-10 h-full overflow-visible fill-popover",
         className
       )}
       focusable="false"
@@ -92,13 +92,15 @@ export default function Curve({
       stroke="none"
       style={{ width: w, ...positionStyle }}
     >
-      <motion.path
-        animate={{ d: shouldReduceMotion ? straight : pathAnimate }}
-        d={straight}
-        initial={{ d: shouldReduceMotion ? straight : pathInitial }}
-        key={`${open ? "open" : "closed"}-${bulged}`}
-        transition={pathTransition}
-      />
+      {h > 0 ? (
+        <motion.path
+          animate={{ d: pathAnimate }}
+          d={straight}
+          initial={{ d: pathInitial }}
+          key={`${open ? "open" : "closed"}-${h}`}
+          transition={pathTransition}
+        />
+      ) : null}
     </svg>
   );
 }
