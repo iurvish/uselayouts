@@ -23,6 +23,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "photo-albums",
   "slide-subscribe",
   "set-timer",
+  "stacked-outline-text",
 ]);
 
 export function isNewComponent(slug: string) {

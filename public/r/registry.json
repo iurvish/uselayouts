@@ -884,6 +884,23 @@
       ]
     },
     {
+      "name": "stacked-outline-text",
+      "type": "registry:component",
+      "title": "Stacked Outline Text",
+      "description": "Heavy outlined type you can drag. Speed leaves a stacked white-on-black trail that springs back when you stop.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stacked-outline-text.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "vertical-tabs",
       "type": "registry:component",
       "title": "Vertical Tabs",

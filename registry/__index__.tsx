@@ -854,6 +854,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "stacked-outline-text": {
+    name: "stacked-outline-text",
+    description: "Heavy outlined type you can drag. Speed leaves a stacked white-on-black trail that springs back when you stop.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/stacked-outline-text.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/stacked-outline-text-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "stacked-outline-text"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "vertical-tabs": {
     name: "vertical-tabs",
     description: "A vertical tab interaction with smooth content switching.",
