@@ -23,6 +23,10 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "photo-albums",
   "slide-subscribe",
   "overlapping-slider",
+  "tactile-button",
+  "gooey-navbar",
+  "dynamic-grid-gallery",
+  "scroll-3d-card-stack",
 ]);
 
 export function isNewComponent(slug: string) {

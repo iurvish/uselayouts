@@ -618,6 +618,9 @@
       "type": "registry:component",
       "title": "Overlapping Slider",
       "description": "A fanned card stack you drag sideways — cards tuck under each other and tilt as they leave.",
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "registry/default/example/overlapping-slider.tsx",

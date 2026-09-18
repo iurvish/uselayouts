@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function sliderStep(cardWidth: number, overlapFactor: number, cardGap: number) {
   return Math.round(cardWidth - cardWidth * overlapFactor + cardGap);
@@ -40,12 +41,12 @@ export function OverlappingSlider<T>({
   items,
   renderItem,
   children,
-  cardWidth = 300,
-  cardHeight = 400,
-  overlapFactor = 0.55,
-  cardGap = 18,
-  maxRotation = 5,
-  transformOrigin = "0% 80%",
+  cardWidth = 260,
+  cardHeight = 360,
+  overlapFactor = 0.5,
+  cardGap = 16,
+  maxRotation = 4,
+  transformOrigin = "50% 80%",
   showDots = true,
   showArrows = true,
   className = "",
@@ -75,13 +76,16 @@ export function OverlappingSlider<T>({
     const transition = animate ? "transform 300ms ease-out" : "none";
     track.style.transition = transition;
     track.style.setProperty("--ox", `${x}px`);
+    const activeExact = -x / step;
+    const active = Math.max(0, Math.min(Math.round(activeExact), total - 1));
     for (let i = 0; i < track.children.length; i++) {
       const card = track.children[i] as HTMLElement;
-      const diff = (x + i * step) / step;
-      const rotate = Math.min(Math.max(diff * 2.2, -maxRotation), maxRotation);
-      const scale = Math.max(0.92, 1 - Math.abs(diff) * 0.038);
-      const y = Math.abs(diff) * 5;
+      const diff = i - activeExact;
+      const rotate = Math.min(Math.max(diff * 1.6, -maxRotation), maxRotation);
+      const scale = Math.max(0.94, 1 - Math.abs(diff) * 0.03);
+      const y = Math.abs(diff) * 4;
       card.style.transition = transition;
+      card.style.zIndex = String(total - Math.abs(i - active));
       card.style.setProperty("--y", `${y}px`);
       card.style.setProperty("--r", `${rotate}deg`);
       card.style.setProperty("--s", String(scale));
@@ -140,10 +144,10 @@ export function OverlappingSlider<T>({
   };
 
   return (
-    <div className={`relative flex w-full select-none flex-col items-center ${className}`}>
+    <div className={`relative mx-auto flex w-full max-w-[880px] select-none flex-col ${className}`}>
       <div
-        className="flex w-full cursor-grab touch-pan-y items-center overflow-hidden py-6 active:cursor-grabbing"
-        style={{ minHeight: cardHeight + 40 }}
+        className="flex w-full cursor-grab touch-pan-y items-center overflow-hidden py-8 active:cursor-grabbing"
+        style={{ minHeight: cardHeight + 56 }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -151,7 +155,7 @@ export function OverlappingSlider<T>({
       >
         <div
           ref={trackRef}
-          className="flex items-center pl-6 sm:pl-14"
+          className="flex items-center pl-4 sm:pl-8"
           style={{ transform: "translate3d(var(--ox, 0px), 0, 0)" }}
         >
           {Array.from({ length: total }, (_, index) => (
@@ -162,7 +166,7 @@ export function OverlappingSlider<T>({
                 width: cardWidth,
                 height: cardHeight,
                 marginRight: -cardWidth * overlapFactor,
-                zIndex: index + 1,
+                zIndex: total - index,
                 transformOrigin,
                 transform: "translateY(var(--y, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1))",
               }}
@@ -179,7 +183,7 @@ export function OverlappingSlider<T>({
       </div>
 
       {(showDots || showArrows) && (
-        <div className="mt-2 flex w-full max-w-4xl items-center justify-between px-6">
+        <div className="mt-1 flex w-full items-center justify-between px-4 sm:px-8">
           {showDots && (
             <div className="flex items-center gap-2">
               {Array.from({ length: total }, (_, i) => (
@@ -204,14 +208,14 @@ export function OverlappingSlider<T>({
                 disabled={activeIndex === 0}
                 onClick={() => goTo(activeIndex - 1)}
               >
-                ←
+                <ChevronLeft className="size-[18px]" strokeWidth={2} />
               </ArrowButton>
               <ArrowButton
                 label="Next"
                 disabled={activeIndex === total - 1}
                 onClick={() => goTo(activeIndex + 1)}
               >
-                →
+                <ChevronRight className="size-[18px]" strokeWidth={2} />
               </ArrowButton>
             </div>
           )}
@@ -238,7 +242,7 @@ function ArrowButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-10 items-center justify-center rounded-full border border-black/8 bg-white text-neutral-800 shadow-sm transition enabled:hover:scale-105 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
+      className="flex size-10 items-center justify-center rounded-full border border-black/8 bg-white text-neutral-800 transition enabled:hover:scale-105 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
     >
       {children}
     </button>
@@ -315,7 +319,7 @@ export function ProfileCard({ card }: { card: CardProfile }) {
   const [following, setFollowing] = useState(false);
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[28px] border border-white/10 bg-neutral-900 p-5 shadow-2xl">
+    <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[28px] bg-neutral-900 p-5">
       <img
         src={card.image}
         alt=""

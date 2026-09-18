@@ -13,7 +13,7 @@ description: A fanned card stack you drag sideways — each card tucks under the
 
 ## Usage
 
-Needs a wide stage so the fan can breathe (the demo cards are 300×400). Drop in your own slides, or keep the built-in profiles.
+Needs a wide stage so the fan can breathe (the demo cards are 260×360). Drop in your own slides, or keep the built-in profiles.
 
 ```tsx
 import OverlappingSlider from "@/components/overlapping-slider";
@@ -31,9 +31,9 @@ import { OverlappingSlider, ProfileCard } from "@/components/overlapping-slider"
 <OverlappingSlider
   items={profiles}
   renderItem={(card) => <ProfileCard card={card} />}
-  cardWidth={300}
-  cardHeight={400}
-  overlapFactor={0.55}
+  cardWidth={260}
+  cardHeight={360}
+  overlapFactor={0.5}
 />
 ```
 

@@ -1,0 +1,31 @@
+---
+title: Scroll 3D Card Stack
+description: Cards that lift, tilt, and blur in perspective as you scroll down a long page.
+---
+
+## Features
+
+- **Sticky stage**: A `n × 100vh` track pins a 3D stack in the viewport while you scroll.
+- **Perspective peel**: Each card rises, rotates back on X, blurs, and fades as the next one takes the front.
+- **Accent pulse**: A glow dot and bar light up on the card that’s in focus.
+- **Step dots**: A column of ticks on the right tracks which card is current.
+
+## Usage
+
+This needs a long page. Don’t drop it in a short section — there’s nothing to scroll. Swap `DEFAULT_CARDS` for your own tag, title, description, and accent.
+
+```tsx
+import Scroll3DCardStack from "@/components/scroll-3d-card-stack";
+
+export default function Page() {
+  return <Scroll3DCardStack />;
+}
+```
+
+## Where to use
+
+- Studio or product homepages
+- Feature stories told one card at a time
+- Onboarding “how it works” pages
+- Case-study indexes
+- Annual recap or lookbook pages

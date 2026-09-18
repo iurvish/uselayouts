@@ -1,0 +1,31 @@
+---
+title: Dynamic Grid Gallery
+description: A 3×2 photo grid that grows the hovered row and column so one still takes the stage.
+---
+
+## Features
+
+- **Expand on hover**: The active row and column take `expandFactor` (1.95 by default); the rest recede.
+- **Six stills**: A 3×2 board. Swap `items` for your own shots.
+- **Slow ease**: Grid tracks tween with a cubic curve so the grow doesn’t snap.
+- **Vignette**: Idle tiles sit slightly dimmed; the hovered one clears.
+
+## Usage
+
+Needs a tall, wide stage. Pass six images. Tune `gap` and `expandFactor` if your photos are a different crop.
+
+```tsx
+import DynamicGridGallery from "@/components/dynamic-grid-gallery";
+
+export default function Page() {
+  return <DynamicGridGallery />;
+}
+```
+
+## Where to use
+
+- Photography portfolios
+- Travel or hotel lookbooks
+- Architecture project boards
+- Campaign stills
+- Mood-board landing sections
