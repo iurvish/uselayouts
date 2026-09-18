@@ -168,9 +168,13 @@ function SidebarList({
     const el = scrollRef.current;
     if (!el) return;
 
-    const until = performance.now() + 400;
+    let allow = true;
+    const until = performance.now() + 250;
+    const stop = () => {
+      allow = false;
+    };
     const tryCenter = () => {
-      if (performance.now() > until || el.clientHeight === 0) return;
+      if (!allow || performance.now() > until || el.clientHeight === 0) return;
       const active = el.querySelector<HTMLElement>("[aria-current=page]");
       if (active) centerChildInScroller(el, active);
     };
@@ -184,18 +188,25 @@ function SidebarList({
     tryCenter();
     updateFades();
     el.addEventListener("scroll", updateFades, { passive: true });
-    const ro = new ResizeObserver(tryCenter);
+    el.addEventListener("wheel", stop, { passive: true });
+    el.addEventListener("touchmove", stop, { passive: true });
+    const ro = new ResizeObserver(() => {
+      tryCenter();
+      updateFades();
+    });
     ro.observe(el);
     const child = el.firstElementChild;
     if (child) ro.observe(child);
     let raf = 0;
     const tick = () => {
       tryCenter();
-      if (performance.now() < until) raf = requestAnimationFrame(tick);
+      if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => {
       el.removeEventListener("scroll", updateFades);
+      el.removeEventListener("wheel", stop);
+      el.removeEventListener("touchmove", stop);
       ro.disconnect();
       cancelAnimationFrame(raf);
     };

@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-13T11:52:58.859Z",
+  "updatedAt": "2026-09-18T18:32:51.832Z",
   "previewBackground": {
     "light": "#F7F4F0",
     "dark": "#F7F4F0"
@@ -23,5 +23,7 @@
   "hintKind": "drag",
   "hintHeading": "",
   "hintDescription": "",
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/editorial-deck/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
 }

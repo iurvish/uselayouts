@@ -117,29 +117,39 @@ export function OpenSwitcher({
     const scroller = listRef.current;
     if (!scroller) return;
 
-    const until = performance.now() + 1000;
+    let allow = true;
+    const stop = () => {
+      allow = false;
+    };
     const run = () => {
-      if (performance.now() > until) return;
+      if (!allow) return;
       const active = scroller.querySelector<HTMLElement>('[aria-selected="true"]');
       if (active) centerChildInScroller(scroller, active);
     };
 
     run();
+    const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
       run();
-      if (performance.now() < until) raf = requestAnimationFrame(tick);
+      if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     const ro = new ResizeObserver(run);
     ro.observe(scroller);
+    const content = scroller.firstElementChild;
+    if (content) ro.observe(content);
     const imgs = [...scroller.querySelectorAll("img")];
     for (const img of imgs) {
       if (!img.complete) img.addEventListener("load", run);
     }
+    scroller.addEventListener("wheel", stop, { passive: true });
+    scroller.addEventListener("touchmove", stop, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      scroller.removeEventListener("wheel", stop);
+      scroller.removeEventListener("touchmove", stop);
       for (const img of imgs) img.removeEventListener("load", run);
     };
   }, [open, displayed.href, query, filtered]);
