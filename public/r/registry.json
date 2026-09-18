@@ -320,7 +320,8 @@
           "path": "registry/default/example/dynamic-grid-gallery.tsx",
           "type": "registry:component"
         }
-      ]
+      ],
+      "dependencies": []
     },
     {
       "name": "dynamic-toolbar",
