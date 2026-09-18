@@ -759,6 +759,24 @@
       ]
     },
     {
+      "name": "set-timer",
+      "type": "registry:component",
+      "title": "Set Timer",
+      "description": "A dark timer pill that morphs into a minute wheel picker, then into a running timer with pause, cancel, and a rounded-rectangle progress border.",
+      "dependencies": [
+        "motion",
+        "@ncdai/react-wheel-picker",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/set-timer.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "shake-testimonial-card",
       "type": "registry:component",
       "title": "Shake Testimonial Card",

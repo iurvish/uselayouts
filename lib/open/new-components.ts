@@ -22,6 +22,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "liquid-index",
   "photo-albums",
   "slide-subscribe",
+  "set-timer",
 ]);
 
 export function isNewComponent(slug: string) {
