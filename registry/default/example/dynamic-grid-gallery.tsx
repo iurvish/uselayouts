@@ -107,7 +107,7 @@ export function DynamicGridGallery({
 
   return (
     <div
-      className={`w-full h-full max-w-[1600px] max-h-[94vh] min-h-[520px] relative select-none ${className}`}
+      className={`relative h-full min-h-0 w-full select-none ${className}`}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       <div
@@ -149,7 +149,7 @@ export function DynamicGridGallery({
 
 export default function DynamicGridGalleryDemo() {
   return (
-    <div className="h-full min-h-[520px] w-full p-3">
+    <div className="aspect-[3/2] w-[min(100%-2.5rem,40rem)]">
       <DynamicGridGallery />
     </div>
   );

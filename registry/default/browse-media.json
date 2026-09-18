@@ -4,8 +4,8 @@
     "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
   },
   "perspective-text-scroll": {
-    "posterUrl": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=880&q=68",
-    "videoUrl": ""
+    "posterUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4"
   },
   "scroll-stack-deck": {
     "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=880&q=68",
@@ -130,5 +130,33 @@
   "create-menu": {
     "posterUrl": "https://cdn.uselayouts.com/components/create-menu/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/create-menu/video.mp4"
+  },
+  "focus-testimonials": {
+    "posterUrl": "https://cdn.uselayouts.com/components/focus-testimonials/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4"
+  },
+  "infinite-grid": {
+    "posterUrl": "https://cdn.uselayouts.com/components/infinite-grid/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4"
+  },
+  "photo-albums": {
+    "posterUrl": "https://cdn.uselayouts.com/components/photo-albums/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/photo-albums/video.mp4"
+  },
+  "polaroid-drag": {
+    "posterUrl": "https://cdn.uselayouts.com/components/polaroid-drag/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4"
+  },
+  "pop-tilt-cards": {
+    "posterUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/video.mp4"
+  },
+  "rolling-card-stack": {
+    "posterUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4"
+  },
+  "slide-subscribe": {
+    "posterUrl": "https://cdn.uselayouts.com/components/slide-subscribe/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/slide-subscribe/video.mp4"
   }
 }

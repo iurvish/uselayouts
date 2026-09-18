@@ -12,13 +12,17 @@ description: A 3×2 photo grid that grows the hovered row and column so one stil
 
 ## Usage
 
-Needs a tall, wide stage. Pass six images. Tune `gap` and `expandFactor` if your photos are a different crop.
+Give it a sized box — it fills whatever you wrap it in. Pass six images. Tune `gap` and `expandFactor` if your photos are a different crop.
 
 ```tsx
 import DynamicGridGallery from "@/components/dynamic-grid-gallery";
 
 export default function Page() {
-  return <DynamicGridGallery />;
+  return (
+    <div className="aspect-[3/2] w-full max-w-2xl">
+      <DynamicGridGallery />
+    </div>
+  );
 }
 ```
 

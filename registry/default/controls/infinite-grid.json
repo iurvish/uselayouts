@@ -17,11 +17,13 @@
     "imageUrl4": "https://images.unsplash.com/photo-1545454675-3531b543be5d?q=85&w=1200&auto=format&fit=crop"
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T12:26:35.534Z",
+  "updatedAt": "2026-09-18T18:37:01.638Z",
   "previewBackground": "#fcfcfc",
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/infinite-grid/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4"
 }
