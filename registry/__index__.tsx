@@ -594,6 +594,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "overlapping-slider": {
+    name: "overlapping-slider",
+    description: "A fanned card stack you drag sideways — cards tuck under each other and tilt as they leave.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/overlapping-slider.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/overlapping-slider-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "overlapping-slider"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "perspective-text-scroll": {
     name: "perspective-text-scroll",
     description: "A polished example interaction built with React and Motion.",

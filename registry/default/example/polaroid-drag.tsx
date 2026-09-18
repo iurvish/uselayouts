@@ -264,31 +264,6 @@ export const PolaroidCard: React.FC<PolaroidCardProps> = ({
   );
 };
 
-export interface PolaroidInstructionProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  children?: React.ReactNode;
-}
-
-export const PolaroidInstruction = React.forwardRef<HTMLParagraphElement, PolaroidInstructionProps>(
-  ({ children = 'Click and Drag', className, ...props }, ref) => {
-    return (
-      <div className="z-0 mt-8 pointer-events-none transition-opacity duration-300">
-        <p
-          ref={ref}
-          className={cn(
-            'text-[19px] font-medium tracking-wide text-[#c6b9c6]',
-            className
-          )}
-          style={{ fontFamily: '"Poppins", sans-serif' }}
-          {...props}
-        >
-          {children}
-        </p>
-      </div>
-    );
-  }
-);
-PolaroidInstruction.displayName = 'PolaroidInstruction';
-
 export default function PolaroidDragDemo() {
   return (
     <PolaroidGallery className="bg-[#f6f4f6]">
@@ -323,8 +298,6 @@ export default function PolaroidDragDemo() {
           textColor="rgb(44, 53, 64)"
         />
       </PolaroidArena>
-
-      <PolaroidInstruction>Click and Drag</PolaroidInstruction>
     </PolaroidGallery>
   );
 }

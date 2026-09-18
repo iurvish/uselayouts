@@ -8,6 +8,7 @@ import React, {
   memo,
 } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -93,14 +94,14 @@ const THEME_PRESETS = {
     bg: '#09090b',
     text: 'rgba(255, 255, 255, 0.35)',
     sel: '#fafafa',
-    marker: '#22c55e',
+    marker: '#fafafa',
     panel: '#18181b',
   },
   light: {
     bg: '#ffffff',
     text: 'rgba(9, 9, 11, 0.28)',
     sel: '#09090b',
-    marker: '#22c55e',
+    marker: '#09090b',
     panel: '#f4f4f5',
   },
 };
@@ -242,7 +243,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
       selectedColor,
       showMarker = true,
       markerColor,
-      markerSize = 14,
+      markerSize = 18,
       markerGap = 18,
       background,
       scrollSpeed = 0.007,
@@ -268,7 +269,7 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
             bg: background || '#fff6ec',
             text: textColor || 'rgba(180, 90, 20, 0.45)',
             sel: selectedColor || '#b4541e',
-            marker: markerColor || '#22c55e',
+            marker: markerColor || selectedColor || '#b4541e',
             panel: background || '#fff6ec',
           }
         : THEME_PRESETS[mode] || THEME_PRESETS.light;
@@ -668,13 +669,15 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
                   marginLeft: -markerSize,
                   transform: 'translate3d(0, -50%, 0)',
                   color: theme.marker,
-                  filter: `drop-shadow(0 1px 6px ${theme.marker}99)`,
                   transition: 'color 0.35s ease',
                 }}
               >
-                <svg width={markerSize} height={markerSize} viewBox="0 0 12 12" aria-hidden="true">
-                  <path d="M2.1 1.3v9.4L10.5 6z" fill="currentColor" />
-                </svg>
+                <ChevronRight
+                  width={markerSize}
+                  height={markerSize}
+                  strokeWidth={2.5}
+                  aria-hidden
+                />
               </div>
             )}
 
@@ -713,7 +716,7 @@ export const WheelCarouselDemo: React.FC = () => {
   const customBg = '#fff6ec';
   const customText = 'rgba(180, 90, 20, 0.45)';
   const customSelected = '#b4541e';
-  const customMarker = '#86efac';
+  const customMarker = '#b4541e';
 
   useEffect(() => {
     const body = document.body;
@@ -768,7 +771,7 @@ export const WheelCarouselDemo: React.FC = () => {
           visibleItems={7}
           apexInset={18}
           showMarker={true}
-          markerSize={14}
+          markerSize={18}
           markerGap={18}
           scrollSpeed={0.007}
           dragSpeed={0.016}

@@ -614,6 +614,18 @@
       ]
     },
     {
+      "name": "overlapping-slider",
+      "type": "registry:component",
+      "title": "Overlapping Slider",
+      "description": "A fanned card stack you drag sideways — cards tuck under each other and tilt as they leave.",
+      "files": [
+        {
+          "path": "registry/default/example/overlapping-slider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "perspective-text-scroll",
       "type": "registry:component",
       "title": "Perspective Text Scroll",
@@ -891,6 +903,7 @@
       "description": "This component creates a smooth wheel-style carousel with photos and selectable items. It supports drag, scroll, keyboard controls, snapping, momentum, themes, image crossfades, and customizable layout and colors.",
       "dependencies": [
         "motion",
+        "lucide-react",
         "clsx",
         "tailwind-merge"
       ],

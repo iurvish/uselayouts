@@ -93,6 +93,7 @@ const SEEDS: Seed[] = [
   { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
   { slug: "client-card", title: "Client Card", description: "A CRM card with paid and deadline rings.", category: "Display" },
   { slug: "coverflow-drag", title: "Coverflow Drag", description: "Portraits that coverflow as you drag.", category: "Display" },
+  { slug: "overlapping-slider", title: "Overlapping Slider", description: "A fanned stack you drag sideways.", category: "Display" },
   { slug: "create-menu", title: "Create Menu", description: "A create pill that opens into actions.", category: "Button" },
   { slug: "liquid-index", title: "Liquid Index", description: "A feature list with a liquid hover badge.", category: "Display" },
   { slug: "photo-albums", title: "Photo Albums", description: "Album stacks that open into a grid.", category: "Display" },
