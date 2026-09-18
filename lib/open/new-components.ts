@@ -30,6 +30,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "theme-toggle",
   "scan-document",
   "polaroid-stack",
+  "analog-stick",
 ]);
 
 export function isNewComponent(slug: string) {

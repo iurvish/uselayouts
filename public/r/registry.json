@@ -55,6 +55,22 @@
       ]
     },
     {
+      "name": "analog-stick",
+      "type": "registry:component",
+      "title": "Analog Stick",
+      "description": "A metallic stick that tilts into the press. Hover a quadrant and the cap leans, the shadow shifts, and the matching arrow goes amber.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/analog-stick.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "animated-collection",
       "type": "registry:component",
       "title": "Animated Collection",
