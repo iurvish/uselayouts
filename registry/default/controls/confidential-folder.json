@@ -8,7 +8,7 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-09-14T05:52:00.000Z",
+  "updatedAt": "2026-09-18T18:30:39.092Z",
   "previewBackground": {
     "light": "oklch(0.18 0.012 260)",
     "dark": "oklch(0.18 0.012 260)"
@@ -17,5 +17,7 @@
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4"
 }

@@ -21,7 +21,7 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T12:06:39.573Z",
+  "updatedAt": "2026-09-18T18:30:09.933Z",
   "previewBackground": "#faf8f6",
   "showHint": true,
   "hintKind": "hover",
@@ -39,5 +39,7 @@
         "y": 32.6
       }
     ]
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/card-folder/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4"
 }

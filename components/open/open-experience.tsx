@@ -168,29 +168,36 @@ function SidebarList({
     const el = scrollRef.current;
     if (!el) return;
 
-    let until = performance.now() + 280;
+    const until = performance.now() + 400;
     const tryCenter = () => {
       if (performance.now() > until || el.clientHeight === 0) return;
       const active = el.querySelector<HTMLElement>("[aria-current=page]");
       if (active) centerChildInScroller(el, active);
     };
 
-    const update = () => {
-      tryCenter();
+    const updateFades = () => {
       const { scrollTop, clientHeight, scrollHeight } = el;
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
     };
 
-    update();
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
+    tryCenter();
+    updateFades();
+    el.addEventListener("scroll", updateFades, { passive: true });
+    const ro = new ResizeObserver(tryCenter);
     ro.observe(el);
     const child = el.firstElementChild;
     if (child) ro.observe(child);
+    let raf = 0;
+    const tick = () => {
+      tryCenter();
+      if (performance.now() < until) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
     return () => {
-      el.removeEventListener("scroll", update);
+      el.removeEventListener("scroll", updateFades);
       ro.disconnect();
+      cancelAnimationFrame(raf);
     };
   }, [items, activeHref]);
 

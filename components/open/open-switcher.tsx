@@ -125,17 +125,20 @@ export function OpenSwitcher({
     };
 
     run();
-    const raf = requestAnimationFrame(run);
+    let raf = 0;
+    const tick = () => {
+      run();
+      if (performance.now() < until) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
     const ro = new ResizeObserver(run);
     ro.observe(scroller);
     const imgs = [...scroller.querySelectorAll("img")];
     for (const img of imgs) {
       if (!img.complete) img.addEventListener("load", run);
     }
-    const t = window.setTimeout(run, 200);
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(t);
       ro.disconnect();
       for (const img of imgs) img.removeEventListener("load", run);
     };

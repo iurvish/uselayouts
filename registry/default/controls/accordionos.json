@@ -24,11 +24,13 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T07:09:07.744Z",
+  "updatedAt": "2026-09-18T18:29:03.576Z",
   "previewBackground": "#f1f2f5",
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4"
 }

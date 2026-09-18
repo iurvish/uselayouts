@@ -98,5 +98,29 @@
   "accessible-action": {
     "posterUrl": "https://cdn.uselayouts.com/components/accessible-action/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/accessible-action/video.mp4"
+  },
+  "accordionos": {
+    "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4"
+  },
+  "bento-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bento-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bento-card/video.mp4"
+  },
+  "bucket": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bucket/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bucket/video.mp4"
+  },
+  "card-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/card-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4"
+  },
+  "confidential-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4"
+  },
+  "corner-video": {
+    "posterUrl": "https://cdn.uselayouts.com/components/corner-video/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4"
   }
 }
