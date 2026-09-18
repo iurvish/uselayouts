@@ -101,6 +101,7 @@ const SEEDS: Seed[] = [
   { slug: "stacked-outline-text", title: "Stacked Outline Text", description: "Outlined type that leaves a velocity trail when you drag it.", category: "Display" },
   { slug: "drawer-buttons", title: "Drawer Buttons", description: "Buttons that fold open a payment drawer and a cart.", category: "Button" },
   { slug: "prompt-box", title: "Prompt Box", description: "A composer that expands into a prompt with a model menu.", category: "Input" },
+  { slug: "get-in-touch", title: "Get In Touch", description: "A contact pill that merges you with a portrait.", category: "Button" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {

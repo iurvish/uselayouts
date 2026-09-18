@@ -515,6 +515,27 @@
       ]
     },
     {
+      "name": "get-in-touch",
+      "type": "registry:component",
+      "title": "Get In Touch",
+      "description": "A glossy contact pill. Hover and the label lifts away so a portrait and YOU merge, then Let’s Talk! writes in.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/get-in-touch.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/get-in-touch-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "infinite-grid",
       "type": "registry:component",
       "title": "Infinite Canvas",

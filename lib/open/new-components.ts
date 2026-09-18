@@ -26,6 +26,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "stacked-outline-text",
   "drawer-buttons",
   "prompt-box",
+  "get-in-touch",
 ]);
 
 export function isNewComponent(slug: string) {

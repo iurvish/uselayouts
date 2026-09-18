@@ -508,6 +508,28 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "get-in-touch": {
+    name: "get-in-touch",
+    description: "A glossy contact pill. Hover and the label lifts away so a portrait and YOU merge, then Let’s Talk! writes in.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/get-in-touch.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "registry/default/example/get-in-touch-button.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/get-in-touch-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "get-in-touch"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "infinite-grid": {
     name: "infinite-grid",
     description: "A free-panning product canvas that tiles forever — drag, scroll, and skim an endless grid of images and captions.",
