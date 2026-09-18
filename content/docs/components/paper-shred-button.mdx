@@ -1,0 +1,43 @@
+---
+title: Paper Shred Button
+description: Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.
+---
+
+## Features
+
+- **Preview on hover or focus**: The button lifts, the trash icon tilts, and a white page appears above it.
+- **Shred on click**: The page clips away from the bottom. SVG strips draw in underneath.
+- **Disabled while shredding**: The button stays off through `shredding` and `shredded`.
+- **Auto-reset**: After the strips settle, it returns to idle so you can run it again.
+- **Reduced motion**: Near-instant transitions, no long path drawing, a short shred delay.
+
+Needs `motion`. This is a visual demo, not a real delete.
+
+## Usage
+
+Hover or tab to the button, then click. It disables itself while shredding, then resets on its own.
+
+```tsx
+import PaperShredButton from "@/components/paper-shred-button";
+
+export default function Example() {
+  return <PaperShredButton />;
+}
+```
+
+## Customize
+
+- **Label**: The button text is `Delete`. Swap the node next to the icon.
+- **Colors**: `bg-red-500`, `hover:bg-red-600`, `border-red-800`. The page is white; strips use `stroke-white`.
+- **Shred duration**: `SHRED_COMPLETE_DELAY` (1500ms). The clip uses `1.15s` and `[0.65, 0, 0.35, 1]`.
+- **Document size**: `h-40 w-[120px]` on the page. The shred SVG is `h-[150px] w-[120px]`.
+- **Reset**: `RESET_DELAY_MS` is how long shredded strips stay before idle returns (2500ms).
+- **Disabled**: `isShredDisabled` covers `shredding` and `shredded`. Idle and preview stay clickable.
+
+## Where to use
+
+- Destructive confirmations that need a beat of delight
+- Portfolio micro-interactions
+- File and document tools
+- Empty-trash demos
+- Settings that remove a local draft

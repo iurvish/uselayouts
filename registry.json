@@ -721,6 +721,23 @@
       ]
     },
     {
+      "name": "paper-shred-button",
+      "type": "registry:component",
+      "title": "Paper Shred Button",
+      "description": "Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/paper-shred-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "polaroid-drag",
       "type": "registry:component",
       "title": "Polaroid Drag",

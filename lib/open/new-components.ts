@@ -31,6 +31,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "scan-document",
   "polaroid-stack",
   "analog-stick",
+  "paper-shred-button",
 ]);
 
 export function isNewComponent(slug: string) {
