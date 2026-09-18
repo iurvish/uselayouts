@@ -977,6 +977,18 @@
       ]
     },
     {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme Toggle",
+      "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+      "files": [
+        {
+          "path": "registry/default/example/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "vertical-tabs",
       "type": "registry:component",
       "title": "Vertical Tabs",

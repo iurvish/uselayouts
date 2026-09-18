@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#e8e8e8",
+    "dark": "#1f2937"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Click the switch",
+  "hintDescription": "The dotted grip slides across the recessed track. On, it goes teal. Off, it sits left."
+}

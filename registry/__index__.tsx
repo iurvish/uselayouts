@@ -942,6 +942,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "theme-toggle": {
+    name: "theme-toggle",
+    description: "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/theme-toggle.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/theme-toggle-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "theme-toggle"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "vertical-tabs": {
     name: "vertical-tabs",
     description: "A vertical tab interaction with smooth content switching.",

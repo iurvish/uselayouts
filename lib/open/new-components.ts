@@ -27,6 +27,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "drawer-buttons",
   "prompt-box",
   "get-in-touch",
+  "theme-toggle",
 ]);
 
 export function isNewComponent(slug: string) {
