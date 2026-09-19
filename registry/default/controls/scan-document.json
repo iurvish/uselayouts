@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-19T18:18:44.046Z",
   "previewBackground": {
     "light": "#f4f4f5",
     "dark": "#09090b"
@@ -12,7 +12,9 @@
     "items": []
   },
   "showHint": true,
-  "hintKind": "custom",
+  "hintKind": "click",
   "hintHeading": "Click Scan",
-  "hintDescription": "A page unfolds, flips, and a light travels across it. When it says Done, it resets so you can scan again."
+  "hintDescription": "A page unfolds, flips, and a light travels across it. When it says Done, it resets so you can scan again.",
+  "hintTop": 140,
+  "hintHideOnScroll": false
 }

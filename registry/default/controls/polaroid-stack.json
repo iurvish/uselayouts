@@ -13,6 +13,6 @@
   },
   "showHint": true,
   "hintKind": "custom",
-  "hintHeading": "Hover the stack",
-  "hintDescription": "Seven Polaroids stay piled until you hover. Then they fan from one corner, like a hand of cards."
+  "hintHeading": "Hover",
+  "hintDescription": "Fan the pile"
 }
