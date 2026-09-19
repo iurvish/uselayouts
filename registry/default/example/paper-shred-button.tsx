@@ -15,7 +15,7 @@ const REDUCED_MOTION_SHRED_COMPLETE_DELAY = 120;
 const RESET_DELAY_MS = 2500;
 
 const buttonClassName = cn(
-  "absolute top-[176px] left-1/2 z-20 inline-flex h-14 origin-bottom items-center justify-center gap-3 select-none",
+  "absolute top-[176px] left-1/2 z-20 inline-flex h-14 origin-bottom cursor-pointer items-center justify-center gap-3 select-none",
   "rounded-xl border-x-2 border-t-2 border-b-4 border-red-800 bg-red-500 px-8 py-3 whitespace-nowrap",
   "text-lg font-medium text-white ring-offset-background transition-colors hover:bg-red-600",
   "active:border-b-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-100",
@@ -25,12 +25,12 @@ const buttonClassName = cn(
 const iconClassName = "size-5 fill-white/80 stroke-transparent";
 
 const documentClassName = cn(
-  "pointer-events-none absolute top-[18px] left-1/2 z-10 h-40 w-[120px]",
+  "pointer-events-none absolute top-[18px] left-1/2 z-10 h-40 w-[120px] opacity-0",
   "border border-black/10 bg-white [filter:drop-shadow(0_0_5px_rgba(0,0,0,0.06))]"
 );
 
 const shreddedSvgClassName = cn(
-  "pointer-events-none absolute top-[218px] left-1/2 z-10 h-[150px] w-[120px]",
+  "pointer-events-none absolute top-[218px] left-1/2 z-10 h-[150px] w-[120px] opacity-0",
   "fill-none stroke-white [filter:drop-shadow(0_0_5px_rgba(0,0,0,0.06))]"
 );
 
@@ -285,6 +285,7 @@ export function PaperShredButton() {
             aria-label="Shred document"
             className={buttonClassName}
             disabled={isShredDisabled(shredState)}
+            initial={false}
             onBlur={handlePreviewEnd}
             onClick={handleShred}
             onFocus={handlePreviewStart}
@@ -315,6 +316,7 @@ export function PaperShredButton() {
           <motion.div
             animate={shredState}
             className={documentClassName}
+            initial={false}
             transition={documentTransition}
             variants={documentVariants}
           />
@@ -324,7 +326,7 @@ export function PaperShredButton() {
             aria-hidden="true"
             className={shreddedSvgClassName}
             focusable="false"
-            initial="idle"
+            initial={false}
             transition={{ duration: shouldReduceMotion ? 0.01 : 0.12 }}
             variants={shreddedSvgVariants}
             viewBox="0 48 154.57 103.52"

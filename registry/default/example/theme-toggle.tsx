@@ -22,11 +22,11 @@ export default function ThemeToggle() {
     : "bg-[#e8e8e8] shadow-[inset_0_0_0.0625em_0.125em_rgb(255_255_255/0.2),inset_0_0.0625em_0.125em_rgb(0_0_0/0.4)] peer-checked:bg-[#1d4ed8] peer-checked:[&_[data-toggle-button]]:translate-x-[1.5em]";
 
   const buttonClassName = checked
-    ? "bg-[#374151] shadow-[inset_0_-0.0625em_0.0625em_0.125em_rgb(0_0_0/0.3),inset_0_-0.125em_0.0625em_rgb(0_0_0/0.45),inset_0_0.1875em_0.0625em_rgb(255_255_255/0.08),0_0.125em_0.125em_rgb(0_0_0/0.7)]"
+    ? "bg-[#c5cdd8] shadow-[inset_0_-0.0625em_0.0625em_0.125em_rgb(0_0_0/0.16),inset_0_-0.125em_0.0625em_rgb(0_0_0/0.22),inset_0_0.1875em_0.0625em_rgb(255_255_255/0.5),0_0.125em_0.125em_rgb(0_0_0/0.45)]"
     : "bg-[#e8e8e8] shadow-[inset_0_-0.0625em_0.0625em_0.125em_rgb(0_0_0/0.1),inset_0_-0.125em_0.0625em_rgb(0_0_0/0.2),inset_0_0.1875em_0.0625em_rgb(255_255_255/0.3),0_0.125em_0.125em_rgb(0_0_0/0.5)]";
 
   const circleClassName = checked
-    ? "bg-[radial-gradient(circle_at_50%_0,#9ca3af,#111827)]"
+    ? "bg-[radial-gradient(circle_at_50%_0,#eef2f7,#64748b)]"
     : "bg-[radial-gradient(circle_at_50%_0,#f5f5f5,#c4c4c4)]";
 
   return (
