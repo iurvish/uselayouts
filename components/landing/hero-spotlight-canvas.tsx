@@ -11,6 +11,11 @@ const COLS = 5;
 const ROWS = 5;
 const CARD_W = 300;
 const CARD_H = 268;
+const FRAME_PAD = 6;
+const TITLE_H = 24;
+const INNER_GAP = 6;
+const MEDIA_W = CARD_W - FRAME_PAD * 2;
+const DEFAULT_ASPECT = MEDIA_W / (CARD_H - FRAME_PAD * 2 - TITLE_H - INNER_GAP);
 /** Wide enough that CARD_SCALE_ACTIVE still leaves a clear gutter. */
 const GAP = 44;
 const PAD = 40;
@@ -60,26 +65,44 @@ const MOBILE_SEAM_WASH =
   "linear-gradient(180deg, rgba(146,148,190,0.72) 0%, rgba(120,130,175,0.35) 45%, transparent 100%)";
 
 const canvasW = PAD * 2 + COLS * CARD_W + (COLS - 1) * GAP;
-const canvasH = PAD * 2 + ROWS * CARD_H + (ROWS - 1) * GAP;
 const TOTAL = COLS * ROWS;
 
 type Camera = { x: number; y: number; scale: number };
 type DeckCard = BrowseItem & { key: string };
+type CardBox = { left: number; top: number; width: number; height: number };
 
-function cardRect(index: number) {
-  const col = index % COLS;
-  const row = Math.floor(index / COLS);
+function cardHeightForAspect(aspect: number) {
+  const ratio = aspect > 0 ? aspect : DEFAULT_ASPECT;
+  return FRAME_PAD * 2 + TITLE_H + INNER_GAP + MEDIA_W / ratio;
+}
+
+/** Column masonry: same width, height follows the poster/video. */
+function layoutDeck(count: number, aspectOf: (index: number) => number) {
+  const colY = Array.from({ length: COLS }, () => PAD);
+  const rects: CardBox[] = [];
+  for (let i = 0; i < count; i++) {
+    const col = i % COLS;
+    const height = cardHeightForAspect(aspectOf(i));
+    rects.push({
+      left: PAD + col * (CARD_W + GAP),
+      top: colY[col]!,
+      width: CARD_W,
+      height,
+    });
+    colY[col]! += height + GAP;
+  }
   return {
-    left: PAD + col * (CARD_W + GAP),
-    top: PAD + row * (CARD_H + GAP),
-    width: CARD_W,
-    height: CARD_H,
+    rects,
+    canvasH: Math.max(...colY, PAD) + PAD - GAP,
   };
 }
 
+function rectAt(rects: CardBox[], index: number): CardBox {
+  return rects[index] ?? { left: PAD, top: PAD, width: CARD_W, height: CARD_H };
+}
+
 /** transform-origin 0 0: screen = canvas * scale + translate. */
-function cameraFor(index: number, viewW: number, viewH: number, scale: number): Camera {
-  const rect = cardRect(index);
+function cameraFor(rect: CardBox, viewW: number, viewH: number, scale: number): Camera {
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
   return {
@@ -164,7 +187,10 @@ function HeroCard({
   reducedMotion,
   left,
   top,
+  height,
+  aspect,
   activeScale = CARD_SCALE_ACTIVE,
+  onAspect,
 }: {
   item: BrowseItem;
   active: boolean;
@@ -172,7 +198,10 @@ function HeroCard({
   reducedMotion: boolean;
   left: number;
   top: number;
+  height: number;
+  aspect: number;
   activeScale?: number;
+  onAspect?: (slug: string, ratio: number) => void;
 }) {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const mountVideo = allowVideo && active && Boolean(item.video);
@@ -196,7 +225,7 @@ function HeroCard({
         left,
         top,
         width: CARD_W,
-        height: CARD_H,
+        height,
         background: glassBg,
         border: active
           ? "1px solid rgba(255,255,255,0.55)"
@@ -241,11 +270,14 @@ function HeroCard({
         }}
       />
 
-      <div className="relative z-[1] shrink-0 px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[13px] text-white sm:text-[14px]">
+      <div className="relative z-[1] shrink-0 truncate px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[13px] text-white sm:text-[14px]">
         {item.title}
       </div>
       {/* Figma media radius 10 inside card 12; radius on media too — video ignores parent clip otherwise */}
-      <div className="relative z-[1] min-h-0 flex-1 overflow-clip rounded-[10px] bg-white/90 [transform:translateZ(0)]">
+      <div
+        className="relative z-[1] w-full overflow-clip rounded-[10px] bg-white/90 [transform:translateZ(0)]"
+        style={{ aspectRatio: aspect }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element -- CDN posters; sized by aspect box. */}
         <img
           src={item.poster}
@@ -266,6 +298,11 @@ function HeroCard({
             preload="metadata"
             className="absolute inset-0 size-full rounded-[10px] object-cover"
             draggable={false}
+            onLoadedMetadata={() => {
+              const node = videoRef.current;
+              if (!node || node.videoWidth < 1 || node.videoHeight < 1) return;
+              onAspect?.(item.slug, node.videoWidth / node.videoHeight);
+            }}
           />
         ) : null}
       </div>
@@ -280,11 +317,22 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const [spotlight, setSpotlight] = React.useState(startIndex);
   const [videosReady, setVideosReady] = React.useState(false);
+  const [aspects, setAspects] = React.useState<Record<string, number>>({});
   /** First layout pass done — avoid animating from 800×900 guess into real size. */
   const [ready, setReady] = React.useState(false);
   const [view, setView] = React.useState({ w: 800, h: 900 });
+  const layout = React.useMemo(
+    () =>
+      layoutDeck(
+        cards.length,
+        (i) => aspects[cards[i]?.slug ?? ""] ?? DEFAULT_ASPECT,
+      ),
+    [cards, aspects],
+  );
+  const layoutRef = React.useRef(layout);
+  layoutRef.current = layout;
   const [camera, setCamera] = React.useState<Camera>(() =>
-    cameraFor(startIndex, 800, 900, SCALE_HOLD),
+    cameraFor(rectAt(layoutDeck(TOTAL, () => DEFAULT_ASPECT).rects, startIndex), 800, 900, SCALE_HOLD),
   );
   const [transition, setTransition] = React.useState({
     duration: 0,
@@ -309,7 +357,34 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
     scaleRef.current = camera.scale;
   }, [camera.scale]);
 
+  const setAspect = React.useCallback((slug: string, ratio: number) => {
+    setAspects((prev) => (prev[slug] === ratio ? prev : { ...prev, [slug]: ratio }));
+  }, []);
+
+  React.useEffect(() => {
+    const seen = new Set<string>();
+    for (const card of cards) {
+      if (!card.poster || seen.has(card.slug)) continue;
+      seen.add(card.slug);
+      const img = new Image();
+      img.onload = () => {
+        if (img.naturalWidth < 1 || img.naturalHeight < 1) return;
+        setAspect(card.slug, img.naturalWidth / img.naturalHeight);
+      };
+      img.src = card.poster;
+    }
+  }, [cards, setAspect]);
+
   React.useEffect(() => deferUntilIdle(() => setVideosReady(true)), []);
+
+  React.useEffect(() => {
+    if (!ready) return;
+    const { w, h } = viewRef.current;
+    setTransition({ duration: 0, ease: [0, 0, 1, 1] });
+    setCamera(
+      cameraFor(rectAt(layout.rects, spotlightRef.current), w, h, scaleRef.current),
+    );
+  }, [layout, ready]);
 
   React.useEffect(() => {
     const el = viewportRef.current;
@@ -333,7 +408,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       const scale = first || scaleRef.current === SCALE_HOLD || scaleRef.current === SCALE_HOLD_MOBILE
         ? holdRef.current
         : scaleRef.current;
-      setCamera(cameraFor(spotlightRef.current, w, h, scale));
+      setCamera(cameraFor(rectAt(layoutRef.current.rects, spotlightRef.current), w, h, scale));
       if (first) setReady(true);
     };
 
@@ -370,18 +445,18 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
       const hold = holdRef.current;
 
       setTransition({ duration: OUT_MS / 1000, ease: [0.4, 0, 1, 1] });
-      setCamera(cameraFor(current, w, h, out));
+      setCamera(cameraFor(rectAt(layoutRef.current.rects, current), w, h, out));
       await wait(OUT_MS);
       if (cancelled) return;
 
       setTransition({ duration: MOVE_MS / 1000, ease: [0.45, 0, 0.55, 1] });
       setSpotlight(next);
-      setCamera(cameraFor(next, w, h, out));
+      setCamera(cameraFor(rectAt(layoutRef.current.rects, next), w, h, out));
       await wait(MOVE_MS);
       if (cancelled) return;
 
       setTransition({ duration: IN_MS / 1000, ease: [0.32, 0.72, 0, 1] });
-      setCamera(cameraFor(next, w, h, hold));
+      setCamera(cameraFor(rectAt(layoutRef.current.rects, next), w, h, hold));
       await wait(IN_MS);
       if (cancelled) return;
 
@@ -408,7 +483,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
         const next = nextSpotlightIndex(current, cards.length);
         const { w, h } = viewRef.current;
         setTransition({ duration: 0, ease: [0, 0, 1, 1] });
-        setCamera(cameraFor(next, w, h, holdRef.current));
+        setCamera(cameraFor(rectAt(layoutRef.current.rects, next), w, h, holdRef.current));
         return next;
       });
     }, HOLD_MS);
@@ -418,7 +493,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   if (cards.length === 0) return null;
 
   const active = cards[spotlight];
-  const activeRect = cardRect(spotlight);
+  const activeRect = rectAt(layout.rects, spotlight);
   const cameraMotion = {
     x: camera.x,
     y: camera.y,
@@ -427,7 +502,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
   const cameraTransition = reducedMotion ? { duration: 0 } : transition;
   const stageStyle = {
     width: canvasW,
-    height: canvasH,
+    height: layout.canvasH,
     transformOrigin: "0px 0px" as const,
     visibility: (ready ? "visible" : "hidden") as "visible" | "hidden",
   };
@@ -476,7 +551,7 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
         >
           {cards.map((item, index) => {
             if (index === spotlight) return null;
-            const rect = cardRect(index);
+            const rect = rectAt(layout.rects, index);
             return (
               <HeroCard
                 key={item.key}
@@ -486,6 +561,9 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
                 reducedMotion={reducedMotion}
                 left={rect.left}
                 top={rect.top}
+                height={rect.height}
+                aspect={aspects[item.slug] ?? DEFAULT_ASPECT}
+                onAspect={setAspect}
               />
             );
           })}
@@ -509,6 +587,9 @@ export function HeroSpotlightCanvas({ items }: { items: BrowseItem[] }) {
               reducedMotion={reducedMotion}
               left={activeRect.left}
               top={activeRect.top}
+              height={activeRect.height}
+              aspect={aspects[active.slug] ?? DEFAULT_ASPECT}
+              onAspect={setAspect}
               activeScale={activeCardScale(isMobile)}
             />
           ) : null}

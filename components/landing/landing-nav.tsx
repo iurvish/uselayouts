@@ -1,10 +1,10 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- static SVG marks, no optimisation needed. */
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export const landingNavLinks = [
   { label: "Component", href: "/browse" },
@@ -13,29 +13,20 @@ export const landingNavLinks = [
   { label: "Sponsor", href: "/sponsor" },
 ] as const;
 
-const outlineButtonStyle = {
-  backgroundImage: "none",
-  boxShadow: [
-    "inset 0 1px 0 rgba(255,255,255,0.7)",
-    "inset 0 0 0 1.5px rgba(7,26,49,0.2)",
-    "0 1px 2px rgba(7,26,49,0.04)",
-  ].join(", "),
-} as const;
-
-function StarOnGithub({ className }: { className?: string }) {
+function GithubMarkLink() {
   return (
     <a
       href="https://github.com/iurvish/uselayouts"
       target="_blank"
       rel="noreferrer"
-      className={cn(
-        "inline-flex h-10 items-center justify-center gap-2 rounded-xl px-3.5 text-[15px] font-medium transition-[transform,filter,background-color] duration-150 ease-out active:scale-[0.96] bg-transparent text-[#071A31] hover:bg-[#071A31]/[0.04]",
-        className,
-      )}
-      style={outlineButtonStyle}
+      aria-label="useLayouts on GitHub"
+      className="dark relative flex items-center overflow-hidden rounded-xl bg-secondary p-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
     >
-      <Star className="size-3.5 fill-[#071A31] text-[#071A31]" aria-hidden />
-      Star on GitHub
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] bg-linear-to-b from-transparent to-black/6 shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.05)]"
+      />
+      <img src="/brand/icon-github.svg" alt="" width={20} height={20} className="relative size-5" />
     </a>
   );
 }
@@ -73,7 +64,7 @@ export function LandingNav({
       </nav>
 
       <div className="flex items-center gap-3">
-        <StarOnGithub className="hidden h-9 sm:inline-flex" />
+        <GithubMarkLink />
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -103,7 +94,6 @@ export function LandingNav({
               {link.label}
             </Link>
           ))}
-          <StarOnGithub className="w-full sm:hidden" />
         </div>
       ) : null}
     </header>

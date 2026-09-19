@@ -42,7 +42,7 @@ export function OpenComponentView({
         )}
         style={
           {
-            background: previewBackground || "hsl(225 7% 11%)",
+            ...(previewBackground ? { background: previewBackground } : {}),
             "--preview-hint-top": `${data.hintTop ?? 80}px`,
           } as React.CSSProperties
         }

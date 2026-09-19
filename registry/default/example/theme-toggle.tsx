@@ -18,8 +18,8 @@ export default function ThemeToggle() {
     : "bg-gradient-to-b from-[#d5d5d5] to-[#e8e8e8] shadow-[0_1px_1px_rgb(255_255_255/0.6)]";
 
   const containerClassName = checked
-    ? "bg-[#1f2937] shadow-[inset_0_0_0.0625em_0.125em_rgb(255_255_255/0.05),inset_0_0.0625em_0.125em_rgb(0_0_0/0.75)] peer-checked:bg-[#0f766e] peer-checked:[&_[data-toggle-button]]:translate-x-[1.5em]"
-    : "bg-[#e8e8e8] shadow-[inset_0_0_0.0625em_0.125em_rgb(255_255_255/0.2),inset_0_0.0625em_0.125em_rgb(0_0_0/0.4)] peer-checked:bg-[var(--color-primary)] peer-checked:[&_[data-toggle-button]]:translate-x-[1.5em]";
+    ? "bg-[#1f2937] shadow-[inset_0_0_0.0625em_0.125em_rgb(255_255_255/0.05),inset_0_0.0625em_0.125em_rgb(0_0_0/0.75)] peer-checked:bg-[#1d4ed8] peer-checked:[&_[data-toggle-button]]:translate-x-[1.5em]"
+    : "bg-[#e8e8e8] shadow-[inset_0_0_0.0625em_0.125em_rgb(255_255_255/0.2),inset_0_0.0625em_0.125em_rgb(0_0_0/0.4)] peer-checked:bg-[#1d4ed8] peer-checked:[&_[data-toggle-button]]:translate-x-[1.5em]";
 
   const buttonClassName = checked
     ? "bg-[#374151] shadow-[inset_0_-0.0625em_0.0625em_0.125em_rgb(0_0_0/0.3),inset_0_-0.125em_0.0625em_rgb(0_0_0/0.45),inset_0_0.1875em_0.0625em_rgb(255_255_255/0.08),0_0.125em_0.125em_rgb(0_0_0/0.7)]"

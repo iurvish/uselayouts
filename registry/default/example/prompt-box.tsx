@@ -39,24 +39,24 @@ const FAST_TRANSITION = {
   ease: EASE_OUT_QUAD,
 };
 
-const COLLAPSED_HEIGHT = 48;
+const COLLAPSED_HEIGHT = 52;
 /** Approximate settle time for SHELL_SPRING height collapse before hover affordances. */
 const SHELL_COLLAPSE_SETTLE_MS = 320;
-const FOOTER_HEIGHT = 46;
-/** One line: pt-4 (16px) + sm:leading-[17px] */
-const SINGLE_LINE_TEXTAREA_HEIGHT = 33;
+const FOOTER_HEIGHT = 52;
+/** One line: pt-5 (20px) + leading-5 (20px) */
+const SINGLE_LINE_TEXTAREA_HEIGHT = 40;
 const MIN_EXPANDED_HEIGHT = SINGLE_LINE_TEXTAREA_HEIGHT + FOOTER_HEIGHT;
 const MAX_TEXTAREA_HEIGHT = 254;
 const MAX_EXPANDED_HEIGHT = MAX_TEXTAREA_HEIGHT + FOOTER_HEIGHT;
 
 const promptFieldClassName =
-  "field-sizing-content w-full border-0 bg-transparent text-base leading-5 text-foreground shadow-none outline-none placeholder:font-medium placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0 sm:text-sm sm:leading-[17px]";
+  "field-sizing-content w-full border-0 bg-transparent text-base leading-5 text-foreground shadow-none outline-none placeholder:font-medium placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0";
 
 const promptFieldCollapsedClassName =
-  "w-full border-0 bg-transparent text-base text-muted-foreground shadow-none outline-none placeholder:font-medium placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0 sm:text-sm";
+  "w-full border-0 bg-transparent text-base text-muted-foreground shadow-none outline-none placeholder:font-medium placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0";
 
 const promptFieldCollapsedRowClassName =
-  "min-w-0 flex-1 cursor-text border-0 bg-transparent p-0 font-medium leading-none text-muted-foreground placeholder:text-muted-foreground placeholder:leading-none";
+  "h-8 min-w-0 flex-1 cursor-text border-0 bg-transparent p-0 font-medium leading-8 text-muted-foreground placeholder:text-muted-foreground placeholder:leading-8";
 
 export type PromptSettingOption = {
   value: string;
@@ -141,7 +141,7 @@ function CollapsedSelectedModelIcon({
       {visible ? (
         <motion.span
           aria-hidden="true"
-          className="pointer-events-none flex size-4 shrink-0 items-center justify-center [&_svg]:size-4 text-muted-foreground"
+          className="pointer-events-none flex size-4 shrink-0 items-center justify-center text-muted-foreground [&_svg]:block [&_svg]:size-4"
           initial={
             reduceMotion
               ? { opacity: 0 }
@@ -169,10 +169,10 @@ function CollapsedSelectedModelIcon({
 }
 
 const dropdownPanelClassName =
-  "fixed z-[400] w-[min(17rem,calc(100vw-1.5rem))] overflow-y-auto overscroll-contain rounded-2xl border border-border/60 bg-card py-1.5 text-sm shadow-[0_10px_28px_-20px_rgba(0,0,0,0.14)] outline-none [-webkit-overflow-scrolling:touch]";
+  "fixed z-[400] w-[min(17rem,calc(100vw-1.5rem))] overflow-y-auto overscroll-contain rounded-lg bg-popover py-1 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-none [-webkit-overflow-scrolling:touch]";
 
 const settingsDropdownPanelClassName =
-  "fixed z-[400] w-[min(13rem,calc(100vw-1.5rem))] overflow-y-auto overscroll-contain rounded-xl bg-card p-1 text-[13px] leading-tight shadow-[var(--shadow-elevated)] outline-none [-webkit-overflow-scrolling:touch]";
+  "fixed z-[400] min-w-[15rem] w-max max-w-[calc(100vw-1.5rem)] overflow-y-auto overscroll-contain rounded-lg bg-popover p-1 text-sm leading-none text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-none [-webkit-overflow-scrolling:touch]";
 
 const DROPDOWN_SIDE_OFFSET = 8;
 const DROPDOWN_VIEWPORT_MARGIN = 12;
@@ -457,10 +457,10 @@ const dropdownOptionClassName =
   "relative flex min-h-11 w-full cursor-pointer scroll-m-1 touch-manipulation items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm outline-none transition-colors focus-visible:text-foreground focus-visible:outline-none";
 
 const settingsDropdownOptionClassName =
-  "relative flex min-h-10 w-full cursor-pointer scroll-m-1 touch-manipulation items-center justify-between gap-2 rounded-lg py-2 pl-2 pr-2.5 text-left text-[13px] outline-none transition-[color,transform] duration-150 ease-out active:scale-[0.96] focus-visible:text-foreground focus-visible:outline-none";
+  "relative flex min-h-10 w-full cursor-pointer scroll-m-1 touch-manipulation items-center justify-between gap-2.5 rounded-md py-2 pl-2 pr-2 text-left text-sm outline-none transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.96] focus-visible:text-foreground focus-visible:outline-none";
 
 const settingsDropdownHighlightClassName =
-  "absolute inset-0 rounded-lg bg-accent/65";
+  "absolute inset-0 rounded-md bg-accent";
 
 const dropdownOptionHighlightClassName =
   "absolute inset-x-1 inset-y-0.5 rounded-lg bg-accent/65";
@@ -646,42 +646,46 @@ function DropdownOption({
         />
       ) : null}
       <span
-        className={`relative z-10 flex min-w-0 flex-1 items-center truncate ${compact ? "gap-2" : "gap-2.5"}`}
+        className={`relative z-10 flex min-w-0 flex-1 items-center ${compact ? "gap-2.5" : "gap-2.5 truncate"}`}
       >
         {icon ? (
           <span
-            className={`flex shrink-0 items-center justify-center text-muted-foreground ${compact ? "size-4" : "size-5"}`}
+            className={`flex shrink-0 items-center justify-center text-muted-foreground ${compact ? "size-4 [&_svg]:size-4" : "size-5"}`}
           >
             {icon}
           </span>
         ) : null}
-        <span className="truncate">{label}</span>
+        <span className="min-w-0 truncate">{label}</span>
       </span>
-      <AnimatePresence>
-        {selected ? (
-          <motion.span
-            animate={
-              reduceMotion
-                ? { opacity: 1 }
-                : compact
-                  ? { opacity: 1, scale: 1, filter: "blur(0px)" }
-                  : { opacity: 1, scale: 1, y: 0 }
-            }
-            className={`relative z-10 flex shrink-0 items-center justify-center text-foreground ${compact ? "size-4" : "size-5"}`}
-            exit={{ opacity: 0, scale: 0.85 }}
-            initial={
-              reduceMotion
-                ? { opacity: 0 }
-                : compact
-                  ? { opacity: 0, scale: 0.25, filter: "blur(4px)" }
-                  : { opacity: 0, scale: 0.78, y: 1 }
-            }
-            transition={{ duration: compact ? 0.3 : 0.18, ease: EASE_OUT }}
-          >
-            <Check className={compact ? "size-3.5" : "h-4 w-4"} />
-          </motion.span>
-        ) : null}
-      </AnimatePresence>
+      <span
+        className={`relative z-10 flex shrink-0 items-center justify-center ${compact ? "size-4" : "size-5"}`}
+      >
+        <AnimatePresence>
+          {selected ? (
+            <motion.span
+              animate={
+                reduceMotion
+                  ? { opacity: 1 }
+                  : compact
+                    ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+                    : { opacity: 1, scale: 1, y: 0 }
+              }
+              className="flex size-full items-center justify-center text-foreground"
+              exit={{ opacity: 0, scale: 0.85 }}
+              initial={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : compact
+                    ? { opacity: 0, scale: 0.25, filter: "blur(4px)" }
+                    : { opacity: 0, scale: 0.78, y: 1 }
+              }
+              transition={{ duration: compact ? 0.3 : 0.18, ease: EASE_OUT }}
+            >
+              <Check className={compact ? "size-3.5" : "h-4 w-4"} />
+            </motion.span>
+          ) : null}
+        </AnimatePresence>
+      </span>
     </motion.button>
   );
 }
@@ -1311,7 +1315,7 @@ function SettingsDropdown({
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-label={`Select settings: ${triggerLabel}`}
-        className="flex min-h-10 min-w-0 max-w-[calc(100%-3rem)] cursor-pointer items-center gap-1 rounded-full py-1 pl-0 pr-0.5 text-sm leading-none transition-colors hover:text-foreground"
+        className="flex min-h-10 min-w-0 max-w-[calc(100%-3rem)] cursor-pointer items-center gap-1.5 rounded-full py-1.5 pl-0.5 pr-1.5 text-[15px] leading-none transition-[color,transform] duration-150 ease-out hover:text-foreground active:scale-[0.96]"
         onClick={toggleOpen}
         onMouseDown={(event) => event.preventDefault()}
         ref={triggerRef}
@@ -1334,7 +1338,7 @@ function SettingsDropdown({
         })}
         <ChevronDown
           aria-hidden="true"
-          className={`size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out ${open ? "rotate-180 text-foreground" : ""}`}
+          className={`size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-out ${open ? "rotate-180 text-foreground" : ""}`}
         />
       </button>
       {mounted
@@ -1981,7 +1985,7 @@ export function PromptInput({
             render={(props) => (
               <textarea
                 {...props}
-                className={`${props.className ?? ""} ${promptFieldClassName} block w-full resize-none pt-4 pr-5 pl-5 outline-none overflow-y-auto overscroll-contain`}
+                className={`${props.className ?? ""} ${promptFieldClassName} block w-full resize-none px-6 pt-5 outline-none overflow-y-auto overscroll-contain`}
                 onKeyDown={(event) => {
                   props.onKeyDown?.(event);
                   handleTextareaKeyDown(event);
@@ -1994,7 +1998,7 @@ export function PromptInput({
           />
         ) : (
         <div
-          className="group/collapsed absolute inset-x-0 top-0 flex items-center overflow-hidden px-5"
+          className="group/collapsed absolute inset-0 flex items-center overflow-hidden px-6"
           key="placeholder"
           onMouseEnter={
             prefersHover ? () => setCollapsedHover(true) : undefined
@@ -2002,11 +2006,10 @@ export function PromptInput({
           onMouseLeave={
             prefersHover ? () => setCollapsedHover(false) : undefined
           }
-          style={{ height: COLLAPSED_HEIGHT }}
         >
             <InputPrimitive
               aria-label="Open prompt input"
-              className={`${promptFieldCollapsedClassName} ${promptFieldCollapsedRowClassName} ${selectedModelIcon && collapsedHoverReady ? "pr-7" : ""}`}
+              className={`${promptFieldCollapsedClassName} ${promptFieldCollapsedRowClassName} ${selectedModelIcon && collapsedHoverReady ? "pr-8" : ""}`}
               onMouseDown={(event) => {
                 event.preventDefault();
                 expand();
@@ -2017,7 +2020,7 @@ export function PromptInput({
             {selectedModelIcon && collapsedHoverReady ? (
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 right-5 flex size-4 -translate-y-1/2 items-center justify-center opacity-80"
+                className="pointer-events-none absolute top-1/2 right-6 flex size-4 -translate-y-1/2 items-center justify-center"
               >
                 <CollapsedSelectedModelIcon
                   icon={selectedModelIcon}
@@ -2033,7 +2036,7 @@ export function PromptInput({
         {expanded ? (
           <motion.div
             animate={{ opacity: 1 }}
-            className="absolute inset-x-0 bottom-0 flex items-center pl-5 pr-2"
+            className="absolute inset-x-0 bottom-0 flex items-center pl-6 pr-2.5"
             exit={{ opacity: 0, transition: { duration: 0.16, ease: EASE_OUT_QUAD } }}
             initial={{ opacity: 0 }}
             key="footer"

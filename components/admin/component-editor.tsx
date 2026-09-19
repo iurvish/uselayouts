@@ -29,6 +29,8 @@ import { generateComponentCopy } from "@/lib/admin/generate-copy";
 import { extractHints } from "@/lib/open/mdx-extract";
 import {
   DEFAULT_PREVIEW_BACKGROUNDS,
+  NONE_PREVIEW_BACKGROUND,
+  isPreviewBackgroundNone,
   parsePreviewBackgrounds,
   resolvePreviewBackground,
   serializePreviewBackgrounds,
@@ -202,6 +204,10 @@ export function ComponentEditor({
     }, 500);
     return () => window.clearTimeout(timer);
   }, [form.code, mode, copyLocked]);
+
+  const noPreviewBackground =
+    isPreviewBackgroundNone(previewBgLight) &&
+    isPreviewBackgroundNone(previewBgDark);
 
   const activePreviewBackground = useMemo(
     () =>
@@ -384,7 +390,11 @@ export function ComponentEditor({
     description: hintDescription,
     hideOnScroll: hintHideOnScroll,
   });
-  const hintTone = hintToneForBackground(activePreviewBackground);
+  const hintTone = activePreviewBackground
+    ? hintToneForBackground(activePreviewBackground)
+    : previewTheme === "light"
+      ? "light"
+      : "dark";
 
   const showPoster = imagePreviewUrl || posterUrl;
   const showVideo = videoPreviewUrl || videoUrl;
@@ -538,23 +548,49 @@ export function ComponentEditor({
           <Card size="sm">
             <CardHeader>
               <CardTitle>Preview backgrounds</CardTitle>
-              <CardDescription>Light and dark colors for the open-page canvas.</CardDescription>
+              <CardDescription>
+                Light and dark colors for the open-page canvas.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <ColorField
-                  label="Light"
-                  value={previewBgLight}
-                  fallback={DEFAULT_PREVIEW_BACKGROUNDS.light}
-                  onChange={setPreviewBgLight}
+              <label className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium">No background</span>
+                <input
+                  type="checkbox"
+                  checked={noPreviewBackground}
+                  aria-label="Use the app canvas instead of a custom preview background"
+                  className="size-4 accent-foreground"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setPreviewBgLight(NONE_PREVIEW_BACKGROUND);
+                      setPreviewBgDark(NONE_PREVIEW_BACKGROUND);
+                      return;
+                    }
+                    setPreviewBgLight(DEFAULT_PREVIEW_BACKGROUNDS.light);
+                    setPreviewBgDark(DEFAULT_PREVIEW_BACKGROUNDS.dark);
+                  }}
                 />
-                <ColorField
-                  label="Dark"
-                  value={previewBgDark}
-                  fallback={DEFAULT_PREVIEW_BACKGROUNDS.dark}
-                  onChange={setPreviewBgDark}
-                />
-              </div>
+              </label>
+              {noPreviewBackground ? (
+                <p className="text-xs text-muted-foreground">
+                  Uses the app canvas behind the preview.
+                </p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <ColorField
+                    label="Light"
+                    value={previewBgLight}
+                    fallback={DEFAULT_PREVIEW_BACKGROUNDS.light}
+                    onChange={setPreviewBgLight}
+                  />
+                  <ColorField
+                    label="Dark"
+                    value={previewBgDark}
+                    fallback={DEFAULT_PREVIEW_BACKGROUNDS.dark}
+                    onChange={setPreviewBgDark}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -719,10 +755,13 @@ export function ComponentEditor({
               className={cn(
                 "component-showcase flex min-h-[min(52vh,480px)] items-center justify-center overflow-hidden text-foreground",
                 previewTheme === "dark" ? "dark" : "light",
+                !activePreviewBackground && "bg-muted",
               )}
               style={
                 {
-                  background: activePreviewBackground,
+                  ...(activePreviewBackground
+                    ? { background: activePreviewBackground }
+                    : {}),
                   "--preview-hint-top": `${hintTop}px`,
                 } as CSSProperties
               }

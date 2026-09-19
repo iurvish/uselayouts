@@ -10,6 +10,13 @@ export const DEFAULT_PREVIEW_BACKGROUNDS = {
   dark: "hsl(225 7% 11%)",
 } as const;
 
+/** Stored in controls JSON so resolve can skip a fill and show the app canvas. */
+export const NONE_PREVIEW_BACKGROUND = "none";
+
+export function isPreviewBackgroundNone(value: string | undefined) {
+  return value === NONE_PREVIEW_BACKGROUND;
+}
+
 export function isCssColor(value: string) {
   const next = value.trim();
   if (!next) return false;
@@ -43,6 +50,7 @@ export function resolvePreviewBackground(
   theme: "light" | "dark",
 ) {
   const value = backgrounds?.[theme]?.trim();
+  if (isPreviewBackgroundNone(value)) return undefined;
   if (value) return value;
   return DEFAULT_PREVIEW_BACKGROUNDS[theme];
 }

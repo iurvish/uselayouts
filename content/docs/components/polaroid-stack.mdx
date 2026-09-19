@@ -1,19 +1,19 @@
 ---
 title: Polaroid Stack
-description: Seven Polaroids sit in a pile. Hover the stage and they fan into an arc from one corner, like a hand of cards.
+description: Seven Polaroids sit in a pile. Hover a card and they fan into an arc from one corner, like a hand of cards.
 ---
 
 ## Features
 
 - **Idle pile**: Same size, white frame, thick Polaroid foot, stacked on center.
-- **CSS fan**: Parent `group-hover` rotates cards from −54° to 54°. No Motion, no JS state.
+- **CSS fan**: Hovering a card rotates the pile from −54° to 54°. No Motion, no JS state.
 - **Shared hinge**: `origin-bottom-left` so they pivot from one hand-held point.
 - **Card lift**: A single print scales to 1.1 on its own hover and rises above the rest.
 - **Fine pointer only**: The fan stays off on touch. Reduced motion keeps the pile still.
 
 ## Usage
 
-Hover the section. Swap `fanCards` for your shots. This is a stack, not a carousel.
+Hover a card. Swap `fanCards` for your shots. This is a stack, not a carousel.
 
 ```tsx
 import PolaroidStack from "@/components/polaroid-stack";
