@@ -25,5 +25,10 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/editorial-deck/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4",
+  "tags": [
+    "cards",
+    "deck",
+    "swipe"
+  ]
 }

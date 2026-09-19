@@ -27,5 +27,9 @@
   "hintDescription": "",
   "hintHideOnScroll": true,
   "posterUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4",
+  "tags": [
+    "text",
+    "scroll"
+  ]
 }

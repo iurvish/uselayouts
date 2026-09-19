@@ -3,5 +3,10 @@
   "disabled": [],
   "updatedAt": "2026-09-18T18:29:27.307Z",
   "posterUrl": "https://cdn.uselayouts.com/components/bento-card/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/bento-card/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/bento-card/video.mp4",
+  "tags": [
+    "bento",
+    "card",
+    "tabs"
+  ]
 }

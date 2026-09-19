@@ -13,5 +13,11 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/save-button/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/save-button/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/save-button/video.mp4",
+  "tags": [
+    "button",
+    "save",
+    "status",
+    "loading"
+  ]
 }

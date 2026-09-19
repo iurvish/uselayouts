@@ -19,5 +19,9 @@
     "items": []
   },
   "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4",
+  "tags": [
+    "folder",
+    "letter"
+  ]
 }

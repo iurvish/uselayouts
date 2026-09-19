@@ -34,5 +34,10 @@
   "disabled": [],
   "updatedAt": "2026-09-16T16:15:47.288Z",
   "posterUrl": "https://cdn.uselayouts.com/components/delete-button/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/delete-button/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/delete-button/video.mp4",
+  "tags": [
+    "button",
+    "delete",
+    "confirm"
+  ]
 }

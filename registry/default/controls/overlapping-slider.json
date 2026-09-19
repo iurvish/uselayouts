@@ -1,6 +1,11 @@
 {
   "dialConfig": {
-    "previewPadding": [24, 0, 96, 4],
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
     "spring": {
       "type": "spring",
       "visualDuration": 0.35,
@@ -17,5 +22,9 @@
   "hintKind": "drag",
   "hintHeading": "",
   "hintDescription": "",
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "tags": [
+    "carousel",
+    "slider"
+  ]
 }

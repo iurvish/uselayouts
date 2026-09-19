@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { BrowseItem } from "@/lib/browse/items";
+import { rankSearchItems } from "@/lib/component-tags";
 import { useRenderQuality } from "@/lib/browse/use-render-quality";
 import { BrowseGrid } from "./browse-grid";
 import { BrowseHeader } from "./browse-header";
@@ -16,11 +17,11 @@ export function BrowseExperience({ items }: { items: BrowseItem[] }) {
   const quality = useRenderQuality();
 
   const filtered = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return items;
-    return items.filter((item) =>
-      `${item.title} ${item.description} ${item.category}`.toLowerCase().includes(needle),
-    );
+    return rankSearchItems(items, query, (item) => ({
+      name: `${item.title} ${item.slug}`,
+      tags: item.tags,
+      extra: `${item.description} ${item.category}`,
+    }));
   }, [items, query]);
 
   const isEmpty = filtered.length === 0;

@@ -21,5 +21,9 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Tap to set a timer",
-  "hintDescription": "Spin the wheel, start, then pause or cancel. One surface morphs through every step."
+  "hintDescription": "Spin the wheel, start, then pause or cancel. One surface morphs through every step.",
+  "tags": [
+    "timer",
+    "input"
+  ]
 }

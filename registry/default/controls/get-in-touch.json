@@ -16,5 +16,9 @@
   "hintHeading": "Hover the pill",
   "hintDescription": "GET IN TOUCH lifts away. A portrait and YOU merge, then Let’s Talk! writes in.",
   "hintTop": 172,
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "tags": [
+    "button",
+    "contact"
+  ]
 }

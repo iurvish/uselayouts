@@ -25,5 +25,10 @@
     "items": []
   },
   "posterUrl": "https://cdn.uselayouts.com/components/infinite-grid/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4",
+  "tags": [
+    "canvas",
+    "grid",
+    "drag"
+  ]
 }

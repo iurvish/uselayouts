@@ -23,5 +23,10 @@
   "hintHeading": "",
   "hintDescription": "",
   "hintHideOnScroll": false,
-  "hintTop": 80
+  "hintTop": 80,
+  "tags": [
+    "gallery",
+    "grid",
+    "photos"
+  ]
 }

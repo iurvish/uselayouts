@@ -3,5 +3,9 @@
   "disabled": [],
   "updatedAt": "2026-09-16T16:44:24.771Z",
   "posterUrl": "https://cdn.uselayouts.com/components/discrete-tabs/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/discrete-tabs/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/discrete-tabs/video.mp4",
+  "tags": [
+    "tabs",
+    "nav"
+  ]
 }

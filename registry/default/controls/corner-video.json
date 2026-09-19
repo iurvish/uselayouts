@@ -36,5 +36,9 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/corner-video/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4",
+  "tags": [
+    "video",
+    "player"
+  ]
 }

@@ -14,5 +14,10 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Tap the composer",
-  "hintDescription": "It expands into a textarea. Open the model menu, then hover the collapsed field to see the selected model."
+  "hintDescription": "It expands into a textarea. Open the model menu, then hover the collapsed field to see the selected model.",
+  "tags": [
+    "input",
+    "prompt",
+    "ai"
+  ]
 }

@@ -3,5 +3,11 @@
   "disabled": [],
   "updatedAt": "2026-09-18T18:38:20.485Z",
   "posterUrl": "https://cdn.uselayouts.com/components/photo-albums/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/photo-albums/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/photo-albums/video.mp4",
+  "tags": [
+    "gallery",
+    "album",
+    "photos",
+    "stack"
+  ]
 }

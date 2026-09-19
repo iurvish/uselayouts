@@ -24,6 +24,7 @@ export type OpenNavItem = {
   href: string;
   slug: string;
   isNew?: boolean;
+  tags?: string[];
 };
 
 export type OpenComponentData = {
@@ -90,6 +91,7 @@ export async function getOpenNavItems(): Promise<OpenNavItem[]> {
         title: page?.data.title ?? item.title,
         href: `/docs/components/${item.name}`,
         isNew: isNewComponent(item.name),
+        tags: item.tags,
       };
     });
   }
@@ -98,9 +100,10 @@ export async function getOpenNavItems(): Promise<OpenNavItem[]> {
     return {
       slug: item.slug,
       title: page?.data.title ?? item.title,
-      href: `/docs/components/${item.slug}`,
-      isNew: item.isNew || isNewComponent(item.slug),
-    };
+        href: `/docs/components/${item.slug}`,
+        isNew: item.isNew || isNewComponent(item.slug),
+        tags: item.tags,
+      };
   });
 }
 

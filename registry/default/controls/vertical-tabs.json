@@ -12,5 +12,9 @@
   "hintHeading": "",
   "hintDescription": "",
   "posterUrl": "https://cdn.uselayouts.com/components/vertical-tabs/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/vertical-tabs/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/vertical-tabs/video.mp4",
+  "tags": [
+    "tabs",
+    "nav"
+  ]
 }

@@ -17,5 +17,10 @@
   "previewBackground": {
     "light": "#F4F6F8",
     "dark": "#F4F6F8"
-  }
+  },
+  "tags": [
+    "cards",
+    "stack",
+    "scroll"
+  ]
 }

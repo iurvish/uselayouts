@@ -21,5 +21,10 @@
   },
   "hintTop": 80,
   "posterUrl": "https://cdn.uselayouts.com/components/3d-book/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/3d-book/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/3d-book/video.mp4",
+  "tags": [
+    "book",
+    "pages",
+    "flip"
+  ]
 }

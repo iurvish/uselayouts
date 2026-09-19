@@ -9,6 +9,7 @@ import { ChevronsUpDown, Search } from "lucide-react";
 
 import { scrollbarMinimal, rememberScroller, restoreScroller, revealChildInScroller } from "@/components/open/ui";
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
+import { rankSearchItems } from "@/lib/component-tags";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
@@ -51,9 +52,10 @@ export function OpenSwitcher({
   }, [pathname, pending]);
 
   const filtered = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return items;
-    return items.filter((item) => item.title.toLowerCase().includes(needle) || item.slug.includes(needle));
+    return rankSearchItems(items, query, (item) => ({
+      name: `${item.title} ${item.slug}`,
+      tags: item.tags,
+    }));
   }, [items, query]);
 
   const close = React.useCallback(() => {

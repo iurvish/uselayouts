@@ -18,5 +18,10 @@
   "hintTop": 150,
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/analog-stick/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4",
+  "tags": [
+    "button",
+    "stick",
+    "press"
+  ]
 }

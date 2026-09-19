@@ -57,6 +57,7 @@ export async function PUT(request: Request, { params }: Params) {
       hintHeading: body.hintHeading,
       hintDescription: body.hintDescription,
       hintHideOnScroll: body.hintHideOnScroll,
+      tags: body.tags,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {

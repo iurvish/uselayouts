@@ -22,11 +22,13 @@ import {
 } from "lucide-react";
 
 import { ComponentLivePreview } from "@/components/admin/live-preview";
+import { ComponentTags } from "@/components/admin/component-tags";
 import { DependencyTags } from "@/components/admin/dependency-tags";
 import { PreviewHint } from "@/components/open/preview-hint";
 import { detectDependencies } from "@/lib/admin/detect-code";
 import { generateComponentCopy } from "@/lib/admin/generate-copy";
 import { extractHints } from "@/lib/open/mdx-extract";
+import { normalizeTags } from "@/lib/component-tags";
 import {
   DEFAULT_PREVIEW_BACKGROUNDS,
   NONE_PREVIEW_BACKGROUND,
@@ -73,6 +75,7 @@ type FormState = {
   code: string;
   dependencies: string;
   features: string;
+  tags: string[];
 };
 
 const EMPTY: FormState = {
@@ -93,6 +96,7 @@ export default function Example() {
 `,
   dependencies: "motion, clsx, tailwind-merge",
   features: "",
+  tags: [],
 };
 
 export function ComponentEditor({
@@ -144,6 +148,7 @@ export function ComponentEditor({
           code: data.code,
           dependencies: (data.item.dependencies || []).join(", "),
           features: data.mdx ? extractHints(data.mdx).join("\n") : "",
+          tags: normalizeTags(data.controls?.tags),
         });
         setDepsLocked(true);
         setCopyLocked(true);
@@ -265,6 +270,7 @@ export function ComponentEditor({
       hintHeading,
       hintDescription,
       hintHideOnScroll,
+      tags: form.tags,
     };
 
     const res = await fetch(
@@ -502,6 +508,10 @@ export function ComponentEditor({
                   }}
                 />
               </Field>
+              <ComponentTags
+                value={form.tags}
+                onChange={(tags) => setForm((f) => ({ ...f, tags }))}
+              />
             </CardContent>
           </Card>
 

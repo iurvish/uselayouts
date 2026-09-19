@@ -14,5 +14,11 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Open a drawer",
-  "hintDescription": "Payment folds in from the right. Cart folds in from the left. Fields stagger in behind the panel."
+  "hintDescription": "Payment folds in from the right. Cart folds in from the left. Fields stagger in behind the panel.",
+  "tags": [
+    "button",
+    "drawer",
+    "cart",
+    "payment"
+  ]
 }

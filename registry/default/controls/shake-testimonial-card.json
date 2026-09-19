@@ -3,5 +3,9 @@
   "disabled": [],
   "updatedAt": "2026-09-16T16:06:36.045Z",
   "posterUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/video.mp4",
+  "tags": [
+    "card",
+    "testimonial"
+  ]
 }

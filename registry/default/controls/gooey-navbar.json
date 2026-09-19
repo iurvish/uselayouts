@@ -23,5 +23,9 @@
   "hintHeading": "",
   "hintDescription": "",
   "hintHideOnScroll": false,
-  "hintTop": 139
+  "hintTop": 139,
+  "tags": [
+    "nav",
+    "navbar"
+  ]
 }

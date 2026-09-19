@@ -16,6 +16,7 @@ type Item = {
   hasMdx: boolean;
   controlsCount: number;
   disabledCount: number;
+  tags: string[];
 };
 
 export default function AdminHomePage() {
@@ -42,7 +43,8 @@ export default function AdminHomePage() {
       (item) =>
         item.name.toLowerCase().includes(q) ||
         item.title.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q),
+        item.description.toLowerCase().includes(q) ||
+        item.tags.some((tag) => tag.includes(q)),
     );
   }, [items, query]);
 
@@ -86,7 +88,7 @@ export default function AdminHomePage() {
           <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="pl-8"
-            placeholder="Search by title, slug, or description…"
+            placeholder="Search by title, slug, tag, or description…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -139,6 +141,15 @@ export default function AdminHomePage() {
                   <p className="line-clamp-2 text-sm text-muted-foreground">
                     {item.description || "No description"}
                   </p>
+                  {item.tags.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {item.tags.map((tag) => (
+                        <Badge key={tag} variant="outline" className="font-normal">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : null}
                   <p className="text-xs text-muted-foreground tabular-nums">
                     {item.controlsCount} dial
                     {item.controlsCount === 1 ? "" : "s"}

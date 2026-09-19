@@ -23,5 +23,10 @@
   "hintKind": "scroll",
   "hintHeading": "",
   "hintDescription": "",
-  "hintHideOnScroll": true
+  "hintHideOnScroll": true,
+  "tags": [
+    "cards",
+    "stack",
+    "scroll"
+  ]
 }

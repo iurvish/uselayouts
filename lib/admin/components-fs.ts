@@ -19,6 +19,7 @@ import {
   serializePreviewHint,
   type PreviewHintKind,
 } from "@/lib/open/preview-hint-config";
+import { normalizeTags } from "@/lib/component-tags";
 
 const execAsync = promisify(exec);
 
@@ -46,6 +47,8 @@ export type ComponentControlsMeta = {
   hintDescription?: string;
   /** Fade the hint as the preview scrolls; it comes back at the top. */
   hintHideOnScroll?: boolean;
+  /** Search keywords. Name matches first, then these. */
+  tags?: string[];
 };
 
 export type RegistryItem = {
@@ -75,6 +78,7 @@ export type UpsertComponentInput = {
   hintHeading?: string;
   hintDescription?: string;
   hintHideOnScroll?: boolean;
+  tags?: string[];
 };
 
 async function readRegistry(): Promise<{
@@ -110,6 +114,7 @@ export async function listComponents() {
           ? Object.keys(flattenKeys(controls.dialConfig)).length
           : 0,
         disabledCount: controls?.disabled.length ?? 0,
+        tags: normalizeTags(controls?.tags),
       };
     }),
   );
@@ -147,6 +152,21 @@ export async function readControls(
   } catch {
     return null;
   }
+}
+
+export async function loadComponentTags(): Promise<Record<string, string[]>> {
+  const files = await fs.readdir(CONTROLS_DIR);
+  const out: Record<string, string[]> = {};
+  await Promise.all(
+    files
+      .filter((file) => file.endsWith(".json"))
+      .map(async (file) => {
+        const slug = file.slice(0, -5);
+        const controls = await readControls(slug);
+        out[slug] = normalizeTags(controls?.tags);
+      }),
+  );
+  return out;
 }
 
 async function writeControls(name: string, meta: ComponentControlsMeta) {
@@ -327,6 +347,10 @@ export async function upsertComponent(input: UpsertComponentInput) {
           hideOnScroll: input.hintHideOnScroll ?? existingHint.hideOnScroll,
         })
       : {}),
+    tags:
+      input.tags !== undefined
+        ? normalizeTags(input.tags)
+        : existingMeta?.tags,
   });
 
   const mdx = generateComponentMdx({

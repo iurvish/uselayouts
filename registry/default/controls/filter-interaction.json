@@ -12,5 +12,9 @@
   "hintHeading": "",
   "hintDescription": "",
   "posterUrl": "https://cdn.uselayouts.com/components/filter-interaction/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/filter-interaction/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/filter-interaction/video.mp4",
+  "tags": [
+    "list",
+    "filter"
+  ]
 }

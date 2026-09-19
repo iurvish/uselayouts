@@ -10,6 +10,7 @@ export type BrowseItem = {
   title: string;
   description: string;
   category: string;
+  tags?: string[];
   /** Still frame shown before/instead of the video. */
   poster: string;
   /** Muted loop preview (empty string = image only). */

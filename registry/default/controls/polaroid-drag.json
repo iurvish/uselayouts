@@ -30,5 +30,11 @@
     "items": []
   },
   "posterUrl": "https://cdn.uselayouts.com/components/polaroid-drag/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4",
+  "tags": [
+    "photos",
+    "polaroid",
+    "drag",
+    "stack"
+  ]
 }

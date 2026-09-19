@@ -170,5 +170,25 @@
   "analog-stick": {
     "posterUrl": "https://cdn.uselayouts.com/components/analog-stick/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4"
+  },
+  "magnified-bento": {
+    "posterUrl": "https://cdn.uselayouts.com/components/magnified-bento/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/magnified-bento/video.mp4"
+  },
+  "empty-testimonial": {
+    "posterUrl": "https://cdn.uselayouts.com/components/empty-testimonial/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/empty-testimonial/video.mp4"
+  },
+  "expandable-gallery": {
+    "posterUrl": "https://cdn.uselayouts.com/components/expandable-gallery/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/expandable-gallery/video.mp4"
+  },
+  "polaroid-stack": {
+    "posterUrl": "https://cdn.uselayouts.com/components/polaroid-stack/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/polaroid-stack/video.mp4"
+  },
+  "scan-document": {
+    "posterUrl": "https://cdn.uselayouts.com/components/scan-document/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scan-document/video.mp4"
   }
 }

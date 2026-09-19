@@ -21,5 +21,9 @@
     ]
   },
   "posterUrl": "https://cdn.uselayouts.com/components/animated-collection/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4",
+  "tags": [
+    "list",
+    "collection"
+  ]
 }

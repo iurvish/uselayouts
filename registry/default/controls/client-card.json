@@ -13,5 +13,9 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/client-card/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/client-card/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/client-card/video.mp4",
+  "tags": [
+    "card",
+    "crm"
+  ]
 }

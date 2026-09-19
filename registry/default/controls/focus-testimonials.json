@@ -27,5 +27,8 @@
     "items": []
   },
   "posterUrl": "https://cdn.uselayouts.com/components/focus-testimonials/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4",
+  "tags": [
+    "testimonial"
+  ]
 }

@@ -14,5 +14,9 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Drag the type",
-  "hintDescription": "Velocity leaves a stacked outline trail. Arrow keys nudge it."
+  "hintDescription": "Velocity leaves a stacked outline trail. Arrow keys nudge it.",
+  "tags": [
+    "text",
+    "drag"
+  ]
 }

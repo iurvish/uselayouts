@@ -28,5 +28,9 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/video.mp4",
+  "tags": [
+    "cards",
+    "tilt"
+  ]
 }

@@ -16,5 +16,9 @@
   "hintHeading": "Open a side",
   "hintDescription": "Left and right panels slide in. The inner edge starts as a bulge, then settles into a straight line.",
   "hintTop": 147,
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "tags": [
+    "drawer",
+    "sidebar"
+  ]
 }

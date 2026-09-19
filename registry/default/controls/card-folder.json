@@ -41,5 +41,9 @@
     ]
   },
   "posterUrl": "https://cdn.uselayouts.com/components/card-folder/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4",
+  "tags": [
+    "folder",
+    "card"
+  ]
 }

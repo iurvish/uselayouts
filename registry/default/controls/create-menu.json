@@ -3,5 +3,10 @@
   "disabled": [],
   "updatedAt": "2026-09-18T18:35:41.788Z",
   "posterUrl": "https://cdn.uselayouts.com/components/create-menu/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/create-menu/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/create-menu/video.mp4",
+  "tags": [
+    "button",
+    "menu",
+    "create"
+  ]
 }

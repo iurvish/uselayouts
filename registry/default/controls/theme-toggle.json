@@ -14,5 +14,11 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Click the switch",
-  "hintDescription": "The dotted grip slides across the recessed track. On, it goes blue. Off, it sits left."
+  "hintDescription": "The dotted grip slides across the recessed track. On, it goes blue. Off, it sits left.",
+  "tags": [
+    "button",
+    "theme",
+    "toggle",
+    "dark"
+  ]
 }

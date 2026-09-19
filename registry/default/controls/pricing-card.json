@@ -3,5 +3,9 @@
   "disabled": [],
   "updatedAt": "2026-09-16T16:18:00.819Z",
   "posterUrl": "https://cdn.uselayouts.com/components/pricing-card/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/pricing-card/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/pricing-card/video.mp4",
+  "tags": [
+    "card",
+    "pricing"
+  ]
 }

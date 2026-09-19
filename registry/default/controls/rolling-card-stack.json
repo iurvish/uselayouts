@@ -34,5 +34,9 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "posterUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4",
+  "tags": [
+    "cards",
+    "stack"
+  ]
 }

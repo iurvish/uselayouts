@@ -25,5 +25,9 @@
   "hintHideOnScroll": false,
   "hintTop": 144,
   "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4",
+  "tags": [
+    "button",
+    "press"
+  ]
 }

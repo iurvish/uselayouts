@@ -25,5 +25,10 @@
     "duration": 3,
     "scale": 50,
     "items": []
-  }
+  },
+  "tags": [
+    "carousel",
+    "wheel",
+    "slider"
+  ]
 }

@@ -32,5 +32,9 @@
     "items": []
   },
   "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4",
+  "tags": [
+    "accordion",
+    "image"
+  ]
 }
