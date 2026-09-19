@@ -198,7 +198,7 @@ function MinutePicker({ selectedMinutes, onChange }: MinutePickerProps) {
   const bandHeight = `calc(50% - ${OPTION_ITEM_HEIGHT / 2}px)`;
 
   return (
-    <div className="relative w-[176px]">
+    <div className="relative w-[176px] cursor-grab active:cursor-grabbing [&_[data-rwp]]:cursor-grab! [&_[data-rwp]]:active:cursor-grabbing!">
       <WheelPickerWrapper className="w-full rounded-none border-0 bg-transparent px-0 shadow-none dark:bg-transparent">
         <WheelPicker<number>
           options={MINUTE_OPTIONS}
@@ -314,7 +314,7 @@ function TimerBorder({
 }
 
 const buttonBase =
-  "flex items-center justify-center rounded-full text-[18px] font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2c2c2c]";
+  "flex cursor-pointer items-center justify-center rounded-full text-[18px] font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2c2c2c]";
 
 export const SetTimer = () => {
   const reduceMotion = useReducedMotion();
@@ -432,7 +432,7 @@ export const SetTimer = () => {
             <button
               type="button"
               onClick={handleOpenPicker}
-              className="flex size-full items-center gap-4 rounded-[42px] pl-[22px] pr-8 text-[28px] font-medium tracking-tight text-white outline-none transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/70"
+              className="flex size-full cursor-pointer items-center gap-4 rounded-[42px] pl-[22px] pr-8 text-[28px] font-medium tracking-tight text-white outline-none transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/70"
             >
               <TimerIcon />
               Set timer
