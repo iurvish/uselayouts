@@ -9,6 +9,7 @@ import { usePosterAspects } from "@/lib/browse/use-poster-aspects";
 import { BrowseCard } from "./glass-card";
 
 const BATCH = 12;
+const PIN_MEDIA_X = 8;
 
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
@@ -57,12 +58,15 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
   const { aspects, setAspect } = usePosterAspects(shown);
   const columns = pinColumnCount(width);
   const columnWidth = width > 0 ? (width - PIN_GAP * (columns - 1)) / columns : 0;
+  const mediaWidth = Math.max(0, columnWidth - PIN_MEDIA_X);
   const packed = packPinMasonry(
     shown.length,
     columns,
     columnWidth,
     PIN_GAP,
-    shown.map((item, index) => tileHeightFor(columnWidth, aspects[item.slug], index)),
+    shown.map((item, index) =>
+      tileHeightFor(mediaWidth, aspects[item.slug], index),
+    ),
   );
 
   return (
@@ -86,7 +90,7 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
                   paused={paused}
                   observeVisibility
                   pinHeight={posterMediaHeight(
-                    columnWidth,
+                    mediaWidth,
                     aspects[item.slug],
                     index,
                   )}
