@@ -17,7 +17,7 @@
     "imageUrl4": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1600&q=85"
   },
   "disabled": [],
-  "updatedAt": "2026-09-17T17:07:10.903Z",
+  "updatedAt": "2026-09-18T18:39:24.176Z",
   "previewBackground": {
     "light": "#e5e5e0",
     "dark": "#e5e5e0"
@@ -32,5 +32,7 @@
   "hintKind": "click",
   "hintHeading": "",
   "hintDescription": "",
-  "hintHideOnScroll": false
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4"
 }

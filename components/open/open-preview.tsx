@@ -25,7 +25,10 @@ export function OpenPreview({
   const fill = name !== "perspective-text-scroll";
   // This demo is its own scrollport (`overflow-y-auto` or iframe). min-h-0 stops the
   // 5×110vh track from inflating this grid item so <main> never becomes the scroller.
-  const nestedPageScroll = name === "scroll-stack-deck" || name === "stack-scroll-reveal";
+  const nestedPageScroll =
+    name === "scroll-stack-deck" ||
+    name === "stack-scroll-reveal" ||
+    name === "scroll-split-cards";
 
   const inner = Component ? (
     <div

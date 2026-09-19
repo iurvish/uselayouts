@@ -16,7 +16,7 @@ import {
   PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPressMotion, scrollbarNone } from "@/components/open/ui";
+import { openIconBtn, openPressMotion, scrollbarNone, centerChildInScroller } from "@/components/open/ui";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -168,23 +168,49 @@ function SidebarList({
     const el = scrollRef.current;
     if (!el) return;
 
-    const update = () => {
+    let allow = true;
+    const until = performance.now() + 250;
+    const stop = () => {
+      allow = false;
+    };
+    const tryCenter = () => {
+      if (!allow || performance.now() > until || el.clientHeight === 0) return;
+      const active = el.querySelector<HTMLElement>("[aria-current=page]");
+      if (active) centerChildInScroller(el, active);
+    };
+
+    const updateFades = () => {
       const { scrollTop, clientHeight, scrollHeight } = el;
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
     };
 
-    update();
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
+    tryCenter();
+    updateFades();
+    el.addEventListener("scroll", updateFades, { passive: true });
+    el.addEventListener("wheel", stop, { passive: true });
+    el.addEventListener("touchmove", stop, { passive: true });
+    const ro = new ResizeObserver(() => {
+      tryCenter();
+      updateFades();
+    });
     ro.observe(el);
     const child = el.firstElementChild;
     if (child) ro.observe(child);
-    return () => {
-      el.removeEventListener("scroll", update);
-      ro.disconnect();
+    let raf = 0;
+    const tick = () => {
+      tryCenter();
+      if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
-  }, [items]);
+    raf = requestAnimationFrame(tick);
+    return () => {
+      el.removeEventListener("scroll", updateFades);
+      el.removeEventListener("wheel", stop);
+      el.removeEventListener("touchmove", stop);
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [items, activeHref]);
 
   return (
     <div className={cn("relative min-h-0 flex-1", tall && "h-[min(70dvh,560px)]")}>
@@ -205,7 +231,7 @@ function SidebarList({
           items={items}
           activeHref={activeHref}
           onItemClick={(item) => {
-            document.title = `${item.title} | uselayouts`;
+            document.title = `${item.title} - useLayouts`;
           }}
           onItemHover={
             onItemHover
@@ -473,5 +499,5 @@ function OpenExperienceShell({
 
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
-  document.title = `${title} | uselayouts`;
+  document.title = `${title} - useLayouts`;
 }

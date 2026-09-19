@@ -375,12 +375,21 @@ export const Index: Record<string, any> = {
       target: ""
     },{
       path: "registry/default/example/drawer-buttons-field.tsx",
+  "dynamic-grid-gallery": {
+    name: "dynamic-grid-gallery",
+    description: "A 3×2 photo grid that grows the hovered row and column so one still takes the stage.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/dynamic-grid-gallery.tsx",
       type: "registry:component",
       target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/drawer-buttons-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "drawer-buttons"
+      const mod = await import("@/registry/default/demo/dynamic-grid-gallery-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "dynamic-grid-gallery"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -581,12 +590,21 @@ export const Index: Record<string, any> = {
     registryDependencies: undefined,
     files: [{
       path: "registry/default/example/holographic-referral-card.tsx",
+  "gooey-navbar": {
+    name: "gooey-navbar",
+    description: "A pill nav that melts into its neighbor when you hover — liquid bridges, glow, active dot.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/gooey-navbar.tsx",
       type: "registry:component",
       target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/holographic-referral-card-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "holographic-referral-card"
+      const mod = await import("@/registry/default/demo/gooey-navbar-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "gooey-navbar"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -699,6 +717,24 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/example/multi-step-form.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "multi-step-form"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "overlapping-slider": {
+    name: "overlapping-slider",
+    description: "A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/overlapping-slider.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/overlapping-slider-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "overlapping-slider"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -895,12 +931,21 @@ export const Index: Record<string, any> = {
     registryDependencies: undefined,
     files: [{
       path: "registry/default/example/scan-document.tsx",
+  "scroll-split-cards": {
+    name: "scroll-split-cards",
+    description: "One photograph that splits into three panels as you scroll, then flips to copy.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/scroll-split-cards.tsx",
       type: "registry:component",
       target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/scan-document-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "scan-document"
+      const mod = await import("@/registry/default/demo/scroll-split-cards-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "scroll-split-cards"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,
@@ -1047,6 +1092,13 @@ export const Index: Record<string, any> = {
     registryDependencies: undefined,
     files: [{
       path: "registry/default/example/stacked-outline-text.tsx",
+  "tactile-button": {
+    name: "tactile-button",
+    description: "A liquid-glass rocker that tilts into its well when you press it.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/tactile-button.tsx",
       type: "registry:component",
       target: ""
     }],
@@ -1071,6 +1123,8 @@ export const Index: Record<string, any> = {
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/theme-toggle-demo.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "theme-toggle"
+      const mod = await import("@/registry/default/demo/tactile-button-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "tactile-button"
       return { default: mod.default || mod[exportName] }
     }),
     categories: undefined,

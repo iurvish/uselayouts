@@ -1,0 +1,45 @@
+---
+title: Overlapping Slider
+description: A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.
+---
+
+## Features
+
+- **Landing width**: Cards are 340×460 and run edge to edge. Four sit on a typical desktop; the next one peeks.
+- **Stable until you move**: No tilt at rest. Drag, click a card, or use the arrows.
+- **Left card recedes**: The card you leave behind scales down and drops back. The rest stay put.
+- **Arrows on the left**: Step one at a time. Dots are off by default; turn them on with `showDots`.
+- **Any card**: Pass `children`, or `items` plus `renderItem`.
+
+## Usage
+
+Give it the full page width. Don’t drop it in a narrow column.
+
+```tsx
+import OverlappingSlider from "@/components/overlapping-slider";
+
+export default function Page() {
+  return <OverlappingSlider />;
+}
+```
+
+To drive it from data:
+
+```tsx
+import { OverlappingSlider, ProfileCard } from "@/components/overlapping-slider";
+
+<OverlappingSlider
+  items={profiles}
+  renderItem={(card) => <ProfileCard card={card} />}
+  cardWidth={340}
+  cardHeight={460}
+/>
+```
+
+## Where to use
+
+- Marketing homepages
+- Team or speaker lineups
+- Lookbooks
+- Testimonial portraits
+- Product pickers that should feel like a row, not a strip

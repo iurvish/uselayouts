@@ -34,6 +34,11 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "paper-shred-button",
   "holographic-referral-card",
   "curve-drawer",
+  "overlapping-slider",
+  "tactile-button",
+  "gooey-navbar",
+  "dynamic-grid-gallery",
+  "scroll-split-cards",
 ]);
 
 export function isNewComponent(slug: string) {

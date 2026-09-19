@@ -56,6 +56,21 @@ export const scrollbarNone = cn(
   "[scrollbar-width:none] [&::-webkit-scrollbar]:[display:none]",
 );
 
+/** Keep `child` in the middle of `scroller` without moving ancestor scrollports. */
+export function centerChildInScroller(scroller: HTMLElement, child: HTMLElement) {
+  const scrollerBox = scroller.getBoundingClientRect();
+  const childBox = child.getBoundingClientRect();
+  const visible = scrollerBox.height;
+  if (visible <= 0) return;
+  const next =
+    scroller.scrollTop +
+    (childBox.top - scrollerBox.top) -
+    visible / 2 +
+    childBox.height / 2;
+  const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+  scroller.scrollTop = Math.max(0, Math.min(next, max));
+}
+
 /** Compact Shiki shell — same theme/token CSS as DocsCodeBlock body. */
 export const shikiCommandSurface = cn(
   "open-shiki-surface min-w-0 overflow-x-auto",

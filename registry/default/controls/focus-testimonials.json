@@ -19,11 +19,13 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T08:49:23.368Z",
+  "updatedAt": "2026-09-18T18:36:30.883Z",
   "previewBackground": "transparent",
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/focus-testimonials/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4"
 }

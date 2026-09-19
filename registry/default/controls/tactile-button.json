@@ -13,17 +13,15 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T18:32:51.832Z",
+  "updatedAt": "2026-09-18T18:09:30.199Z",
   "previewBackground": {
-    "light": "#F7F4F0",
-    "dark": "#F7F4F0"
+    "light": "#e8e8e8",
+    "dark": "#e8e8e8"
   },
-  "hintTop": 100,
   "showHint": true,
-  "hintKind": "drag",
+  "hintKind": "click",
   "hintHeading": "",
   "hintDescription": "",
   "hintHideOnScroll": false,
-  "posterUrl": "https://cdn.uselayouts.com/components/editorial-deck/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
+  "hintTop": 144
 }

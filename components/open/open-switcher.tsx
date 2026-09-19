@@ -7,12 +7,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronsUpDown, Search } from "lucide-react";
 
-import { scrollbarMinimal } from "@/components/open/ui";
+import { scrollbarMinimal, centerChildInScroller } from "@/components/open/ui";
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
 
-const TITLE_SUFFIX = " | uselayouts";
+const TITLE_SUFFIX = " - useLayouts";
 
 /** Figma 91:4677 container shadow */
 const DROPDOWN_SHADOW =
@@ -34,6 +34,7 @@ export function OpenSwitcher({
   const pathname = usePathname();
   const rootRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [instant, setInstant] = React.useState(false);
@@ -111,6 +112,48 @@ export function OpenSwitcher({
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  React.useLayoutEffect(() => {
+    if (!open || query.trim()) return;
+    const scroller = listRef.current;
+    if (!scroller) return;
+
+    let allow = true;
+    const stop = () => {
+      allow = false;
+    };
+    const run = () => {
+      if (!allow) return;
+      const active = scroller.querySelector<HTMLElement>('[aria-selected="true"]');
+      if (active) centerChildInScroller(scroller, active);
+    };
+
+    run();
+    const until = performance.now() + 220;
+    let raf = 0;
+    const tick = () => {
+      run();
+      if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const ro = new ResizeObserver(run);
+    ro.observe(scroller);
+    const content = scroller.firstElementChild;
+    if (content) ro.observe(content);
+    const imgs = [...scroller.querySelectorAll("img")];
+    for (const img of imgs) {
+      if (!img.complete) img.addEventListener("load", run);
+    }
+    scroller.addEventListener("wheel", stop, { passive: true });
+    scroller.addEventListener("touchmove", stop, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      scroller.removeEventListener("wheel", stop);
+      scroller.removeEventListener("touchmove", stop);
+      for (const img of imgs) img.removeEventListener("load", run);
+    };
+  }, [open, displayed.href, query, filtered]);
+
   function select(item: OpenNavItem) {
     close();
     if (item.href === pathname || item.href === current.href) return;
@@ -175,7 +218,10 @@ export function OpenSwitcher({
               </div>
             </div>
             {/* Figma 95:4696 — list gap 2; px 12 py 10 inset via padding so hover bg is full-bleed */}
-            <div className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}>
+            <div
+              ref={listRef}
+              className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}
+            >
               {filtered.length === 0 ? (
                 <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>
               ) : (

@@ -389,6 +389,17 @@
           "type": "registry:component"
         }
       ]
+      "name": "dynamic-grid-gallery",
+      "type": "registry:component",
+      "title": "Dynamic Grid Gallery",
+      "description": "A 3×2 photo grid that grows the hovered row and column so one still takes the stage.",
+      "files": [
+        {
+          "path": "registry/default/example/dynamic-grid-gallery.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": []
     },
     {
       "name": "dynamic-toolbar",
@@ -594,6 +605,16 @@
       "files": [
         {
           "path": "registry/default/example/holographic-referral-card.tsx",
+      "name": "gooey-navbar",
+      "type": "registry:component",
+      "title": "Gooey Navbar",
+      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, glow, active dot.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/gooey-navbar.tsx",
           "type": "registry:component"
         }
       ]
@@ -727,6 +748,21 @@
       "files": [
         {
           "path": "registry/default/example/multi-step-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "overlapping-slider",
+      "type": "registry:component",
+      "title": "Overlapping Slider",
+      "description": "A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/overlapping-slider.tsx",
           "type": "registry:component"
         }
       ]
@@ -918,12 +954,17 @@
       "type": "registry:component",
       "title": "Scan Document",
       "description": "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
+      "name": "scroll-split-cards",
+      "type": "registry:component",
+      "title": "Scroll Split Cards",
+      "description": "One photograph that splits into three panels as you scroll, then flips to copy.",
       "dependencies": [
         "motion"
       ],
       "files": [
         {
           "path": "registry/default/example/scan-document.tsx",
+          "path": "registry/default/example/scroll-split-cards.tsx",
           "type": "registry:component"
         }
       ]
@@ -1095,6 +1136,16 @@
       "files": [
         {
           "path": "registry/default/example/theme-toggle.tsx",
+      "name": "tactile-button",
+      "type": "registry:component",
+      "title": "Tactile Button",
+      "description": "A liquid-glass rocker that tilts into its well when you press it.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/tactile-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -1125,6 +1176,7 @@
       "description": "This component creates a smooth wheel-style carousel with photos and selectable items. It supports drag, scroll, keyboard controls, snapping, momentum, themes, image crossfades, and customizable layout and colors.",
       "dependencies": [
         "motion",
+        "lucide-react",
         "clsx",
         "tailwind-merge"
       ],

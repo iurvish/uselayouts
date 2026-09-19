@@ -22,11 +22,13 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T12:12:28.499Z",
+  "updatedAt": "2026-09-18T18:38:42.286Z",
   "previewBackground": "#f6f4f6",
   "interactionHints": {
     "duration": 3,
     "scale": 70,
     "items": []
-  }
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/polaroid-drag/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4"
 }

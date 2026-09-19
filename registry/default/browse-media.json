@@ -1,11 +1,11 @@
 {
   "editorial-deck": {
-    "posterUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=880&q=68",
-    "videoUrl": ""
+    "posterUrl": "https://cdn.uselayouts.com/components/editorial-deck/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
   },
   "perspective-text-scroll": {
-    "posterUrl": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=880&q=68",
-    "videoUrl": ""
+    "posterUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4"
   },
   "scroll-stack-deck": {
     "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=880&q=68",
@@ -98,5 +98,65 @@
   "accessible-action": {
     "posterUrl": "https://cdn.uselayouts.com/components/accessible-action/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/accessible-action/video.mp4"
+  },
+  "accordionos": {
+    "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4"
+  },
+  "bento-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bento-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bento-card/video.mp4"
+  },
+  "bucket": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bucket/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bucket/video.mp4"
+  },
+  "card-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/card-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4"
+  },
+  "confidential-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4"
+  },
+  "corner-video": {
+    "posterUrl": "https://cdn.uselayouts.com/components/corner-video/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4"
+  },
+  "client-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/client-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/client-card/video.mp4"
+  },
+  "create-menu": {
+    "posterUrl": "https://cdn.uselayouts.com/components/create-menu/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/create-menu/video.mp4"
+  },
+  "focus-testimonials": {
+    "posterUrl": "https://cdn.uselayouts.com/components/focus-testimonials/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4"
+  },
+  "infinite-grid": {
+    "posterUrl": "https://cdn.uselayouts.com/components/infinite-grid/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4"
+  },
+  "photo-albums": {
+    "posterUrl": "https://cdn.uselayouts.com/components/photo-albums/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/photo-albums/video.mp4"
+  },
+  "polaroid-drag": {
+    "posterUrl": "https://cdn.uselayouts.com/components/polaroid-drag/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4"
+  },
+  "pop-tilt-cards": {
+    "posterUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/video.mp4"
+  },
+  "rolling-card-stack": {
+    "posterUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4"
+  },
+  "slide-subscribe": {
+    "posterUrl": "https://cdn.uselayouts.com/components/slide-subscribe/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/slide-subscribe/video.mp4"
   }
 }
