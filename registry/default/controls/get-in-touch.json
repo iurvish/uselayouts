@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-19T18:13:52.654Z",
   "previewBackground": {
     "light": "#ffffff",
     "dark": "#09090b"
@@ -14,5 +14,7 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Hover the pill",
-  "hintDescription": "GET IN TOUCH lifts away. A portrait and YOU merge, then Let’s Talk! writes in."
+  "hintDescription": "GET IN TOUCH lifts away. A portrait and YOU merge, then Let’s Talk! writes in.",
+  "hintTop": 172,
+  "hintHideOnScroll": false
 }

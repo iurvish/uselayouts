@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronsUpDown, Search } from "lucide-react";
 
-import { scrollbarMinimal, centerChildInScroller } from "@/components/open/ui";
+import { scrollbarMinimal, rememberScroller, restoreScroller, revealChildInScroller } from "@/components/open/ui";
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
@@ -117,44 +117,56 @@ export function OpenSwitcher({
     const scroller = listRef.current;
     if (!scroller) return;
 
+    const key = "switcher";
     let allow = true;
     const stop = () => {
       allow = false;
     };
-    const run = () => {
+    const active = () =>
+      scroller.querySelector<HTMLElement>('[aria-selected="true"]');
+    const run = (restore: boolean) => {
       if (!allow) return;
-      const active = scroller.querySelector<HTMLElement>('[aria-selected="true"]');
-      if (active) centerChildInScroller(scroller, active);
+      if (restore) restoreScroller(key, scroller, active());
+      else {
+        const item = active();
+        if (item) revealChildInScroller(scroller, item);
+      }
     };
 
-    run();
+    run(true);
     const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
-      run();
+      run(false);
       if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    const ro = new ResizeObserver(run);
+    const onScroll = () => rememberScroller(key, scroller);
+    const ro = new ResizeObserver(() => run(false));
     ro.observe(scroller);
     const content = scroller.firstElementChild;
     if (content) ro.observe(content);
+    const onLoad = () => run(false);
     const imgs = [...scroller.querySelectorAll("img")];
     for (const img of imgs) {
-      if (!img.complete) img.addEventListener("load", run);
+      if (!img.complete) img.addEventListener("load", onLoad);
     }
+    scroller.addEventListener("scroll", onScroll, { passive: true });
     scroller.addEventListener("wheel", stop, { passive: true });
     scroller.addEventListener("touchmove", stop, { passive: true });
     return () => {
+      rememberScroller(key, scroller);
       cancelAnimationFrame(raf);
       ro.disconnect();
+      scroller.removeEventListener("scroll", onScroll);
       scroller.removeEventListener("wheel", stop);
       scroller.removeEventListener("touchmove", stop);
-      for (const img of imgs) img.removeEventListener("load", run);
+      for (const img of imgs) img.removeEventListener("load", onLoad);
     };
   }, [open, displayed.href, query, filtered]);
 
   function select(item: OpenNavItem) {
+    if (listRef.current) rememberScroller("switcher", listRef.current);
     close();
     if (item.href === pathname || item.href === current.href) return;
     setPending(item);

@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-19T18:15:31.357Z",
   "previewBackground": {
     "light": "#eceff2",
     "dark": "#18181b"
@@ -13,6 +13,8 @@
   },
   "showHint": true,
   "hintKind": "custom",
-  "hintHeading": "Hover, then click Delete",
-  "hintDescription": "A page appears above the button. Click and it shreds into strips. After a few seconds it resets so you can shred again."
+  "hintHeading": "Click Delete",
+  "hintDescription": "A page appears above. Click to shred it, then it resets.\n\n",
+  "hintTop": 162,
+  "hintHideOnScroll": false
 }

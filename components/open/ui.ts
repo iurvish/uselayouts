@@ -56,19 +56,34 @@ export const scrollbarNone = cn(
   "[scrollbar-width:none] [&::-webkit-scrollbar]:[display:none]",
 );
 
-/** Keep `child` in the middle of `scroller` without moving ancestor scrollports. */
-export function centerChildInScroller(scroller: HTMLElement, child: HTMLElement) {
-  const scrollerBox = scroller.getBoundingClientRect();
-  const childBox = child.getBoundingClientRect();
-  const visible = scrollerBox.height;
-  if (visible <= 0) return;
-  const next =
-    scroller.scrollTop +
-    (childBox.top - scrollerBox.top) -
-    visible / 2 +
-    childBox.height / 2;
+const scrollerTop = new Map<string, number>();
+
+export function rememberScroller(key: string, scroller: HTMLElement) {
+  scrollerTop.set(key, scroller.scrollTop);
+}
+
+/** Scroll the least amount that keeps `child` in view. No-ops if it already is. */
+export function revealChildInScroller(scroller: HTMLElement, child: HTMLElement) {
+  const s = scroller.getBoundingClientRect();
+  const c = child.getBoundingClientRect();
+  if (s.height <= 0) return;
+  if (c.bottom > s.top && c.top < s.bottom) return;
+  const pad = 20;
+  let next = scroller.scrollTop;
+  if (c.top < s.top) next += c.top - s.top - pad;
+  else next += c.bottom - s.bottom + pad;
   const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
   scroller.scrollTop = Math.max(0, Math.min(next, max));
+}
+
+export function restoreScroller(
+  key: string,
+  scroller: HTMLElement,
+  child: HTMLElement | null,
+) {
+  const saved = scrollerTop.get(key);
+  if (saved != null) scroller.scrollTop = saved;
+  if (child) revealChildInScroller(scroller, child);
 }
 
 /** Compact Shiki shell — same theme/token CSS as DocsCodeBlock body. */

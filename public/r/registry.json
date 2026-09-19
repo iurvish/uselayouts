@@ -389,6 +389,8 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
       "name": "dynamic-grid-gallery",
       "type": "registry:component",
       "title": "Dynamic Grid Gallery",
@@ -585,10 +587,6 @@
         {
           "path": "registry/default/example/get-in-touch.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "registry/default/example/get-in-touch-button.tsx",
-          "type": "registry:component"
         }
       ]
     },
@@ -605,6 +603,11 @@
       "files": [
         {
           "path": "registry/default/example/holographic-referral-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "gooey-navbar",
       "type": "registry:component",
       "title": "Gooey Navbar",
@@ -954,6 +957,17 @@
       "type": "registry:component",
       "title": "Scan Document",
       "description": "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scan-document.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "scroll-split-cards",
       "type": "registry:component",
       "title": "Scroll Split Cards",
@@ -963,7 +977,6 @@
       ],
       "files": [
         {
-          "path": "registry/default/example/scan-document.tsx",
           "path": "registry/default/example/scroll-split-cards.tsx",
           "type": "registry:component"
         }
@@ -1136,6 +1149,11 @@
       "files": [
         {
           "path": "registry/default/example/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "tactile-button",
       "type": "registry:component",
       "title": "Tactile Button",

@@ -16,7 +16,7 @@ import {
   PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPressMotion, scrollbarNone, centerChildInScroller } from "@/components/open/ui";
+import { openIconBtn, openPressMotion, scrollbarNone, rememberScroller, restoreScroller, revealChildInScroller } from "@/components/open/ui";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -168,43 +168,49 @@ function SidebarList({
     const el = scrollRef.current;
     if (!el) return;
 
+    const key = "sidebar";
     let allow = true;
-    const until = performance.now() + 250;
     const stop = () => {
       allow = false;
     };
-    const tryCenter = () => {
-      if (!allow || performance.now() > until || el.clientHeight === 0) return;
-      const active = el.querySelector<HTMLElement>("[aria-current=page]");
-      if (active) centerChildInScroller(el, active);
-    };
-
+    const active = () => el.querySelector<HTMLElement>("[aria-current=page]");
     const updateFades = () => {
       const { scrollTop, clientHeight, scrollHeight } = el;
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
     };
-
-    tryCenter();
-    updateFades();
-    el.addEventListener("scroll", updateFades, { passive: true });
-    el.addEventListener("wheel", stop, { passive: true });
-    el.addEventListener("touchmove", stop, { passive: true });
-    const ro = new ResizeObserver(() => {
-      tryCenter();
+    const sync = (restore: boolean) => {
+      if (!allow || el.clientHeight === 0) return;
+      if (restore) restoreScroller(key, el, active());
+      else {
+        const item = active();
+        if (item) revealChildInScroller(el, item);
+      }
       updateFades();
-    });
-    ro.observe(el);
-    const child = el.firstElementChild;
-    if (child) ro.observe(child);
+    };
+
+    sync(true);
+    const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
-      tryCenter();
+      sync(false);
       if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
+    const onScroll = () => {
+      rememberScroller(key, el);
+      updateFades();
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener("wheel", stop, { passive: true });
+    el.addEventListener("touchmove", stop, { passive: true });
+    const ro = new ResizeObserver(() => sync(false));
+    ro.observe(el);
+    const child = el.firstElementChild;
+    if (child) ro.observe(child);
     return () => {
-      el.removeEventListener("scroll", updateFades);
+      rememberScroller(key, el);
+      el.removeEventListener("scroll", onScroll);
       el.removeEventListener("wheel", stop);
       el.removeEventListener("touchmove", stop);
       ro.disconnect();
@@ -231,6 +237,7 @@ function SidebarList({
           items={items}
           activeHref={activeHref}
           onItemClick={(item) => {
+            if (scrollRef.current) rememberScroller("sidebar", scrollRef.current);
             document.title = `${item.title} - useLayouts`;
           }}
           onItemHover={

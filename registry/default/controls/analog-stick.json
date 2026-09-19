@@ -1,10 +1,10 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-19T18:12:41.967Z",
   "previewBackground": {
     "light": "#e8eef1",
-    "dark": "#1c2328"
+    "dark": "#14181a"
   },
   "interactionHints": {
     "duration": 3,
@@ -14,5 +14,7 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Hover a quadrant",
-  "hintDescription": "The stick tilts into the press. The matching arrow goes amber. CSS only — no JS hover state."
+  "hintDescription": "The stick tilts into the press. The matching arrow goes amber. CSS only — no JS hover state.",
+  "hintTop": 80,
+  "hintHideOnScroll": false
 }

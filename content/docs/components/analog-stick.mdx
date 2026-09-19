@@ -3,19 +3,7 @@ title: Analog Stick
 description: A metallic stick that tilts into the press. Hover a quadrant and the cap leans, the shadow shifts, and the matching arrow goes amber.
 ---
 
-## Features
-
-- **Physical cap**: Layered rings, inset bowl, stacked shadows, four face dots.
-- **CSS press**: Four invisible zones, rotated 45°, drive `:has()` tilt. No React state.
-- **Direction light**: The matching arrow fills amber and glows.
-- **Fine pointer only**: Hover is gated to `(hover: hover) and (pointer: fine)`.
-- **Reduced motion**: The cap stays put. The arrow can still change color.
-
-Needs `:has()`. Older browsers show the stick at rest.
-
 ## Usage
-
-Hover top, right, left, or bottom of the stage. This is a visual demo, not a form control.
 
 ```tsx
 import AnalogStick from "@/components/analog-stick";
@@ -25,19 +13,11 @@ export default function Example() {
 }
 ```
 
-## Customize
+## Features
 
-- **Size**: The 300px stage, `size-50` ring, `155px` bowl, `size-25.5` cap.
-- **Press distance / tilt**: `translate(0,-5px) rotateX(8deg)` and the sibling directions.
-- **Icons**: `#b4b9bd` idle, `#e3a560` active, plus the drop-shadow glow.
-- **Metal**: The three linear gradients on ring, cap, and face.
-- **Shadow**: Default stack on `.button-wrapper`; each `:has()` override shifts the light.
-- **Zones**: `150px` squares inside the rotated 300px overlay.
-
-## Where to use
-
-- Game and hardware demos
-- Settings that need a physical control
-- Portfolio micro-interactions
-- Product pages for controllers
-- Idle toys on a landing stage
+- Physical cap: Layered rings, inset bowl, stacked shadows, four face dots.
+- CSS press: Four invisible zones, rotated 45°, drive `:has()` tilt. No React state.
+- Direction light: The matching arrow fills amber and glows.
+- Fine pointer only: Hover is gated to `(hover: hover) and (pointer: fine)`.
+- Reduced motion: The cap stays put. The arrow can still change color.
+- Needs `:has()`. Older browsers show the stick at rest.
