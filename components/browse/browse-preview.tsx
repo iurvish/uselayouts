@@ -20,6 +20,7 @@ export function BrowsePreview({
   observeVisibility = false,
   /** Canvas: distance-weighted priority so center tiles win the playback pool. */
   playbackPriority = PRIORITY_VISIBLE,
+  onAspect,
 }: {
   poster: string;
   video?: string;
@@ -28,6 +29,7 @@ export function BrowsePreview({
   allowVideo?: boolean;
   observeVisibility?: boolean;
   playbackPriority?: number;
+  onAspect?: (ratio: number) => void;
 }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
@@ -101,20 +103,32 @@ export function BrowsePreview({
         loading={eager ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={eager ? "high" : "auto"}
-        draggable={false}
-      />
-      {mountVideo ? (
-        <video
-          ref={attachVideo}
-          src={video}
-          poster={poster}
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="metadata"
+          onLoad={(event) => {
+            const img = event.currentTarget;
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              onAspect?.(img.naturalWidth / img.naturalHeight);
+            }
+          }}
           draggable={false}
-          onLoadedData={(event) => {
+        />
+        {mountVideo ? (
+          <video
+            ref={attachVideo}
+            src={video}
+            poster={poster}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="metadata"
+            draggable={false}
+            onLoadedMetadata={(event) => {
+              const node = event.currentTarget;
+              if (node.videoWidth > 0 && node.videoHeight > 0) {
+                onAspect?.(node.videoWidth / node.videoHeight);
+              }
+            }}
+            onLoadedData={(event) => {
             setReady(true);
             if (!paused) requestPlayback(event.currentTarget, playbackPriority);
           }}

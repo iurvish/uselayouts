@@ -16,6 +16,7 @@ import {
   capVideoTiles,
 } from "@/lib/browse/canvas-media-tier";
 import { posterMediaHeight, tileHeight, tileHeightFor } from "@/lib/browse/media";
+import { usePosterAspects } from "@/lib/browse/use-poster-aspects";
 import { useRenderQuality } from "@/lib/browse/use-render-quality";
 import { maxMountedVideos, priorityFromCenter } from "@/lib/browse/video-pool";
 import { BrowseCard } from "./glass-card";
@@ -86,49 +87,11 @@ function sameTiles(a: TileSpec[], b: TileSpec[]) {
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
-function usePosterAspects(items: BrowseItem[]) {
-  const [aspects, setAspects] = React.useState<Record<string, number>>({});
-  const key = items.map((item) => `${item.slug}:${item.poster}`).join("|");
-
-  React.useEffect(() => {
-    let live = true;
-    if (items.length === 0) {
-      setAspects({});
-      return;
-    }
-
-    const next: Record<string, number> = {};
-    let pending = items.length;
-    const done = () => {
-      pending -= 1;
-      if (live && pending === 0) setAspects(next);
-    };
-
-    for (const item of items) {
-      const img = new Image();
-      img.onload = () => {
-        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-          next[item.slug] = img.naturalWidth / img.naturalHeight;
-        }
-        done();
-      };
-      img.onerror = done;
-      img.src = item.poster;
-    }
-
-    return () => {
-      live = false;
-    };
-  }, [key]);
-
-  return aspects;
-}
-
 export function InfiniteCanvas({ items, paused = false }: InfiniteCanvasProps) {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const stageRef = React.useRef<HTMLDivElement>(null);
   const tilesRef = React.useRef<TileSpec[]>([]);
-  const aspects = usePosterAspects(items);
+  const { aspects } = usePosterAspects(items);
   const quality = useRenderQuality();
 
   const camera = React.useRef({ x: 0, y: 0 });

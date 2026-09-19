@@ -4,7 +4,8 @@ import * as React from "react";
 
 import type { BrowseItem } from "@/lib/browse/items";
 import { packPinMasonry, PIN_GAP, pinColumnCount } from "@/lib/browse/masonry";
-import { mediaHeight, tileHeight } from "@/lib/browse/media";
+import { posterMediaHeight, tileHeightFor } from "@/lib/browse/media";
+import { usePosterAspects } from "@/lib/browse/use-poster-aspects";
 import { BrowseCard } from "./glass-card";
 
 const BATCH = 12;
@@ -53,6 +54,7 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
   }, [items.length, visibleCount]);
 
   const shown = items.slice(0, visibleCount);
+  const { aspects, setAspect } = usePosterAspects(shown);
   const columns = pinColumnCount(width);
   const columnWidth = width > 0 ? (width - PIN_GAP * (columns - 1)) / columns : 0;
   const packed = packPinMasonry(
@@ -60,7 +62,7 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
     columns,
     columnWidth,
     PIN_GAP,
-    shown.map((_, index) => tileHeight(index)),
+    shown.map((item, index) => tileHeightFor(columnWidth, aspects[item.slug], index)),
   );
 
   return (
@@ -83,7 +85,12 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
                   surface="pin"
                   paused={paused}
                   observeVisibility
-                  pinHeight={mediaHeight(index)}
+                  pinHeight={posterMediaHeight(
+                    columnWidth,
+                    aspects[item.slug],
+                    index,
+                  )}
+                  onMediaAspect={(ratio) => setAspect(item.slug, ratio)}
                   style={{
                     position: "absolute",
                     top: slot.y,

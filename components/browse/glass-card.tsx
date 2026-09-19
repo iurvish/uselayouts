@@ -21,6 +21,7 @@ type BrowseCardProps = {
   allowVideo?: boolean;
   observeVisibility?: boolean;
   playbackPriority?: number;
+  onMediaAspect?: (ratio: number) => void;
 };
 
 /** Figma 82:3892 — titled preview card (title bar + media shell). */
@@ -35,6 +36,7 @@ export function BrowseCard({
   allowVideo = true,
   observeVisibility = false,
   playbackPriority,
+  onMediaAspect,
 }: BrowseCardProps) {
   const label = item.isNew ? `${item.title}, new` : item.title;
 
@@ -63,6 +65,7 @@ export function BrowseCard({
               allowVideo={allowVideo}
               observeVisibility={observeVisibility}
               playbackPriority={playbackPriority}
+              onAspect={onMediaAspect}
             />
           </div>
         </div>

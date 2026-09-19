@@ -12,14 +12,21 @@ export function mediaHeight(index: number) {
   return MEDIA_HEIGHTS[index % MEDIA_HEIGHTS.length];
 }
 
-/** Height of the media box at `cardW` given poster width/height. */
+/** Used until a poster/video reports its real width/height. */
+export const DEFAULT_MEDIA_ASPECT = 4 / 5;
+
+/** Height of the media box at `cardW` given poster/video width÷height. */
 export function posterMediaHeight(
   cardW: number,
   aspect: number | undefined,
   index: number,
 ) {
-  if (aspect && Number.isFinite(aspect) && aspect > 0) {
-    return Math.round(cardW / aspect);
+  if (cardW > 0) {
+    const ratio =
+      aspect && Number.isFinite(aspect) && aspect > 0
+        ? aspect
+        : DEFAULT_MEDIA_ASPECT;
+    return Math.round(cardW / ratio);
   }
   return mediaHeight(index);
 }
