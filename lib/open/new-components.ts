@@ -7,7 +7,6 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "corner-video",
   "focus-testimonials",
   "infinite-grid",
-  "logoshift",
   "polaroid-drag",
   "pop-tilt-cards",
   "rolling-card-stack",

@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-19T19:39:35.469Z",
   "previewBackground": {
     "light": "#f4f4f5",
     "dark": "#09090b"
@@ -14,5 +14,7 @@
   "showHint": true,
   "hintKind": "custom",
   "hintHeading": "Open a side",
-  "hintDescription": "Left and right panels slide in. The inner edge starts as a bulge, then settles into a straight line."
+  "hintDescription": "Left and right panels slide in. The inner edge starts as a bulge, then settles into a straight line.",
+  "hintTop": 147,
+  "hintHideOnScroll": false
 }

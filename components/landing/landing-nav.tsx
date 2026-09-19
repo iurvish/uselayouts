@@ -6,35 +6,45 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { formatStarCount, GITHUB_URL } from "@/lib/github";
+
 export const landingNavLinks = [
   { label: "Component", href: "/browse" },
-  { label: "Documentation", href: "/docs/installation" },
+  { label: "Documentation", href: "/docs" },
   { label: "Meet Creator", href: "https://urvish.in" },
   { label: "Sponsor", href: "/sponsor" },
 ] as const;
 
-function GithubMarkLink() {
+function GithubMarkLink({ stars }: { stars?: number | null }) {
+  const count = typeof stars === "number" ? formatStarCount(stars) : null;
   return (
     <a
-      href="https://github.com/iurvish/uselayouts"
+      href={GITHUB_URL}
       target="_blank"
       rel="noreferrer"
-      aria-label="useLayouts on GitHub"
-      className="dark relative flex items-center overflow-hidden rounded-xl bg-secondary p-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
+      aria-label={count ? `useLayouts on GitHub, ${count} stars` : "useLayouts on GitHub"}
+      className="dark relative flex items-center gap-1.5 overflow-hidden rounded-xl bg-secondary py-2 pr-2.5 pl-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
     >
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-[inherit] bg-linear-to-b from-transparent to-black/6 shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.05)]"
       />
       <img src="/brand/icon-github.svg" alt="" width={20} height={20} className="relative size-5" />
+      {count ? (
+        <span className="relative text-[13px] leading-none font-medium text-secondary-foreground tabular-nums">
+          {count}
+        </span>
+      ) : null}
     </a>
   );
 }
 
 export function LandingNav({
   logoSrc = "/logomark-landing.svg",
+  githubStars,
 }: {
   logoSrc?: string;
+  githubStars?: number | null;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -64,7 +74,7 @@ export function LandingNav({
       </nav>
 
       <div className="flex items-center gap-3">
-        <GithubMarkLink />
+        <GithubMarkLink stars={githubStars} />
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}

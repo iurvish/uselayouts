@@ -3,17 +3,38 @@
 import * as React from "react";
 
 import type { BrowseItem } from "@/lib/browse/items";
+import { packPinMasonry, PIN_GAP, pinColumnCount } from "@/lib/browse/masonry";
+import { mediaHeight, tileHeight } from "@/lib/browse/media";
 import { BrowseCard } from "./glass-card";
 
 const BATCH = 12;
 
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; paused?: boolean }) {
   const [visibleCount, setVisibleCount] = React.useState(() => Math.min(BATCH, items.length));
+  const [width, setWidth] = React.useState(0);
+  const masonryRef = React.useRef<HTMLDivElement>(null);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     setVisibleCount(Math.min(BATCH, items.length));
   }, [items]);
+
+  useIsomorphicLayoutEffect(() => {
+    const node = masonryRef.current;
+    if (!node) return;
+
+    const apply = () => {
+      const next = Math.round(node.clientWidth);
+      setWidth((current) => (current === next ? current : next));
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, []);
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -32,21 +53,47 @@ export function BrowseGrid({ items, paused = false }: { items: BrowseItem[]; pau
   }, [items.length, visibleCount]);
 
   const shown = items.slice(0, visibleCount);
+  const columns = pinColumnCount(width);
+  const columnWidth = width > 0 ? (width - PIN_GAP * (columns - 1)) / columns : 0;
+  const packed = packPinMasonry(
+    shown.length,
+    columns,
+    columnWidth,
+    PIN_GAP,
+    shown.map((_, index) => tileHeight(index)),
+  );
 
   return (
     <div className="pb-24">
-      <div className="browse-masonry">
-        {shown.map((item, index) => (
-          <BrowseCard
-            key={item.slug}
-            item={item}
-            index={index}
-            eager={index < 6}
-            surface="pin"
-            paused={paused}
-            observeVisibility
-          />
-        ))}
+      <div
+        ref={masonryRef}
+        className="browse-masonry"
+        style={width > 0 ? { height: packed.height } : undefined}
+      >
+        {width > 0
+          ? shown.map((item, index) => {
+              const slot = packed.slots[index];
+              if (!slot) return null;
+              return (
+                <BrowseCard
+                  key={item.slug}
+                  item={item}
+                  index={index}
+                  eager={index < 6}
+                  surface="pin"
+                  paused={paused}
+                  observeVisibility
+                  pinHeight={mediaHeight(index)}
+                  style={{
+                    position: "absolute",
+                    top: slot.y,
+                    left: slot.x,
+                    width: slot.width,
+                  }}
+                />
+              );
+            })
+          : null}
       </div>
 
       {visibleCount < items.length ? (

@@ -271,14 +271,6 @@ export const Index: Record<string, any> = {
       path: "registry/default/example/curve-drawer.tsx",
       type: "registry:component",
       target: ""
-    },{
-      path: "registry/default/example/curve-drawer-primitives.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "registry/default/example/curve-drawer-curve.tsx",
-      type: "registry:component",
-      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/curve-drawer-demo.tsx")

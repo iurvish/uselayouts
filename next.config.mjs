@@ -21,13 +21,13 @@ const config = {
       },
       {
         source: "/docs/introduction",
-        destination: "/docs/installation",
+        destination: "/docs",
         permanent: true,
       },
       {
-        source: "/docs",
-        destination: "/docs/installation",
-        permanent: false,
+        source: "/docs/installation",
+        destination: "/docs",
+        permanent: true,
       },
       {
         source: "/gallery",

@@ -267,14 +267,14 @@ const buttonCraft = {
     },
   },
   secondary: {
-    className: "bg-white text-[#071A31] hover:brightness-[0.98]",
+    className:
+      "dark relative overflow-hidden bg-secondary text-secondary-foreground after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.05)] hover:brightness-110",
     style: {
-      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%)",
+      backgroundImage: "none",
       boxShadow: [
-        "inset 0 1px 0 #fff",
-        "inset 0 0 0 1px rgba(7,26,49,0.08)",
-        "0 1px 2px rgba(7,26,49,0.06)",
-        "0 4px 10px rgba(7,26,49,0.08)",
+        "0px 2px 2px -1px rgba(0,0,0,0.16)",
+        "0px 4px 4px -2px rgba(0,0,0,0.24)",
+        "0px 0px 0px 1px rgba(0,0,0,0.1)",
       ].join(", "),
     },
   },
@@ -786,7 +786,7 @@ function ToolsSection() {
             </div>
           </div>
 
-          <ExploreButton className="h-auto rounded-full px-[14px] py-3" />
+          <ExploreButton className="w-fit" />
         </div>
       </div>
     </section>
@@ -1063,7 +1063,7 @@ function TestimonialsSection() {
 
 const footerLinks = [
   { label: "Component", href: "/browse" },
-  { label: "Documentation", href: "/docs/installation" },
+  { label: "Documentation", href: "/docs" },
   { label: "Meet Creator", href: "https://urvish.in" },
   { label: "Sponsor", href: "/sponsor" },
   { label: "0xUrvish", href: "https://x.com/0xUrvish" },
@@ -1166,10 +1166,16 @@ function LandingFooter() {
   );
 }
 
-export default function LandingPage({ heroItems }: { heroItems: BrowseItem[] }) {
+export default function LandingPage({
+  heroItems,
+  githubStars,
+}: {
+  heroItems: BrowseItem[];
+  githubStars?: number | null;
+}) {
   return (
     <main className="min-h-screen bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
-      <LandingNav />
+      <LandingNav githubStars={githubStars} />
       <HeroSection heroItems={heroItems} />
       <FeaturesSection />
       <WhySection />

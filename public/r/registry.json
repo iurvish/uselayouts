@@ -270,14 +270,6 @@
         {
           "path": "registry/default/example/curve-drawer.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "registry/default/example/curve-drawer-primitives.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/default/example/curve-drawer-curve.tsx",
-          "type": "registry:component"
         }
       ]
     },

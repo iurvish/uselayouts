@@ -3,15 +3,6 @@ title: Curve Drawer
 description: Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.
 ---
 
-## Features
-
-- **Organic edge**: An SVG quadratic curve bulges on the moving inner edge, then eases straight.
-- **Both sides**: Left and right. The path is mirrored so the bulge always faces inward.
-- **Vaul shell**: Overlay, focus trap, and handle-only drag. Motion drives the slide so the curve can sync.
-- **Reduced motion**: The slide and path morph become instant. The drawers still open.
-
-Needs `vaul` and `motion`. This is a visual sheet, not a router.
-
 ## Usage
 
 ```tsx
@@ -22,34 +13,10 @@ export default function Example() {
 }
 ```
 
-Compose with the primitives if you need your own content:
+## Features
 
-```tsx
-import {
-  CurveDrawer,
-  CurveDrawerContent,
-  CurveDrawerTrigger,
-} from "@/components/curve-drawer-primitives";
-
-<CurveDrawer direction="left" handleOnly>
-  <CurveDrawerTrigger asChild>
-    <button type="button">Open</button>
-  </CurveDrawerTrigger>
-  <CurveDrawerContent>{/* your panel */}</CurveDrawerContent>
-</CurveDrawer>
-```
-
-## Customize
-
-- **Curve width**: `curveWidth` on `CurveDrawerContent` (default 100).
-- **Side**: `direction` on the root, or `curveSide` to force left/right/off.
-- **Timing**: `DRAWER_SLIDE_DURATION_MS` is 800. The path uses 1s on open and 0.8s on close, ease `[0.76, 0, 0.24, 1]`.
-- **Fill**: The SVG uses `fill-popover` so it matches the panel.
-
-## Where to use
-
-- Side navigation
-- Notes and inspector panels
-- Portfolio micro-interactions
-- Settings sheets
-- Any left/right drawer that should feel organic
+- Organic edge: An SVG quadratic curve bulges on the moving inner edge, then eases straight.
+- Both sides: Left and right. The path is mirrored so the bulge always faces inward.
+- Vaul shell: Overlay, focus trap, and handle-only drag. Motion drives the slide so the curve can sync.
+- Reduced motion: The slide and path morph become instant. The drawers still open.
+- Needs `vaul` and `motion`. This is a visual sheet, not a router.

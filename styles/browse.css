@@ -84,24 +84,13 @@
 }
 
 .browse-pin .browse-preview img {
-  height: auto;
+  height: 100%;
 }
 
 .browse-masonry {
-  column-count: 1;
-  column-gap: 18px;
-}
-
-@media (min-width: 720px) {
-  .browse-masonry {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 1100px) {
-  .browse-masonry {
-    column-count: 3;
-  }
+  position: relative;
+  width: 100%;
+  overflow-anchor: none;
 }
 
 .browse-card-hit {
@@ -113,10 +102,8 @@
 
 .browse-pin {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 100%;
-  margin-bottom: 18px;
-  break-inside: avoid;
 }
 
 .browse-pin-media {

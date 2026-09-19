@@ -1,0 +1,48 @@
+---
+title: Introduction
+description: Animated React components you copy into your project. Edit them like any other file.
+---
+
+useLayouts is a free library of animated UI for React. Tabs, buttons, galleries, small interactions. You copy a component into your app and it's just your code.
+
+I got tired of shipping the same dead hover states. Most kits let you customize, then everyone still ships the defaults from the docs. So I built these with Motion and Tailwind, one component at a time, and dropped the source in your repo.
+
+No wrapper package. Pick one, run the CLI, change whatever you want.
+
+## Install
+
+It's a [shadcn](https://ui.shadcn.com/docs/cli) registry. Add uselayouts once, then install by name.
+
+In your project's `components.json`:
+
+```json
+{
+  "registries": {
+    "@uselayouts": "https://uselayouts.com/r/{name}.json"
+  }
+}
+```
+
+Then:
+
+```bash
+npx shadcn@latest add @uselayouts/discrete-tabs
+```
+
+pnpm, yarn, and bun work the same way:
+
+```bash
+pnpm dlx shadcn@latest add @uselayouts/discrete-tabs
+yarn dlx shadcn@latest add @uselayouts/discrete-tabs
+bunx --bun shadcn@latest add @uselayouts/discrete-tabs
+```
+
+You can add a few at once:
+
+```bash
+npx shadcn@latest add @uselayouts/delete-button @uselayouts/status-button
+```
+
+You need React and Tailwind. Motion (and anything else a component needs) gets installed for you.
+
+Grab one from [browse](/browse) or open a [component](/docs/components/pricing-card).

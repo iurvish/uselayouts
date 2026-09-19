@@ -1,5 +1,8 @@
 import { isNewComponent } from "@/lib/open/new-components";
 import browseMedia from "@/registry/default/browse-media.json";
+import registry from "@/registry.json";
+
+const LIVE_SLUGS = new Set(registry.items.map((item) => item.name));
 
 export type BrowseItem = {
   /** Registry name, also the docs slug. */
@@ -83,7 +86,6 @@ const SEEDS: Seed[] = [
   { slug: "corner-video", title: "Corner Video", description: "A player that morphs from the corner.", category: "Display" },
   { slug: "focus-testimonials", title: "Focus Testimonials", description: "Hover to bring one voice forward.", category: "Display" },
   { slug: "infinite-grid", title: "Infinite Canvas", description: "An endless product canvas you can drag.", category: "Layout" },
-  { slug: "logoshift", title: "LogoShift", description: "Logos that trade places.", category: "Display" },
   { slug: "polaroid-drag", title: "Polaroid Drag", description: "Photos that stack and tilt.", category: "Display" },
   { slug: "pop-tilt-cards", title: "Pop Tilt Cards", description: "A deck that pops toward the cursor.", category: "Display" },
   { slug: "rolling-card-stack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
@@ -116,15 +118,17 @@ const SEEDS: Seed[] = [
   { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
 ];
 
-export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {
-  const override = MEDIA_OVERRIDES[seed.slug];
-  return {
-    ...seed,
-    poster: override?.posterUrl ?? POSTERS[index % POSTERS.length]!,
-    video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
-    isNew: isNewComponent(seed.slug),
-  };
-});
+export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug)).map(
+  (seed, index) => {
+    const override = MEDIA_OVERRIDES[seed.slug];
+    return {
+      ...seed,
+      poster: override?.posterUrl ?? POSTERS[index % POSTERS.length]!,
+      video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
+      isNew: isNewComponent(seed.slug),
+    };
+  },
+);
 
 /** Poster always; video only if uploaded in admin (no placeholder clips). */
 export function browseUploadedMedia(slug: string) {

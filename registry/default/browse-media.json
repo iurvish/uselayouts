@@ -158,5 +158,17 @@
   "slide-subscribe": {
     "posterUrl": "https://cdn.uselayouts.com/components/slide-subscribe/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/slide-subscribe/video.mp4"
+  },
+  "tactile-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
+  },
+  "paper-shred-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/paper-shred-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/paper-shred-button/video.mp4"
+  },
+  "analog-stick": {
+    "posterUrl": "https://cdn.uselayouts.com/components/analog-stick/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4"
   }
 }

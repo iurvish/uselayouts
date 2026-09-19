@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T18:09:30.199Z",
+  "updatedAt": "2026-09-19T19:34:00.434Z",
   "previewBackground": {
     "light": "#e8e8e8",
     "dark": "#e8e8e8"
@@ -23,5 +23,7 @@
   "hintHeading": "",
   "hintDescription": "",
   "hintHideOnScroll": false,
-  "hintTop": 144
+  "hintTop": 144,
+  "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
 }
