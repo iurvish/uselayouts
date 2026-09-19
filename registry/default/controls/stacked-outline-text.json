@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#000000",
+    "dark": "#000000"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Drag the type",
+  "hintDescription": "Velocity leaves a stacked outline trail. Arrow keys nudge it."
+}

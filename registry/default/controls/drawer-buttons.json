@@ -1,0 +1,18 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Open a drawer",
+  "hintDescription": "Payment folds in from the right. Cart folds in from the left. Fields stagger in behind the panel."
+}

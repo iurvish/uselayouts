@@ -102,6 +102,18 @@ const SEEDS: Seed[] = [
   { slug: "liquid-index", title: "Liquid Index", description: "A feature list with a liquid hover badge.", category: "Display" },
   { slug: "photo-albums", title: "Photo Albums", description: "Album stacks that open into a grid.", category: "Display" },
   { slug: "slide-subscribe", title: "Slide Subscribe", description: "Pick a plan, then slide to start.", category: "Input" },
+  { slug: "set-timer", title: "Set Timer", description: "A pill that morphs into a wheel, then a countdown.", category: "Input" },
+  { slug: "stacked-outline-text", title: "Stacked Outline Text", description: "Outlined type that leaves a velocity trail when you drag it.", category: "Display" },
+  { slug: "drawer-buttons", title: "Drawer Buttons", description: "Buttons that fold open a payment drawer and a cart.", category: "Button" },
+  { slug: "prompt-box", title: "Prompt Box", description: "A composer that expands into a prompt with a model menu.", category: "Input" },
+  { slug: "get-in-touch", title: "Get In Touch", description: "A contact pill that merges you with a portrait.", category: "Button" },
+  { slug: "theme-toggle", title: "Theme Toggle", description: "A dotted grip that slides across a recessed track.", category: "Button" },
+  { slug: "scan-document", title: "Scan Document", description: "A button that unfolds a page and scans it.", category: "Button" },
+  { slug: "polaroid-stack", title: "Polaroid Stack", description: "Prints that fan out from a pile on hover.", category: "Display" },
+  { slug: "analog-stick", title: "Analog Stick", description: "A metallic cap that tilts into the press.", category: "Button" },
+  { slug: "paper-shred-button", title: "Paper Shred Button", description: "A delete button that shreds a page into strips.", category: "Button" },
+  { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
+  { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.map((seed, index) => {

@@ -55,6 +55,22 @@
       ]
     },
     {
+      "name": "analog-stick",
+      "type": "registry:component",
+      "title": "Analog Stick",
+      "description": "A metallic stick that tilts into the press. Hover a quadrant and the cap leans, the shadow shifts, and the matching arrow goes amber.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/analog-stick.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "animated-collection",
       "type": "registry:component",
       "title": "Animated Collection",
@@ -236,6 +252,36 @@
       ]
     },
     {
+      "name": "curve-drawer",
+      "type": "registry:component",
+      "title": "Curve Drawer",
+      "description": "Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/curve-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/curve-drawer-primitives.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/curve-drawer-curve.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "day-picker",
       "type": "registry:component",
       "title": "Day Picker",
@@ -311,6 +357,38 @@
       ]
     },
     {
+      "name": "drawer-buttons",
+      "type": "registry:component",
+      "title": "Drawer Buttons",
+      "description": "Two buttons that open side drawers with a 3D fold. Payment comes from the right, cart from the left, and the fields stagger in.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea",
+        "select",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/drawer-buttons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/drawer-buttons-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/drawer-buttons-field.tsx",
+          "type": "registry:component"
+        }
+      ]
       "name": "dynamic-grid-gallery",
       "type": "registry:component",
       "title": "Dynamic Grid Gallery",
@@ -494,6 +572,39 @@
       ]
     },
     {
+      "name": "get-in-touch",
+      "type": "registry:component",
+      "title": "Get In Touch",
+      "description": "A glossy contact pill. Hover and the label lifts away so a portrait and YOU merge, then Let’s Talk! writes in.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/get-in-touch.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/get-in-touch-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "holographic-referral-card",
+      "type": "registry:component",
+      "title": "Holographic Referral Card",
+      "description": "A dark invite card that tilts in 3D with the pointer. A holographic glow follows. Touch stays still. Tab for a quiet glow.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/holographic-referral-card.tsx",
       "name": "gooey-navbar",
       "type": "registry:component",
       "title": "Gooey Navbar",
@@ -693,6 +804,23 @@
       ]
     },
     {
+      "name": "paper-shred-button",
+      "type": "registry:component",
+      "title": "Paper Shred Button",
+      "description": "Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/paper-shred-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "polaroid-drag",
       "type": "registry:component",
       "title": "Polaroid Drag",
@@ -705,6 +833,22 @@
       "files": [
         {
           "path": "registry/default/example/polaroid-drag.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "polaroid-stack",
+      "type": "registry:component",
+      "title": "Polaroid Stack",
+      "description": "Seven Polaroids sit in a pile. Hover and they fan into an arc from one corner.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/polaroid-stack.tsx",
           "type": "registry:component"
         }
       ]
@@ -749,6 +893,27 @@
       ]
     },
     {
+      "name": "prompt-box",
+      "type": "registry:component",
+      "title": "Prompt Box",
+      "description": "A collapsed chat composer that expands into a textarea with a model menu and send control.",
+      "dependencies": [
+        "motion",
+        "@base-ui/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/prompt-box.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/prompt-box-icons.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "rolling-card-stack",
       "type": "registry:component",
       "title": "Rolling Card Stack",
@@ -785,6 +950,10 @@
       ]
     },
     {
+      "name": "scan-document",
+      "type": "registry:component",
+      "title": "Scan Document",
+      "description": "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
       "name": "scroll-split-cards",
       "type": "registry:component",
       "title": "Scroll Split Cards",
@@ -794,6 +963,7 @@
       ],
       "files": [
         {
+          "path": "registry/default/example/scan-document.tsx",
           "path": "registry/default/example/scroll-split-cards.tsx",
           "type": "registry:component"
         }
@@ -812,6 +982,24 @@
       "files": [
         {
           "path": "registry/default/example/scroll-stack-deck.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "set-timer",
+      "type": "registry:component",
+      "title": "Set Timer",
+      "description": "A dark timer pill that morphs into a minute wheel picker, then into a running timer with pause, cancel, and a rounded-rectangle progress border.",
+      "dependencies": [
+        "motion",
+        "@ncdai/react-wheel-picker",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/set-timer.tsx",
           "type": "registry:component"
         }
       ]
@@ -924,6 +1112,30 @@
       ]
     },
     {
+      "name": "stacked-outline-text",
+      "type": "registry:component",
+      "title": "Stacked Outline Text",
+      "description": "Heavy outlined type you can drag. Speed leaves a stacked white-on-black trail that springs back when you stop.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stacked-outline-text.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme Toggle",
+      "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+      "files": [
+        {
+          "path": "registry/default/example/theme-toggle.tsx",
       "name": "tactile-button",
       "type": "registry:component",
       "title": "Tactile Button",
