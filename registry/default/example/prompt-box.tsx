@@ -1,7 +1,7 @@
 "use client";
 
 import { Input as InputPrimitive } from "@base-ui/react/input";
-import { Check, ChevronRight } from "lucide-react";
+import { ArrowUp, Check, ChevronDown, ChevronRight, Mic } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import {
   Fragment,
@@ -15,7 +15,7 @@ import {
   useState,
 } from "react";
 import { createPortal, flushSync } from "react-dom";
-import { ArrowUp, ClaudeAI, Cursor, Microphone, OpenAI } from "./prompt-box-icons";
+import { ClaudeAI, Cursor, OpenAI } from "./prompt-box-icons";
 
 const SHELL_SPRING = {
   type: "spring" as const,
@@ -56,7 +56,7 @@ const promptFieldCollapsedClassName =
   "w-full border-0 bg-transparent text-base text-muted-foreground shadow-none outline-none placeholder:font-medium placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0 sm:text-sm";
 
 const promptFieldCollapsedRowClassName =
-  "min-w-0 flex-1 -translate-y-px cursor-text border-0 bg-transparent p-0 font-medium leading-none text-muted-foreground placeholder:text-muted-foreground placeholder:leading-none";
+  "min-w-0 flex-1 cursor-text border-0 bg-transparent p-0 font-medium leading-none text-muted-foreground placeholder:text-muted-foreground placeholder:leading-none";
 
 export type PromptSettingOption = {
   value: string;
@@ -369,26 +369,6 @@ function activateOnEnterOrSpace(
     event.preventDefault();
     action();
   }
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      height="10"
-      viewBox="0 0 14 14"
-      width="10"
-    >
-      <path
-        d="M3.5 5.25L7 8.75L10.5 5.25"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
 }
 
 const BAR_XS = [1.5, 5.75, 10] as const;
@@ -1352,11 +1332,10 @@ function SettingsDropdown({
             </span>
           );
         })}
-        <span
-          className={`inline-flex shrink-0 translate-y-px text-muted-foreground transition-transform duration-200 ease-out ${open ? "rotate-180 text-foreground" : ""}`}
-        >
-          <ChevronDownIcon />
-        </span>
+        <ChevronDown
+          aria-hidden="true"
+          className={`size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out ${open ? "rotate-180 text-foreground" : ""}`}
+        />
       </button>
       {mounted
         ? createPortal(
@@ -1622,7 +1601,7 @@ function PlusMenuDropdown({
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label="Add attachment"
-        className={`mr-9 ml-auto flex items-center justify-center rounded-full py-1 transition-colors ${open ? "text-foreground" : "text-foreground/50 hover:text-foreground"}`}
+        className={`flex size-8 items-center justify-center rounded-full transition-colors ${open ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
         onClick={toggleOpen}
         onMouseDown={(event) => event.preventDefault()}
         ref={triggerRef}
@@ -1983,7 +1962,7 @@ export function PromptInput({
     >
       <motion.div
         animate={{ height: expanded ? expandedHeight : COLLAPSED_HEIGHT }}
-        className="relative overflow-hidden rounded-[24px] border-[0.5px] border-border bg-white p-0.5"
+        className="relative overflow-hidden rounded-[24px] border-[0.5px] border-border bg-background p-0.5"
         data-prompt-input-root=""
         initial={false}
         onBlur={handleBlur}
@@ -2002,7 +1981,7 @@ export function PromptInput({
             render={(props) => (
               <textarea
                 {...props}
-                className={`${props.className ?? ""} ${promptFieldClassName} block w-full resize-none pt-4 pr-14 pl-5 outline-none overflow-y-auto overscroll-contain`}
+                className={`${props.className ?? ""} ${promptFieldClassName} block w-full resize-none pt-4 pr-5 pl-5 outline-none overflow-y-auto overscroll-contain`}
                 onKeyDown={(event) => {
                   props.onKeyDown?.(event);
                   handleTextareaKeyDown(event);
@@ -2015,7 +1994,7 @@ export function PromptInput({
           />
         ) : (
         <div
-          className="group/collapsed absolute inset-x-0 top-0 flex items-center overflow-hidden pl-5 pr-[18px]"
+          className="group/collapsed absolute inset-x-0 top-0 flex items-center overflow-hidden px-5"
           key="placeholder"
           onMouseEnter={
             prefersHover ? () => setCollapsedHover(true) : undefined
@@ -2038,7 +2017,7 @@ export function PromptInput({
             {selectedModelIcon && collapsedHoverReady ? (
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 right-[18px] size-4 -translate-y-[calc(50%-1px)] opacity-80"
+                className="pointer-events-none absolute top-1/2 right-5 flex size-4 -translate-y-1/2 items-center justify-center opacity-80"
               >
                 <CollapsedSelectedModelIcon
                   icon={selectedModelIcon}
@@ -2054,7 +2033,7 @@ export function PromptInput({
         {expanded ? (
           <motion.div
             animate={{ opacity: 1 }}
-            className="absolute inset-x-0 bottom-0 flex items-center gap-5 px-5"
+            className="absolute inset-x-0 bottom-0 flex items-center pl-5 pr-2"
             exit={{ opacity: 0, transition: { duration: 0.16, ease: EASE_OUT_QUAD } }}
             initial={{ opacity: 0 }}
             key="footer"
@@ -2077,65 +2056,58 @@ export function PromptInput({
                 values={settings}
               />
             ) : null}
-            {plusMenuItems.length > 0 ? (
-              <PlusMenuDropdown
-                items={plusMenuItems}
-                onOpenChange={(nextOpen) => {
-                  setPlusOpen(nextOpen);
-                  if (nextOpen) {
-                    setSettingsOpen(false);
-                    return;
-                  }
-                  maybeCollapse();
-                }}
-              />
-            ) : null}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {expanded ? (
-          <motion.button
-            animate={{ opacity: 1, scale: 1 }}
-            aria-label={hasValue ? "Send prompt" : "Use voice input"}
-            className="absolute right-2 bottom-2 flex size-8 items-center justify-center bg-white shadow-xs text-accent-foreground transition-opacity hover:opacity-90 cursor-pointer p-px"
-            exit={{ opacity: 0, scale: 0.85 }}
-            initial={{ opacity: 0, scale: 0.85 }}
-            key="send"
-            onClick={handleSubmit}
-            style={{ borderRadius: 9999 }}
-            transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
-            type="button"
-          >
-            <div className="bg-accent h-full w-full flex items-center justify-center rounded-full">
-              <AnimatePresence initial={false} mode="wait">
-                {hasValue ? (
-                  <motion.span
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center justify-center"
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    key="arrow"
-                    transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
-                  >
-                    <ArrowUp className="size-[13px] shrink-0" strokeWidth="2.5" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center justify-center"
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    key="mic"
-                    transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
-                  >
-                    <Microphone className="size-[13px] shrink-0" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+            <div className="ml-auto flex items-center gap-0.5">
+              {plusMenuItems.length > 0 ? (
+                <PlusMenuDropdown
+                  items={plusMenuItems}
+                  onOpenChange={(nextOpen) => {
+                    setPlusOpen(nextOpen);
+                    if (nextOpen) {
+                      setSettingsOpen(false);
+                      return;
+                    }
+                    maybeCollapse();
+                  }}
+                />
+              ) : null}
+              <motion.button
+                animate={{ opacity: 1, scale: 1 }}
+                aria-label={hasValue ? "Send prompt" : "Use voice input"}
+                className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-foreground text-background shadow-xs transition-opacity hover:opacity-90"
+                exit={{ opacity: 0, scale: 0.85 }}
+                initial={{ opacity: 0, scale: 0.85 }}
+                onClick={handleSubmit}
+                transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
+                type="button"
+              >
+                <AnimatePresence initial={false} mode="wait">
+                  {hasValue ? (
+                    <motion.span
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-center justify-center"
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      key="arrow"
+                      transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
+                    >
+                      <ArrowUp className="size-4" strokeWidth={2.25} />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-center justify-center"
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      key="mic"
+                      transition={{ duration: 0.15, ease: EASE_OUT_QUAD }}
+                    >
+                      <Mic className="size-4" strokeWidth={2.25} />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
             </div>
-          </motion.button>
+          </motion.div>
         ) : null}
       </AnimatePresence>
         </div>
