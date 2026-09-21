@@ -119,8 +119,8 @@ const SEEDS: Seed[] = [
   { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
 ];
 
-export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug)).map(
-  (seed, index) => {
+export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug))
+  .map((seed, index) => {
     const override = MEDIA_OVERRIDES[seed.slug];
     return {
       ...seed,
@@ -128,8 +128,8 @@ export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(s
       video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
       isNew: isNewComponent(seed.slug),
     };
-  },
-);
+  })
+  .sort((a, b) => a.title.localeCompare(b.title));
 
 /** Poster always; video only if uploaded in admin (no placeholder clips). */
 export function browseUploadedMedia(slug: string) {

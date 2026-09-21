@@ -1,10 +1,12 @@
 import "server-only";
 
+import { createHash } from "crypto";
+
 import sharp from "sharp";
 
 import { firstFrameJpeg } from "@/lib/media/video-frame";
 import { reencodeVideoToMp4 } from "@/lib/media/reencode-video";
-import { uploadToR2 } from "@/lib/r2/upload";
+import { deleteCdnObject, uploadToR2 } from "@/lib/r2/upload";
 
 /** 2× a ~640px browse column — enough for retina without smearing UI text. */
 const POSTER_WIDTH = 1280;
@@ -27,16 +29,25 @@ async function encodePoster(input: Buffer) {
     .toBuffer();
 }
 
+function shortHash(buf: Buffer) {
+  return createHash("sha1").update(buf).digest("hex").slice(0, 10);
+}
+
 /**
  * Compress + upload component browse media to R2:
  * - Image → AVIF poster
  * - Video → H.264 CRF 23, ≤1080p, ≤45s, muted, +faststart
  * - Optional first-frame poster fallback if no image provided
+ *
+ * Keys are content-hashed so re-uploads bust CDN/browser cache.
+ * Previous CDN URLs are deleted after a successful replace.
  */
 export async function processComponentMedia(input: {
   slug: string;
   image?: Buffer | null;
   video?: Buffer | null;
+  previousPosterUrl?: string | null;
+  previousVideoUrl?: string | null;
 }): Promise<ComponentMediaResult> {
   const keyPrefix = `components/${input.slug}`;
   let posterUrl: string | null = null;
@@ -51,7 +62,7 @@ export async function processComponentMedia(input: {
     deliveryVideo = await reencodeVideoToMp4(input.video);
     videoDeliveryBytes = deliveryVideo.length;
     videoUrl = await uploadToR2({
-      key: `${keyPrefix}/video.mp4`,
+      key: `${keyPrefix}/video-${shortHash(deliveryVideo)}.mp4`,
       body: deliveryVideo,
       contentType: "video/mp4",
     });
@@ -61,7 +72,7 @@ export async function processComponentMedia(input: {
     const posterAvif = await encodePoster(input.image);
     posterBytes = posterAvif.length;
     posterUrl = await uploadToR2({
-      key: `${keyPrefix}/poster.avif`,
+      key: `${keyPrefix}/poster-${shortHash(posterAvif)}.avif`,
       body: posterAvif,
       contentType: "image/avif",
     });
@@ -71,15 +82,31 @@ export async function processComponentMedia(input: {
       const posterAvif = await encodePoster(frame);
       posterBytes = posterAvif.length;
       posterUrl = await uploadToR2({
-        key: `${keyPrefix}/poster.avif`,
+        key: `${keyPrefix}/poster-${shortHash(posterAvif)}.avif`,
         body: posterAvif,
         contentType: "image/avif",
       });
     }
   }
 
+  if (!posterUrl && !videoUrl) {
+    throw new Error("Upload an image (or a video we can posterize).");
+  }
+
+  // Keep previous poster when only a video was uploaded and we couldn't posterize.
+  if (!posterUrl && input.previousPosterUrl) {
+    posterUrl = input.previousPosterUrl;
+  }
+
   if (!posterUrl) {
     throw new Error("Upload an image (or a video we can posterize).");
+  }
+
+  if (posterUrl !== input.previousPosterUrl) {
+    await deleteCdnObject(input.previousPosterUrl);
+  }
+  if (videoUrl && videoUrl !== input.previousVideoUrl) {
+    await deleteCdnObject(input.previousVideoUrl);
   }
 
   return {

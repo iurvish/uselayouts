@@ -13,8 +13,8 @@ export default function SponsorThanksPage() {
         Thank you
       </h1>
       <p className="text-[16px] leading-relaxed text-[#071A31]/70">
-        Payment is processing. Name and logo from checkout show on the sponsors
-        page after the subscription is confirmed.
+        Payment is processing. Your sponsorship shows on this page after the
+        subscription is confirmed.
       </p>
       <Link
         href="/sponsor"

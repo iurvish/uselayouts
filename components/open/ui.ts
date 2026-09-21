@@ -62,6 +62,10 @@ export function rememberScroller(key: string, scroller: HTMLElement) {
   scrollerTop.set(key, scroller.scrollTop);
 }
 
+export function forgetScroller(key: string) {
+  scrollerTop.delete(key);
+}
+
 /** Scroll the least amount that keeps `child` in view. No-ops if it already is. */
 export function revealChildInScroller(scroller: HTMLElement, child: HTMLElement) {
   const s = scroller.getBoundingClientRect();
@@ -72,6 +76,16 @@ export function revealChildInScroller(scroller: HTMLElement, child: HTMLElement)
   let next = scroller.scrollTop;
   if (c.top < s.top) next += c.top - s.top - pad;
   else next += c.bottom - s.bottom + pad;
+  const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+  scroller.scrollTop = Math.max(0, Math.min(next, max));
+}
+
+/** Put `child` near the vertical middle of the scroller. */
+export function centerChildInScroller(scroller: HTMLElement, child: HTMLElement) {
+  const s = scroller.getBoundingClientRect();
+  const c = child.getBoundingClientRect();
+  if (s.height <= 0) return;
+  const next = scroller.scrollTop + (c.top + c.height / 2) - (s.top + s.height / 2);
   const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
   scroller.scrollTop = Math.max(0, Math.min(next, max));
 }

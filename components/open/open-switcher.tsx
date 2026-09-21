@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronsUpDown, Search } from "lucide-react";
 
-import { scrollbarMinimal, rememberScroller, restoreScroller, revealChildInScroller } from "@/components/open/ui";
+import { scrollbarMinimal, forgetScroller, rememberScroller, centerChildInScroller } from "@/components/open/ui";
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import { rankSearchItems } from "@/lib/component-tags";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -126,29 +126,27 @@ export function OpenSwitcher({
     };
     const active = () =>
       scroller.querySelector<HTMLElement>('[aria-selected="true"]');
-    const run = (restore: boolean) => {
+    const run = () => {
       if (!allow) return;
-      if (restore) restoreScroller(key, scroller, active());
-      else {
-        const item = active();
-        if (item) revealChildInScroller(scroller, item);
-      }
+      const item = active();
+      if (item) centerChildInScroller(scroller, item);
     };
 
-    run(true);
+    forgetScroller(key);
+    run();
     const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
-      run(false);
+      run();
       if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     const onScroll = () => rememberScroller(key, scroller);
-    const ro = new ResizeObserver(() => run(false));
+    const ro = new ResizeObserver(() => run());
     ro.observe(scroller);
     const content = scroller.firstElementChild;
     if (content) ro.observe(content);
-    const onLoad = () => run(false);
+    const onLoad = () => run();
     const imgs = [...scroller.querySelectorAll("img")];
     for (const img of imgs) {
       if (!img.complete) img.addEventListener("load", onLoad);

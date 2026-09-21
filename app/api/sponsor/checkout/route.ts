@@ -8,20 +8,6 @@ import {
 
 const CUSTOM_FIELDS = [
   {
-    key: "display_name",
-    label: "Name to show on the sponsors page",
-    field_type: "text" as const,
-    placeholder: "Acme Inc.",
-    required: true,
-  },
-  {
-    key: "logo_url",
-    label: "Logo URL",
-    field_type: "url" as const,
-    placeholder: "https://… (PNG or SVG)",
-    required: true,
-  },
-  {
     key: "website",
     label: "Website",
     field_type: "url" as const,

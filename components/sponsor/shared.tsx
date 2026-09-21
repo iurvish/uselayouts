@@ -50,19 +50,19 @@ export const CURRENT_SPONSORS = [
 export const FAQ = [
   {
     q: "Where does my brand show up?",
-    a: "Company sponsors get a logo on the homepage footer strip and a linked mark on /browse. Individual sponsors are listed on this page with a thank-you note — no logo placement.",
+    a: "Company sponsors get a logo on the homepage footer strip and a linked mark on /browse. Reach out after checkout if you want a custom mark placed.",
   },
   {
     q: "Can I cancel anytime?",
-    a: "Yes. GitHub Sponsors lets you pause or cancel from your account. Logo placements come down at the end of the billing period.",
+    a: "Yes. Cancel from your Dodo customer portal or email us. Logo placements come down at the end of the billing period.",
   },
   {
     q: "Do you take one-time payments?",
-    a: "Coffee and thank-you tiers are one-time. Company placement is monthly so we can keep the logo wall honest.",
+    a: "Sponsor placements are monthly so the wall stays current. One-time tips can go through GitHub Sponsors.",
   },
   {
     q: "What if my company name is extremely long?",
-    a: "We truncate on the logo wall with a tooltip for the full legal name. Prefer a short wordmark SVG when you can.",
+    a: "We truncate on the logo wall with a tooltip for the full legal name. Prefer a short wordmark when you can.",
   },
 ] as const;
 

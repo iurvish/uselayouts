@@ -71,9 +71,11 @@ export async function POST(request: Request, { params }: Params) {
       slug: name,
       image,
       video,
+      previousPosterUrl: existingPoster,
+      previousVideoUrl: existingVideo,
     });
 
-    const posterUrl = processed.posterUrl || existingPoster;
+    const posterUrl = processed.posterUrl;
     if (!posterUrl) {
       return NextResponse.json(
         { error: "Could not produce a poster image." },
@@ -120,9 +122,21 @@ export async function DELETE(request: Request, { params }: Params) {
 
     // Explicit flags; omit both → clear everything.
     const clearAll = body.poster === undefined && body.video === undefined;
+    const clearPoster = clearAll || body.poster === true;
+    const clearVideo = clearAll || body.video === true;
+
+    if (clearPoster) {
+      const { deleteCdnObject } = await import("@/lib/r2/upload");
+      await deleteCdnObject(component.controls?.posterUrl);
+    }
+    if (clearVideo) {
+      const { deleteCdnObject } = await import("@/lib/r2/upload");
+      await deleteCdnObject(component.controls?.videoUrl);
+    }
+
     const result = await clearComponentMedia(name, {
-      poster: clearAll || body.poster === true,
-      video: clearAll || body.video === true,
+      poster: clearPoster,
+      video: clearVideo,
     });
 
     return NextResponse.json({ ok: true, ...result });

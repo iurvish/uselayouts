@@ -75,6 +75,13 @@ export function BrowseCard({
         aria-label={label}
         draggable={false}
         className="browse-card-hit rounded-[10px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ring"
+        onClick={() => {
+          try {
+            window.sessionStorage.setItem("uselayouts:open-sidebar-pinned", "0");
+          } catch {
+            // ignore
+          }
+        }}
       />
     </article>
   );

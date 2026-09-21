@@ -16,7 +16,7 @@ import {
   PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPressMotion, scrollbarNone, rememberScroller, restoreScroller, revealChildInScroller } from "@/components/open/ui";
+import { openIconBtn, openPressMotion, scrollbarNone, forgetScroller, rememberScroller, centerChildInScroller } from "@/components/open/ui";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -173,21 +173,19 @@ function SidebarList({
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
     };
-    const sync = (restore: boolean) => {
+    const sync = () => {
       if (!allow || el.clientHeight === 0) return;
-      if (restore) restoreScroller(key, el, active());
-      else {
-        const item = active();
-        if (item) revealChildInScroller(el, item);
-      }
+      const item = active();
+      if (item) centerChildInScroller(el, item);
       updateFades();
     };
 
-    sync(true);
+    forgetScroller(key);
+    sync();
     const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
-      sync(false);
+      sync();
       if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -198,7 +196,7 @@ function SidebarList({
     el.addEventListener("scroll", onScroll, { passive: true });
     el.addEventListener("wheel", stop, { passive: true });
     el.addEventListener("touchmove", stop, { passive: true });
-    const ro = new ResizeObserver(() => sync(false));
+    const ro = new ResizeObserver(() => sync());
     ro.observe(el);
     const child = el.firstElementChild;
     if (child) ro.observe(child);
@@ -295,7 +293,10 @@ function OpenExperienceShell({
   const peekPanelRef = React.useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
-  const current = navItems.find((item) => item.href === pathname) ??
+  const slug = pathname.split("/").pop() ?? "";
+  const current =
+    navItems.find((item) => item.href === pathname) ??
+    navItems.find((item) => item.slug === slug) ??
     navItems[0] ?? {
       slug: "component",
       title: "Component",

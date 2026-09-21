@@ -83,28 +83,29 @@ export function getComponentDocsPage(slug: string) {
 
 export async function getOpenNavItems(): Promise<OpenNavItem[]> {
   const items = await listComponents();
-  if (items.length > 0) {
-    return items.map((item) => {
-      const page = getComponentDocsPage(item.name);
-      return {
-        slug: item.name,
-        title: page?.data.title ?? item.title,
-        href: `/docs/components/${item.name}`,
-        isNew: isNewComponent(item.name),
-        tags: item.tags,
-      };
-    });
-  }
-  return browseItems.map((item) => {
-    const page = getComponentDocsPage(item.slug);
-    return {
-      slug: item.slug,
-      title: page?.data.title ?? item.title,
-        href: `/docs/components/${item.slug}`,
-        isNew: item.isNew || isNewComponent(item.slug),
-        tags: item.tags,
-      };
-  });
+  const mapped =
+    items.length > 0
+      ? items.map((item) => {
+          const page = getComponentDocsPage(item.name);
+          return {
+            slug: item.name,
+            title: page?.data.title ?? item.title,
+            href: `/docs/components/${item.name}`,
+            isNew: isNewComponent(item.name),
+            tags: item.tags,
+          };
+        })
+      : browseItems.map((item) => {
+          const page = getComponentDocsPage(item.slug);
+          return {
+            slug: item.slug,
+            title: page?.data.title ?? item.title,
+            href: `/docs/components/${item.slug}`,
+            isNew: item.isNew || isNewComponent(item.slug),
+            tags: item.tags,
+          };
+        });
+  return mapped.sort((a, b) => a.title.localeCompare(b.title));
 }
 
 export async function getOpenComponent(slug: string): Promise<OpenComponentData | null> {
