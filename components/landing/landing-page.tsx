@@ -156,32 +156,86 @@ const avatars = [
 
 const testimonials = [
   {
-    quote:
-      "The components look great out of the box, but the best part is how easy they are to make your own.",
-    name: "Jack Carter",
-    role: "VP of Engineering, Bloom & co",
-    avatar: "/landing/avatar-4.png",
+    quote: "Looks amazing 🤩",
+    name: "Rob Austin",
+    role: "Founder of shadcnblocks",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1902211854476439552/CTVSPPo1_400x400.jpg",
+  },
+  {
+    quote: "First 🏅 level discovery of 2026",
+    name: "Harman",
+    role: "Founder of shadcn-form",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1972611039066791936/cwvQHJ0S_400x400.jpg",
   },
   {
     quote:
-      "The components look great out of the box, but the best part is how easy they are to make your own.",
-    name: "Jack Carter",
-    role: "VP of Engineering, Bloom & co",
-    avatar: "/landing/avatar-1.png",
+      "Great work Urvish. Congratulations. I've added uselayouts to htmlrev 👏",
+    name: "Lucian Devluc",
+    role: "Creator of htmlrev",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1179462746414432257/HBkrOkaX_400x400.jpg",
   },
   {
     quote:
-      "The components look great out of the box, but the best part is how easy they are to make your own.",
-    name: "Jack Carter",
-    role: "VP of Engineering, Bloom & co",
-    avatar: "/landing/avatar-2.png",
+      "That's so sick. Every single component hits perfectly. It feels like a master chef put it together with high attention to detail.",
+    name: "Frederik",
+    role: "Create worlds with code",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1649670410848333825/yNqgk-ys_400x400.jpg",
+  },
+  {
+    quote: "Wow looks sickkkk. Gotta give it a shot",
+    name: "Bilal Bakr",
+    role: "Co-founder of Calendaty",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1965065977436991488/f9FD6oer_400x400.jpg",
   },
   {
     quote:
-      "The components look great out of the box, but the best part is how easy they are to make your own.",
-    name: "Jack Carter",
-    role: "VP of Engineering, Bloom & co",
-    avatar: "/landing/avatar-3.png",
+      "Bro, really appreciate your efforts in making the product first, then this great visual hook video and all you are giving away for free. Hats off dude.",
+    name: "Kushal",
+    role: "Building things",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1996490150264889344/KA5Wr5i3_400x400.jpg",
+  },
+  {
+    quote:
+      "congrats on shipping it!!! interacted with all the components and it feels smooth throughout. keep building and adding more...",
+    name: "Patel Meet",
+    role: "web dev | ai & tech enthusiast",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1451865652457717764/xpBuUbkB_400x400.jpg",
+  },
+  {
+    quote: "soo damn cool",
+    name: "Gurbinder",
+    role: "Founder of Evilcharts",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1924504051728670720/mqyGd02m_400x400.jpg",
+  },
+  {
+    quote: "Damm! That's some premium stuff. Thanks man 💪🏼",
+    name: "Dev",
+    role: "Building flowset",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1847198803218071552/Y5ih3vmW_400x400.jpg",
+  },
+  {
+    quote: "Great work Bro. And thanks for keeping it open source.",
+    name: "Tilak Raj Singh",
+    role: "Frontend & UI/UX enthusiast",
+    avatar:
+      "https://pbs.twimg.com/profile_images/2002983266513780736/gwRnmlXg_400x400.jpg",
+  },
+  {
+    quote:
+      "It's really sick 🔥, i really liked the animations and i personally think that I'll be using multi-step form more in my projects for user registration",
+    name: "Samarth Adsare",
+    role: "Developer",
+    avatar:
+      "https://pbs.twimg.com/profile_images/1860297180722143232/n_knNBFy_400x400.jpg",
   },
 ];
 
@@ -846,7 +900,7 @@ function TestimonialCard({
             </div>
             <Image
               src={avatar}
-              alt=""
+              alt={name}
               width={40}
               height={40}
               className="size-10 shrink-0 rounded-full object-cover"
