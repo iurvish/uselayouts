@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/brand-logo";
 
 export const SPONSOR_HREF = "https://github.com/sponsors/iurvish";
 
@@ -82,14 +82,7 @@ export function ProtoNav({
   return (
     <header className="relative z-20 flex h-[70px] items-center justify-between px-4 sm:px-8 lg:px-[47px]">
       <Link href="/" aria-label="uselayouts home" className="shrink-0">
-        <Image
-          src="/logomark.svg"
-          alt="uselayouts"
-          width={128}
-          height={30}
-          className="h-[30px] w-auto"
-          priority
-        />
+        <BrandLogo />
       </Link>
       <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex">
         {links.map((link) => (

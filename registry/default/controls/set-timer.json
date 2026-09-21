@@ -8,7 +8,7 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-09-15T00:00:00.000Z",
+  "updatedAt": "2026-09-21T04:10:09.361Z",
   "previewBackground": {
     "light": "#e9e9e9",
     "dark": "#e9e9e9"
@@ -25,5 +25,7 @@
   "tags": [
     "timer",
     "input"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/set-timer/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/set-timer/video.mp4"
 }

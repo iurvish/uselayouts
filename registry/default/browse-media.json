@@ -190,5 +190,13 @@
   "scan-document": {
     "posterUrl": "https://cdn.uselayouts.com/components/scan-document/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/scan-document/video.mp4"
+  },
+  "theme-toggle": {
+    "posterUrl": "https://cdn.uselayouts.com/components/theme-toggle/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/theme-toggle/video.mp4"
+  },
+  "set-timer": {
+    "posterUrl": "https://cdn.uselayouts.com/components/set-timer/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/set-timer/video.mp4"
   }
 }

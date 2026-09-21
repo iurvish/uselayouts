@@ -2,11 +2,11 @@
 
 /* eslint-disable @next/next/no-img-element -- static SVG marks, no optimisation needed. */
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 import { formatStarCount, GITHUB_URL } from "@/lib/github";
+import { BrandLogo } from "@/components/brand-logo";
 
 export const landingNavLinks = [
   { label: "Component", href: "/browse" },
@@ -40,10 +40,8 @@ function GithubMarkLink({ stars }: { stars?: number | null }) {
 }
 
 export function LandingNav({
-  logoSrc = "/logomark-landing.svg",
   githubStars,
 }: {
-  logoSrc?: string;
   githubStars?: number | null;
 }) {
   const [open, setOpen] = useState(false);
@@ -51,14 +49,7 @@ export function LandingNav({
   return (
     <header className="relative z-20 flex h-[70px] items-center justify-between px-4 sm:px-8 lg:px-12">
       <Link href="/" aria-label="uselayouts home" className="shrink-0">
-        <Image
-          src={logoSrc}
-          alt="uselayouts"
-          width={128}
-          height={30}
-          className="h-[30px] w-auto"
-          priority
-        />
+        <BrandLogo />
       </Link>
 
       <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex">

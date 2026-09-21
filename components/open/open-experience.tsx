@@ -21,6 +21,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
 import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/brand-logo";
 
 const SIDEBAR_WIDTH = 262;
 const PINNED_KEY = "uselayouts:open-sidebar-pinned";
@@ -77,14 +78,7 @@ function PinnedSidebarHeader({
           className="flex min-w-0 items-center outline-none focus-visible:ring-0"
           aria-label="uselayouts browse"
         >
-          <img
-            src="/brand/logo-wordmark.svg"
-            alt="uselayouts"
-            width={128}
-            height={30}
-            className="h-[30px] w-auto"
-            draggable={false}
-          />
+          <BrandLogo invert />
         </Link>
         <button
           type="button"

@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-21T03:38:44.963Z",
   "previewBackground": {
     "light": "#e8e8e8",
     "dark": "#1f2937"
@@ -20,5 +20,7 @@
     "theme",
     "toggle",
     "dark"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/theme-toggle/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/theme-toggle/video.mp4"
 }

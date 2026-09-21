@@ -61,7 +61,6 @@ export function OpenComponentView({
             registryItem={data.registryItem}
             manager={manager}
             onManagerChange={setManager}
-            html={data.cliHtml}
           />
         </div>
       )}

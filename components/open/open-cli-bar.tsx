@@ -10,8 +10,8 @@ import {
   cliInstallCommand,
   type PackageManager,
 } from "@/lib/open/package-manager";
+import { MiddleTruncation } from "@/components/middle-truncation";
 import { PackageManagerMark } from "@/components/open/pm-marks";
-import { shikiCommandSurface } from "@/components/open/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useGatedCopy } from "@/hooks/use-gated-copy";
 import { Confetti, type ConfettiRef } from "@/registry/magicui/confetti";
@@ -22,13 +22,10 @@ export function OpenCliBar({
   registryItem,
   manager,
   onManagerChange,
-  html = {},
 }: {
   registryItem: string;
   manager: PackageManager;
   onManagerChange: (manager: PackageManager) => void;
-  /** Pre-highlighted shell HTML per manager (same Shiki surface as DocsCodeBlock). */
-  html?: Partial<Record<PackageManager, string>>;
 }) {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
@@ -128,22 +125,19 @@ export function OpenCliBar({
             type="button"
             className={cn(
               /* Figma 91:4662 — text segment + drop-shadow rim */
-              "flex h-8 max-w-[min(42vw,420px)] cursor-pointer items-center justify-center overflow-hidden rounded-tl-[10px] rounded-bl-[10px] bg-[#030202] px-2.5 py-1.5 drop-shadow-[0px_0.5px_0px_rgba(255,255,255,0.15)]",
+              "flex h-8 max-w-[min(42vw,420px)] min-w-0 cursor-pointer items-center overflow-hidden rounded-tl-[10px] rounded-bl-[10px] bg-[#030202] px-2.5 py-1.5 drop-shadow-[0px_0.5px_0px_rgba(255,255,255,0.15)]",
               "hover:bg-[#030202]",
             )}
             onClick={copyCommand}
             aria-label={copied ? "Copied" : "Copy install command"}
             title={command}
           >
-            <div
-              className={cn(
-                shikiCommandSurface,
-                "overflow-hidden whitespace-nowrap [&_pre]:overflow-hidden [&_pre]:whitespace-nowrap [&_code]:whitespace-nowrap",
-              )}
-              dangerouslySetInnerHTML={{
-                __html: html[manager] || `<pre><code>${command}</code></pre>`,
-              }}
-            />
+            <MiddleTruncation
+              end={registryItem.length}
+              className="w-max min-w-0 max-w-full font-mono text-[13px] leading-[19.5px] text-[#99FFE4]"
+            >
+              {command}
+            </MiddleTruncation>
           </button>
           <button
             type="button"

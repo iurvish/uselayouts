@@ -13,10 +13,10 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T17:45:00.000Z",
+  "updatedAt": "2026-09-21T04:05:22.298Z",
   "previewBackground": {
-    "light": "#0a0a0a",
-    "dark": "#0a0a0a"
+    "light": "hsl(0 0% 100%)",
+    "dark": "hsl(225 7% 11%)"
   },
   "showHint": true,
   "hintKind": "scroll",
@@ -27,5 +27,6 @@
     "cards",
     "scroll",
     "split"
-  ]
+  ],
+  "hintTop": 80
 }

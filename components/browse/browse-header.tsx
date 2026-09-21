@@ -6,6 +6,7 @@ import * as React from "react";
 import Link from "next/link";
 
 import { SearchIcon } from "./icons";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function BrowseHeader({
   query,
@@ -36,14 +37,7 @@ export function BrowseHeader({
         href="/"
         className="flex items-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
       >
-        <img
-          src="/brand/logo-wordmark.svg"
-          alt="useLayouts"
-          width={128}
-          height={30}
-          className="h-[30px] w-auto"
-          draggable={false}
-        />
+        <BrandLogo invert />
       </Link>
 
       <div className="flex items-center gap-2.5">
