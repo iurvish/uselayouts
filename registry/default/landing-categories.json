@@ -1,0 +1,6 @@
+{
+  "layouts": "fluid-expanding-grid",
+  "navigation": "gooey-navbar",
+  "interactions": "delete-button",
+  "user-interface": "pricing-card"
+}
