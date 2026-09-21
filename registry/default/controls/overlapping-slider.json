@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T17:00:00.000Z",
+  "updatedAt": "2026-09-21T04:12:14.215Z",
   "previewBackground": {
     "light": "#ffffff",
     "dark": "#ffffff"
@@ -26,5 +26,7 @@
   "tags": [
     "carousel",
     "slider"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/overlapping-slider/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/overlapping-slider/video.mp4"
 }

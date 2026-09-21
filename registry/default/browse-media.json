@@ -198,5 +198,13 @@
   "set-timer": {
     "posterUrl": "https://cdn.uselayouts.com/components/set-timer/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/set-timer/video.mp4"
+  },
+  "overlapping-slider": {
+    "posterUrl": "https://cdn.uselayouts.com/components/overlapping-slider/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/overlapping-slider/video.mp4"
+  },
+  "wheel-carousel": {
+    "posterUrl": "https://cdn.uselayouts.com/components/wheel-carousel/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/wheel-carousel/video.mp4"
   }
 }

@@ -19,7 +19,7 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-08-29T04:33:28.964Z",
+  "updatedAt": "2026-09-21T04:12:42.879Z",
   "previewBackground": "#ffffff",
   "interactionHints": {
     "duration": 3,
@@ -30,5 +30,7 @@
     "carousel",
     "wheel",
     "slider"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/wheel-carousel/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/wheel-carousel/video.mp4"
 }
