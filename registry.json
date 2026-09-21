@@ -1133,7 +1133,8 @@
           "path": "registry/default/example/theme-toggle.tsx",
           "type": "registry:component"
         }
-      ]
+      ],
+      "dependencies": []
     },
     {
       "name": "tactile-button",

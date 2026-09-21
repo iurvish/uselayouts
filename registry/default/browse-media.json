@@ -239,10 +239,6 @@
     "posterUrl": "https://cdn.uselayouts.com/components/get-in-touch/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/get-in-touch/video.mp4"
   },
-  "tactile-button": {
-    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
-    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
-  },
   "holographic-referral-card": {
     "posterUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/video.mp4"
@@ -250,5 +246,9 @@
   "scroll-split-cards": {
     "posterUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/video.mp4"
+  },
+  "tactile-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster-445352537e.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video-afb6c148d5.mp4"
   }
 }

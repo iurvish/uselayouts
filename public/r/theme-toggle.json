@@ -3,6 +3,7 @@
   "name": "theme-toggle",
   "title": "Theme Toggle",
   "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+  "dependencies": [],
   "files": [
     {
       "path": "registry/default/example/theme-toggle.tsx",
