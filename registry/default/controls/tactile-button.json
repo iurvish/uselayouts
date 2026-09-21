@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-19T19:34:00.434Z",
+  "updatedAt": "2026-09-21T09:39:13.236Z",
   "previewBackground": {
     "light": "#e8e8e8",
     "dark": "#e8e8e8"
@@ -24,10 +24,10 @@
   "hintDescription": "",
   "hintHideOnScroll": false,
   "hintTop": 144,
-  "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4",
   "tags": [
     "button",
     "press"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
 }

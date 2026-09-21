@@ -8,8 +8,8 @@
     "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4"
   },
   "scroll-stack-deck": {
-    "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=880&q=68",
-    "videoUrl": ""
+    "posterUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/video.mp4"
   },
   "feature-carousel": {
     "posterUrl": "https://cdn.uselayouts.com/components/feature-carousel/poster.avif",
@@ -159,10 +159,6 @@
     "posterUrl": "https://cdn.uselayouts.com/components/slide-subscribe/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/slide-subscribe/video.mp4"
   },
-  "tactile-button": {
-    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
-    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
-  },
   "paper-shred-button": {
     "posterUrl": "https://cdn.uselayouts.com/components/paper-shred-button/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/paper-shred-button/video.mp4"
@@ -226,5 +222,33 @@
   "stacked-outline-text": {
     "posterUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/video.mp4"
+  },
+  "coverflow-drag": {
+    "posterUrl": "https://cdn.uselayouts.com/components/coverflow-drag/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/coverflow-drag/video.mp4"
+  },
+  "stack-scroll-reveal": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/video.mp4"
+  },
+  "liquid-index": {
+    "posterUrl": "https://cdn.uselayouts.com/components/liquid-index/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/liquid-index/video.mp4"
+  },
+  "get-in-touch": {
+    "posterUrl": "https://cdn.uselayouts.com/components/get-in-touch/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/get-in-touch/video.mp4"
+  },
+  "tactile-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video.mp4"
+  },
+  "holographic-referral-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/video.mp4"
+  },
+  "scroll-split-cards": {
+    "posterUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/video.mp4"
   }
 }

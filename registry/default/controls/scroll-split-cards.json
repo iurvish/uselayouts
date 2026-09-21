@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-21T04:05:22.298Z",
+  "updatedAt": "2026-09-21T16:48:04.977Z",
   "previewBackground": {
     "light": "hsl(0 0% 100%)",
     "dark": "hsl(225 7% 11%)"
@@ -28,5 +28,7 @@
     "scroll",
     "split"
   ],
-  "hintTop": 80
+  "hintTop": 80,
+  "posterUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/video.mp4"
 }

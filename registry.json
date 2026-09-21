@@ -371,14 +371,6 @@
         {
           "path": "registry/default/example/drawer-buttons.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "registry/default/example/drawer-buttons-drawer.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/default/example/drawer-buttons-field.tsx",
-          "type": "registry:component"
         }
       ]
     },
@@ -603,10 +595,8 @@
       "name": "gooey-navbar",
       "type": "registry:component",
       "title": "Gooey Navbar",
-      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, glow, active dot.",
-      "dependencies": [
-        "motion"
-      ],
+      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, active dot.",
+      "dependencies": [],
       "files": [
         {
           "path": "registry/default/example/gooey-navbar.tsx",

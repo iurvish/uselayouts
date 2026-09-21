@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-16T19:12:59.835Z",
+  "updatedAt": "2026-09-21T09:36:41.722Z",
   "previewBackground": {
     "light": "#f6f3ee",
     "dark": "#f6f3ee"
@@ -28,5 +28,7 @@
     "cards",
     "stack",
     "scroll"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/video.mp4"
 }

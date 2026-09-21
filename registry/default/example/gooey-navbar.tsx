@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
 
 // --- Number Formatter Helper ---
 function $(n: number): string {
@@ -82,7 +81,6 @@ export interface GooeyNavbarProps {
   activeIndex?: number;
   onSelect?: (index: number, item: NavItem) => void;
   pillColor?: string;
-  hoverPillColor?: string;
   textColor?: string;
   hoverTextColor?: string;
   fontSize?: number;
@@ -93,7 +91,6 @@ export interface GooeyNavbarProps {
   neighborPush?: number;
   anchorEdge?: "left" | "center" | "right";
   neckRatio?: number;
-  glowSize?: number;
   stiffness?: number;
   damping?: number;
   mass?: number;
@@ -101,11 +98,11 @@ export interface GooeyNavbarProps {
 }
 
 export const DEFAULT_NAV_ITEMS: NavItem[] = [
-  { label: "Home", link: "#home", width: 93 },
-  { label: "Studio", link: "#studio", width: 105 },
-  { label: "Project", link: "#sus", width: 117 },
-  { label: "Blog", link: "#blog", width: 88 },
-  { label: "Contact", link: "#contact", width: 121 },
+  { label: "Home", link: "#home" },
+  { label: "Work", link: "#work" },
+  { label: "About", link: "#about" },
+  { label: "Lab", link: "#lab" },
+  { label: "Contact", link: "#contact" },
 ];
 
 /**
@@ -117,7 +114,6 @@ export function GooeyNavbar({
   activeIndex: controlledActiveIndex,
   onSelect,
   pillColor = "rgb(0, 0, 0)",
-  hoverPillColor = "rgb(61, 61, 61)",
   textColor = "rgba(255, 255, 255, 0.8)",
   hoverTextColor = "rgb(255, 255, 255)",
   fontSize = 15,
@@ -128,7 +124,6 @@ export function GooeyNavbar({
   neighborPush = 32,
   anchorEdge = "center",
   neckRatio = 0.35,
-  glowSize = 50,
   stiffness = 260,
   damping = 30,
   mass = 1,
@@ -136,13 +131,11 @@ export function GooeyNavbar({
 }: GooeyNavbarProps) {
   const [internalActiveIndex, setInternalActiveIndex] = useState<number>(defaultActiveIndex);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const activeIndex = controlledActiveIndex ?? internalActiveIndex;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
-  const gradientRef = useRef<SVGRadialGradientElement>(null);
 
   // Measure initial rects
   const baseRects = useMemo(() => {
@@ -286,12 +279,6 @@ export function GooeyNavbar({
     if (!container) return;
     const rect = container.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    if (gradientRef.current) {
-      gradientRef.current.setAttribute("cx", String(x));
-      gradientRef.current.setAttribute("cy", String(y));
-    }
 
     let closestIdx: number | null = null;
     let minDist = Infinity;
@@ -304,12 +291,10 @@ export function GooeyNavbar({
       }
     }
     setHoveredIndex(closestIdx);
-    if (!isHovering) setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
     setHoveredIndex(null);
-    setIsHovering(false);
   };
 
   const handleSelect = (idx: number, e: React.MouseEvent) => {
@@ -317,8 +302,6 @@ export function GooeyNavbar({
     setInternalActiveIndex(idx);
     onSelect?.(idx, items[idx]);
   };
-
-  const gradientId = "goo-glow-halo-gradient";
 
   return (
     <div
@@ -335,33 +318,7 @@ export function GooeyNavbar({
         focusable="false"
         className="absolute inset-0 z-0 pointer-events-none overflow-visible"
       >
-        <defs>
-          <radialGradient
-            ref={gradientRef}
-            id={gradientId}
-            gradientUnits="userSpaceOnUse"
-            cx="-9999"
-            cy="-9999"
-            r={glowSize}
-          >
-            <stop offset="0" stopColor={hoverPillColor} stopOpacity={1} />
-            <stop offset="0.45" stopColor={hoverPillColor} stopOpacity={0.55} />
-            <stop offset="1" stopColor={hoverPillColor} stopOpacity={0} />
-          </radialGradient>
-        </defs>
-
-        {/* Base Solid Fill */}
         <path d={fullSvgPath} fill={pillColor} fillRule="nonzero" />
-
-        {/* Cursor Halo Glow Layer */}
-        <motion.path
-          d={fullSvgPath}
-          fill={`url(#${gradientId})`}
-          fillRule="nonzero"
-          initial={false}
-          animate={{ opacity: isHovering ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-        />
       </svg>
 
       {/* Foreground Navigation Links */}
@@ -388,13 +345,15 @@ export function GooeyNavbar({
                 fontFamily: 'Inter, "Inter Placeholder", system-ui, sans-serif',
                 fontWeight: 600,
                 fontSize: `${fontSize}px`,
+                lineHeight: 1,
                 letterSpacing: "-0.1px",
                 textTransform: "uppercase",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 minWidth: "max-content",
+                height: `${pillHeight}px`,
                 color: isHovered ? hoverTextColor : textColor,
-                padding: `${paddingY}px ${paddingX}px`,
+                padding: `0 ${paddingX}px`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -411,7 +370,7 @@ export function GooeyNavbar({
               }}
               aria-current={isActive ? "page" : undefined}
             >
-              <span>{item.label}</span>
+              <span style={{ transform: "translateY(2px)" }}>{item.label}</span>
 
               {/* Active Dot (4px circle at bottom: 5px) */}
               {isActive && (

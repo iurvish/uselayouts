@@ -361,14 +361,6 @@ export const Index: Record<string, any> = {
       path: "registry/default/example/drawer-buttons.tsx",
       type: "registry:component",
       target: ""
-    },{
-      path: "registry/default/example/drawer-buttons-drawer.tsx",
-      type: "registry:component",
-      target: ""
-    },{
-      path: "registry/default/example/drawer-buttons-field.tsx",
-      type: "registry:component",
-      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/demo/drawer-buttons-demo.tsx")
@@ -600,7 +592,7 @@ export const Index: Record<string, any> = {
   },
   "gooey-navbar": {
     name: "gooey-navbar",
-    description: "A pill nav that melts into its neighbor when you hover — liquid bridges, glow, active dot.",
+    description: "A pill nav that melts into its neighbor when you hover — liquid bridges, active dot.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{

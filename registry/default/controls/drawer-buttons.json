@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-21T04:13:30.784Z",
+  "updatedAt": "2026-09-21T09:14:24.412Z",
   "previewBackground": {
     "light": "#f4f4f5",
     "dark": "#09090b"
@@ -22,5 +22,7 @@
     "payment"
   ],
   "posterUrl": "https://cdn.uselayouts.com/components/drawer-buttons/poster.avif",
-  "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4"
+  "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4",
+  "hintTop": 158,
+  "hintHideOnScroll": false
 }

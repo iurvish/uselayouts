@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-19T18:14:04.620Z",
+  "updatedAt": "2026-09-21T09:40:10.079Z",
   "previewBackground": {
     "light": "#eceff2",
     "dark": "#0c0c0d"
@@ -20,5 +20,7 @@
   "tags": [
     "card",
     "referral"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/video.mp4"
 }
