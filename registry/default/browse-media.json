@@ -206,5 +206,25 @@
   "wheel-carousel": {
     "posterUrl": "https://cdn.uselayouts.com/components/wheel-carousel/poster.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/wheel-carousel/video.mp4"
+  },
+  "drawer-buttons": {
+    "posterUrl": "https://cdn.uselayouts.com/components/drawer-buttons/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4"
+  },
+  "dynamic-grid-gallery": {
+    "posterUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/video.mp4"
+  },
+  "curve-drawer": {
+    "posterUrl": "https://cdn.uselayouts.com/components/curve-drawer/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/curve-drawer/video.mp4"
+  },
+  "prompt-box": {
+    "posterUrl": "https://cdn.uselayouts.com/components/prompt-box/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/prompt-box/video.mp4"
+  },
+  "stacked-outline-text": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/video.mp4"
   }
 }

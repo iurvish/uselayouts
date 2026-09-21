@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-19T19:39:35.469Z",
+  "updatedAt": "2026-09-21T04:14:40.549Z",
   "previewBackground": {
     "light": "#f4f4f5",
     "dark": "#09090b"
@@ -20,5 +20,7 @@
   "tags": [
     "drawer",
     "sidebar"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/curve-drawer/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/curve-drawer/video.mp4"
 }

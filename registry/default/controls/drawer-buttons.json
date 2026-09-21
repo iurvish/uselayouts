@@ -1,7 +1,7 @@
 {
   "dialConfig": {},
   "disabled": [],
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-21T04:13:30.784Z",
   "previewBackground": {
     "light": "#f4f4f5",
     "dark": "#09090b"
@@ -20,5 +20,7 @@
     "drawer",
     "cart",
     "payment"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/drawer-buttons/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4"
 }

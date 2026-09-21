@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T18:44:35.468Z",
+  "updatedAt": "2026-09-21T04:14:01.302Z",
   "previewBackground": {
     "light": "#0a0a0a",
     "dark": "#0a0a0a"
@@ -28,5 +28,7 @@
     "gallery",
     "grid",
     "photos"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/video.mp4"
 }
