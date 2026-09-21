@@ -4,54 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { browseItems, type BrowseItem } from "@/lib/browse/items";
+import { type BrowseItem } from "@/lib/browse/items";
+import type { LandingCategoryCard } from "@/lib/landing/categories";
 import { HeroSpotlightCanvas } from "@/components/landing/hero-spotlight-canvas";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { cn } from "@/lib/utils";
 
-const browseBySlug = new Map(browseItems.map((item) => [item.slug, item]));
-
-const categories = [
-  {
-    title: "Layouts",
-    slug: "fluid-expanding-grid",
-    count: "20+",
-    image: "/landing/card-layouts.png",
-    panel: "#879F6C",
-    badgeGradient:
-      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(67.1% -0.048 0.060 / 0%) 93.5%)",
-    tags: ["Hero", "Bento", "Sections", "Grid Stack"],
-  },
-  {
-    title: "Navigation",
-    slug: "discrete-tabs",
-    count: "20+",
-    image: "/landing/card-navigation.png",
-    panel: "#2495D1",
-    badgeGradient:
-      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(63.7% -0.069 -0.111 / 20%) 93.5%)",
-    tags: ["Navbar", "Tabs", "Menu", "Sidebar", "Breadcrumbs"],
-  },
-  {
-    title: "Interactions",
-    slug: "pop-tilt-cards",
-    count: "20+",
-    image: "/landing/card-interactions.png",
-    panel: "#BC6147",
-    badgeGradient:
-      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(59.5% 0.099 0.074 / 20%) 93.5%)",
-    tags: ["Magnetic Hover", "Cursor reveal", "Marquee"],
-  },
-  {
-    title: "User Interface",
-    slug: "pricing-card",
-    count: "20+",
-    image: "/landing/card-user-interface.png",
-    panel: "#B6547A",
-    badgeGradient:
-      "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(57.9% 0.133 -0.005 / 20%) 93.5%)",
-    tags: ["Cards", "Forms", "Pricing Modal", "Testimonials"],
-  },
+const avatars = [
+  "/landing/avatar-1.png",
+  "/landing/avatar-2.png",
+  "/landing/avatar-3.png",
+  "/landing/avatar-4.png",
 ];
 
 const toolPills = [
@@ -147,12 +110,6 @@ const landingDotPattern = {
 
 const pillRowMask =
   "linear-gradient(90deg, rgba(217,217,217,0) 0%, rgba(196,196,196,1) 32.94%, rgba(166,166,166,1) 71.5%, rgba(115,115,115,0) 100%)";
-const avatars = [
-  "/landing/avatar-1.png",
-  "/landing/avatar-2.png",
-  "/landing/avatar-3.png",
-  "/landing/avatar-4.png",
-];
 
 const testimonials = [
   {
@@ -461,7 +418,21 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
               </p>
             </div>
 
-            <ExploreButton className="w-fit" />
+            <div className="flex w-fit flex-col items-start gap-4">
+              <ExploreButton className="w-fit" />
+              <a
+                href="https://vercel.com/oss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 transition-opacity hover:opacity-100"
+              >
+                <img
+                  alt="Vercel OSS Program"
+                  src="https://vercel.com/oss/program-badge-2026.svg"
+                  className="h-8 w-auto"
+                />
+              </a>
+            </div>
           </div>
 
           <TrustedBy />
@@ -522,7 +493,7 @@ function CategoryCardPreview({
   );
 }
 
-function FeaturesSection() {
+function FeaturesSection({ cards }: { cards: LandingCategoryCard[] }) {
   return (
     <section className="bg-[#F5F3EE] px-4 py-16 sm:px-8 lg:px-[120px] lg:py-[100px]">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 lg:gap-14">
@@ -542,20 +513,18 @@ function FeaturesSection() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {categories.map((cat) => (
-            <article
-              key={cat.title}
-              className="flex flex-col gap-2.5 overflow-hidden rounded-2xl border border-[#E2E2E2] bg-white px-3 pb-6 pt-3"
+          {cards.map((cat) => (
+            <Link
+              key={cat.id}
+              href={cat.href}
+              className="flex flex-col gap-2.5 overflow-hidden rounded-2xl border border-[#E2E2E2] bg-white px-3 pb-6 pt-3 transition-[box-shadow,border-color] duration-150 hover:border-[#071A31]/25 hover:shadow-sm"
             >
               <div className="flex flex-col gap-4">
                 <div
                   className="relative h-[220px] overflow-hidden rounded-xl sm:h-[320px] lg:h-[430px]"
                   style={{ backgroundColor: cat.panel }}
                 >
-                  <CategoryCardPreview
-                    poster={cat.image}
-                    video={browseBySlug.get(cat.slug)?.video}
-                  />
+                  <CategoryCardPreview poster={cat.poster} video={cat.video} />
                 </div>
                 <div className="flex flex-col gap-4 px-2">
                   <div className="flex items-center gap-3">
@@ -584,7 +553,7 @@ function FeaturesSection() {
                   </div>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
@@ -1222,16 +1191,18 @@ function LandingFooter() {
 
 export default function LandingPage({
   heroItems,
+  categoryCards,
   githubStars,
 }: {
   heroItems: BrowseItem[];
+  categoryCards: LandingCategoryCard[];
   githubStars?: number | null;
 }) {
   return (
     <main className="min-h-screen bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
       <LandingNav githubStars={githubStars} />
       <HeroSection heroItems={heroItems} />
-      <FeaturesSection />
+      <FeaturesSection cards={categoryCards} />
       <WhySection />
       <ToolsSection />
       <TestimonialsSection />

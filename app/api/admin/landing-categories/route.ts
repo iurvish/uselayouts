@@ -7,7 +7,7 @@ import {
   type LandingCategoryId,
   type LandingCategoriesConfig,
 } from "@/lib/landing/categories";
-import { browseItems } from "@/lib/browse/items";
+import { browseItems, browseUploadedMedia } from "@/lib/browse/items";
 
 export async function GET() {
   if (!isDev()) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -25,13 +25,7 @@ export async function GET() {
       title: item.title,
       poster: item.poster,
       category: item.category,
-      hasVideo: Boolean(
-        browseItems.find((entry) => entry.slug === item.slug) &&
-          // uploaded only — mirrors browseUploadedMedia
-          item.video &&
-          !item.video.includes("cloudinary.com/demo") &&
-          !item.video.includes("videos.pexels.com"),
-      ),
+      hasVideo: Boolean(browseUploadedMedia(item.slug).video),
     })),
   });
 }
