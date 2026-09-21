@@ -4,7 +4,7 @@ import { motion, useSpring, useTransform, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-const STARTING_MARGIN = 8;
+const STARTING_MARGIN = 12;
 const ITEM_HEIGHT = 32;
 const ITEM_GAP = 8;
 const DEPTH_INDENT = 10;

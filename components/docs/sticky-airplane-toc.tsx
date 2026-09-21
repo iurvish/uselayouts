@@ -10,7 +10,11 @@ export type DocTocItem = {
   depth: number;
 };
 
-/** Sticky right rail beside the article — hidden below xl. */
+/**
+ * Absolute to the right of the article.
+ * Article is max-w-2xl (42rem), nudged left 1.5rem (−translate-x-6).
+ * left = 50% − 1.5rem + 21rem + 6rem gap
+ */
 export function StickyAirplaneToc({
   toc,
   className,
@@ -24,16 +28,20 @@ export function StickyAirplaneToc({
 
   return (
     <aside
-      className={cn("hidden w-64 shrink-0 self-start xl:block", className)}
-      style={{ position: "sticky", top }}
+      className={cn(
+        "pointer-events-none absolute inset-y-0 left-[calc(50%+25.5rem)] hidden w-72 overflow-visible xl:block",
+        className,
+      )}
     >
-      <DocsTableOfContents
-        toc={toc}
-        className="px-0 pt-0 [&_a]:text-[#4B565E]/75 [&_a[data-active=true]]:text-[#071A31] [&_a:hover]:text-[#071A31] [&_p]:bg-[#F5F3EE] [&_p]:text-[#4B565E]/75"
-        indicatorClassName="text-[#4B565E]"
-        indicatorActivePathColor="#071A31"
-        indicatorAirplaneFill="#071A31"
-      />
+      <div className="pointer-events-auto sticky overflow-visible" style={{ top }}>
+        <DocsTableOfContents
+          toc={toc}
+          className="overflow-visible px-0 pt-0 [&_a]:text-[#4B565E]/75 [&_a[data-active=true]]:text-[#071A31] [&_a:hover]:text-[#071A31] [&_p]:bg-[#F5F3EE] [&_p]:text-[#4B565E]/75"
+          indicatorClassName="text-[#4B565E]"
+          indicatorActivePathColor="#071A31"
+          indicatorAirplaneFill="#071A31"
+        />
+      </div>
     </aside>
   );
 }

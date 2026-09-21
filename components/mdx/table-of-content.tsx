@@ -124,8 +124,8 @@ export function DocsTableOfContents({
   }
 
   return (
-    <div className={cn("flex flex-col px-0 pt-0 text-base", className)}>
-      <div className="flex h-8 flex-row items-center gap-2">
+    <div className={cn("flex flex-col overflow-visible px-0 pt-0 text-base", className)}>
+      <div className="flex h-8 flex-row items-center gap-2 pl-1">
         <HugeiconsIcon
           size="16"
           className="text-muted-foreground"
@@ -135,8 +135,9 @@ export function DocsTableOfContents({
           On This Page
         </p>
       </div>
-      <div className="relative flex flex-row gap-0">
-        <div className="relative w-5 shrink-0 self-stretch">
+      <div className="relative flex flex-row gap-1.5 overflow-visible">
+        {/* w-8 + pl so circle/path strokes are not clipped on the left */}
+        <div className="relative w-8 shrink-0 self-stretch overflow-visible pl-1">
           <TocIndicator
             toc={toc}
             activeIndex={activeIndex}

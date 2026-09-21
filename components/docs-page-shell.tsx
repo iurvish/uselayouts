@@ -16,10 +16,10 @@ export function DocsPageShell({
   return (
     <div
       id="nd-docs-layout"
-      className="mx-auto flex w-full justify-center gap-8 px-4 py-8 sm:px-8 sm:py-12"
+      className="relative mx-auto w-full px-4 py-8 sm:px-8 sm:py-12"
     >
-      {/* Narrow reading column; article + TOC center as one unit */}
-      <main className="min-w-0 w-full max-w-xl pb-24 xl:w-[36rem] xl:flex-none">
+      {/* Centered, nudged slightly left; a bit wider than max-w-xl */}
+      <main className="mx-auto min-w-0 w-full max-w-2xl pb-24 xl:-translate-x-6">
         {children}
       </main>
 
