@@ -10,7 +10,7 @@ export type DocTocItem = {
   depth: number;
 };
 
-/** Mounts the existing airplane TOC sticky on the right — component internals unchanged. */
+/** Sticky right rail beside the article — hidden below xl. */
 export function StickyAirplaneToc({
   toc,
   className,
@@ -24,7 +24,7 @@ export function StickyAirplaneToc({
 
   return (
     <aside
-      className={cn("hidden w-[220px] shrink-0 self-start lg:block", className)}
+      className={cn("hidden w-64 shrink-0 self-start xl:block", className)}
       style={{ position: "sticky", top }}
     >
       <DocsTableOfContents

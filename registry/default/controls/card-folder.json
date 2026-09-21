@@ -21,8 +21,11 @@
     ]
   },
   "disabled": [],
-  "updatedAt": "2026-09-18T18:30:09.933Z",
-  "previewBackground": "#faf8f6",
+  "updatedAt": "2026-09-21T18:01:43.717Z",
+  "previewBackground": {
+    "light": "#faf8f6",
+    "dark": "#faf8f6"
+  },
   "showHint": true,
   "hintKind": "hover",
   "hintHeading": "",
@@ -45,5 +48,6 @@
   "tags": [
     "folder",
     "card"
-  ]
+  ],
+  "hintTop": 90
 }

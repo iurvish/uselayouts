@@ -124,19 +124,19 @@ export function DocsTableOfContents({
   }
 
   return (
-    <div className={cn("flex flex-col px-4 pt-0 text-sm", className)}>
-      <div className="flex h-6 flex-row items-center gap-[5px]">
+    <div className={cn("flex flex-col px-0 pt-0 text-base", className)}>
+      <div className="flex h-8 flex-row items-center gap-2">
         <HugeiconsIcon
-          size="14"
+          size="16"
           className="text-muted-foreground"
           icon={Menu02Icon}
         />
-        <p className="text-muted-foreground/75 bg-background sticky top-0 text-xs">
+        <p className="text-muted-foreground/75 bg-background sticky top-0 text-sm font-medium">
           On This Page
         </p>
       </div>
-      <div className="relative flex flex-row">
-        <div className="relative w-8 shrink-0 self-stretch">
+      <div className="relative flex flex-row gap-0">
+        <div className="relative w-5 shrink-0 self-stretch">
           <TocIndicator
             toc={toc}
             activeIndex={activeIndex}
@@ -150,7 +150,7 @@ export function DocsTableOfContents({
             <a
               key={item.url}
               href={item.url}
-              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-[0.8rem] no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=1]:pl-5 data-[depth=2]:pl-5 data-[depth=3]:pl-8 data-[depth=4]:pl-11"
+              className="text-muted-foreground/75 hover:text-foreground data-[active=true]:text-foreground text-base leading-6 no-underline transition-colors duration-200 empty:hidden data-[active=true]:font-medium data-[depth=3]:pl-2 data-[depth=4]:pl-4"
               data-active={item.url === `#${activeHeading}`}
               data-depth={item.depth}
             >

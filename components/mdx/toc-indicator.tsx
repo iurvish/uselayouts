@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import * as React from "react";
 
 const STARTING_MARGIN = 8;
-const ITEM_HEIGHT = 26.28;
+const ITEM_HEIGHT = 32;
 const ITEM_GAP = 8;
 const DEPTH_INDENT = 10;
 const INITIAL_OFFSET = 8;

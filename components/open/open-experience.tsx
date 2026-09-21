@@ -16,7 +16,15 @@ import {
   PREVIEW_W,
   type SidebarHoverTarget,
 } from "@/components/open/sidebar-hover-preview";
-import { openIconBtn, openPressMotion, scrollbarNone, forgetScroller, rememberScroller, centerChildInScroller } from "@/components/open/ui";
+import {
+  openIconBtn,
+  openPressMotion,
+  scrollbarNone,
+  forgetScroller,
+  rememberScroller,
+  restoreScroller,
+  centerChildInScroller,
+} from "@/components/open/ui";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
@@ -149,6 +157,7 @@ function SidebarList({
   ) => void;
 }) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const centeredOnOpenRef = React.useRef(false);
   const [showTop, setShowTop] = React.useState(false);
   const [showBottom, setShowBottom] = React.useState(false);
 
@@ -157,6 +166,14 @@ function SidebarList({
     surface === "sidebar" || surface === "background"
       ? "from-[hsl(240_6%_7%)]"
       : "from-[hsl(240_6%_20%)]";
+
+  // Reset so the next open can center once; browsing while open must not.
+  React.useEffect(() => {
+    return () => {
+      centeredOnOpenRef.current = false;
+      forgetScroller("sidebar");
+    };
+  }, []);
 
   React.useLayoutEffect(() => {
     const el = scrollRef.current;
@@ -173,19 +190,28 @@ function SidebarList({
       setShowTop(scrollTop > 0);
       setShowBottom(scrollTop + clientHeight < scrollHeight - SCROLL_EDGE_EPS);
     };
-    const sync = () => {
+    const place = (mode: "center" | "keep") => {
       if (!allow || el.clientHeight === 0) return;
       const item = active();
-      if (item) centerChildInScroller(el, item);
+      if (item) {
+        if (mode === "center") {
+          centerChildInScroller(el, item);
+          rememberScroller(key, el);
+          centeredOnOpenRef.current = true;
+        } else {
+          restoreScroller(key, el, item);
+        }
+      }
       updateFades();
     };
 
-    forgetScroller(key);
-    sync();
+    // Center only the first time this sidebar instance opens.
+    // Later clicks keep scroll and only reveal if the row is clipped.
+    place(centeredOnOpenRef.current ? "keep" : "center");
     const until = performance.now() + 220;
     let raf = 0;
     const tick = () => {
-      sync();
+      place(centeredOnOpenRef.current ? "keep" : "center");
       if (allow && performance.now() < until) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -196,7 +222,7 @@ function SidebarList({
     el.addEventListener("scroll", onScroll, { passive: true });
     el.addEventListener("wheel", stop, { passive: true });
     el.addEventListener("touchmove", stop, { passive: true });
-    const ro = new ResizeObserver(() => sync());
+    const ro = new ResizeObserver(() => place("keep"));
     ro.observe(el);
     const child = el.firstElementChild;
     if (child) ro.observe(child);
