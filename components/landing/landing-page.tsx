@@ -408,6 +408,18 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
         <div className="relative z-10 flex h-full max-w-[480px] flex-col gap-6 p-6 pb-[min(52%,300px)] sm:gap-8 sm:p-10 sm:pb-10 md:pb-12 lg:p-12">
           <div className="flex flex-col gap-6 sm:gap-8">
             <div className="flex flex-col gap-4">
+              <a
+                href="https://vercel.com/oss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-fit rounded-md bg-white px-2.5 py-1.5 transition-opacity hover:opacity-90"
+              >
+                <img
+                  alt="Vercel OSS Program"
+                  src="https://vercel.com/oss/program-badge-2026.svg"
+                  className="h-5 w-auto brightness-0"
+                />
+              </a>
               <h1 className="text-balance text-[40px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[54px]">
                 Build interfaces that feel as good as they look.
               </h1>
@@ -418,21 +430,7 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
               </p>
             </div>
 
-            <div className="flex w-fit flex-col items-start gap-4">
-              <ExploreButton className="w-fit" />
-              <a
-                href="https://vercel.com/oss"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="opacity-90 transition-opacity hover:opacity-100"
-              >
-                <img
-                  alt="Vercel OSS Program"
-                  src="https://vercel.com/oss/program-badge-2026.svg"
-                  className="h-8 w-auto"
-                />
-              </a>
-            </div>
+            <ExploreButton className="w-fit" />
           </div>
 
           <TrustedBy />
