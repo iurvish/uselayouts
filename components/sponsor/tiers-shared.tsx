@@ -8,6 +8,7 @@ import { RibbonField, RibbonFieldDial, type RibbonPatternMode } from "./ribbon-p
 import { cn } from "@/lib/utils";
 import { startSponsorCheckout } from "@/lib/sponsor/checkout";
 import { SPONSOR_PLANS, type SponsorTier } from "@/lib/sponsor/plans";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const TIERS = ["Gold", "Silver", "Bronze"] as const;
 
@@ -170,15 +171,18 @@ export function SponsorTicketSlot({
   if (!sponsor) {
     return (
       <div className="relative min-w-0 flex-1">
-        <button
-          type="button"
-          onClick={() => void checkout.onClick()}
-          disabled={checkout.pending}
-          className="group relative block w-full min-w-0 transition-opacity duration-150 hover:opacity-90 active:scale-[0.99] disabled:opacity-60"
-          aria-label={label}
-        >
-          <TicketFace sponsor={null} shape={shape} mode={mode} />
-        </button>
+        <Tooltip>
+          <TooltipTrigger
+            type="button"
+            onClick={() => void checkout.onClick()}
+            disabled={checkout.pending}
+            className="group relative block w-full min-w-0 cursor-pointer transition-opacity duration-150 hover:opacity-90 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60"
+            aria-label={label}
+          >
+            <TicketFace sponsor={null} shape={shape} mode={mode} />
+          </TooltipTrigger>
+          <TooltipContent side="top">Sponsor me 💛</TooltipContent>
+        </Tooltip>
         {checkout.error ? (
           <p className="mt-1 text-center text-[11px] text-red-700" role="alert">
             {checkout.error}
