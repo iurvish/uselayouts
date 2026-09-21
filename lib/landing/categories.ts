@@ -15,8 +15,10 @@ export type LandingCategoryId =
 export type LandingCategoryDef = {
   id: LandingCategoryId;
   title: string;
-  /** Counts components in this browse category. */
+  /** Counts components in this browse category (admin filter / catalog). */
   browseCategory: BrowseItem["category"];
+  /** Marketing badge — sum of the four must stay ≤ 64. */
+  countLabel: string;
   panel: string;
   badgeGradient: string;
   /** Chips from our real tag vocabulary. */
@@ -30,40 +32,44 @@ export const LANDING_CATEGORY_DEFS: LandingCategoryDef[] = [
     id: "layouts",
     title: "Layouts",
     browseCategory: "Layout",
+    countLabel: "12+",
     panel: "#879F6C",
     badgeGradient:
       "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(67.1% -0.048 0.060 / 0%) 93.5%)",
-    tags: ["Grid", "Bento", "Canvas", "Layout"],
+    tags: ["Grid", "Bento", "Hero", "Sections"],
     defaultSlug: "fluid-expanding-grid",
   },
   {
     id: "navigation",
     title: "Navigation",
     browseCategory: "Navigation",
+    countLabel: "14+",
     panel: "#2495D1",
     badgeGradient:
       "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(63.7% -0.069 -0.111 / 20%) 93.5%)",
-    tags: ["Navbar", "Tabs", "Menu", "Toolbar"],
+    tags: ["Navbar", "Tabs", "Menu", "Sidebar"],
     defaultSlug: "gooey-navbar",
   },
   {
     id: "interactions",
     title: "Interactions",
     browseCategory: "Button",
+    countLabel: "18+",
     panel: "#BC6147",
     badgeGradient:
       "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(59.5% 0.099 0.074 / 20%) 93.5%)",
-    tags: ["Button", "Delete", "Create", "Drawer"],
+    tags: ["Hover", "Drag", "Press", "Reveal"],
     defaultSlug: "delete-button",
   },
   {
     id: "user-interface",
     title: "User Interface",
     browseCategory: "Display",
+    countLabel: "20+",
     panel: "#B6547A",
     badgeGradient:
       "linear-gradient(in oklab 167.62deg, oklab(100% 0 0 / 20%) 16.5%, oklab(57.9% 0.133 -0.005 / 20%) 93.5%)",
-    tags: ["Cards", "Gallery", "Carousel", "Testimonials"],
+    tags: ["Cards", "Forms", "Gallery", "Pricing"],
     defaultSlug: "pricing-card",
   },
 ];
@@ -114,7 +120,7 @@ export async function writeLandingCategoriesConfig(
 export type LandingCategoryCard = {
   id: LandingCategoryId;
   title: string;
-  count: number;
+  countLabel: string;
   panel: string;
   badgeGradient: string;
   tags: string[];
@@ -135,13 +141,11 @@ export function resolveLandingCategoryCards(
   return LANDING_CATEGORY_DEFS.map((def) => {
     const item = resolveSlug(config[def.id], def.defaultSlug);
     const media = browseUploadedMedia(item.slug);
-    const count = browseItems.filter((entry) => entry.category === def.browseCategory)
-      .length;
 
     return {
       id: def.id,
       title: def.title,
-      count,
+      countLabel: def.countLabel,
       panel: def.panel,
       badgeGradient: def.badgeGradient,
       tags: def.tags,

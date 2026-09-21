@@ -533,7 +533,7 @@ function FeaturesSection({ cards }: { cards: LandingCategoryCard[] }) {
                         backgroundImage: cat.badgeGradient,
                       }}
                     >
-                      {cat.count}
+                      {cat.countLabel}
                     </span>
                     <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.02em] text-[#071A31]">
                       {cat.title}
