@@ -105,6 +105,19 @@ export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: "Contact", link: "#contact" },
 ];
 
+let measureCanvas: HTMLCanvasElement | null = null;
+
+/** Pixel width of an uppercase Inter 600 label — keeps SVG pills and links in sync. */
+function measureLabelWidth(label: string, fontSize: number) {
+  const fallback = label.length * fontSize * 0.78;
+  if (typeof document === "undefined") return fallback;
+  measureCanvas ??= document.createElement("canvas");
+  const ctx = measureCanvas.getContext("2d");
+  if (!ctx) return fallback;
+  ctx.font = `600 ${fontSize}px Inter, "Inter Placeholder", system-ui, sans-serif`;
+  return ctx.measureText(label.toUpperCase()).width;
+}
+
 /**
  * Reusable Gooey Navbar Component
  */
@@ -137,11 +150,13 @@ export function GooeyNavbar({
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
-  // Measure initial rects
+  // Measure initial rects — same width drives SVG pills and <a> boxes so labels stay centered.
   const baseRects = useMemo(() => {
     let curX = 0;
     return items.map((item) => {
-      const w = item.width || item.label.length * (fontSize * 0.62 - 0.1) + paddingX * 2;
+      const w =
+        item.width ||
+        Math.ceil(measureLabelWidth(item.label, fontSize) + paddingX * 2);
       const h = fontSize + paddingY * 2;
       const r = { x: curX, y: 0, width: w, height: h };
       curX += w + gap;
@@ -350,8 +365,9 @@ export function GooeyNavbar({
                 textTransform: "uppercase",
                 textAlign: "center",
                 whiteSpace: "nowrap",
-                minWidth: "max-content",
+                width: `${baseRects[idx]?.width ?? 0}px`,
                 height: `${pillHeight}px`,
+                flexShrink: 0,
                 color: isHovered ? hoverTextColor : textColor,
                 padding: `0 ${paddingX}px`,
                 display: "flex",
@@ -370,7 +386,7 @@ export function GooeyNavbar({
               }}
               aria-current={isActive ? "page" : undefined}
             >
-              <span style={{ transform: "translateY(2px)" }}>{item.label}</span>
+              <span>{item.label}</span>
 
               {/* Active Dot (4px circle at bottom: 5px) */}
               {isActive && (
