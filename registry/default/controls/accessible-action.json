@@ -1,0 +1,39 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-17T17:54:50.934Z",
+  "previewBackground": {
+    "light": "#212121",
+    "dark": "#212121"
+  },
+  "showHint": true,
+  "hintKind": "swipe",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false,
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "hintTop": 110,
+  "posterUrl": "https://cdn.uselayouts.com/components/accessible-action/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/accessible-action/video.mp4",
+  "tags": [
+    "cards",
+    "stack",
+    "swipe"
+  ]
+}

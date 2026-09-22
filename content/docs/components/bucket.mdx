@@ -1,81 +1,19 @@
 ---
 title: Bucket
-description: An interactive card component with a 3D-like bucket effect and falling animated chips.
+description: A glass hopper that tosses feature chips in, one after another, like a catch tray.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
+## Features
 
-import { Suspense } from "react";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="bucket" size="lg" />
-  </Tab>
-  <Tab value="Code">
-    <Suspense
-      fallback={
-        <div className="h-[400px] w-full animate-pulse bg-fd-muted rounded-xl" />
-      }
-    >
-      <SourceCode name="bucket" />
-    </Suspense>
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/bucket.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/bucket.tsx`.
-      </Step>
-      <Step>
-        ### Add the hook
-
-        Add the `use-mobile.ts` hook to your `hooks` directory if you haven't already.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
+- **Falling chips**: Each card drops into the bucket, then the next one follows on a loop.
+- **Layered SVG bowl**: The hopper is a real shape with blur and depth — not a rounded rectangle.
+- **Icon + claim**: Production Ready, Fluid Motion, Accessible, Modern Design — short and readable in the chip.
+- **Continuous cycle**: Every two seconds the front chip rotates out so the bucket never sits still.
+- **No 3D engine**: Motion and SVG give you the toss without WebGL.
 
 ## Usage
 
-### Customizing Data
-
-You can customize the initial chips shown in the bucket by modifying the `INITIAL_CHIPS` array:
-
-```tsx
-const INITIAL_CHIPS = [
-  {
-    id: 1,
-    title: "Production Ready",
-    description: "Fully type-safe and tested",
-    icon: SecurityCheckIcon,
-  },
-  // ... add more items
-];
-```
-
-### Basic Implementation
+Use it as a feature explainer, not a form. Swap `INITIAL_CHIPS` for your own titles, lines, and icons. Give it a wide, short stage (it wants landscape). Autoplay is the point — don’t put it next to something that also loops.
 
 ```tsx
 import Bucket from "@/components/bucket";
@@ -89,41 +27,10 @@ export default function Page() {
 }
 ```
 
-## Understanding the Logic
+## Where to use
 
-The **Bucket** component creates a sense of depth and physical interaction using a layered SVG approach and Framer Motion's exit animations.
-
-### 1. The Layered "Glass" Effect
-
-The "bucket" is not a single image, but a collection of SVG paths and `foreignObject` elements stacked on top of each other:
-
-- **Base Layer**: Defines the back and bottom of the bucket with subtle gradients.
-- **Middle Layer**: Where the active `motion.div` chip resides.
-- **Top Layer**: A translucent front cover with heavy `backdrop-blur`. This makes the chips appear as if they are falling _into_ a container.
-
-### 2. The Toss Animation
-
-The component uses `AnimatePresence` with `mode="popLayout"` to manage the lifecycle of the chips. Every 2 seconds (configurable in the `useEffect` interval), the first item is moved to the end of the array.
-
-- **Entry (`initial`)**: The chip starts high up with `opacity: 0` and drops down.
-- **Exit (`exit`)**: The chip falls further down "out" of the bucket, creating a continuous tossing effect.
-
-### 3. High-Fidelity Filters
-
-The component makes extensive use of SVG filters for:
-
-- **Inner Shadows**: Giving the container edges a rounded, 3D feel.
-- **Multi-stage Dropshadows**: Providing soft, realistic shadows for complex shapes.
-- **Dynamic Blurs**: The front face uses a high-radius blur to create a premium glassmorphism finish.
-
-### 4. Responsive Adaptation
-
-Using a custom `useIsMobile` hook, the component dynamically scales the chips and adjusts the vertical travel distance of the animations. This ensures the "toss" effect doesn't overlap with other page elements on small screens.
-
-## Features
-
-- **Continuous Tossing**: Smooth, looping animation that keeps the user engaged.
-- **Layered Depth**: True z-axis feel without using a 3D engine.
-- **Premium Aesthetics**: Glassmorphism, tailored gradients, and high-spec icons.
-- **Performance Optimized**: Uses CSS-accelerated SVG properties and motion values.
-- **Flexible Content**: Easily swappable titles, descriptions, and icons.
+- Homepage “what you get” moments
+- Launch pages that need motion without a video
+- Developer-tool marketing (type-safe, fast, accessible)
+- Conference booth loops
+- About-the-product sections above the fold

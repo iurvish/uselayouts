@@ -1,90 +1,22 @@
 ---
 title: Folder Interaction
-description: An interactive 3D folder animation that opens to reveal documents with spring physics.
+description: A folder management system with drag-and-drop-like feel.
 ---
-
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { Callout } from "fumadocs-ui/components/callout";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
-
-<Callout type="warning">
-  **Note:** The backdrop blur effect may not appear in this documentation
-  preview due to MDX rendering limitations. However, when you install and use
-  this component in your project, the blur effect will work correctly. **[View
-  demo video →](https://twitter.com/0xUrvish/status/2004190386986930338?s=20)**
-  to see the full effect with blur.
-</Callout>
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="folder-interaction" />
-  </Tab>
-  <Tab value="Code">
-    <SourceCode name="folder-interaction" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/folder-interaction.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/folder-interaction.tsx`.
-      </Step>
-      <Step>
-        ### Update imports
-
-        Update the imports to match your project structure.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
 
 ## Usage
 
 ```tsx
 import FolderInteraction from "@/components/folder-interaction";
 
-export default function Page() {
-  return (
-    <div className="flex items-center justify-center min-h-[400px] w-full">
-      <FolderInteraction />
-    </div>
-  );
+export default function Example() {
+  return <FolderInteraction />;
 }
 ```
 
 ## Features
 
-- **3D folder opening** - Realistic folder flip animation with perspective
-- **Document fan-out** - Three documents spread out with staggered spring animations
-- **Glassmorphism** - Frosted glass effect on the folder front using backdrop blur
-- **Click to toggle** - Simple click interaction to open/close the folder
-- **SVG folder design** - Custom SVG folder shape with gradient fills
-
-## Important Note
-
-<Callout type="info">
-  The backdrop blur effect uses CSS `backdrop-filter` which may not render correctly in MDX documentation previews due to browser security restrictions with SVG `foreignObject` elements. When you install this component in your project, the blur effect will work perfectly.
-
-For the best experience, check out the **[live demo](https://uselayouts.com/components/folder-interaction)** to see the component with full blur effects.
-
-</Callout>
+- Click to open: One tap flips the folder flap on the X axis.
+- Document fan: Three pages spring to the left, center, and right with a little stagger.
+- Inset lighting: The pocket has an inner shadow so it reads as a real sleeve.
+- Frosted front: The flap uses blur and a custom SVG silhouette.
+- Click again to close: Papers tuck back in; the flap drops.

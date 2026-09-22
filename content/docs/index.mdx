@@ -1,0 +1,106 @@
+---
+title: Introduction
+description: Animated React components you copy into your project. Edit them like any other file.
+---
+
+useLayouts is a free library of animated UI for React. Tabs, buttons, galleries, small interactions. You copy a component into your app and it's just your code.
+
+## When it felt dead
+
+I remember shipping a product page at 1am. The hover states were fine. The motion was "smooth." Nobody complained.
+
+I still felt nothing when I moved the cursor.
+
+### What I was shipping
+
+Defaults from a kit. A scale on hover. A fade on open. The same three transitions on every surface, because that was what the docs showed and what we had time for.
+
+### What I wanted instead
+
+A grip that slides. A card that remembers the pointer. A delete that feels like a decision, not a CSS class. Motion that tells you the UI is listening.
+
+So I started building those pieces myself. Motion and Tailwind. One component at a time. Then I put the source in the repo so you can own it the same way.
+
+## What this is
+
+Not a locked package. Not a theme you fight.
+
+You pick a component, run the CLI, and the file lands in your project. Change the spring. Swap the copy. Delete half of it. It's yours.
+
+## Install
+
+It's a [shadcn](https://ui.shadcn.com/docs/cli) registry. Add uselayouts once, then install by name.
+
+### Add the registry
+
+In your project's `components.json`:
+
+```json
+{
+  "registries": {
+    "@uselayouts": "https://uselayouts.com/r/{name}.json"
+  }
+}
+```
+
+### Pick a component
+
+```bash
+npx shadcn@latest add @uselayouts/discrete-tabs
+```
+
+### Package managers
+
+pnpm, yarn, and bun work the same way:
+
+```bash
+pnpm dlx shadcn@latest add @uselayouts/discrete-tabs
+yarn dlx shadcn@latest add @uselayouts/discrete-tabs
+bunx --bun shadcn@latest add @uselayouts/discrete-tabs
+```
+
+You can add a few at once:
+
+```bash
+npx shadcn@latest add @uselayouts/delete-button @uselayouts/status-button
+```
+
+You need React and Tailwind. Motion (and anything else a component needs) gets installed for you.
+
+## Open one and break it
+
+Don't treat these as finished products. Treat them as a starting point you can ruin on purpose.
+
+Change the easing until it feels like your product. Rename the props. Strip the chrome. The point of owning the file is that you stop asking permission from a library.
+
+## Motion that means something
+
+Every animation here is supposed to do a job: feedback, focus, or flow. If it only looks expensive, cut it.
+
+These components were built for the moments where a static UI feels rude — waiting, deleting, switching, dragging. That is the whole bet.
+
+## Where to look
+
+### Browse
+
+[Browse](/browse) is the wall. Skim, hover, open whatever pulls you in.
+
+### Docs pages
+
+Each [component](/docs/components/pricing-card) page has a live preview, the install command, and the source you get when you add it.
+
+## Who this is for
+
+### If you're shipping alone
+
+You need something that already feels cared for, so you can spend the night on the product instead of reinventing a tab indicator.
+
+### If you're on a team
+
+Drop a component in, make it match your design system, and stop debating hover opacity in Slack.
+
+## Keep it free
+
+I want this to stay free for people who need a better starting point than another dead hover.
+
+If a company gets value from it, [sponsor](/sponsor) so the lights stay on. If you're building something small and personal, take what you need and ship.

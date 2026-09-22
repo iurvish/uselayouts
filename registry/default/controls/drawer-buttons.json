@@ -1,0 +1,28 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T09:14:24.412Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Open a drawer",
+  "hintDescription": "Payment folds in from the right. Cart folds in from the left. Fields stagger in behind the panel.",
+  "tags": [
+    "button",
+    "drawer",
+    "cart",
+    "payment"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/drawer-buttons/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4",
+  "hintTop": 158,
+  "hintHideOnScroll": false
+}

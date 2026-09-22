@@ -1,0 +1,31 @@
+---
+title: Photo Albums
+description: Tilted album stacks that open into a shared-element grid of photos.
+---
+
+## Features
+
+- **Stacked covers**: Three photos sit at a fan, then morph into the album grid.
+- **The rest leave**: Other albums fade out so only the one you opened stays.
+- **Shared titles**: The album name travels with `layoutId`.
+- **Hover lift**: Stacks tilt a little on hover.
+
+## Usage
+
+Replace `COLLECTIONS` with your albums. Click a stack to open, back to return. Keep the parent from clipping overflow so the morph isn’t cut.
+
+```tsx
+import PhotoAlbums from "@/components/photo-albums";
+
+export default function Page() {
+  return <PhotoAlbums />;
+}
+```
+
+## Where to use
+
+- Photo apps and camera rolls
+- Travel journals
+- Portfolio case indexes
+- Mood boards
+- Private / public album pickers

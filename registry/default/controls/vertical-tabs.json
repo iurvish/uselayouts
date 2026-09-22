@@ -1,0 +1,20 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-16T16:08:34.172Z",
+  "previewBackground": {
+    "light": "#0a0a0a",
+    "dark": "#0a0a0a"
+  },
+  "hintTop": 80,
+  "showHint": false,
+  "hintKind": "click",
+  "hintHeading": "",
+  "hintDescription": "",
+  "posterUrl": "https://cdn.uselayouts.com/components/vertical-tabs/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/vertical-tabs/video.mp4",
+  "tags": [
+    "tabs",
+    "nav"
+  ]
+}

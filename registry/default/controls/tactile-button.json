@@ -1,0 +1,33 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-21T17:23:09.932Z",
+  "previewBackground": {
+    "light": "#e8e8e8",
+    "dark": "#e8e8e8"
+  },
+  "showHint": true,
+  "hintKind": "click",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false,
+  "hintTop": 144,
+  "tags": [
+    "button",
+    "press"
+  ],
+  "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video-afb6c148d5.mp4",
+  "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster-445352537e.avif"
+}

@@ -1,0 +1,22 @@
+---
+title: Accessible Action
+description: Interactive draggable card stack with 3D tilt, swipe-to-back gestures, click interactions, random rotation, and smooth spring animations.
+---
+
+## Usage
+
+```tsx
+import AccessibleAction from "@/components/accessible-action";
+
+export default function Example() {
+  return <AccessibleAction />;
+}
+```
+
+## Features
+
+- Swipe to the back: Drag the front photo aside and it drops behind the pile.
+- 3D tilt: The card leans with your pointer so the stack feels physical, not flat.
+- Click to cycle: A tap on the front card can send it back without a full swipe.
+- Random rotation: Each card sits at a slight deterministic angle so the pile looks lived-in.
+- Spring settle: After the flick, cards snap into depth instead of popping off.

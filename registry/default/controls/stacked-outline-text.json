@@ -1,0 +1,24 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T04:16:17.419Z",
+  "previewBackground": {
+    "light": "#000000",
+    "dark": "#000000"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Drag the type",
+  "hintDescription": "Velocity leaves a stacked outline trail. Arrow keys nudge it.",
+  "tags": [
+    "text",
+    "drag"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/video.mp4"
+}

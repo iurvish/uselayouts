@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "curve-drawer",
+  "title": "Curve Drawer",
+  "description": "Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.",
+  "dependencies": [
+    "motion",
+    "vaul",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/default/example/curve-drawer.tsx",
+      "content": "\"use client\";\n\nimport { buttonVariants } from \"@/components/ui/button\";\nimport { cn } from \"@/lib/utils\";\nimport { X } from \"lucide-react\";\n\nimport {\n  CurveDrawer,\n  CurveDrawerClose,\n  CurveDrawerContent,\n  CurveDrawerDescription,\n  CurveDrawerHeader,\n  CurveDrawerTitle,\n  CurveDrawerTrigger,\n} from \"./curve-drawer-primitives\";\n\nconst NAV_ITEMS = [\"Overview\", \"Projects\", \"Archive\", \"Settings\"];\n\nexport function CurveDrawerDemo() {\n  return (\n    <section\n      aria-label=\"Curve drawer demo\"\n      className=\"flex h-full min-h-[520px] w-full items-center justify-center bg-background p-4 text-foreground\"\n    >\n      <div className=\"flex flex-col items-center gap-3 sm:flex-row\">\n        <CurveDrawer direction=\"left\" handleOnly>\n          <CurveDrawerTrigger asChild>\n            <button\n              aria-label=\"Open menu drawer\"\n              className={cn(\n                buttonVariants({ variant: \"outline\" }),\n                \"cursor-pointer\"\n              )}\n              type=\"button\"\n            >\n              Open left\n            </button>\n          </CurveDrawerTrigger>\n          <CurveDrawerContent curveSide=\"left\">\n            <CurveDrawerHeader className=\"flex-row items-start justify-between gap-4 border-b border-border\">\n              <div className=\"min-w-0\">\n                <CurveDrawerTitle>Menu</CurveDrawerTitle>\n                <CurveDrawerDescription>\n                  The inner edge starts as a bulge, then settles straight.\n                </CurveDrawerDescription>\n              </div>\n              <CurveDrawerClose asChild>\n                <button\n                  aria-label=\"Close menu drawer\"\n                  className={cn(\n                    buttonVariants({ variant: \"ghost\", size: \"icon\" }),\n                    \"shrink-0\"\n                  )}\n                  type=\"button\"\n                >\n                  <X aria-hidden=\"true\" />\n                </button>\n              </CurveDrawerClose>\n            </CurveDrawerHeader>\n            <nav aria-label=\"Demo menu\" className=\"flex flex-col gap-1 p-4\">\n              {NAV_ITEMS.map((item) => (\n                <span\n                  className=\"rounded-lg px-3 py-2 text-sm text-foreground\"\n                  key={item}\n                >\n                  {item}\n                </span>\n              ))}\n            </nav>\n          </CurveDrawerContent>\n        </CurveDrawer>\n\n        <CurveDrawer direction=\"right\" handleOnly>\n          <CurveDrawerTrigger asChild>\n            <button\n              aria-label=\"Open notes drawer\"\n              className={cn(buttonVariants(), \"cursor-pointer\")}\n              type=\"button\"\n            >\n              Open right\n            </button>\n          </CurveDrawerTrigger>\n          <CurveDrawerContent curveSide=\"right\">\n            <CurveDrawerHeader className=\"flex-row items-start justify-between gap-4 border-b border-border\">\n              <div className=\"min-w-0\">\n                <CurveDrawerTitle>Notes</CurveDrawerTitle>\n                <CurveDrawerDescription>\n                  Same curve, mirrored on the left inner edge.\n                </CurveDrawerDescription>\n              </div>\n              <CurveDrawerClose asChild>\n                <button\n                  aria-label=\"Close notes drawer\"\n                  className={cn(\n                    buttonVariants({ variant: \"ghost\", size: \"icon\" }),\n                    \"shrink-0\"\n                  )}\n                  type=\"button\"\n                >\n                  <X aria-hidden=\"true\" />\n                </button>\n              </CurveDrawerClose>\n            </CurveDrawerHeader>\n            <div className=\"space-y-3 p-4 text-sm leading-relaxed text-muted-foreground\">\n              <p>\n                The panel slides in over 800ms. The SVG arm morphs from a quadratic\n                bulge to a straight edge.\n              </p>\n              <p>\n                Touch drag is handle-only so scrolling the sheet does not dismiss\n                it.\n              </p>\n            </div>\n          </CurveDrawerContent>\n        </CurveDrawer>\n      </div>\n    </section>\n  );\n}\n\nexport default CurveDrawerDemo;\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

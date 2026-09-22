@@ -34,32 +34,7 @@ export interface DocsLayoutProps {
   children: ReactNode;
 }
 
-export function DocsLayout({ tree, children }: DocsLayoutProps) {
-  return (
-    <TreeContextProvider tree={tree}>
-      <SidebarProvider>
-        <DocsSidebar tree={tree} />
-        <SidebarInset>
-          <header className="sticky top-0  bg-background h-14 z-priority ">
-            <nav className="flex flex-row items-center gap-2 size-full px-4">
-              <SidebarTrigger />
-              <div className="flex-1" />
-              <div className="flex items-center gap-2">
-                <SearchDialog />
-                <ThemeToggle />
-              </div>
-            </nav>
-          </header>
-          <main id="nd-docs-layout" className="flex flex-1 flex-row">
-            {children}
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
-    </TreeContextProvider>
-  );
-}
-
-function DocsSidebar({ tree }: { tree: PageTree.Root }) {
+export function DocsSidebar({ tree }: { tree: PageTree.Root }) {
   const { isMobile, setOpenMobile } = useSidebar();
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

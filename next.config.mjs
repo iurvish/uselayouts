@@ -1,8 +1,41 @@
 import { createMDX } from "fumadocs-mdx/next";
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  serverExternalPackages: ["ffmpeg-static"],
+  turbopack: {
+    root: __dirname,
+  },
+  async redirects() {
+    return [
+      {
+        source: "/docs/components/discrete-tab",
+        destination: "/docs/components/discrete-tabs",
+        permanent: true,
+      },
+      {
+        source: "/docs/introduction",
+        destination: "/docs",
+        permanent: true,
+      },
+      {
+        source: "/docs/installation",
+        destination: "/docs",
+        permanent: true,
+      },
+      {
+        source: "/gallery",
+        destination: "/browse",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -22,6 +55,27 @@ const config = {
         protocol: "https",
         hostname: "raw.githubusercontent.com",
       },
+      // Cloudflare R2 public CDN (from R2_PUBLIC_URL when set)
+      ...(process.env.R2_PUBLIC_URL
+        ? (() => {
+            try {
+              const { hostname, protocol } = new URL(process.env.R2_PUBLIC_URL);
+              return [
+                {
+                  protocol: protocol.replace(":", "") || "https",
+                  hostname,
+                },
+              ];
+            } catch {
+              return [];
+            }
+          })()
+        : [
+            {
+              protocol: "https",
+              hostname: "*.r2.dev",
+            },
+          ]),
     ],
   },
 };

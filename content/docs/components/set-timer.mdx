@@ -1,0 +1,33 @@
+---
+title: Set Timer
+description: A dark timer pill that morphs into a minute wheel picker, then into a running timer with pause, cancel, and a rounded-rectangle progress border.
+---
+
+## Features
+
+- **One morphing surface**: Compact pill → wheel picker → running panel. Width, height, and radius spring between modes.
+- **iOS-style wheel**: Infinite 1–60 minute wheel with progressive blur above and below the selected row.
+- **Perimeter progress**: A stroke traces the rounded rectangle clockwise from top center and drains as time runs out.
+- **Pause and resume**: Countdown and border freeze on pause. The label slides between Pause and Resume.
+- **Clean cancel**: Returns to the pill without the border flashing back to full.
+- **Reduced motion**: Springs and scaling become short fades. Every state change stays visible.
+
+## Usage
+
+Drop it in and click. The countdown is deadline-based, so it stays accurate when the tab is throttled. Requires `@ncdai/react-wheel-picker`.
+
+```tsx
+import SetTimer from "@/components/set-timer";
+
+export default function Example() {
+  return <SetTimer />;
+}
+```
+
+## Where to use
+
+- Focus or pomodoro widgets
+- Cooking and workout apps
+- Meeting and presentation tools
+- Dashboard quick actions
+- Motion portfolio pieces

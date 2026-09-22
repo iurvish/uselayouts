@@ -1,65 +1,19 @@
 ---
 title: Bento Card
-description: An interactive bento card with animated tabs and workspace preview.
+description: A single glass tile with tabs that swap dashboard previews inside the same card.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
+## Features
 
-import { Suspense } from "react";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview" className="not-prose">
-    <ComponentPreview name="bento-card" size="lg" />
-  </Tab>
-  <Tab value="Code">
-    <Suspense
-      fallback={
-        <div className="h-[400px] w-full animate-pulse bg-fd-muted rounded-xl" />
-      }
-    >
-      <SourceCode name="bento-card" />
-    </Suspense>
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/bento-card.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/bento-card.tsx`.
-      </Step>
-      <Step>
-        ### Update imports
-
-        Update the imports to match your project structure.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
+- **Tabs in a tile**: Dashboard, Management, Threads, Resources — all inside one bento cell.
+- **Live-looking previews**: Mini charts, people lists, and thread rows so it feels like a real product, not a mock.
+- **Badge counts**: Unread-style numbers on tabs that actually have work waiting.
+- **Layout morph**: Header copy and body swap with a soft layout animation, not a hard cut.
+- **Glass chrome**: Blur, border, and a compact add/search toolbar so it reads as an app surface.
 
 ## Usage
 
-### Basic Implementation
+This is a marketing snapshot of a product, not a real dashboard. Swap the tab labels and inner panels to match your app. Give it a centered stage around 420px wide — it wants to feel like one tile in a bento, not a full page.
 
 ```tsx
 import BentoCard from "@/components/bento-card";
@@ -73,10 +27,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Interactive Tabs**: Smooth switching between different dashboard views.
-- **Micro-animations**: Subtle layout transitions and hover effects using Framer Motion.
-- **Glassmorphism**: Elegant use of blur and borders for a premium feel.
-- **Responsive Design**: Adapts beautifully to different screen sizes.
-- **Clean API**: Easy to customize tabs and content.
+- SaaS homepage “see the product” tiles
+- Feature grids next to other bento cells
+- Pricing pages that preview the workspace
+- Changelog or launch posts
+- Investor or waitlist landing pages

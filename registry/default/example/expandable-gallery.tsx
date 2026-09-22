@@ -4,7 +4,6 @@ import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId, useRef } from "react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
@@ -210,27 +209,20 @@ export default function ExpandableGallery() {
                   exit={{ opacity: 0 }}
                   className="text-center max-w-2xl space-y-8"
                 >
-                  <h2 className="text-2xl md:text-4xl font-normal tracking-tight text-foreground/90 leading-tight">
+                  <h2 className="text-2xl md:text-4xl font-normal tracking-tight text-foreground/90 leading-tight text-balance">
                     People don’t fall in love with components.{" "}
                     <br className="hidden md:block" />
                     They fall in love with how something feels.
                   </h2>
 
-                  <div className="flex justify-center">
-                    <Button
-                      variant="default"
-                      onClick={() => setIsExpanded(true)}
-                      className="rounded-full cursor-pointer py-6 px-8 border-border/40 font-normal group "
-                    >
-                      Explore more components
-                      <HugeiconsIcon
-                        icon={ArrowRight01Icon}
-                        className="transition-transform group-hover:translate-x-1"
-                        width={20}
-                        height={20}
-                      />
-                    </Button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsExpanded(true)}
+                    className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[15px] font-medium text-background transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
+                  >
+                    See all {PHOTOS.length}
+                    <HugeiconsIcon icon={ArrowRight01Icon} width={16} height={16} />
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>

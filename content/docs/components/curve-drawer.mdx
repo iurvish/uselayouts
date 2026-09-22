@@ -1,0 +1,22 @@
+---
+title: Curve Drawer
+description: Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.
+---
+
+## Usage
+
+```tsx
+import CurveDrawer from "@/components/curve-drawer";
+
+export default function Example() {
+  return <CurveDrawer />;
+}
+```
+
+## Features
+
+- Organic edge: An SVG quadratic curve bulges on the moving inner edge, then eases straight.
+- Both sides: Left and right. The path is mirrored so the bulge always faces inward.
+- Vaul shell: Overlay, focus trap, and handle-only drag. Motion drives the slide so the curve can sync.
+- Reduced motion: The slide and path morph become instant. The drawers still open.
+- Needs `vaul` and `motion`. This is a visual sheet, not a router.

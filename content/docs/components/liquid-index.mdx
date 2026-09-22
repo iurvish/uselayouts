@@ -1,0 +1,31 @@
+---
+title: Liquid Index
+description: A feature list whose hover badge is a WebGL liquid gradient that follows the active row.
+---
+
+## Features
+
+- **Row-tracking badge**: The shader tile slides to the hovered title.
+- **Liquid fill**: A small WebGL canvas mixes brand colors in motion.
+- **Icon swap**: A solid mark sits in the tile and crossfades with the row.
+- **Copy on hover**: Description appears for the active item; tap on phones.
+
+## Usage
+
+Edit `ITEMS` for titles, copy, Unsplash stills, icons, seeds, and RGB colors. Needs WebGL2. Type uses `foreground` / `muted-foreground`, so it follows the theme.
+
+```tsx
+import LiquidIndex from "@/components/liquid-index";
+
+export default function Page() {
+  return <LiquidIndex />;
+}
+```
+
+## Where to use
+
+- Product feature pages
+- Platform capability indexes
+- Pricing “what’s included” lists
+- About / studio service lists
+- Marketing homepages

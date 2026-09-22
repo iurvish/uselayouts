@@ -1,0 +1,267 @@
+.browse-chrome {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 10px;
+  background: hsl(240 5% 21%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.browse-chrome-title {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: hsl(240 5% 21%);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.browse-chrome-media {
+  padding: 0 4px 5px;
+}
+
+.browse-canvas-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.browse-canvas-card > a {
+  cursor: pointer;
+}
+
+.browse-card {
+  --card-radius: 8px;
+
+  position: relative;
+  display: block;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--card-radius);
+  background-color: var(--background);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.browse-pin .browse-card {
+  width: 100%;
+}
+
+.browse-pin > a {
+  cursor: pointer;
+}
+
+.browse-pin > a:focus-visible .browse-chrome {
+  outline: 2px solid color-mix(in oklab, var(--foreground) 70%, transparent);
+  outline-offset: 3px;
+}
+
+.browse-preview {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--background);
+}
+
+.browse-preview img,
+.browse-preview video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.browse-preview video {
+  position: absolute;
+  inset: 0;
+}
+
+.browse-pin .browse-preview {
+  position: relative;
+  inset: auto;
+}
+
+.browse-pin .browse-preview img {
+  height: 100%;
+}
+
+.browse-masonry {
+  position: relative;
+  width: 100%;
+  overflow-anchor: none;
+}
+
+.browse-card-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.browse-pin {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.browse-pin-media {
+  width: 100%;
+}
+
+.browse-dock {
+  filter: drop-shadow(0 8px 18px rgb(0 0 0 / 32%));
+}
+
+.browse-dock-modes {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 2px;
+  border-radius: 12px;
+  background: var(--muted);
+  box-shadow: 0 0 0 1px var(--secondary);
+}
+
+.browse-dock-btn,
+.browse-dock-pause {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  transition: transform 150ms ease;
+}
+
+.browse-dock-btn {
+  border-radius: 10px;
+  color: var(--muted-foreground);
+}
+
+.browse-dock-btn[aria-pressed="true"] {
+  color: var(--foreground);
+}
+
+.browse-dock-btn:active,
+.browse-dock-pause:active {
+  transform: scale(0.98);
+}
+
+.browse-dock-btn-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 2%) 100%),
+    var(--accent);
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 11%);
+}
+
+.browse-dock-join {
+  display: block;
+  width: 13.787px;
+  height: 24.128px;
+  margin-right: -0.9px;
+  pointer-events: none;
+}
+
+.browse-dock-pause {
+  overflow: hidden;
+  border-radius: 10px;
+  color: var(--foreground);
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%),
+    var(--secondary);
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 11%);
+}
+
+.browse-dock-pause[aria-pressed="true"] {
+  color: var(--foreground);
+}
+
+.canvas-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.canvas-viewport[data-dragging="true"],
+.canvas-viewport[data-dragging="true"] .canvas-tile {
+  cursor: grabbing;
+}
+
+.canvas-stage {
+  position: absolute;
+  inset: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .canvas-viewport[data-dragging="true"] .canvas-stage {
+    will-change: transform;
+  }
+}
+
+.canvas-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  transform-origin: 50% 50%;
+}
+
+.canvas-tile .browse-chrome {
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 10%),
+    0 1px 2px rgb(17 17 19 / 18%),
+    0 8px 20px rgb(17 17 19 / 28%);
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+[data-quality="low"] .canvas-tile .browse-chrome {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 10%);
+  transition: none;
+}
+
+.canvas-tile:hover {
+  z-index: 4;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .canvas-tile:hover .browse-chrome {
+    transform: scale(1.015);
+  }
+
+  .canvas-tile:active .browse-chrome {
+    transform: scale(0.98);
+  }
+
+  .canvas-viewport[data-dragging="true"] .canvas-tile .browse-chrome,
+  .canvas-viewport[data-dragging="true"] .canvas-tile:hover .browse-chrome,
+  .canvas-viewport[data-dragging="true"] .canvas-tile:active .browse-chrome {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-tile .browse-chrome {
+    transition-duration: 1ms;
+  }
+}
+
+.canvas-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 96% 94% at 50% 50%,
+    transparent 72%,
+    rgb(17 17 19 / 22%) 100%
+  );
+}

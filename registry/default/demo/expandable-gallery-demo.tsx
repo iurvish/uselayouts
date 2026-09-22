@@ -3,7 +3,6 @@
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
@@ -199,28 +198,20 @@ export default function ExpandableGalleryDemo() {
                   exit={{ opacity: 0 }}
                   className="text-center max-w-xl space-y-4 md:space-y-6"
                 >
-                  <h2 className="text-lg md:text-2xl lg:text-3xl font-normal tracking-tight text-foreground/90 leading-tight">
+                  <h2 className="text-lg md:text-2xl lg:text-3xl font-normal tracking-tight text-foreground/90 leading-tight text-balance">
                     People don’t fall in love with components.{" "}
                     <br className="hidden md:block" />
                     They fall in love with how something feels.
                   </h2>
 
-                  <div className="flex justify-center">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      onClick={() => setIsExpanded(true)}
-                      className="rounded-full h-9 md:h-11 px-6 md:px-8 border-border/40 hover:border-border/80 hover:bg-muted/30 transition-all duration-300 font-normal group text-sm md:text-base shadow-sm"
-                    >
-                      Explore more components
-                      <HugeiconsIcon
-                        icon={ArrowRight01Icon}
-                        className="ml-2 transition-transform group-hover:translate-x-1"
-                        width={16}
-                        height={16}
-                      />
-                    </Button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsExpanded(true)}
+                    className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-[opacity,transform] duration-150 ease-out hover:opacity-90 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 md:h-11 md:text-[15px]"
+                  >
+                    See all {PHOTOS.length}
+                    <HugeiconsIcon icon={ArrowRight01Icon} width={16} height={16} />
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>

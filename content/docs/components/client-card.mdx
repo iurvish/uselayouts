@@ -1,0 +1,21 @@
+---
+title: Client Card
+description: A client CRM card with payment and deadline rings, plus a morphing avatar stack.
+---
+
+## Usage
+
+```tsx
+import ClientCard from "@/components/client-card";
+
+export default function Example() {
+  return <ClientCard />;
+}
+```
+
+## Features
+
+- Shared layout: The avatar rail expands into a full grid of faces with `layoutId`.
+- Paid ring: Circular progress from amount paid vs total.
+- Deadline ring: Time used vs the contract window, with a short “Xd left” label.
+- Identity: Name, country, and portrait on a compact card.

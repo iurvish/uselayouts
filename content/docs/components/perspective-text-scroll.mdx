@@ -1,0 +1,22 @@
+---
+title: Perspective Text Scroll
+description: A polished example interaction built with React and Motion.
+---
+
+## Usage
+
+```tsx
+import PerspectiveTextScroll from "@/components/perspective-text-scroll";
+
+export default function Example() {
+  return <PerspectiveTextScroll />;
+}
+```
+
+## Features
+
+- Scroll-linked 3D: RotateX, translateY, and translateZ follow a progress curve, not a CSS keyframe loop.
+- Soft follow: Progress is lerped so the type doesn’t stutter on a trackpad.
+- Enter and exit: Copy fades in from below, sits readable in the middle, then recedes.
+- Scroll parent aware: Works inside a nested scroller, not only the window.
+- Editorial type: One block of design-system copy — no cards, no chrome.

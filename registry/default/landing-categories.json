@@ -1,0 +1,6 @@
+{
+  "layouts": "confidential-folder",
+  "navigation": "tactile-button",
+  "interactions": "scroll-split-cards",
+  "user-interface": "accessible-action"
+}

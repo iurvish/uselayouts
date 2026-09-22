@@ -234,7 +234,7 @@ function Button({
           },
         }}
         className={cn(
-          "flex items-center font-mono uppercase bg-secondary outline outline-2 outline-background overflow-hidden shadow-md transition-colors duration-75 ease-out cursor-pointer",
+          "flex items-center font-mono uppercase bg-secondary outline outline-2 outline-border overflow-hidden shadow-md transition-colors duration-75 ease-out cursor-pointer",
           config.gap,
           config.padding,
           config.fontSize,

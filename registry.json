@@ -8,10 +8,64 @@
       "type": "registry:component",
       "title": "3D Book",
       "description": "An interactive 3D book component with page flip animations.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/3d-book.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "accessible-action",
+      "type": "registry:component",
+      "title": "Accessible Action",
+      "description": "Interactive draggable card stack with 3D tilt, swipe-to-back gestures, click interactions, random rotation, and smooth spring animations.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/accessible-action.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "accordionos",
+      "type": "registry:component",
+      "title": "AccordionOS",
+      "description": "Interactive accordion showcase with animated content, image transitions, hover effects, keyboard navigation, autoplay, and responsive design.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/accordionos.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "analog-stick",
+      "type": "registry:component",
+      "title": "Analog Stick",
+      "description": "A metallic stick that tilts into the press. Hover a quadrant and the cap leans, the shadow shifts, and the matching arrow goes amber.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/analog-stick.tsx",
           "type": "registry:component"
         }
       ]
@@ -36,6 +90,25 @@
       ]
     },
     {
+      "name": "bento-card",
+      "type": "registry:component",
+      "title": "Bento Card",
+      "description": "An interactive bento card with animated tabs and workspace preview.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/bento-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "bottom-menu",
       "type": "registry:component",
       "title": "Bottom Menu",
@@ -51,6 +124,151 @@
       "files": [
         {
           "path": "registry/default/example/bottom-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "bucket",
+      "type": "registry:component",
+      "title": "Bucket",
+      "description": "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/bucket.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/use-mobile.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "card-folder",
+      "type": "registry:component",
+      "title": "Card Folder",
+      "description": "This component creates an animated folder-style card with a background image, floating 3D object, hover effects, and customizable colors and text. You can easily change the images, colors, content, and animation settings from the card props.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/card-folder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "client-card",
+      "type": "registry:component",
+      "title": "Client Card",
+      "description": "A client CRM card with payment and deadline rings, plus a morphing avatar stack.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/client-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "confidential-folder",
+      "type": "registry:component",
+      "title": "Confidential Folder",
+      "description": "A charcoal sleeve that pulls a letter out, flips it, and lands it in front of you.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/confidential-folder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "corner-video",
+      "type": "registry:component",
+      "title": "Corner Video",
+      "description": "A compact corner video player with smooth open/close morphing, autoplay, mute, enlarge, hover controls, and video scrubbing.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/corner-video.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "coverflow-drag",
+      "type": "registry:component",
+      "title": "Coverflow Drag",
+      "description": "A drag coverflow of portraits that scale, dim, and snap as you swipe.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/coverflow-drag.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "create-menu",
+      "type": "registry:component",
+      "title": "Create Menu",
+      "description": "A Start Creating pill that springs open into a list of create actions.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/create-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "curve-drawer",
+      "type": "registry:component",
+      "title": "Curve Drawer",
+      "description": "Side drawers whose inner edge starts as a bulge and morphs into a straight line as the panel settles.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/curve-drawer.tsx",
           "type": "registry:component"
         }
       ]
@@ -81,6 +299,7 @@
       "description": "A confirmation button with smooth icon transitions.",
       "dependencies": [
         "motion",
+        "dialkit",
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
@@ -117,13 +336,56 @@
       "type": "registry:component",
       "title": "Discrete Tabs",
       "description": "A tab component with discrete sliding animations.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "registry/default/example/discrete-tabs.tsx",
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "drawer-buttons",
+      "type": "registry:component",
+      "title": "Drawer Buttons",
+      "description": "Two buttons that open side drawers with a 3D fold. Payment comes from the right, cart from the left, and the fields stagger in.",
+      "dependencies": [
+        "motion",
+        "vaul",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea",
+        "select",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/drawer-buttons.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-grid-gallery",
+      "type": "registry:component",
+      "title": "Dynamic Grid Gallery",
+      "description": "A 3×2 photo grid that grows the hovered row and column so one still takes the stage.",
+      "files": [
+        {
+          "path": "registry/default/example/dynamic-grid-gallery.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": []
     },
     {
       "name": "dynamic-toolbar",
@@ -149,6 +411,40 @@
       ]
     },
     {
+      "name": "editorial-deck",
+      "type": "registry:component",
+      "title": "Editorial Deck",
+      "description": "A stacked editorial story deck. Drag the front card and it springs back into the pile.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/editorial-deck.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "empty-testimonial",
+      "type": "registry:component",
+      "title": "Empty Testimonial",
+      "description": "An interactive empty state for testimonials with a playful folder animation.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/empty-testimonial.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "expandable-gallery",
       "type": "registry:component",
       "title": "Expandable Gallery",
@@ -160,15 +456,13 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/default/example/expandable-gallery.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "hooks/use-outside-click.ts",
-          "type": "registry:hook"
         }
       ]
     },
@@ -187,6 +481,59 @@
       "files": [
         {
           "path": "registry/default/example/feature-carousel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "filter-interaction",
+      "type": "registry:component",
+      "title": "Filter Interaction",
+      "description": "Interactive list items with hover and focus effects.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/filter-interaction.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "fluid-expanding-grid",
+      "type": "registry:component",
+      "title": "Fluid Expanding Grid",
+      "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/fluid-expanding-grid.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "focus-testimonials",
+      "type": "registry:component",
+      "title": "Focus Testimonials",
+      "description": "Interactive testimonial section with hover-based focus effects, animated author tooltips, and expandable testimonials.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/focus-testimonials.tsx",
           "type": "registry:component"
         }
       ]
@@ -211,6 +558,70 @@
       ]
     },
     {
+      "name": "get-in-touch",
+      "type": "registry:component",
+      "title": "Get In Touch",
+      "description": "A glossy contact pill. Hover and the label lifts away so a portrait and YOU merge, then Let’s Talk! writes in.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/get-in-touch.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "holographic-referral-card",
+      "type": "registry:component",
+      "title": "Holographic Referral Card",
+      "description": "A dark invite card that tilts in 3D with the pointer. A holographic glow follows. Touch stays still. Tab for a quiet glow.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/holographic-referral-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "gooey-navbar",
+      "type": "registry:component",
+      "title": "Gooey Navbar",
+      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, active dot.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/default/example/gooey-navbar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "infinite-grid",
+      "type": "registry:component",
+      "title": "Infinite Canvas",
+      "description": "A free-panning product canvas that tiles forever — drag, scroll, and skim an endless grid of images and captions.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/infinite-grid.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "inline-edit",
       "type": "registry:component",
       "title": "Inline Edit",
@@ -222,7 +633,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["input"],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/example/inline-edit.tsx",
@@ -231,10 +644,29 @@
       ]
     },
     {
-      "name": "list-item",
+      "name": "liquid-index",
       "type": "registry:component",
-      "title": "List Item",
-      "description": "Interactive list items with hover and focus effects.",
+      "title": "Liquid Index",
+      "description": "A feature list whose hover badge is a WebGL liquid gradient that tracks the row.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/liquid-index.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/liquid-index-canvas.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "magnified-bento",
+      "type": "registry:component",
+      "title": "Magnified Bento",
+      "description": "A bento card component with a draggable magnifying lens effect over scrolling chips.",
       "dependencies": [
         "motion",
         "@hugeicons/core-free-icons",
@@ -244,7 +676,7 @@
       ],
       "files": [
         {
-          "path": "registry/default/example/list-item.tsx",
+          "path": "registry/default/example/magnified-bento.tsx",
           "type": "registry:component"
         }
       ]
@@ -261,7 +693,9 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["input"],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/example/morphing-input.tsx",
@@ -304,6 +738,125 @@
       ]
     },
     {
+      "name": "overlapping-slider",
+      "type": "registry:component",
+      "title": "Overlapping Slider",
+      "description": "A full-width landing row of portrait cards. They sit flat until you move — then the card on the left scales back.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/overlapping-slider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "perspective-text-scroll",
+      "type": "registry:component",
+      "title": "Perspective Text Scroll",
+      "description": "A polished example interaction built with React and Motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/perspective-text-scroll.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "photo-albums",
+      "type": "registry:component",
+      "title": "Photo Albums",
+      "description": "Tilted album stacks that expand into a shared-element photo grid.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/photo-albums.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "paper-shred-button",
+      "type": "registry:component",
+      "title": "Paper Shred Button",
+      "description": "Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/paper-shred-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "polaroid-drag",
+      "type": "registry:component",
+      "title": "Polaroid Drag",
+      "description": "Draggable Polaroid photo gallery with realistic tilt, stacking, smooth animations, and customizable captions, sizes, and decorations.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/polaroid-drag.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "polaroid-stack",
+      "type": "registry:component",
+      "title": "Polaroid Stack",
+      "description": "Seven Polaroids sit in a pile. Hover and they fan into an arc from one corner.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/polaroid-stack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pop-tilt-cards",
+      "type": "registry:component",
+      "title": "Pop Tilt Cards",
+      "description": "Interactive tilt card deck with smooth hover animations, 3D popping effects, images, links, and customizable card styling.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/pop-tilt-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "pricing-card",
       "type": "registry:component",
       "title": "Pricing Card",
@@ -320,6 +873,128 @@
       "files": [
         {
           "path": "registry/default/example/pricing-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "prompt-box",
+      "type": "registry:component",
+      "title": "Prompt Box",
+      "description": "A collapsed chat composer that expands into a textarea with a model menu and send control.",
+      "dependencies": [
+        "motion",
+        "@base-ui/react",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/prompt-box.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/prompt-box-icons.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "rolling-card-stack",
+      "type": "registry:component",
+      "title": "Rolling Card Stack",
+      "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/rolling-card-stack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "save-button",
+      "type": "registry:component",
+      "title": "Save Button",
+      "description": "A button with animated states for idle, loading, and success.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/save-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scan-document",
+      "type": "registry:component",
+      "title": "Scan Document",
+      "description": "Click Scan and a page unfolds, flips, and a glowing bar reads it. Done holds, then it resets.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scan-document.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scroll-split-cards",
+      "type": "registry:component",
+      "title": "Scroll Split Cards",
+      "description": "One photograph that splits into three panels as you scroll, then flips to copy.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-split-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scroll-stack-deck",
+      "type": "registry:component",
+      "title": "Scroll Stack Deck",
+      "description": "Scroll-linked project cards that pin in the viewport and stack, scale, and settle as you move down the page.",
+      "dependencies": [
+        "lenis",
+        "motion",
+        "react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/scroll-stack-deck.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "set-timer",
+      "type": "registry:component",
+      "title": "Set Timer",
+      "description": "A dark timer pill that morphs into a minute wheel picker, then into a running timer with pause, cancel, and a rounded-rectangle progress border.",
+      "dependencies": [
+        "motion",
+        "@ncdai/react-wheel-picker",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/set-timer.tsx",
           "type": "registry:component"
         }
       ]
@@ -344,6 +1019,33 @@
       ]
     },
     {
+      "name": "slide-subscribe",
+      "type": "registry:component",
+      "title": "Slide Subscribe",
+      "description": "Pick a billing period, then slide to start a trial.",
+      "dependencies": [
+        "motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/slide-subscribe.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/slide-subscribe-unlock.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/example/slide-subscribe-shimmer.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "smooth-dropdown",
       "type": "registry:component",
       "title": "Smooth Dropdown",
@@ -363,10 +1065,29 @@
       ]
     },
     {
-      "name": "status-button",
+      "name": "stack-scroll-reveal",
       "type": "registry:component",
-      "title": "Status Button",
-      "description": "A button with animated states for idle, loading, and success.",
+      "title": "Stack Scroll Reveal",
+      "description": "Scroll-linked case-study cards that pin in the viewport and peel, scale, and fade as you move down the page.",
+      "dependencies": [
+        "clsx",
+        "lenis",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stack-scroll-reveal.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stacked-list",
+      "type": "registry:component",
+      "title": "Stacked List",
+      "description": "An expandable list widget with a stacked layout and smooth morphing transitions.",
       "dependencies": [
         "motion",
         "@hugeicons/core-free-icons",
@@ -374,10 +1095,58 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "input",
+        "button"
+      ],
       "files": [
         {
-          "path": "registry/default/example/status-button.tsx",
+          "path": "registry/default/example/stacked-list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "stacked-outline-text",
+      "type": "registry:component",
+      "title": "Stacked Outline Text",
+      "description": "Heavy outlined type you can drag. Speed leaves a stacked white-on-black trail that springs back when you stop.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stacked-outline-text.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme Toggle",
+      "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+      "files": [
+        {
+          "path": "registry/default/example/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "name": "tactile-button",
+      "type": "registry:component",
+      "title": "Tactile Button",
+      "description": "A liquid-glass rocker that tilts into its well when you press it.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/tactile-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -402,114 +1171,19 @@
       ]
     },
     {
-      "name": "stacked-list",
+      "name": "wheel-carousel",
       "type": "registry:component",
-      "title": "Stacked List",
-      "description": "An expandable list widget with a stacked layout and smooth morphing transitions.",
+      "title": "Wheel Carousel",
+      "description": "This component creates a smooth wheel-style carousel with photos and selectable items. It supports drag, scroll, keyboard controls, snapping, momentum, themes, image crossfades, and customizable layout and colors.",
       "dependencies": [
         "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "registryDependencies": ["input", "button"],
-      "files": [
-        {
-          "path": "registry/default/example/stacked-list.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "bucket",
-      "type": "registry:component",
-      "title": "Bucket",
-      "description": "An interactive card component that simulates a bucket where chips are tossed and replaced with smooth physics-inspired animations.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
+        "lucide-react",
         "clsx",
         "tailwind-merge"
       ],
       "files": [
         {
-          "path": "registry/default/example/bucket.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "hooks/use-mobile.ts",
-          "type": "registry:hook"
-        }
-      ]
-    },
-    {
-      "name": "fluid-expanding-grid",
-      "type": "registry:component",
-      "title": "Fluid Expanding Grid",
-      "description": "A responsive gallery grid that fluidly shifts and expands items using motion layout.",
-      "dependencies": ["motion", "clsx", "tailwind-merge"],
-      "files": [
-        {
-          "path": "registry/default/example/fluid-expanding-grid.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "bento-card",
-      "type": "registry:component",
-      "title": "Bento Card",
-      "description": "An interactive bento card with animated tabs and workspace preview.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/bento-card.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "magnified-bento",
-      "type": "registry:component",
-      "title": "Magnified Bento",
-      "description": "A bento card component with a draggable magnifying lens effect over scrolling chips.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/magnified-bento.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "empty-testimonial",
-      "type": "registry:component",
-      "title": "Empty Testimonial",
-      "description": "An interactive empty state for testimonials with a playful folder animation.",
-      "dependencies": [
-        "motion",
-        "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/empty-testimonial.tsx",
+          "path": "registry/default/example/wheel-carousel.tsx",
           "type": "registry:component"
         }
       ]

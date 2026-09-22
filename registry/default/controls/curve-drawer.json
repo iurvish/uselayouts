@@ -1,0 +1,26 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T04:14:40.549Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Open a side",
+  "hintDescription": "Left and right panels slide in. The inner edge starts as a bulge, then settles into a straight line.",
+  "hintTop": 147,
+  "hintHideOnScroll": false,
+  "tags": [
+    "drawer",
+    "sidebar"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/curve-drawer/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/curve-drawer/video.mp4"
+}

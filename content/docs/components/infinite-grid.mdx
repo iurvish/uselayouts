@@ -1,0 +1,33 @@
+---
+title: Infinite Canvas
+description: A free-panning product canvas that tiles forever — drag, scroll, and skim an endless grid of images and captions.
+---
+
+## Features
+
+- **Endless tiled canvas**: A 3×3 wrap so the grid never runs out of space.
+- **Drag to pan**: Pointer drag with inertia and a little coast after you let go.
+- **Wheel and trackpad**: Two-axis scrolling with the same soft follow.
+- **Velocity skew**: Cells lean slightly with pan speed so the move feels physical.
+- **Image + caption**: Product shots with a title and price — no card chrome.
+- **Ambient blobs**: Optional soft color moving behind the grid.
+
+## Usage
+
+This wants a full viewport. Pass a list of products with photos, titles, and prices. Drag and trackpad both pan, so it works as a shop floor, not a CSS grid. Skip it in a short section — people need room to wander.
+
+```tsx
+import InfiniteGrid from "@/components/infinite-grid";
+
+export default function Example() {
+  return <InfiniteGrid />;
+}
+```
+
+## Where to use
+
+- Product catalog heroes
+- Furniture or object lookbooks
+- Fashion e-commerce browse
+- Archive or museum collection walls
+- Brand “everything we make” canvases

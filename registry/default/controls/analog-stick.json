@@ -1,0 +1,27 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-19T19:40:36.391Z",
+  "previewBackground": {
+    "light": "#e8eef1",
+    "dark": "#14181a"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "hover",
+  "hintHeading": "Hover a quadrant",
+  "hintDescription": "The stick tilts into the press. The matching arrow goes amber. CSS only — no JS hover state.",
+  "hintTop": 150,
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/analog-stick/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4",
+  "tags": [
+    "button",
+    "stick",
+    "press"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "duration": [
+      0.4,
+      0.05,
+      2,
+      0.05
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-18T18:31:09.068Z",
+  "previewBackground": {
+    "light": "hsl(240 6% 7%)",
+    "dark": "hsl(240 6% 7%)"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "hintTop": 126,
+  "showHint": true,
+  "hintKind": "hover",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/corner-video/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4",
+  "tags": [
+    "video",
+    "player"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T09:38:15.254Z",
+  "previewBackground": {
+    "light": "#ffffff",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Hover the pill",
+  "hintDescription": "GET IN TOUCH lifts away. A portrait and YOU merge, then Let’s Talk! writes in.",
+  "hintTop": 172,
+  "hintHideOnScroll": false,
+  "tags": [
+    "button",
+    "contact"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/get-in-touch/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/get-in-touch/video.mp4"
+}

@@ -1,0 +1,258 @@
+{
+  "editorial-deck": {
+    "posterUrl": "https://cdn.uselayouts.com/components/editorial-deck/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/editorial-deck/video.mp4"
+  },
+  "perspective-text-scroll": {
+    "posterUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/perspective-text-scroll/video.mp4"
+  },
+  "scroll-stack-deck": {
+    "posterUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/video.mp4"
+  },
+  "feature-carousel": {
+    "posterUrl": "https://cdn.uselayouts.com/components/feature-carousel/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/feature-carousel/video.mp4"
+  },
+  "animated-collection": {
+    "posterUrl": "https://cdn.uselayouts.com/components/animated-collection/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/animated-collection/video.mp4"
+  },
+  "shake-testimonial-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/shake-testimonial-card/video.mp4"
+  },
+  "vertical-tabs": {
+    "posterUrl": "https://cdn.uselayouts.com/components/vertical-tabs/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/vertical-tabs/video.mp4"
+  },
+  "delete-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/delete-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/delete-button/video.mp4"
+  },
+  "fluid-expanding-grid": {
+    "posterUrl": "https://cdn.uselayouts.com/components/fluid-expanding-grid/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/fluid-expanding-grid/video.mp4"
+  },
+  "smooth-dropdown": {
+    "posterUrl": "https://cdn.uselayouts.com/components/smooth-dropdown/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/smooth-dropdown/video.mp4"
+  },
+  "pricing-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/pricing-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/pricing-card/video.mp4"
+  },
+  "stacked-list": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stacked-list/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stacked-list/video.mp4"
+  },
+  "dynamic-toolbar": {
+    "posterUrl": "https://cdn.uselayouts.com/components/dynamic-toolbar/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/dynamic-toolbar/video.mp4"
+  },
+  "bottom-menu": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bottom-menu/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bottom-menu/video.mp4"
+  },
+  "day-picker": {
+    "posterUrl": "https://cdn.uselayouts.com/components/day-picker/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/day-picker/video.mp4"
+  },
+  "discrete-tabs": {
+    "posterUrl": "https://cdn.uselayouts.com/components/discrete-tabs/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/discrete-tabs/video.mp4"
+  },
+  "filter-interaction": {
+    "posterUrl": "https://cdn.uselayouts.com/components/filter-interaction/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/filter-interaction/video.mp4"
+  },
+  "3d-book": {
+    "posterUrl": "https://cdn.uselayouts.com/components/3d-book/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/3d-book/video.mp4"
+  },
+  "multi-step-form": {
+    "posterUrl": "https://cdn.uselayouts.com/components/multi-step-form/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/multi-step-form/video.mp4"
+  },
+  "folder-interaction": {
+    "posterUrl": "https://cdn.uselayouts.com/components/folder-interaction/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/folder-interaction/video.mp4"
+  },
+  "inline-edit": {
+    "posterUrl": "https://cdn.uselayouts.com/components/inline-edit/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/inline-edit/video.mp4"
+  },
+  "save-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/save-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/save-button/video.mp4"
+  },
+  "discover-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/discover-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/discover-button/video.mp4"
+  },
+  "morphing-input": {
+    "posterUrl": "https://cdn.uselayouts.com/components/morphing-input/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/morphing-input/video.mp4"
+  },
+  "accessible-action": {
+    "posterUrl": "https://cdn.uselayouts.com/components/accessible-action/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/accessible-action/video.mp4"
+  },
+  "accordionos": {
+    "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4"
+  },
+  "bento-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bento-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bento-card/video.mp4"
+  },
+  "bucket": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bucket/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bucket/video.mp4"
+  },
+  "card-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/card-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/card-folder/video.mp4"
+  },
+  "confidential-folder": {
+    "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4"
+  },
+  "corner-video": {
+    "posterUrl": "https://cdn.uselayouts.com/components/corner-video/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/corner-video/video.mp4"
+  },
+  "client-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/client-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/client-card/video.mp4"
+  },
+  "create-menu": {
+    "posterUrl": "https://cdn.uselayouts.com/components/create-menu/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/create-menu/video.mp4"
+  },
+  "focus-testimonials": {
+    "posterUrl": "https://cdn.uselayouts.com/components/focus-testimonials/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/focus-testimonials/video.mp4"
+  },
+  "infinite-grid": {
+    "posterUrl": "https://cdn.uselayouts.com/components/infinite-grid/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/infinite-grid/video.mp4"
+  },
+  "photo-albums": {
+    "posterUrl": "https://cdn.uselayouts.com/components/photo-albums/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/photo-albums/video.mp4"
+  },
+  "polaroid-drag": {
+    "posterUrl": "https://cdn.uselayouts.com/components/polaroid-drag/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/polaroid-drag/video.mp4"
+  },
+  "pop-tilt-cards": {
+    "posterUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/pop-tilt-cards/video.mp4"
+  },
+  "rolling-card-stack": {
+    "posterUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/rolling-card-stack/video.mp4"
+  },
+  "slide-subscribe": {
+    "posterUrl": "https://cdn.uselayouts.com/components/slide-subscribe/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/slide-subscribe/video.mp4"
+  },
+  "paper-shred-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/paper-shred-button/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/paper-shred-button/video.mp4"
+  },
+  "analog-stick": {
+    "posterUrl": "https://cdn.uselayouts.com/components/analog-stick/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/analog-stick/video.mp4"
+  },
+  "magnified-bento": {
+    "posterUrl": "https://cdn.uselayouts.com/components/magnified-bento/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/magnified-bento/video.mp4"
+  },
+  "empty-testimonial": {
+    "posterUrl": "https://cdn.uselayouts.com/components/empty-testimonial/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/empty-testimonial/video.mp4"
+  },
+  "expandable-gallery": {
+    "posterUrl": "https://cdn.uselayouts.com/components/expandable-gallery/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/expandable-gallery/video.mp4"
+  },
+  "polaroid-stack": {
+    "posterUrl": "https://cdn.uselayouts.com/components/polaroid-stack/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/polaroid-stack/video.mp4"
+  },
+  "scan-document": {
+    "posterUrl": "https://cdn.uselayouts.com/components/scan-document/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scan-document/video.mp4"
+  },
+  "theme-toggle": {
+    "posterUrl": "https://cdn.uselayouts.com/components/theme-toggle/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/theme-toggle/video.mp4"
+  },
+  "set-timer": {
+    "posterUrl": "https://cdn.uselayouts.com/components/set-timer/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/set-timer/video.mp4"
+  },
+  "overlapping-slider": {
+    "posterUrl": "https://cdn.uselayouts.com/components/overlapping-slider/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/overlapping-slider/video.mp4"
+  },
+  "wheel-carousel": {
+    "posterUrl": "https://cdn.uselayouts.com/components/wheel-carousel/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/wheel-carousel/video.mp4"
+  },
+  "drawer-buttons": {
+    "posterUrl": "https://cdn.uselayouts.com/components/drawer-buttons/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/drawer-buttons/video.mp4"
+  },
+  "dynamic-grid-gallery": {
+    "posterUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/dynamic-grid-gallery/video.mp4"
+  },
+  "curve-drawer": {
+    "posterUrl": "https://cdn.uselayouts.com/components/curve-drawer/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/curve-drawer/video.mp4"
+  },
+  "prompt-box": {
+    "posterUrl": "https://cdn.uselayouts.com/components/prompt-box/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/prompt-box/video.mp4"
+  },
+  "stacked-outline-text": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stacked-outline-text/video.mp4"
+  },
+  "coverflow-drag": {
+    "posterUrl": "https://cdn.uselayouts.com/components/coverflow-drag/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/coverflow-drag/video.mp4"
+  },
+  "stack-scroll-reveal": {
+    "posterUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/video.mp4"
+  },
+  "liquid-index": {
+    "posterUrl": "https://cdn.uselayouts.com/components/liquid-index/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/liquid-index/video.mp4"
+  },
+  "get-in-touch": {
+    "posterUrl": "https://cdn.uselayouts.com/components/get-in-touch/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/get-in-touch/video.mp4"
+  },
+  "holographic-referral-card": {
+    "posterUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/holographic-referral-card/video.mp4"
+  },
+  "scroll-split-cards": {
+    "posterUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/poster.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/scroll-split-cards/video.mp4"
+  },
+  "tactile-button": {
+    "posterUrl": "https://cdn.uselayouts.com/components/tactile-button/poster-445352537e.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/tactile-button/video-afb6c148d5.mp4"
+  },
+  "gooey-navbar": {
+    "posterUrl": "https://cdn.uselayouts.com/components/gooey-navbar/poster-a23f8deef0.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/gooey-navbar/video-32facfe716.mp4"
+  }
+}

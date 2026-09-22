@@ -1,15 +1,19 @@
-import Hero from "@/components/hero";
-import ProductBenefits from "@/components/product-benefits";
-import Footer from "@/components/footer";
-import { Testimonial } from "@/components/testimonial";
+import LandingPage from "@/components/landing/landing-page";
+import { getGithubStarCount } from "@/lib/github";
+import { getLandingCategoryCards } from "@/lib/landing/categories";
+import { getLandingHeroItems } from "@/lib/landing/hero-components";
 
-export default function Page() {
+export default async function Page() {
+  const [heroItems, categoryCards, githubStars] = await Promise.all([
+    getLandingHeroItems(),
+    getLandingCategoryCards(),
+    getGithubStarCount(),
+  ]);
   return (
-    <main className="min-h-screen light bg-white font-[family-name:var(--font-geist-sans)]">
-      <Hero />
-      <Testimonial />
-      <ProductBenefits />
-      <Footer />
-    </main>
+    <LandingPage
+      heroItems={heroItems}
+      categoryCards={categoryCards}
+      githubStars={githubStars}
+    />
   );
 }

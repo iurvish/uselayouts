@@ -1,0 +1,27 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-19T19:45:50.914Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "click",
+  "hintHeading": "Click Scan",
+  "hintDescription": "A page unfolds, flips, and a light travels across it. When it says Done, it resets so you can scan again.",
+  "hintTop": 140,
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/scan-document/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/scan-document/video.mp4",
+  "tags": [
+    "button",
+    "scan",
+    "document"
+  ]
+}

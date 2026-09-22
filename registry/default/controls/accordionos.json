@@ -1,0 +1,40 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    },
+    "DEFAULT_STATIC_IMAGE": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=2560&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2560&auto=format&fit=crop",
+    "imageUrl2": "https://images.unsplash.com/photo-1753164726043-31e583f8a9b8?q=80&w=2560&auto=format&fit=crop",
+    "imageUrl3": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?q=80&w=2560&auto=format&fit=crop",
+    "imageUrl4": "https://images.unsplash.com/photo-1753164726182-4037e5b3bcaa?q=80&w=2560&auto=format&fit=crop",
+    "duration": [
+      0.6,
+      0.05,
+      2,
+      0.05
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-18T18:29:03.576Z",
+  "previewBackground": "#f1f2f5",
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/accordionos/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/accordionos/video.mp4",
+  "tags": [
+    "accordion",
+    "image"
+  ]
+}

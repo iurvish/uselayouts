@@ -1,84 +1,22 @@
 ---
 title: Expandable Gallery
-description: A stacked photo gallery that expands into a grid view on interaction.
+description: A photo gallery with smooth item expansion.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
-
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="expandable-gallery" full />
-  </Tab>
-  <Tab value="Code">
-    <SourceCode name="expandable-gallery" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/expandable-gallery.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/expandable-gallery.tsx`.
-      </Step>
-      <Step>
-        ### Update imports
-
-        Update the imports to match your project structure.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
-
 ## Usage
-
-### Customizing Content
-
-Swap out the images by modifying the `PHOTOS` array at the top of the component file:
-
-```tsx
-// Change Here
-const PHOTOS = [
-  {
-    id: "photo-1",
-    src: "https://images.unsplash.com...",
-    alt: "Image Description",
-  },
-  // ...
-];
-```
 
 ```tsx
 import ExpandableGallery from "@/components/expandable-gallery";
 
-export default function Page() {
+export default function Example() {
   return <ExpandableGallery />;
 }
 ```
 
 ## Features
 
-- **Stacked Initial State**: Photos start in a playful, rotated stack.
-- **Expand to Grid**: Expands into a full grid view on click or "Explore" action.
-- **Smooth Expansion**: Transitions smoothly between stack and grid layouts using `LayoutGroup`.
-- **Hover Effects**: Interactive hover states for both stack and grid items.
-- **Featured Items**: Highlights primary items in the collapsed stack view.
+- Scattered stack: Three photos sit rotated and overlapping, like prints on a desk.
+- Explore to grid: Click through and the pile lays out into a full gallery.
+- Shared layout: Images keep their identity as they travel from stack to cell.
+- Hover lift: Individual prints respond before you commit to the grid.
+- Outside click: Click away and it can fold back to the pile.

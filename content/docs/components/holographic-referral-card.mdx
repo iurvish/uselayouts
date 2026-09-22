@@ -1,0 +1,23 @@
+---
+title: Holographic Referral Card
+description: A dark invite card that tilts in 3D with the pointer. A holographic glow follows. Touch stays still. Tab for a quiet glow.
+---
+
+## Usage
+
+```tsx
+import HolographicReferralCard from "@/components/holographic-referral-card";
+
+export default function Example() {
+  return <HolographicReferralCard />;
+}
+```
+
+## Features
+
+- Pointer tilt: `rotateX`, `rotateY`, and `translateZ` spring from the pointer.
+- Holographic glow: A radial overlay tracks the pointer with `mix-blend-overlay`.
+- Fine pointer only: Touch does not drive the tilt.
+- Keyboard: Focus reveals the glow. Blur resets the card.
+- Reduced motion: The transform stays put. The card still works.
+- Needs `motion`. This is a visual invite, not a form.

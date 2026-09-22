@@ -1,0 +1,22 @@
+---
+title: Stack Scroll Reveal
+description: Scroll-linked case-study cards that pin in the viewport and peel, scale, and fade as you move down the page.
+---
+
+## Usage
+
+```tsx
+import StackScrollReveal from "@/components/stack-scroll-reveal";
+
+export default function Example() {
+  return <StackScrollReveal />;
+}
+```
+
+## Features
+
+- Sticky viewport: A `440vh` track pins the deck so the stack stays on screen while you scroll.
+- Scroll is the scrubber: Motion `useScroll` maps progress to each card’s `y`, `rotateX`, `scale`, and opacity.
+- Peel-away stack: Later cards sit behind; earlier work lifts, tilts, and fades as the next one takes the stage.
+- Split case-study cards: Number, category, headline, and still on a tinted body.
+- Landing-page defaults: Scroll cue, title, and an end section — swap the `CARDS` data for your work.

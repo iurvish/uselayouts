@@ -1,0 +1,28 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-21T09:36:10.044Z",
+  "previewBackground": {
+    "light": "#F4F6F8",
+    "dark": "#F4F6F8"
+  },
+  "tags": [
+    "cards",
+    "stack",
+    "scroll"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/scroll-stack-deck/video.mp4"
+}

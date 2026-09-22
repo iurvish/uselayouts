@@ -1,72 +1,19 @@
 ---
 title: Morphing Input
-description: An input field with an animated placeholder and toggleable icon switch.
+description: A search field whose placeholder letters flip, and whose icon toggles the mode — search vs generate.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { ComponentPreview } from "@/components/component-preview";
-import { SourceCode } from "@/components/source-code";
+## Features
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="morphing-input" align="center" />
-  </Tab>
-  <Tab value="Code">
-    <SourceCode name="morphing-input" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/morphing-input.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion lucide-react @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Install UI components
-
-        Ensure you have the `Input` component from Shadcn UI installed.
-
-        ```bash
-        npx shadcn@latest add input
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/input-switch.tsx`.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
+- **Letter-by-letter placeholder**: “Search anything…” and “Generate Image” enter with a tiny 3D flip.
+- **Icon as mode**: Tap the leading icon to cycle presets.
+- **Submit still there**: An arrow on the right for the actual query.
+- **Empty vs typed**: Placeholder animation only while the field is empty.
+- **Compact bar**: One rounded field, not a whole command palette.
 
 ## Usage
 
-### Customizing Content
-
-Adjust the placeholder text and icons by modifying the `placeholderOptions` array:
-
-```tsx
-// Change Here
-const placeholderOptions = [
-  { id: 1, placeholder: "Search anything...", icon: SparklesIcon },
-  { id: 2, placeholder: "Generate Image", icon: Album02Icon },
-  // ...
-];
-```
+Use it as a prompt or search control. Edit `placeholderOptions` for extra modes. Needs a click on the icon to switch; typing is a normal input. Sit it in a header or an AI bar. Don’t auto-play the placeholder while someone’s mid-sentence.
 
 ```tsx
 import InputSwitch from "@/components/morphing-input";
@@ -76,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Mode Switch**: Toggles between specific preset inputs (e.g., Search, Image Gen) and free text.
-- **Animated Placeholder**: Placeholder text animates character-by-character.
-- **Search/Command Ready**: Ideal for command palettes or multi-purpose search bars.
-- **Compact to Detailed**: Expands to show more controls or details when active.
-- **Icon Integration**: Visual icons clearly denote the current input mode.
+- AI prompt bars
+- Site search in the header
+- Image-gen or mixed-mode tools
+- Docs command-style search
+- Product demos of a “one box” UI

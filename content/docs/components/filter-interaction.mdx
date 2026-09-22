@@ -1,0 +1,22 @@
+---
+title: Filter Interaction
+description: Interactive list items with hover and focus effects.
+---
+
+## Usage
+
+```tsx
+import FilterInteraction from "@/components/filter-interaction";
+
+export default function Example() {
+  return <FilterInteraction />;
+}
+```
+
+## Features
+
+- Twin circles: A filter glyph beside the selected type (tasks, events, reminders…).
+- Morphing panel: The filter button becomes a list via a shared `layoutId`.
+- Staggered rows: Options slide in one after another, not all at once.
+- Check on the pick: The active row gets a filled tick.
+- Icon as summary: When the list closes, the right circle still shows what you chose.

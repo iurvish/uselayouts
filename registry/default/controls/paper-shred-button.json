@@ -1,0 +1,27 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-19T19:34:59.782Z",
+  "previewBackground": {
+    "light": "#eceff2",
+    "dark": "#18181b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Click Delete",
+  "hintDescription": "A page appears above. Click to shred it, then it resets.\n\n",
+  "hintTop": 162,
+  "hintHideOnScroll": false,
+  "posterUrl": "https://cdn.uselayouts.com/components/paper-shred-button/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/paper-shred-button/video.mp4",
+  "tags": [
+    "button",
+    "delete",
+    "shred"
+  ]
+}

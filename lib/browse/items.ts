@@ -1,0 +1,148 @@
+import { isNewComponent } from "@/lib/open/new-components";
+import browseMedia from "@/registry/default/browse-media.json";
+import registry from "@/registry.json";
+
+const LIVE_SLUGS = new Set(registry.items.map((item) => item.name));
+
+export type BrowseItem = {
+  /** Registry name, also the docs slug. */
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  tags?: string[];
+  /** Still frame shown before/instead of the video. */
+  poster: string;
+  /** Muted loop preview (empty string = image only). */
+  video: string;
+  isNew?: boolean;
+};
+
+/**
+ * Placeholder media pools. Per-component Cloudflare R2 URLs in
+ * `registry/default/browse-media.json` override these once uploaded from admin.
+ */
+const POSTERS = [
+  "photo-1506744038136-46273834b3fb",
+  "photo-1470071459604-3b5ec3a7fe05",
+  "photo-1441974231531-c6227db76b6e",
+  "photo-1493246507139-91e8fad9978e",
+  "photo-1451187580459-43490279c0fa",
+  "photo-1518837695005-2083093ee35b",
+  "photo-1500530855697-b586d89ba3ee",
+  "photo-1502082553048-f009c37129b9",
+  "photo-1483728642387-6c3bdd6c93e5",
+  "photo-1439066615861-d1af74d74000",
+  "photo-1519681393784-d120267933ba",
+  "photo-1497436072909-60f360e1d4b1",
+].map((id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=880&q=68`);
+
+const VIDEOS = [
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/samples/sea-turtle.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/dog.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/samples/cld-sample-video.mp4",
+  "https://res.cloudinary.com/demo/video/upload/q_auto,w_720/elephants.mp4",
+  "https://videos.pexels.com/video-files/857195/857195-hd_1280_720_25fps.mp4",
+  "https://videos.pexels.com/video-files/5527786/5527786-hd_1920_1080_25fps.mp4",
+  "https://videos.pexels.com/video-files/6981411/6981411-hd_1920_1080_25fps.mp4",
+];
+
+type Seed = { slug: string; title: string; description: string; category: string };
+type MediaOverride = { posterUrl?: string; videoUrl?: string };
+
+const MEDIA_OVERRIDES = browseMedia as Record<string, MediaOverride>;
+
+const SEEDS: Seed[] = [
+  { slug: "3d-book", title: "3D Book", description: "Page flips with real depth.", category: "Display" },
+  { slug: "animated-collection", title: "Animated Collection", description: "Items that rearrange themselves.", category: "List" },
+  { slug: "bottom-menu", title: "Bottom Menu", description: "A dock that expands on demand.", category: "Navigation" },
+  { slug: "day-picker", title: "Day Picker", description: "Dates chosen without friction.", category: "Input" },
+  { slug: "delete-button", title: "Delete Button", description: "Confirmation folded into one tap.", category: "Button" },
+  { slug: "discover-button", title: "Discover Button", description: "A button that opens up.", category: "Button" },
+  { slug: "discrete-tabs", title: "Discrete Tabs", description: "Sliding between quiet states.", category: "Navigation" },
+  { slug: "dynamic-toolbar", title: "Dynamic Toolbar", description: "Resizes around its content.", category: "Navigation" },
+  { slug: "expandable-gallery", title: "Expandable Gallery", description: "Photos that grow into place.", category: "Display" },
+  { slug: "feature-carousel", title: "Feature Carousel", description: "One idea at a time.", category: "Display" },
+  { slug: "folder-interaction", title: "Folder Interaction", description: "Files that feel physical.", category: "Display" },
+  { slug: "inline-edit", title: "Inline Edit", description: "Read and write in one field.", category: "Input" },
+  { slug: "filter-interaction", title: "List Item", description: "Rows that answer the cursor.", category: "List" },
+  { slug: "morphing-input", title: "Morphing Input", description: "One field, many shapes.", category: "Input" },
+  { slug: "multi-step-form", title: "Multi Step Form", description: "Long forms made short.", category: "Input" },
+  { slug: "pricing-card", title: "Pricing Card", description: "Hierarchy that sells itself.", category: "Display" },
+  { slug: "shake-testimonial-card", title: "Shake Testimonial", description: "Praise with a pulse.", category: "Display" },
+  { slug: "smooth-dropdown", title: "Smooth Dropdown", description: "Menus that never jump.", category: "Navigation" },
+  { slug: "save-button", title: "Status Button", description: "Idle, loading, done.", category: "Button" },
+  { slug: "vertical-tabs", title: "Vertical Tabs", description: "Switching along the edge.", category: "Navigation" },
+  { slug: "stacked-list", title: "Stacked List", description: "A stack that unfolds.", category: "List" },
+  { slug: "bucket", title: "Bucket", description: "Chips tossed with physics.", category: "Display" },
+  { slug: "fluid-expanding-grid", title: "Fluid Expanding Grid", description: "A grid that breathes.", category: "Layout" },
+  { slug: "bento-card", title: "Bento Card", description: "Tabs inside a single tile.", category: "Layout" },
+  { slug: "magnified-bento", title: "Magnified Bento", description: "A lens you can drag.", category: "Layout" },
+  { slug: "editorial-deck", title: "Editorial Deck", description: "Swipe stories back into the stack.", category: "Display" },
+  { slug: "empty-testimonial", title: "Empty Testimonial", description: "An empty state worth keeping.", category: "Display" },
+  { slug: "accessible-action", title: "Accessible Action", description: "A card stack you can tilt and swipe.", category: "Display" },
+  { slug: "accordionos", title: "AccordionOS", description: "Accordions with image transitions.", category: "Display" },
+  { slug: "card-folder", title: "Card Folder", description: "A folder card with hover depth.", category: "Display" },
+  { slug: "confidential-folder", title: "Confidential Folder", description: "A sleeve that pulls a letter out and flips it.", category: "Display" },
+  { slug: "corner-video", title: "Corner Video", description: "A player that morphs from the corner.", category: "Display" },
+  { slug: "focus-testimonials", title: "Focus Testimonials", description: "Hover to bring one voice forward.", category: "Display" },
+  { slug: "infinite-grid", title: "Infinite Canvas", description: "An endless product canvas you can drag.", category: "Layout" },
+  { slug: "polaroid-drag", title: "Polaroid Drag", description: "Photos that stack and tilt.", category: "Display" },
+  { slug: "pop-tilt-cards", title: "Pop Tilt Cards", description: "A deck that pops toward the cursor.", category: "Display" },
+  { slug: "rolling-card-stack", title: "Rolling Card Stack", description: "Cards that roll into place.", category: "Display" },
+  { slug: "scroll-stack-deck", title: "Scroll Stack Deck", description: "Cards that stack as you scroll.", category: "Display" },
+  { slug: "stack-scroll-reveal", title: "Stack Scroll Reveal", description: "Cards that peel off a stack as you scroll.", category: "Display" },
+  { slug: "perspective-text-scroll", title: "Perspective Text Scroll", description: "Text that tilts through scroll perspective.", category: "Display" },
+  { slug: "wheel-carousel", title: "Wheel Carousel", description: "A wheel you can spin through.", category: "Display" },
+  { slug: "client-card", title: "Client Card", description: "A CRM card with paid and deadline rings.", category: "Display" },
+  { slug: "coverflow-drag", title: "Coverflow Drag", description: "Portraits that coverflow as you drag.", category: "Display" },
+  { slug: "overlapping-slider", title: "Overlapping Slider", description: "A landing row of portraits. The left card scales back.", category: "Display" },
+  { slug: "tactile-button", title: "Tactile Button", description: "A glass rocker that tilts when you press.", category: "Button" },
+  { slug: "gooey-navbar", title: "Gooey Navbar", description: "Pills that melt into each other.", category: "Navigation" },
+  { slug: "dynamic-grid-gallery", title: "Dynamic Grid Gallery", description: "A grid that grows toward the cursor.", category: "Display" },
+  { slug: "scroll-split-cards", title: "Scroll Split Cards", description: "A still that splits into three cards, then flips.", category: "Display" },
+  { slug: "create-menu", title: "Create Menu", description: "A create pill that opens into actions.", category: "Button" },
+  { slug: "liquid-index", title: "Liquid Index", description: "A feature list with a liquid hover badge.", category: "Display" },
+  { slug: "photo-albums", title: "Photo Albums", description: "Album stacks that open into a grid.", category: "Display" },
+  { slug: "slide-subscribe", title: "Slide Subscribe", description: "Pick a plan, then slide to start.", category: "Input" },
+  { slug: "set-timer", title: "Set Timer", description: "A pill that morphs into a wheel, then a countdown.", category: "Input" },
+  { slug: "stacked-outline-text", title: "Stacked Outline Text", description: "Outlined type that leaves a velocity trail when you drag it.", category: "Display" },
+  { slug: "drawer-buttons", title: "Drawer Buttons", description: "Buttons that fold open a payment drawer and a cart.", category: "Button" },
+  { slug: "prompt-box", title: "Prompt Box", description: "A composer that expands into a prompt with a model menu.", category: "Input" },
+  { slug: "get-in-touch", title: "Get In Touch", description: "A contact pill that merges you with a portrait.", category: "Button" },
+  { slug: "theme-toggle", title: "Theme Toggle", description: "A dotted grip that slides across a recessed track.", category: "Button" },
+  { slug: "scan-document", title: "Scan Document", description: "A button that unfolds a page and scans it.", category: "Button" },
+  { slug: "polaroid-stack", title: "Polaroid Stack", description: "Prints that fan out from a pile on hover.", category: "Display" },
+  { slug: "analog-stick", title: "Analog Stick", description: "A metallic cap that tilts into the press.", category: "Button" },
+  { slug: "paper-shred-button", title: "Paper Shred Button", description: "A delete button that shreds a page into strips.", category: "Button" },
+  { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
+  { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
+];
+
+export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug))
+  .map((seed, index) => {
+    const override = MEDIA_OVERRIDES[seed.slug];
+    return {
+      ...seed,
+      poster: override?.posterUrl ?? POSTERS[index % POSTERS.length]!,
+      video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
+      isNew: isNewComponent(seed.slug),
+    };
+  })
+  .sort((a, b) => a.title.localeCompare(b.title));
+
+/** Poster always; video only if uploaded in admin (no placeholder clips). */
+export function browseUploadedMedia(slug: string) {
+  const item = browseItems.find((entry) => entry.slug === slug);
+  const uploaded = MEDIA_OVERRIDES[slug]?.videoUrl?.trim() ?? "";
+  return {
+    poster: item?.poster ?? "",
+    video: uploaded,
+    title: item?.title ?? slug,
+  };
+}
+
+export const browseCategories = [
+  "All",
+  ...Array.from(new Set(browseItems.map((item) => item.category))).sort(),
+];

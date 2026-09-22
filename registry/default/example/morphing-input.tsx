@@ -27,45 +27,23 @@ const AnimatedPlaceholder = ({ text }: { text: string }) => {
   const letters = text.split("");
 
   return (
-    <motion.span className="inline-flex overflow-hidden">
+    <span className="inline-flex overflow-hidden">
       {letters.map((letter, index) => (
         <motion.span
-          key={`${text}-${index}`}
-          initial={{
-            opacity: 0,
-            rotateX: "80deg",
-            y: 8,
-            filter: "blur(3px)",
-          }}
-          exit={{
-            opacity: 0,
-            rotateX: "-80deg",
-            filter: "blur(3px)",
-            y: -8,
-          }}
-          animate={{
-            opacity: 1,
-            rotateX: "0deg",
-            y: 0,
-            filter: "blur(0px)",
-          }}
+          key={index}
+          initial={{ opacity: 0, y: 6, filter: "blur(2px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
-            delay: 0.015 * index,
-
-            type: "spring",
-            damping: 16,
-            stiffness: 240,
-            mass: 1.2,
-          }}
-          style={{
-            willChange: "transform",
+            delay: 0.02 * index,
+            duration: 0.2,
+            ease: [0.32, 0.72, 0, 1],
           }}
           className="inline-block"
         >
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
-    </motion.span>
+    </span>
   );
 };
 
@@ -81,55 +59,49 @@ const InputSwitch = () => {
   const IconComponent = currentConfig.icon;
 
   return (
-    <div className="bg-muted w-full max-w-sm py-1 flex justify-center items-center rounded-full px-1">
+    <div className="flex w-full max-w-sm items-center justify-center overflow-hidden rounded-full bg-muted px-1 py-1">
       <motion.button
-        className="bg-background p-2.5 px-2.5 rounded-full flex items-center justify-center gap-1.5 transition-colors overflow-hidden cursor-default shadow-sm"
+        type="button"
+        className="flex shrink-0 cursor-pointer items-center justify-center gap-1.5 overflow-hidden rounded-full bg-background p-2.5 shadow-sm"
         onClick={handleIconClick}
-        whileTap={{ scale: 0.9 }}
+        whileTap={{ scale: 0.96 }}
       >
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.div
-            key={currentConfig.id}
-            exit={{
-              filter: "blur(5px)",
-              opacity: 0,
-            }}
-            initial={{
-              opacity: 0,
-              filter: "blur(5px)",
-            }}
-            animate={{
-              filter: "blur(0px)",
-              opacity: 1,
-            }}
-            transition={{
-              ease: "easeInOut",
-
-              duration: 0.35,
-            }}
-            className="flex items-center justify-center gap-1"
-          >
-            <HugeiconsIcon
-              icon={IconComponent}
-              className="w-5 h-5 text-foreground"
-            />
-          </motion.div>
-        </AnimatePresence>
+        <span className="relative size-5 shrink-0 overflow-hidden">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={currentConfig.id}
+              initial={{ opacity: 0, scale: 0.85, filter: "blur(3px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.85, filter: "blur(3px)" }}
+              transition={{ type: "spring", duration: 0.25, bounce: 0 }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <HugeiconsIcon
+                icon={IconComponent}
+                className="size-5 text-foreground"
+              />
+            </motion.span>
+          </AnimatePresence>
+        </span>
         <HugeiconsIcon
           icon={UnfoldMoreIcon}
-          className="w-3 h-3 text-muted-foreground"
+          className="size-3 shrink-0 text-muted-foreground"
         />
       </motion.button>
       <div className="flex-1 relative min-w-0">
         {!inputValue && (
-          <div className="absolute left-0 top-0 w-full h-full flex items-center pointer-events-none pl-1.5 bg-transparent overflow-hidden">
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.div
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex w-full items-center overflow-hidden pl-1.5">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
                 key={currentConfig.id}
-                className="text-sm text-muted-foreground whitespace-nowrap"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
+                className="block overflow-hidden text-sm whitespace-nowrap text-muted-foreground"
               >
                 <AnimatedPlaceholder text={currentConfig.placeholder} />
-              </motion.div>
+              </motion.span>
             </AnimatePresence>
           </div>
         )}

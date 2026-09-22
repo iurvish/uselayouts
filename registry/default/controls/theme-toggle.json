@@ -1,0 +1,28 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T17:23:47.045Z",
+  "previewBackground": {
+    "light": "#e8e8e8",
+    "dark": "#e8e8e8"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "click",
+  "hintHeading": "Click the switch",
+  "hintDescription": "The dotted grip slides across the recessed track. On, it goes blue. Off, it sits left.",
+  "tags": [
+    "button",
+    "theme",
+    "toggle",
+    "dark"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/theme-toggle/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/theme-toggle/video.mp4",
+  "hintTop": 152,
+  "hintHideOnScroll": false
+}

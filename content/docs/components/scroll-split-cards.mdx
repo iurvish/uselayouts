@@ -1,0 +1,21 @@
+---
+title: Scroll Split Cards
+description: One photograph that splits into three panels as you scroll, then flips to copy.
+---
+
+## Usage
+
+```tsx
+import ScrollSplitCards from "@/components/scroll-split-cards";
+
+export default function Example() {
+  return <ScrollSplitCards />;
+}
+```
+
+## Features
+
+- One still, then a cut: Three panels start flush so they read as a single image.
+- Step apart: The outer panels slide left and right, then settle in for the turn.
+- Flip: Each panel rotates on Y to a place card: index, kicker, title, copy.
+- Your shot: Pass `imageSrc` and three `items`. Extra items are ignored.

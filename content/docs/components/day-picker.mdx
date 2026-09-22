@@ -1,65 +1,19 @@
 ---
 title: Day Picker
-description: A frequency selector component with spring animations and expandable day selection.
+description: A frequency chip that expands into Daily / Weekly / Monthly / Yearly, then into days of the week.
 ---
 
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { ComponentPreview } from "@/components/component-preview";
-import { SourceCode } from "@/components/source-code";
+## Features
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <ComponentPreview name="day-picker" align="center" />
-  </Tab>
-
-  <Tab value="Code">
-    <SourceCode name="day-picker" />
-  </Tab>
-</Tabs>
-
-## Installation
-
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">
-    ```bash
-    npx shadcn@latest add "https://uselayouts.com/r/day-picker.json"
-    ```
-  </Tab>
-  <Tab value="Manual">
-    <Steps>
-      <Step>
-        ### Install dependencies
-
-        ```bash
-        npm install motion clsx tailwind-merge @hugeicons/react @hugeicons/core-free-icons
-        ```
-      </Step>
-      <Step>
-        ### Copy the code
-
-        Copy the code from the **Code** tab above into `components/frequency-selector.tsx`.
-      </Step>
-      <Step>
-        ### Update imports
-
-        Update the imports to match your project structure.
-      </Step>
-    </Steps>
-
-  </Tab>
-</Tabs>
+- **Frequency first**: Daily, Weekly, Monthly, Yearly sit in a morphing pill.
+- **Day chips**: When weekly is on, Sun–Sat appear so you can tap several days.
+- **Blur swap**: Opening the option row blurs the “Frequency” label so focus stays on the choice.
+- **Spring resize**: The card grows and shrinks with the content — no leftover empty box.
+- **Summary when closed**: Collapse it and you still see what you picked.
 
 ## Usage
 
-### Customizing Content
-
-You can modify the frequency options by updating the `options` array:
-
-```tsx
-// Change Here
-const options = ["Daily", "Weekly", "Monthly", "Yearly"];
-```
+Meant for schedules, reminders, and billing cadence — not a full calendar. Drop it in a form or settings sheet. You’ll mostly change the `options` array. Give it a compact column (~320px); it already looks like a native control.
 
 ```tsx
 import FrequencySelector from "@/components/day-picker";
@@ -69,10 +23,10 @@ export default function Page() {
 }
 ```
 
-## Features
+## Where to use
 
-- **Multi-select**: Intuitive selection of multiple days of the week.
-- **Compact to Expanded**: Collapses into a summary view and expands for selection.
-- **Spring Animations**: Smooth resizing and selection effects.
-- **Semantic Design**: specifically crafted for recurring schedule or frequency interfaces.
-- **Clear Feedback**: Active states distinguish selected days instantly.
+- Recurring-task or reminder settings
+- Billing period pickers
+- Calendar-app onboarding
+- Newsletter or digest cadence
+- Booking flows that need “which days”

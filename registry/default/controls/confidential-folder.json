@@ -1,0 +1,27 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      32,
+      48,
+      48,
+      48
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-18T18:30:39.092Z",
+  "previewBackground": {
+    "light": "oklch(0.18 0.012 260)",
+    "dark": "oklch(0.18 0.012 260)"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "posterUrl": "https://cdn.uselayouts.com/components/confidential-folder/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/confidential-folder/video.mp4",
+  "tags": [
+    "folder",
+    "letter"
+  ]
+}

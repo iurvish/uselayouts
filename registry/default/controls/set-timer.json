@@ -1,0 +1,31 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-21T04:10:09.361Z",
+  "previewBackground": {
+    "light": "#e9e9e9",
+    "dark": "#e9e9e9"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Tap to set a timer",
+  "hintDescription": "Spin the wheel, start, then pause or cancel. One surface morphs through every step.",
+  "tags": [
+    "timer",
+    "input"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/set-timer/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/set-timer/video.mp4"
+}

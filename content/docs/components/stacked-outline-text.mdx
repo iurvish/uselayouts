@@ -1,0 +1,32 @@
+---
+title: Stacked Outline Text
+description: Heavy outlined type you can drag. Speed leaves a stacked white-on-black trail that springs back when you stop.
+---
+
+## Features
+
+- **Drag the word**: The block follows the pointer inside the stage, with a little elastic give at the edges.
+- **Velocity trail**: Faster drags push more outline copies behind the letters. Slow down and they collapse.
+- **Spring settle**: The stack eases back onto the word when you release.
+- **Keyboard nudge**: Focus it and use the arrow keys. Each tap moves a short, bounded step.
+- **Reduced motion**: The trail and drag scale turn off. The word still moves.
+
+## Usage
+
+Drop it on a dark ground. Pass `text` to change the word. `fontSize` and `stacks` stay optional.
+
+```tsx
+import StackedOutlineText from "@/components/stacked-outline-text";
+
+export default function Example() {
+  return <StackedOutlineText text="LMNO" />;
+}
+```
+
+## Where to use
+
+- Motion or type portfolio pieces
+- Hero wordmarks
+- Event or drop teasers
+- Editorial openers
+- Drag-to-play demos

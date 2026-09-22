@@ -20,5 +20,7 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@uselayouts": "https://uselayouts.com/r/{name}.json"
+  }
 }

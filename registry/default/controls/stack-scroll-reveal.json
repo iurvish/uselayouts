@@ -1,0 +1,34 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-09-21T09:36:41.722Z",
+  "previewBackground": {
+    "light": "#f6f3ee",
+    "dark": "#f6f3ee"
+  },
+  "hintTop": 184,
+  "showHint": true,
+  "hintKind": "scroll",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": true,
+  "tags": [
+    "cards",
+    "stack",
+    "scroll"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/stack-scroll-reveal/video.mp4"
+}

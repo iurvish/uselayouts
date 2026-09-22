@@ -1,0 +1,147 @@
+"use client";
+
+/* eslint-disable @next/next/no-img-element -- static SVG marks, no optimisation needed. */
+
+import * as React from "react";
+import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
+
+import { SearchIcon } from "./icons";
+import { useAuth } from "@/components/auth/auth-provider";
+import { BrandLogo } from "@/components/brand-logo";
+
+function userAvatarUrl(user: User) {
+  const meta = user.user_metadata ?? {};
+  if (typeof meta.avatar_url === "string" && meta.avatar_url) return meta.avatar_url;
+  if (typeof meta.picture === "string" && meta.picture) return meta.picture;
+  return null;
+}
+
+function userInitials(user: User) {
+  const meta = user.user_metadata ?? {};
+  const name =
+    (typeof meta.full_name === "string" && meta.full_name) ||
+    (typeof meta.name === "string" && meta.name) ||
+    user.email ||
+    "?";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+/** Display-only avatar — no menu on click. */
+function BrowseProfileAvatar({ user }: { user: User }) {
+  const [failed, setFailed] = React.useState(false);
+  const src = userAvatarUrl(user);
+
+  React.useEffect(() => {
+    setFailed(false);
+  }, [user.id, src]);
+
+  return (
+    <span
+      className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2a2a2e] text-[11px] font-medium text-white shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]"
+      aria-label={user.email ? `Signed in as ${user.email}` : "Signed in"}
+      title={user.email ?? "Signed in"}
+    >
+      {src && !failed ? (
+        <img
+          src={src}
+          alt=""
+          width={36}
+          height={36}
+          className="size-full object-cover"
+          referrerPolicy="no-referrer"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span aria-hidden>{userInitials(user)}</span>
+      )}
+    </span>
+  );
+}
+
+export function BrowseHeader({
+  query,
+  onQueryChange,
+}: {
+  query: string;
+  onQueryChange: (value: string) => void;
+}) {
+  const { user } = useAuth();
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = React.useState(false);
+
+  React.useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "/" || event.metaKey || event.ctrlKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;
+      event.preventDefault();
+      inputRef.current?.focus();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  return (
+    <header className="flex w-full shrink-0 items-center justify-between px-[30px] py-2.5">
+      <Link
+        href="/"
+        className="flex items-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
+      >
+        <BrandLogo invert />
+      </Link>
+
+      <div className="flex items-center gap-2.5">
+        {/* Figma 82:3700 — px 12 / py 8 / radius 12 / bg #030202; hidden on mobile */}
+        <div className="hidden w-[180px] items-center justify-between rounded-[12px] bg-[#030202] px-3 py-2 shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.15)] transition-[box-shadow] duration-150 ease-out focus-within:shadow-[0px_0.5px_0px_0px_rgba(255,255,255,0.28)] md:flex sm:w-[243px]">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <SearchIcon className="size-4 shrink-0 text-[#acacb4]" />
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  onQueryChange("");
+                  event.currentTarget.blur();
+                }
+              }}
+              type="search"
+              placeholder="Search"
+              aria-label="Search components"
+              className="min-w-0 flex-1 bg-transparent text-sm tracking-[-0.42px] text-[#acacb4] outline-none placeholder:text-[#acacb4] [&::-webkit-search-cancel-button]:hidden"
+            />
+          </div>
+          {focused || query ? null : (
+            <kbd className="relative flex shrink-0 items-center justify-center rounded-[6px] bg-[#212121] px-3 py-0.5 font-sans text-xs tracking-[-0.36px] text-[#adadb7] shadow-[inset_0px_0.5px_0px_0px_rgba(255,255,255,0.12)]">
+              /
+            </kbd>
+          )}
+        </div>
+
+        <a
+          href="https://github.com/iurvish/uselayouts"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="useLayouts on GitHub"
+          className="relative flex items-center overflow-hidden rounded-xl bg-secondary p-2 shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.1)]"
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-[inherit] bg-linear-to-b from-transparent to-black/6 shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.05)]"
+          />
+          <img src="/brand/icon-github.svg" alt="" width={20} height={20} className="relative size-5" />
+        </a>
+
+        {user ? <BrowseProfileAvatar user={user} /> : null}
+      </div>
+    </header>
+  );
+}

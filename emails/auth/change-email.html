@@ -1,0 +1,107 @@
+<!--
+  Supabase → Authentication → Email Templates → change-email
+  Subject: Confirm your new email
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="supported-color-schemes" content="dark" />
+  <title>Confirm your new email</title>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td { font-family: Arial, Helvetica, sans-serif !important; }
+  </style>
+  <![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#1b1c1f;">
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+    Confirm your new email — This verifies a new email on your account.
+  </div>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#1b1c1f;">
+    <tr>
+      <td align="center" style="padding:40px 16px 48px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="width:560px;max-width:560px;">
+          <!-- Header / logo -->
+          <tr>
+            <td style="padding:0 0 8px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:8px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="middle" style="padding:0;">
+                          <img src="https://uselayouts.com/brand/logomark-email.png" width="42" height="42" alt="useLayouts" style="display:block;width:42px;height:42px;border:0;border-radius:8px;" />
+                        </td>
+                        <td valign="middle" style="padding:0 0 0 11px;font-family:Geist,Inter,Helvetica,Arial,sans-serif;font-size:24px;font-weight:500;line-height:normal;letter-spacing:-0.72px;color:#ffffff;">
+                          useLayouts
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Card -->
+          <tr>
+            <td style="padding:12px 0 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#323239;border-radius:20px;">
+                <tr>
+                  <td style="padding:24px;">
+                    <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:20px;font-weight:600;line-height:26px;letter-spacing:-0.3px;color:#e2e3e4;">
+                      Hi,
+                    </p>
+                    <div style="height:20px;line-height:20px;font-size:20px;">&nbsp;</div>
+                    <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:18px;font-weight:600;line-height:normal;letter-spacing:-0.27px;color:#e2e3e4;">
+                      Confirm your new email
+                    </p>
+                    <div style="height:20px;line-height:20px;font-size:20px;">&nbsp;</div>
+                    <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.4;color:#e2e3e4;">Confirm this address to use it with your useLayouts account.</p>
+                    <div style="height:20px;line-height:20px;font-size:20px;">&nbsp;</div>
+                    <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.4;color:#e2e3e4;">If you didn't request an email change, you can ignore this email.</p>
+                    <div style="height:20px;line-height:20px;font-size:20px;">&nbsp;</div>
+                    <!-- CTA -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td align="center" bgcolor="#3351e5" style="background-color:#3351e5;border-radius:14px;">
+                          <a href="{{ .ConfirmationURL }}" target="_blank" style="display:block;padding:10px 10px;font-family:Inter,Helvetica,Arial,sans-serif;font-size:18px;font-weight:500;line-height:20px;letter-spacing:-0.108px;color:#ffffff;text-decoration:none;text-align:center;">
+                            Confirm email
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="height:20px;line-height:20px;font-size:20px;">&nbsp;</div>
+                    <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:13px;font-weight:400;line-height:1.4;color:#b7b7b8;word-break:break-all;">
+                      Button not working? Paste this link into your browser:<br />
+                      <a href="{{ .ConfirmationURL }}" style="color:#b7b7b8;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:24px 0 0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:12px;font-weight:400;line-height:18px;color:#b7b7b8;text-align:center;">
+              <p style="margin:0;">
+                © 2026 useLayouts
+                &nbsp;|&nbsp;
+                <a href="https://uselayouts.com" style="color:#b7b7b8;text-decoration:none;">uselayouts.com</a>
+                &nbsp;|&nbsp;
+                <a href="https://uselayouts.com" style="color:#b7b7b8;text-decoration:underline;">Privacy Policy</a>
+              </p>
+              <div style="height:10px;line-height:10px;font-size:10px;">&nbsp;</div>
+              <p style="margin:0;color:#b7b7b8;">
+                This verifies a new email on your account.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

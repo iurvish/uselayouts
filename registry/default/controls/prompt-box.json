@@ -1,0 +1,25 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-09-21T04:15:27.030Z",
+  "previewBackground": {
+    "light": "#f4f4f5",
+    "dark": "#09090b"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Tap the composer",
+  "hintDescription": "It expands into a textarea. Open the model menu, then hover the collapsed field to see the selected model.",
+  "tags": [
+    "input",
+    "prompt",
+    "ai"
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/prompt-box/poster.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/prompt-box/video.mp4"
+}

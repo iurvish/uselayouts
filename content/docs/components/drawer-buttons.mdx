@@ -1,0 +1,22 @@
+---
+title: Drawer Buttons
+description: Two buttons that open side drawers with a 3D fold. Payment comes from the right, cart from the left, and the fields stagger in.
+---
+
+## Usage
+
+```tsx
+import DrawerButtons from "@/components/drawer-buttons";
+
+export default function Example() {
+  return <DrawerButtons />;
+}
+```
+
+## Features
+
+- 3D fold: Each panel rotates in on the Y axis from off-screen, then settles flat.
+- Two sides: Payment details from the right. Cart summary from the left.
+- Staggered fields: Form rows and cart lines fade, slide, and un-blur in sequence with Motion.
+- Cart actions: Quantity, coupon `SAVE10`, and a live total.
+- Reduced motion: The fold and stagger become instant fades. The drawers still open.

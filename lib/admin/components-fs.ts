@@ -1,0 +1,570 @@
+import { promises as fs } from "fs";
+import path from "path";
+import { exec } from "child_process";
+import { promisify } from "util";
+import {
+  ensureDialConfigInSource,
+  filterDialConfig,
+} from "@/lib/admin/dial-extract";
+import { generateComponentMdx } from "@/lib/admin/generate-mdx";
+import { toSlug, toTitle } from "@/lib/admin/slug";
+import {
+  parsePreviewBackgrounds,
+  serializePreviewBackgrounds,
+  type PreviewBackgrounds,
+} from "@/lib/open/preview-background";
+import {
+  parsePreviewHint,
+  parsePreviewHintKind,
+  serializePreviewHint,
+  type PreviewHintKind,
+} from "@/lib/open/preview-hint-config";
+import { normalizeTags } from "@/lib/component-tags";
+
+const execAsync = promisify(exec);
+
+const ROOT = process.cwd();
+const REGISTRY_PATH = path.join(ROOT, "registry.json");
+const EXAMPLE_DIR = path.join(ROOT, "registry/default/example");
+const CONTROLS_DIR = path.join(ROOT, "registry/default/controls");
+const DOCS_DIR = path.join(ROOT, "content/docs/components");
+
+export type ComponentControlsMeta = {
+  dialConfig: Record<string, unknown>;
+  disabled: string[];
+  updatedAt: string;
+  previewBackground?: PreviewBackgrounds | string;
+  /** Cloudflare R2 CDN still (AVIF). */
+  posterUrl?: string;
+  /** Cloudflare R2 CDN muted preview MP4. */
+  videoUrl?: string;
+  /** PreviewHint overlay top offset in px. Default 80. May be negative. */
+  hintTop?: number;
+  /** When true, PreviewHint / admin live preview render PreviewHint. */
+  showHint?: boolean;
+  hintKind?: PreviewHintKind;
+  hintHeading?: string;
+  hintDescription?: string;
+  /** Fade the hint as the preview scrolls; it comes back at the top. */
+  hintHideOnScroll?: boolean;
+  /** Search keywords. Name matches first, then these. */
+  tags?: string[];
+};
+
+export type RegistryItem = {
+  name: string;
+  type: string;
+  title: string;
+  description: string;
+  dependencies?: string[];
+  files: { path: string; type: string }[];
+};
+
+export type UpsertComponentInput = {
+  name?: string;
+  /** When set, renames artifacts if the resolved slug changes. */
+  previousName?: string;
+  title: string;
+  description: string;
+  code: string;
+  dependencies?: string[];
+  features?: string[];
+  dialConfig?: Record<string, unknown>;
+  disabledControls?: string[];
+  previewBackground?: PreviewBackgrounds | string | null;
+  hintTop?: number | null;
+  showHint?: boolean;
+  hintKind?: PreviewHintKind;
+  hintHeading?: string;
+  hintDescription?: string;
+  hintHideOnScroll?: boolean;
+  tags?: string[];
+};
+
+async function readRegistry(): Promise<{
+  $schema?: string;
+  name: string;
+  homepage?: string;
+  items: RegistryItem[];
+}> {
+  return JSON.parse(await fs.readFile(REGISTRY_PATH, "utf8"));
+}
+
+async function writeRegistry(data: unknown) {
+  await fs.writeFile(REGISTRY_PATH, JSON.stringify(data, null, 2) + "\n");
+}
+
+export async function listComponents() {
+  const registry = await readRegistry();
+  const items = await Promise.all(
+    registry.items.map(async (item) => {
+      const controls = await readControls(item.name);
+      const mdxPath = path.join(DOCS_DIR, `${item.name}.mdx`);
+      let hasMdx = false;
+      try {
+        await fs.access(mdxPath);
+        hasMdx = true;
+      } catch {
+        hasMdx = false;
+      }
+      return {
+        ...item,
+        hasMdx,
+        controlsCount: controls
+          ? Object.keys(flattenKeys(controls.dialConfig)).length
+          : 0,
+        disabledCount: controls?.disabled.length ?? 0,
+        tags: normalizeTags(controls?.tags),
+      };
+    }),
+  );
+  return items;
+}
+
+export async function getComponent(name: string) {
+  const registry = await readRegistry();
+  const item = registry.items.find((i) => i.name === name);
+  if (!item) return null;
+
+  const filePath = path.join(ROOT, item.files[0].path);
+  const code = await fs.readFile(filePath, "utf8");
+  const controls = await readControls(name);
+  const mdxPath = path.join(DOCS_DIR, `${name}.mdx`);
+  let mdx: string | null = null;
+  try {
+    mdx = await fs.readFile(mdxPath, "utf8");
+  } catch {
+    mdx = null;
+  }
+
+  return { item, code, controls, mdx, filePath: item.files[0].path };
+}
+
+export async function readControls(
+  name: string,
+): Promise<ComponentControlsMeta | null> {
+  try {
+    const raw = await fs.readFile(
+      path.join(CONTROLS_DIR, `${name}.json`),
+      "utf8",
+    );
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export async function loadComponentTags(): Promise<Record<string, string[]>> {
+  const files = await fs.readdir(CONTROLS_DIR);
+  const out: Record<string, string[]> = {};
+  await Promise.all(
+    files
+      .filter((file) => file.endsWith(".json"))
+      .map(async (file) => {
+        const slug = file.slice(0, -5);
+        const controls = await readControls(slug);
+        out[slug] = normalizeTags(controls?.tags);
+      }),
+  );
+  return out;
+}
+
+async function writeControls(name: string, meta: ComponentControlsMeta) {
+  await fs.mkdir(CONTROLS_DIR, { recursive: true });
+  const existing = await readControls(name);
+  await fs.writeFile(
+    path.join(CONTROLS_DIR, `${name}.json`),
+    JSON.stringify({ ...existing, ...meta }, null, 2) + "\n",
+  );
+}
+
+export function clampHintTop(value: unknown): number | undefined {
+  if (value == null || value === "") return undefined;
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return Math.min(200, Math.max(-200, Math.round(n)));
+}
+
+function flattenKeys(
+  config: Record<string, unknown>,
+  prefix = "",
+): string[] {
+  const keys: string[] = [];
+  for (const [key, value] of Object.entries(config)) {
+    if (key === "_collapsed") continue;
+    const pathKey = prefix ? `${prefix}.${key}` : key;
+    keys.push(pathKey);
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      !("type" in (value as object))
+    ) {
+      keys.push(...flattenKeys(value as Record<string, unknown>, pathKey));
+    }
+  }
+  return keys;
+}
+
+async function safeRename(from: string, to: string) {
+  try {
+    await fs.access(from);
+    await fs.rename(from, to);
+  } catch {
+    // source missing
+  }
+}
+
+async function replaceSlugInFile(filePath: string, from: string, to: string) {
+  try {
+    const content = await fs.readFile(filePath, "utf8");
+    if (!content.includes(from)) return;
+    await fs.writeFile(filePath, content.replaceAll(from, to));
+  } catch {
+    // optional file
+  }
+}
+
+async function renameComponentSlug(from: string, to: string) {
+  if (from === to) return;
+
+  await safeRename(
+    path.join(EXAMPLE_DIR, `${from}.tsx`),
+    path.join(EXAMPLE_DIR, `${to}.tsx`),
+  );
+  await safeRename(
+    path.join(CONTROLS_DIR, `${from}.json`),
+    path.join(CONTROLS_DIR, `${to}.json`),
+  );
+  await safeRename(path.join(DOCS_DIR, `${from}.mdx`), path.join(DOCS_DIR, `${to}.mdx`));
+
+  const demoFrom = path.join(ROOT, "registry/default/demo", `${from}-demo.tsx`);
+  const demoTo = path.join(ROOT, "registry/default/demo", `${to}-demo.tsx`);
+  try {
+    const demo = await fs.readFile(demoFrom, "utf8");
+    await fs.writeFile(demoTo, demo.replaceAll(from, to));
+    await fs.unlink(demoFrom);
+  } catch {
+    await safeRename(demoFrom, demoTo);
+  }
+
+  const { readBrowseMediaMap, writeBrowseMediaOverride, clearBrowseMediaOverride } =
+    await import("@/lib/browse/browse-media-map");
+  const media = (await readBrowseMediaMap())[from];
+  if (media) {
+    await writeBrowseMediaOverride(to, media);
+    await clearBrowseMediaOverride(from);
+  }
+
+  const registry = await readRegistry();
+  registry.items = registry.items.filter((item) => item.name !== from);
+  await writeRegistry(registry);
+
+  await replaceSlugInFile(path.join(ROOT, "lib/browse/items.ts"), from, to);
+  await replaceSlugInFile(path.join(ROOT, "lib/open/new-components.ts"), from, to);
+
+  const heroPath = path.join(ROOT, "registry/default/landing-hero.json");
+  try {
+    const hero = JSON.parse(await fs.readFile(heroPath, "utf8")) as { slugs?: string[] };
+    if (Array.isArray(hero.slugs) && hero.slugs.includes(from)) {
+      hero.slugs = hero.slugs.map((slug) => (slug === from ? to : slug));
+      await fs.writeFile(heroPath, JSON.stringify(hero, null, 2) + "\n");
+    }
+  } catch {
+    // optional
+  }
+
+  try {
+    await fs.unlink(path.join(ROOT, "public/r", `${from}.json`));
+  } catch {
+    // rebuilt on save
+  }
+
+  try {
+    const { createServiceClient } = await import("@/lib/supabase/admin");
+    const supabase = createServiceClient();
+    if (supabase) await supabase.from("components").delete().eq("slug", from);
+  } catch {
+    // FS remains source of truth.
+  }
+}
+
+export async function upsertComponent(input: UpsertComponentInput) {
+  const name = toSlug(input.name || input.title);
+  if (!name) throw new Error("Invalid component name");
+
+  if (input.previousName && input.previousName !== name) {
+    const registry = await readRegistry();
+    if (registry.items.some((item) => item.name === name)) {
+      throw new Error(`Component "${name}" already exists`);
+    }
+    await renameComponentSlug(input.previousName, name);
+  }
+
+  const title = input.title.trim() || toTitle(name);
+  const description = input.description.trim();
+  const disabled = input.disabledControls ?? [];
+  const exampleRelative = `registry/default/example/${name}.tsx`;
+  const examplePath = path.join(ROOT, exampleRelative);
+  await fs.mkdir(EXAMPLE_DIR, { recursive: true });
+  await fs.writeFile(examplePath, input.code);
+
+  const existingMeta = await readControls(name);
+  const background =
+    input.previewBackground !== undefined
+      ? serializePreviewBackgrounds(
+          typeof input.previewBackground === "string"
+            ? parsePreviewBackgrounds(input.previewBackground)
+            : input.previewBackground ?? {},
+        )
+      : existingMeta?.previewBackground;
+
+  const hintTop = clampHintTop(input.hintTop);
+  const hasHintInput =
+    input.showHint !== undefined ||
+    input.hintKind !== undefined ||
+    input.hintHeading !== undefined ||
+    input.hintDescription !== undefined ||
+    input.hintHideOnScroll !== undefined;
+  const existingHint = parsePreviewHint(existingMeta);
+  await writeControls(name, {
+    dialConfig: input.dialConfig ?? existingMeta?.dialConfig ?? {},
+    disabled,
+    updatedAt: new Date().toISOString(),
+    previewBackground: background,
+    posterUrl: existingMeta?.posterUrl,
+    videoUrl: existingMeta?.videoUrl,
+    ...(hintTop !== undefined ? { hintTop } : {}),
+    ...(hasHintInput
+      ? serializePreviewHint({
+          show: input.showHint ?? existingHint.show,
+          kind:
+            input.hintKind !== undefined
+              ? parsePreviewHintKind(input.hintKind)
+              : existingHint.kind,
+          heading: input.hintHeading ?? existingHint.heading,
+          description: input.hintDescription ?? existingHint.description,
+          hideOnScroll: input.hintHideOnScroll ?? existingHint.hideOnScroll,
+        })
+      : {}),
+    tags:
+      input.tags !== undefined
+        ? normalizeTags(input.tags)
+        : existingMeta?.tags,
+  });
+
+  const mdx = generateComponentMdx({
+    name,
+    title,
+    description,
+    features: input.features,
+  });
+  await fs.mkdir(DOCS_DIR, { recursive: true });
+  await fs.writeFile(path.join(DOCS_DIR, `${name}.mdx`), mdx);
+
+  const registry = await readRegistry();
+  const existingIndex = registry.items.findIndex((i) => i.name === name);
+  const item: RegistryItem = {
+    name,
+    type: "registry:component",
+    title,
+    description,
+    dependencies: input.dependencies?.length
+      ? input.dependencies
+      : ["motion", "clsx", "tailwind-merge"],
+    files: [{ path: exampleRelative, type: "registry:component" }],
+  };
+
+  if (existingIndex >= 0) {
+    registry.items[existingIndex] = {
+      ...registry.items[existingIndex],
+      ...item,
+      dependencies:
+        input.dependencies ?? registry.items[existingIndex].dependencies,
+    };
+  } else {
+    registry.items.push(item);
+    registry.items.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  await writeRegistry(registry);
+  await rebuildRegistry();
+
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: item.title,
+      description: item.description,
+      dependencies: item.dependencies,
+      poster_url: existingMeta?.posterUrl ?? null,
+      video_url: existingMeta?.videoUrl ?? null,
+    });
+  } catch {
+    // FS remains source of truth.
+  }
+
+  return { name, item };
+}
+
+export async function deleteComponent(name: string) {
+  const registry = await readRegistry();
+  const item = registry.items.find((i) => i.name === name);
+  if (!item) throw new Error("Component not found");
+
+  registry.items = registry.items.filter((i) => i.name !== name);
+  await writeRegistry(registry);
+
+  for (const file of item.files) {
+    try {
+      await fs.unlink(path.join(ROOT, file.path));
+    } catch {
+      // ignore
+    }
+  }
+
+  for (const extra of [
+    path.join(CONTROLS_DIR, `${name}.json`),
+    path.join(DOCS_DIR, `${name}.mdx`),
+    path.join(ROOT, "public/r", `${name}.json`),
+    path.join(ROOT, "registry/default/demo", `${name}-demo.tsx`),
+  ]) {
+    try {
+      await fs.unlink(extra);
+    } catch {
+      // ignore
+    }
+  }
+
+  await rebuildRegistry();
+  return { name };
+}
+
+export async function updateControls(
+  name: string,
+  disabled: string[],
+  dialConfig?: Record<string, unknown>,
+) {
+  const existing = await getComponent(name);
+  if (!existing) throw new Error("Component not found");
+
+  const config = dialConfig ?? existing.controls?.dialConfig ?? {};
+  const filtered = filterDialConfig(config, disabled);
+  const code = ensureDialConfigInSource(existing.code, filtered);
+  await fs.writeFile(path.join(ROOT, existing.filePath), code);
+  await writeControls(name, {
+    dialConfig: config,
+    disabled,
+    updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    posterUrl: existing.controls?.posterUrl,
+    videoUrl: existing.controls?.videoUrl,
+  });
+  return { name, disabled };
+}
+
+/** Persist browse poster/video CDN URLs on the component controls file. */
+export async function updateComponentMedia(
+  name: string,
+  media: { posterUrl: string; videoUrl?: string | null },
+) {
+  const existing = await getComponent(name);
+  if (!existing) throw new Error("Component not found");
+
+  await writeControls(name, {
+    dialConfig: existing.controls?.dialConfig ?? {},
+    disabled: existing.controls?.disabled ?? [],
+    updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? undefined,
+  });
+
+  const { writeBrowseMediaOverride } = await import("@/lib/browse/browse-media-map");
+  await writeBrowseMediaOverride(name, {
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? undefined,
+  });
+
+  // Best-effort Supabase metadata sync (needs SUPABASE_SERVICE_ROLE_KEY).
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: existing.item.title,
+      description: existing.item.description,
+      poster_url: media.posterUrl,
+      video_url: media.videoUrl ?? null,
+      dependencies: existing.item.dependencies,
+    });
+  } catch {
+    // FS write already succeeded.
+  }
+
+  return {
+    name,
+    posterUrl: media.posterUrl,
+    videoUrl: media.videoUrl ?? null,
+  };
+}
+
+/** Clear poster and/or video from controls + browse map. */
+export async function clearComponentMedia(
+  name: string,
+  opts: { poster?: boolean; video?: boolean },
+) {
+  const existing = await getComponent(name);
+  if (!existing) throw new Error("Component not found");
+
+  const clearPoster = Boolean(opts.poster);
+  const clearVideo = Boolean(opts.video);
+  const nextPoster = clearPoster ? undefined : existing.controls?.posterUrl;
+  const nextVideo = clearVideo ? undefined : existing.controls?.videoUrl;
+
+  await writeControls(name, {
+    dialConfig: existing.controls?.dialConfig ?? {},
+    disabled: existing.controls?.disabled ?? [],
+    updatedAt: new Date().toISOString(),
+    previewBackground: existing.controls?.previewBackground,
+    posterUrl: nextPoster,
+    videoUrl: nextVideo,
+  });
+
+  const { writeBrowseMediaOverride, clearBrowseMediaOverride } = await import(
+    "@/lib/browse/browse-media-map"
+  );
+  if (!nextPoster) {
+    await clearBrowseMediaOverride(name, { poster: true, video: true });
+  } else {
+    await writeBrowseMediaOverride(name, {
+      posterUrl: nextPoster,
+      videoUrl: nextVideo,
+    });
+  }
+
+  try {
+    const { upsertComponentRow } = await import("@/lib/supabase/admin");
+    await upsertComponentRow({
+      slug: name,
+      title: existing.item.title,
+      description: existing.item.description,
+      poster_url: nextPoster ?? null,
+      video_url: nextVideo ?? null,
+      dependencies: existing.item.dependencies,
+    });
+  } catch {
+    // FS write already succeeded.
+  }
+
+  return {
+    name,
+    posterUrl: nextPoster ?? null,
+    videoUrl: nextVideo ?? null,
+  };
+}
+
+async function rebuildRegistry() {
+  await execAsync("npm run build:registry", {
+    cwd: ROOT,
+  });
+}
