@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { useAuth } from "@/components/auth/auth-provider";
 import { useOpenPanel } from "@/components/open/open-panel-context";
 import { OpenCliBar } from "@/components/open/open-cli-bar";
 import { OpenDrawer } from "@/components/open/open-drawer";
@@ -25,6 +26,7 @@ export function OpenComponentView({
   docsContent?: React.ReactNode;
 }) {
   const { panel, setPanel, stage } = useOpenPanel();
+  const { user, configured } = useAuth();
   const [manager, setManager] = usePackageManager();
   const backgrounds = React.useMemo(
     () => parsePreviewBackgrounds(data.previewBackground),
@@ -32,6 +34,11 @@ export function OpenComponentView({
   );
   const previewBackground = resolvePreviewBackground(backgrounds, "dark");
   const hintTone = hintToneForBackground(previewBackground);
+  const codeOpen = panel === "code" && (!configured || Boolean(user));
+
+  React.useEffect(() => {
+    if (panel === "code" && configured && !user) setPanel(null);
+  }, [panel, configured, user, setPanel]);
 
   return (
     <>
@@ -66,7 +73,7 @@ export function OpenComponentView({
       )}
 
       <OpenDrawer
-        open={panel === "code"}
+        open={codeOpen}
         onClose={() => setPanel(null)}
         title="Get this Component"
         wide

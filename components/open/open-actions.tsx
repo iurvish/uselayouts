@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { Maximize2, Pencil } from "lucide-react";
 
+import { useAuth } from "@/components/auth/auth-provider";
 import { useOpenPanel } from "@/components/open/open-panel-context";
 import { openPressMotion } from "@/components/open/ui";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ export function OpenActions({
 }) {
   const active = panel === "code";
   const { setStage } = useOpenPanel();
+  const { requireAuth } = useAuth();
 
   return (
     <div className="flex items-center gap-2">
@@ -57,7 +59,15 @@ export function OpenActions({
         className={actionBtnClass}
         aria-label="Code"
         aria-pressed={active}
-        onClick={() => onChange(active ? null : "code")}
+        onClick={() => {
+          if (active) {
+            onChange(null);
+            return;
+          }
+          void requireAuth(() => {
+            onChange("code");
+          });
+        }}
       >
         <img src="/open/code.svg" alt="" width={22} height={22} className="size-[22px]" draggable={false} />
       </button>
