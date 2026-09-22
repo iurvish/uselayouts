@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     siteName: "useLayouts",
     images: [
       {
-        url: "/og.png",
+        url: "/og.jpg",
         width: 1200,
         height: 630,
         alt: "useLayouts free animated React components",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     title: "useLayouts | Free animated React components",
     description:
       "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
-    images: ["/og.png"],
+    images: ["/og.jpg"],
     creator: "@0xUrvish",
   },
 };
