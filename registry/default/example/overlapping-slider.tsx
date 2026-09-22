@@ -31,6 +31,69 @@ export function cardLeave(diff: number) {
   };
 }
 
+export type CardProfile = {
+  id: string;
+  name: string;
+  handle: string;
+  role: string;
+  image: string;
+  gradient?: string;
+};
+
+const shot = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`;
+
+export const DEFAULT_PROFILES: CardProfile[] = [
+  {
+    id: "1",
+    name: "Sophie Bennett",
+    handle: "@sophie34",
+    role: "Product Designer",
+    image: shot("1534528741775-53994a69daeb"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(212, 123, 91) 96.8%)",
+  },
+  {
+    id: "2",
+    name: "Luna Hart",
+    handle: "@lunahart",
+    role: "UI/UX Designer",
+    image: shot("1529626455594-4ff0802cfb7e"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(184, 212, 91) 96.8%)",
+  },
+  {
+    id: "3",
+    name: "Maya Rivera",
+    handle: "@mayacodes",
+    role: "Frontend Developer",
+    image: shot("1494790108377-be9c29b29330"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(153, 209, 255) 96.8%)",
+  },
+  {
+    id: "4",
+    name: "Zoe Bennett",
+    handle: "@zoe",
+    role: "Product Designer",
+    image: shot("1438761681033-6461ffad8d80"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(156, 122, 214) 96.8%)",
+  },
+  {
+    id: "5",
+    name: "Isla Morgan",
+    handle: "@islaui",
+    role: "UI/UX Designer",
+    image: shot("1580489944761-15a19d654956"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 176, 72) 96.8%)",
+  },
+  {
+    id: "6",
+    name: "Sofia Laurent",
+    handle: "@itssofia",
+    role: "Product Designer",
+    image: shot("1544005313-94ddf0286df2"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 132, 148) 96.8%)",
+  },
+];
+
 export type OverlappingSliderProps<T> = {
   items?: T[];
   renderItem?: (item: T, index: number, isActive: boolean) => ReactNode;
@@ -47,7 +110,7 @@ export type OverlappingSliderProps<T> = {
   onActiveChange?: (index: number) => void;
 };
 
-export function OverlappingSlider<T>({
+export function OverlappingSlider<T = CardProfile>({
   items,
   renderItem,
   children,
@@ -63,7 +126,15 @@ export function OverlappingSlider<T>({
   onActiveChange,
 }: OverlappingSliderProps<T>) {
   const childArray = React.Children.toArray(children);
-  const total = items ? items.length : childArray.length;
+  // Docs call `<OverlappingSlider />` with no props — fall back to demo profiles.
+  const usingDefaults = items == null && childArray.length === 0;
+  const resolvedItems = usingDefaults
+    ? (DEFAULT_PROFILES as unknown as T[])
+    : items;
+  const resolvedRenderItem = usingDefaults
+    ? ((item: T) => <ProfileCard card={item as CardProfile} />)
+    : renderItem;
+  const total = resolvedItems ? resolvedItems.length : childArray.length;
   const step = sliderStep(cardWidth, overlapFactor, cardGap);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -171,7 +242,11 @@ export function OverlappingSlider<T>({
         >
           {Array.from({ length: total }, (_, index) => (
             <div
-              key={items ? String((items[index] as { id?: string }).id ?? index) : index}
+              key={
+                resolvedItems
+                  ? String((resolvedItems[index] as { id?: string }).id ?? index)
+                  : index
+              }
               className="shrink-0"
               style={{
                 width: cardWidth,
@@ -185,8 +260,8 @@ export function OverlappingSlider<T>({
                 if (dragRef.current.moved < 8) goTo(index);
               }}
             >
-              {items && renderItem
-                ? renderItem(items[index], index, activeIndex === index)
+              {resolvedItems && resolvedRenderItem
+                ? resolvedRenderItem(resolvedItems[index], index, activeIndex === index)
                 : childArray[index]}
             </div>
           ))}
@@ -259,69 +334,6 @@ function ArrowButton({
     </button>
   );
 }
-
-export type CardProfile = {
-  id: string;
-  name: string;
-  handle: string;
-  role: string;
-  image: string;
-  gradient?: string;
-};
-
-const shot = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`;
-
-export const DEFAULT_PROFILES: CardProfile[] = [
-  {
-    id: "1",
-    name: "Sophie Bennett",
-    handle: "@sophie34",
-    role: "Product Designer",
-    image: shot("1534528741775-53994a69daeb"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(212, 123, 91) 96.8%)",
-  },
-  {
-    id: "2",
-    name: "Luna Hart",
-    handle: "@lunahart",
-    role: "UI/UX Designer",
-    image: shot("1529626455594-4ff0802cfb7e"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(184, 212, 91) 96.8%)",
-  },
-  {
-    id: "3",
-    name: "Maya Rivera",
-    handle: "@mayacodes",
-    role: "Frontend Developer",
-    image: shot("1494790108377-be9c29b29330"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(153, 209, 255) 96.8%)",
-  },
-  {
-    id: "4",
-    name: "Zoe Bennett",
-    handle: "@zoe",
-    role: "Product Designer",
-    image: shot("1438761681033-6461ffad8d80"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(156, 122, 214) 96.8%)",
-  },
-  {
-    id: "5",
-    name: "Isla Morgan",
-    handle: "@islaui",
-    role: "UI/UX Designer",
-    image: shot("1580489944761-15a19d654956"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 176, 72) 96.8%)",
-  },
-  {
-    id: "6",
-    name: "Sofia Laurent",
-    handle: "@itssofia",
-    role: "Product Designer",
-    image: shot("1544005313-94ddf0286df2"),
-    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 132, 148) 96.8%)",
-  },
-];
 
 export function ProfileCard({ card }: { card: CardProfile }) {
   const [following, setFollowing] = useState(false);

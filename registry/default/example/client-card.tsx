@@ -6,15 +6,15 @@ import { ArrowLeft, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ClientCardProps {
-  name: string;
-  country: string;
+  name?: string;
+  country?: string;
   image?: string;
-  service: string;
-  amountPaid: number;
-  totalAmount: number;
-  plan: "Starter" | "Professional" | "Enterprise";
-  deadline: Date;
-  startDate: Date;
+  service?: string;
+  amountPaid?: number;
+  totalAmount?: number;
+  plan?: "Starter" | "Professional" | "Enterprise";
+  deadline?: Date;
+  startDate?: Date;
   className?: string;
 }
 
@@ -99,14 +99,15 @@ function CircularProgress({
 }
 
 export function ClientCard({
-  name,
-  country,
-  image,
-  service,
-  amountPaid,
-  totalAmount,
-  deadline,
-  startDate,
+  name = "Sarah Jenkins",
+  country = "United Kingdom",
+  image = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=256&h=256&q=80",
+  service = "Social Media Management & Content Strategy",
+  amountPaid = 4500,
+  totalAmount = 6000,
+  plan = "Professional",
+  deadline = new Date("2024-06-01"),
+  startDate = new Date("2024-01-01"),
   className,
 }: ClientCardProps) {
   const paymentPercentage = Math.min((amountPaid / totalAmount) * 100, 100);
@@ -316,17 +317,5 @@ export function ClientCard({
 }
 
 export default function ClientCardPreview() {
-  return (
-    <ClientCard
-      name="Sarah Jenkins"
-      country="United Kingdom"
-      image="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=256&h=256&q=80"
-      service="Social Media Management & Content Strategy"
-      amountPaid={4500}
-      totalAmount={6000}
-      plan="Professional"
-      startDate={new Date("2024-01-01")}
-      deadline={new Date("2024-06-01")}
-    />
-  );
+  return <ClientCard />;
 }
