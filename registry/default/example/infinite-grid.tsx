@@ -108,14 +108,11 @@ export const LiquidGlassCard = forwardRef<HTMLDivElement, LiquidGlassCardProps>(
                   fetchPriority="high"
                   decoding="async"
                   draggable={false}
+                  referrerPolicy="no-referrer"
                   className={cn(
                     'w-full h-full object-contain object-center select-none pointer-events-none transition-transform duration-200 ease-out group-hover:scale-105',
                     imageClassName
                   )}
-                  style={{
-                    filter: 'grayscale(100%) contrast(108%)',
-                    mixBlendMode: 'multiply',
-                  }}
                 />
               )}
             </div>
@@ -442,5 +439,8 @@ export const LiquidGlassInfiniteGrid = forwardRef<HTMLDivElement, LiquidGlassInf
   }
 );
 LiquidGlassInfiniteGrid.displayName = 'LiquidGlassInfiniteGrid';
+
+/** Docs / CLI alias — same as LiquidGlassInfiniteGrid. */
+export const InfiniteGrid = LiquidGlassInfiniteGrid;
 
 export default LiquidGlassInfiniteGrid;

@@ -180,7 +180,7 @@ function AnimatedQuote({ text, id }: { text: string; id: number }) {
         animate="show"
         exit="exit"
         style={{
-          fontFamily: '"Geist", "Geist Placeholder", sans-serif',
+          fontFamily: '"Inter", "Inter Placeholder", sans-serif',
           fontSize: 29,
           fontWeight: 400,
           letterSpacing: "-0.017em",
@@ -558,13 +558,6 @@ export default function TestimonialWidget() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
-        @font-face {
-          font-family: 'Geist';
-          src: url('https://elevatetestimonial.framer.website/assets/gyBhhwUxId8gMGYQMKR3pzfaWI_RnOMImpna-aHR0cHM6.woff2') format('woff2');
-          font-weight: 400;
-          font-style: normal;
-          font-display: swap;
-        }
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; background: #fff; -webkit-font-smoothing: antialiased; }
       `}</style>
