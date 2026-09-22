@@ -8,7 +8,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
-  serverExternalPackages: ["ffmpeg-static"],
+  serverExternalPackages: ["ffmpeg-static", "sharp"],
+  // sharp@0.35 nests libvips in @img/sharp-libvips-*; ensure NFT packs it for Vercel.
+  outputFileTracingIncludes: {
+    "/api/admin/components/[name]/media": [
+      "./node_modules/@img/sharp-libvips-linux-x64/**/*",
+      "./node_modules/@img/sharp-linux-x64/**/*",
+      "./node_modules/@img/sharp-libvips-linuxmusl-x64/**/*",
+      "./node_modules/@img/sharp-linuxmusl-x64/**/*",
+    ],
+  },
   turbopack: {
     root: __dirname,
   },

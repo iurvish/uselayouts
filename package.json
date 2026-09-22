@@ -72,7 +72,7 @@
     "react-use-measure": "^2.1.7",
     "server-only": "^0.0.1",
     "shadcn": "^3.6.1",
-    "sharp": "^0.35.4",
+    "sharp": "0.34.5",
     "shiki": "^4.4.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
@@ -101,6 +101,7 @@
     }
   },
   "resolutions": {
+    "sharp": "0.34.5",
     "@supabase/auth-js": "2.116.0",
     "@supabase/supabase-js": "2.116.0",
     "@supabase/functions-js": "2.116.0",

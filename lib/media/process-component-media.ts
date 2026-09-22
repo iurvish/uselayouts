@@ -2,8 +2,6 @@ import "server-only";
 
 import { createHash } from "crypto";
 
-import sharp from "sharp";
-
 import { firstFrameJpeg } from "@/lib/media/video-frame";
 import { reencodeVideoToMp4 } from "@/lib/media/reencode-video";
 import { deleteCdnObject, uploadToR2 } from "@/lib/r2/upload";
@@ -22,6 +20,9 @@ export type ComponentMediaResult = {
 };
 
 async function encodePoster(input: Buffer) {
+  // Dynamic import keeps sharp out of Next's build-time page-data graph and
+  // avoids loading the wrong platform binary during `next build` on Vercel.
+  const sharp = (await import("sharp")).default;
   return sharp(input, { failOn: "none" })
     .rotate()
     .resize({ width: POSTER_WIDTH, withoutEnlargement: true })
