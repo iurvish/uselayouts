@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -15,7 +16,7 @@ type AuthContextValue = {
   closeLogin: () => void;
   /**
    * If signed in (or Supabase unset in local/dev), runs `action`.
-   * Otherwise opens the login dialog and returns false.
+   * Otherwise opens the login dialog and runs `action` after a successful sign-in.
    */
   requireAuth: (action?: () => void | Promise<void>) => Promise<boolean>;
   signOut: () => Promise<void>;
@@ -25,9 +26,23 @@ const AuthContext = React.createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const configured = isSupabaseConfigured();
+  const pathname = usePathname();
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(configured);
   const [loginOpen, setLoginOpen] = React.useState(false);
+  const pendingActionRef = React.useRef<(() => void | Promise<void>) | null>(
+    null,
+  );
+
+  const runPending = React.useCallback(() => {
+    const pending = pendingActionRef.current;
+    pendingActionRef.current = null;
+    if (pending) void pending();
+  }, []);
+
+  const clearPending = React.useCallback(() => {
+    pendingActionRef.current = null;
+  }, []);
 
   React.useEffect(() => {
     if (!configured) {
@@ -50,17 +65,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      if (session?.user) setLoginOpen(false);
+      if (session?.user) {
+        setLoginOpen(false);
+        runPending();
+      }
     });
 
     return () => {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [configured]);
+  }, [configured, runPending]);
+
+  // Close login on in-app navigation or browser back/forward.
+  React.useEffect(() => {
+    setLoginOpen(false);
+    clearPending();
+  }, [pathname, clearPending]);
+
+  React.useEffect(() => {
+    const onPopState = () => {
+      setLoginOpen(false);
+      clearPending();
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [clearPending]);
 
   const openLogin = React.useCallback(() => setLoginOpen(true), []);
-  const closeLogin = React.useCallback(() => setLoginOpen(false), []);
+  const closeLogin = React.useCallback(() => {
+    clearPending();
+    setLoginOpen(false);
+  }, [clearPending]);
 
   const requireAuth = React.useCallback(
     async (action?: () => void | Promise<void>) => {
@@ -72,6 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await action?.();
         return true;
       }
+      pendingActionRef.current = action ?? null;
       setLoginOpen(true);
       return false;
     },
