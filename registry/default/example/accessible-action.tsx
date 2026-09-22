@@ -251,10 +251,13 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
 
 CardStack.displayName = "CardStack";
 
+/** Docs / CLI alias — same as CardStack with default cards. */
+export const AccessibleAction = CardStack;
+
 export default function App() {
   return (
     <div className="flex h-full w-full min-w-0 items-center justify-center overflow-hidden">
-      <CardStack items={DEFAULT_CARDS} />
+      <CardStack />
     </div>
   );
 }
