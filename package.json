@@ -25,6 +25,7 @@
     "lint": "eslint",
     "build:docs": "fumadocs-mdx",
     "build:registry": "tsx scripts/build-registry.mts",
+    "push:auth-emails": "tsx scripts/push-auth-emails.mts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

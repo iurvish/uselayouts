@@ -386,7 +386,7 @@ export function LoginDialog() {
                             "w-full rounded-lg bg-[#222223] px-2 py-2.5 text-[13px] leading-[1.1] text-white outline-none",
                             "placeholder:text-[#71717a]",
                             "shadow-[0px_-1px_0px_0px_rgba(255,255,255,0.06),0px_0px_0px_1px_rgba(255,255,255,0.06),0px_0px_0px_1px_#27272a,0px_0px_1px_1.5px_rgba(0,0,0,0.24),0px_2px_2px_0px_rgba(0,0,0,0.24)]",
-                            "focus-visible:shadow-[0px_0px_0px_1px_#3351e5,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]",
+                            "focus-visible:shadow-[0px_0px_0px_1px_#ffffff,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]",
                           )}
                         />
                       </label>
