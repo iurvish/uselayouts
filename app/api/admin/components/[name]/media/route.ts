@@ -12,6 +12,7 @@ import { r2Configured } from "@/lib/r2/client";
 export const runtime = "nodejs";
 /** Video re-encode can take a while. */
 export const maxDuration = 300;
+export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ name: string }> };
 
