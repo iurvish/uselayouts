@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import Image, { type ImageProps } from "next/image";
 import { type ComponentProps, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -36,7 +35,7 @@ type BookACallLinkProps = Omit<
   ComponentProps<typeof PrimaryCtaLink>,
   "children" | "variant"
 > & {
-  imageSrc?: ImageProps["src"];
+  imageSrc?: string;
   defaultText?: string;
   hoverText?: string;
 };
@@ -186,12 +185,12 @@ export function BookACallLink({
               delay: isActive ? 0.04 : 0,
             })}
           >
-            <Image
+            <img
               src={imageSrc}
               alt=""
-              fill
-              sizes="40px"
-              className="object-cover"
+              referrerPolicy="no-referrer"
+              draggable={false}
+              className="absolute inset-0 size-full object-cover"
             />
           </motion.span>
 

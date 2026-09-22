@@ -278,48 +278,48 @@ export const DEFAULT_PROFILES: CardProfile[] = [
     name: "Sophie Bennett",
     handle: "@sophie34",
     role: "Product Designer",
-    image: shot("1635631414456-6a9dc5051a3d"),
-    gradient: "linear-gradient(transparent, rgb(232 141 122))",
+    image: shot("1534528741775-53994a69daeb"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(212, 123, 91) 96.8%)",
   },
   {
     id: "2",
     name: "Luna Hart",
     handle: "@lunahart",
     role: "UI/UX Designer",
-    image: shot("1525187030628-9bb40ba289f4"),
-    gradient: "linear-gradient(transparent, rgb(196 196 92))",
+    image: shot("1529626455594-4ff0802cfb7e"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(184, 212, 91) 96.8%)",
   },
   {
     id: "3",
     name: "Maya Rivera",
     handle: "@mayacodes",
     role: "Frontend Developer",
-    image: shot("1488426862026-3ee34a7d66df"),
-    gradient: "linear-gradient(transparent, rgb(232 148 96))",
+    image: shot("1494790108377-be9c29b29330"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(153, 209, 255) 96.8%)",
   },
   {
     id: "4",
     name: "Zoe Bennett",
     handle: "@zoe",
     role: "Product Designer",
-    image: shot("1619785690726-89c6b3bd3849"),
-    gradient: "linear-gradient(transparent, rgb(156 122 214))",
+    image: shot("1438761681033-6461ffad8d80"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(156, 122, 214) 96.8%)",
   },
   {
     id: "5",
     name: "Isla Morgan",
     handle: "@islaui",
     role: "UI/UX Designer",
-    image: shot("1469334031218-e382a71b716b"),
-    gradient: "linear-gradient(transparent, rgb(214 176 72))",
+    image: shot("1580489944761-15a19d654956"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 176, 72) 96.8%)",
   },
   {
     id: "6",
     name: "Sofia Laurent",
     handle: "@itssofia",
     role: "Product Designer",
-    image: shot("1581044777550-4cfa60707c03"),
-    gradient: "linear-gradient(transparent, rgb(214 132 148))",
+    image: shot("1544005313-94ddf0286df2"),
+    gradient: "linear-gradient(rgba(255, 252, 252, 0) 0%, rgb(214, 132, 148) 96.8%)",
   },
 ];
 
@@ -332,6 +332,7 @@ export function ProfileCard({ card }: { card: CardProfile }) {
         src={card.image}
         alt=""
         draggable={false}
+        referrerPolicy="no-referrer"
         className="pointer-events-none absolute inset-0 size-full object-cover object-[50%_18%]"
       />
       <div
@@ -355,6 +356,7 @@ export function ProfileCard({ card }: { card: CardProfile }) {
             src={card.image}
             alt=""
             draggable={false}
+            referrerPolicy="no-referrer"
             className="size-11 shrink-0 rounded-full object-cover object-[50%_18%] ring-2 ring-white/20"
           />
           <div className="min-w-0 text-left">

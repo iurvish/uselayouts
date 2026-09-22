@@ -3,17 +3,17 @@
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId, useRef } from "react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import Image from "next/image";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 
-// Change Here
+const shot = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`;
+
 const PHOTOS = [
   {
     id: "photo-1",
-
-    src: "https://images.unsplash.com/photo-1755398104393-746e52af4a9f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mzd8fHxlbnwwfHx8fHw%3D?q=80&w=800",
+    src: shot("1517336714731-489689fd1ca8"),
     alt: "Technology setup",
     rotation: -15,
     x: -90,
@@ -22,7 +22,7 @@ const PHOTOS = [
   },
   {
     id: "photo-2",
-    src: "https://images.unsplash.com/photo-1756764099214-b09a5666914b?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D?q=80&w=800",
+    src: shot("1581291518633-83b4ebd1d83e"),
     alt: "Design research",
     rotation: -3,
     x: -10,
@@ -31,7 +31,7 @@ const PHOTOS = [
   },
   {
     id: "photo-3",
-    src: "https://images.unsplash.com/photo-1757372429884-92e02350c5d9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjJ8fHxlbnwwfHx8fHw%3D?q=80&w=800",
+    src: shot("1498050108023-c5249f4df085"),
     alt: "Code and development",
     rotation: 12,
     x: 75,
@@ -40,32 +40,32 @@ const PHOTOS = [
   },
   {
     id: "photo-4",
-    src: "https://images.unsplash.com/photo-1756993399574-2fa126269ce7?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NzR8fHxlbnwwfHx8fHw%3D?q=80&w=800",
+    src: shot("1551288049-bebda4e38f71"),
     alt: "Dashboard interface",
   },
   {
     id: "photo-5",
-    src: "https://images.unsplash.com/photo-1756990637536-714b76296a30?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8ODJ8fHxlbnwwfHx8fHw%3D?q=80&w=800",
+    src: shot("1561070791-2526d30994b5"),
     alt: "Product design",
   },
   {
     id: "photo-6",
-    src: "https://images.unsplash.com/photo-1756838197413-07f174def66c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTA0fHx8ZW58MHx8fHx8?q=80&w=800",
+    src: shot("1497366216548-37526070297c"),
     alt: "Laptop on desk",
   },
   {
     id: "photo-7",
-    src: "https://images.unsplash.com/photo-1756310406492-3ce3bef447aa?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTQwfHx8ZW58MHx8fHx8?q=80&w=800",
+    src: shot("1522071820081-009f0129c71c"),
     alt: "Team collaboration",
   },
   {
     id: "photo-8",
-    src: "https://images.unsplash.com/photo-1755311905796-d539c7d24acd?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTgzfHx8ZW58MHx8fHx8?q=80&w=800",
+    src: shot("1586281380349-632531db7ed4"),
     alt: "UX wireframes",
   },
   {
     id: "photo-9",
-    src: "https://images.unsplash.com/photo-1755542366797-b3f036b11310?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTg2fHx8ZW58MHx8fHx8?q=80&w=800",
+    src: shot("1519389950473-47ba0277781c"),
     alt: "Developer workspace",
   },
 ];
@@ -183,17 +183,12 @@ export default function ExpandableGallery() {
                       className="w-full h-full relative"
                       transition={transition}
                     >
-                      <Image
+                      <img
                         src={photo.src}
                         alt={photo.alt}
-                        fill
-                        className="object-cover select-none pointer-events-none"
-                        sizes={
-                          isExpanded
-                            ? "(max-width: 1024px) 50vw, 33vw"
-                            : "240px"
-                        }
-                        priority={isPrimary}
+                        referrerPolicy="no-referrer"
+                        draggable={false}
+                        className="absolute inset-0 size-full object-cover select-none pointer-events-none"
                       />
                     </motion.div>
                   </motion.div>

@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId } from "react";
-import Image from "next/image";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
@@ -172,17 +171,12 @@ export default function ExpandableGalleryDemo() {
                       className="w-full h-full relative"
                       transition={transition}
                     >
-                      <Image
+                      <img
                         src={photo.src}
                         alt={photo.alt}
-                        fill
-                        className="object-cover select-none pointer-events-none m-0! p-0! block"
-                        sizes={
-                          isExpanded
-                            ? "(max-width: 1024px) 50vw, 33vw"
-                            : "224px"
-                        }
-                        priority={isPrimary}
+                        referrerPolicy="no-referrer"
+                        draggable={false}
+                        className="absolute inset-0 size-full object-cover select-none pointer-events-none m-0! p-0! block"
                       />
                     </motion.div>
                   </motion.div>
