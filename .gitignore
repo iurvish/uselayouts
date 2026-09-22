@@ -56,3 +56,7 @@ next-env.d.ts
 skills-lock.json
 /app/proto
 bun.lock
+
+# local figma / export staging
+.tmp/
+.tmp-*.png
