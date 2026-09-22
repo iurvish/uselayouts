@@ -202,7 +202,7 @@ export const RollingCardStack: React.FC<RollingCardStackProps> = ({
   const mobileOffsets = [0, 42, 84, 126];
 
   const springConfig = {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 380,
     damping: 30,
     mass: 0.75,

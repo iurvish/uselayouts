@@ -1085,7 +1085,6 @@ function TestimonialsSection() {
 const footerLinks = [
   { label: "Component", href: "/browse" },
   { label: "Documentation", href: "/docs" },
-  { label: "Meet Creator", href: "https://urvish.in" },
   { label: "Sponsor", href: "/sponsor" },
   { label: "0xUrvish", href: "https://x.com/0xUrvish" },
 ] as const;

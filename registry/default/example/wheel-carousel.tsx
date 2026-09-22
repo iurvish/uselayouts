@@ -685,7 +685,9 @@ export const WheelCarousel = forwardRef<WheelCarouselRef, WheelCarouselProps>(
               return (
                 <div
                   key={item.id ?? index}
-                  ref={(el) => (itemRefs.current[index] = el)}
+                  ref={(el) => {
+                    itemRefs.current[index] = el;
+                  }}
                   onClick={() => {
                     scrollToIndex(index);
                     if (onItemClick) onItemClick(item, index);
