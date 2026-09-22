@@ -18,8 +18,11 @@ const RESEND_SECONDS = 5 * 60;
 
 const EMAIL_FIELD_SHADOW =
   "shadow-[0px_-1px_0px_0px_rgba(255,255,255,0.06),0px_0px_0px_1px_rgba(255,255,255,0.06),0px_0px_0px_1px_#27272a,0px_0px_1px_1.5px_rgba(0,0,0,0.24),0px_2px_2px_0px_rgba(0,0,0,0.24)]";
+/** Figma 418:9820 — 1px #60a5fa + 4px rgba(51,81,229,0.25) focus ring */
 const EMAIL_FIELD_FOCUS =
-  "focus-within:shadow-[0px_0px_0px_1px_#ffffff,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]";
+  "focus-within:bg-[rgba(255,255,255,0.04)] focus-within:shadow-[0px_0px_0px_1px_#60a5fa,0px_0px_0px_4px_rgba(51,81,229,0.25)]";
+const EMAIL_FIELD_FOCUS_VISIBLE =
+  "focus-visible:bg-[rgba(255,255,255,0.04)] focus-visible:shadow-[0px_0px_0px_1px_#60a5fa,0px_0px_0px_4px_rgba(51,81,229,0.25)]";
 
 /** Anchored email chip — view truncates under a fade; Edit toggles Figma 400:2652 field + Done. */
 function EmailAddressChip({
@@ -265,6 +268,8 @@ export function LoginDialog() {
   const [resendIn, setResendIn] = React.useState(RESEND_SECONDS);
   const [resending, setResending] = React.useState(false);
   const [chipBusy, setChipBusy] = React.useState(false);
+  /** Existing account → magic link; first-time email → verification link. */
+  const [isExistingUser, setIsExistingUser] = React.useState(false);
 
   React.useEffect(() => {
     if (!loginOpen) {
@@ -275,6 +280,7 @@ export function LoginDialog() {
       setResendIn(RESEND_SECONDS);
       setResending(false);
       setChipBusy(false);
+      setIsExistingUser(false);
     }
   }, [loginOpen]);
 
@@ -290,6 +296,29 @@ export function LoginDialog() {
 
   const redirectTo = () =>
     `${window.location.origin}/auth/callback?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+
+  async function resolveEmailExists(trimmed: string) {
+    try {
+      const res = await fetch("/api/auth/email-exists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      if (!res.ok) return false;
+      const json = (await res.json()) as { exists?: boolean };
+      return Boolean(json.exists);
+    } catch {
+      return false;
+    }
+  }
+
+  function formatAuthError(err: unknown, fallback: string) {
+    const message = err instanceof Error ? err.message : fallback;
+    if (/rate limit|over_email_send_rate_limit|429/i.test(message)) {
+      return "Too many emails sent. Wait a few minutes, or raise the limit in Supabase → Authentication → Rate Limits (needs custom SMTP).";
+    }
+    return message || fallback;
+  }
 
   async function sendOtp(trimmed: string) {
     const supabase = createClient();
@@ -309,12 +338,14 @@ export function LoginDialog() {
     setError(null);
 
     try {
+      const exists = await resolveEmailExists(trimmed);
+      setIsExistingUser(exists);
       await sendOtp(trimmed);
       setResendIn(RESEND_SECONDS);
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Could not send login link");
+      setError(formatAuthError(err, "Could not send login link"));
     }
   }
 
@@ -327,7 +358,7 @@ export function LoginDialog() {
       await sendOtp(trimmed);
       setResendIn(RESEND_SECONDS);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not resend login link");
+      setError(formatAuthError(err, "Could not resend login link"));
     } finally {
       setResending(false);
     }
@@ -338,10 +369,12 @@ export function LoginDialog() {
     setError(null);
     setEmail(next);
     try {
+      const exists = await resolveEmailExists(next);
+      setIsExistingUser(exists);
       await sendOtp(next);
       setResendIn(RESEND_SECONDS);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send login link");
+      setError(formatAuthError(err, "Could not send login link"));
     } finally {
       setChipBusy(false);
     }
@@ -365,7 +398,7 @@ export function LoginDialog() {
 
   const sentEmail = email.trim();
   const isSent = status === "sent";
-  const linkLabel = mode === "signup" ? "verification link" : "magic link";
+  const linkLabel = isExistingUser ? "magic link" : "verification link";
 
   return (
     <Dialog
@@ -508,7 +541,7 @@ export function LoginDialog() {
                             "w-full rounded-lg bg-[#222223] px-2 py-2.5 text-[13px] leading-[1.1] text-white outline-none",
                             "placeholder:text-[#71717a]",
                             EMAIL_FIELD_SHADOW,
-                            "focus-visible:shadow-[0px_0px_0px_1px_#ffffff,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]",
+                            EMAIL_FIELD_FOCUS_VISIBLE,
                           )}
                         />
                       </label>

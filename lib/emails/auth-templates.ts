@@ -21,6 +21,7 @@ type EmailCopy = {
   footerNote: string;
 };
 
+/** Live absolute URL — must exist on production after deploy (`public/brand/logomark-email.png`). */
 const SITE = "https://uselayouts.com";
 const LOGO = `${SITE}/brand/logomark-email.png`;
 
@@ -154,7 +155,7 @@ export function buildAuthEmailHtml(
             <td style="padding:12px 0 0;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#323239;border-radius:20px;">
                 <tr>
-                  <td style="padding:36px;">
+                  <td style="padding:24px;">
                     <p style="margin:0;font-family:Inter,Helvetica,Arial,sans-serif;font-size:20px;font-weight:600;line-height:26px;letter-spacing:-0.3px;color:#e2e3e4;">
                       ${escapeHtml(copy.greeting)}
                     </p>
@@ -169,7 +170,7 @@ export function buildAuthEmailHtml(
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                       <tr>
                         <td align="center" bgcolor="#3351e5" style="background-color:#3351e5;border-radius:14px;">
-                          <a href="${ctaUrl}" target="_blank" style="display:block;padding:14px 10px;font-family:Inter,Helvetica,Arial,sans-serif;font-size:18px;font-weight:500;line-height:20px;letter-spacing:-0.108px;color:#ffffff;text-decoration:none;text-align:center;">
+                          <a href="${ctaUrl}" target="_blank" style="display:block;padding:10px 10px;font-family:Inter,Helvetica,Arial,sans-serif;font-size:18px;font-weight:500;line-height:20px;letter-spacing:-0.108px;color:#ffffff;text-decoration:none;text-align:center;">
                             ${escapeHtml(copy.cta)}
                           </a>
                         </td>
