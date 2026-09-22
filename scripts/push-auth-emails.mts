@@ -2,14 +2,15 @@
 /**
  * Push useLayouts auth email HTML to Supabase Auth config.
  *
- * Requires: SUPABASE_ACCESS_TOKEN from
+ * Requires: SUPABASE_ACCESS_TOKEN in .env.local (or the shell) from
  * https://supabase.com/dashboard/account/tokens
  *
- *   SUPABASE_ACCESS_TOKEN=sbp_... npx tsx scripts/push-auth-emails.mts
+ *   bun run push:auth-emails
  */
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { createRequire } from "node:module";
 
 import {
   AUTH_EMAIL_KINDS,
@@ -17,9 +18,17 @@ import {
   type AuthEmailKind,
 } from "../lib/emails/auth-templates";
 
+const require = createRequire(import.meta.url);
+const { loadEnvConfig } = require("@next/env") as {
+  loadEnvConfig: (dir: string) => void;
+};
+loadEnvConfig(process.cwd());
+
 const PROJECT_REF =
   process.env.SUPABASE_PROJECT_REF ?? "sjjpqdkofyzrlvmhhflb";
-const TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+const TOKEN =
+  process.env.SUPABASE_ACCESS_TOKEN?.trim() ||
+  process.env.SUPABASE_PERSONAL_ACCESS_TOKEN?.trim();
 
 /** Map our kinds → Supabase Management API fields */
 const FIELD_MAP: Record<
@@ -55,7 +64,10 @@ function stripHtmlComment(html: string) {
 async function main() {
   if (!TOKEN) {
     console.error(
-      "Missing SUPABASE_ACCESS_TOKEN.\nCreate one at https://supabase.com/dashboard/account/tokens\nthen run:\n  SUPABASE_ACCESS_TOKEN=sbp_… npx tsx scripts/push-auth-emails.mts",
+      "Missing SUPABASE_ACCESS_TOKEN in .env.local (or the shell).\n" +
+        "Create one at https://supabase.com/dashboard/account/tokens\n" +
+        "then add:\n  SUPABASE_ACCESS_TOKEN=sbp_…\n" +
+        "and run: bun run push:auth-emails",
     );
     process.exit(1);
   }
@@ -64,17 +76,10 @@ async function main() {
 
   for (const kind of AUTH_EMAIL_KINDS) {
     const { subject, html } = buildAuthEmailHtml(kind);
-    // Prefer generated file if present (includes comment header we strip)
     let content = html;
-    try {
-      content = stripHtmlComment(
-        readFileSync(
-          resolve(process.cwd(), `emails/auth/${kind}.html`),
-          "utf8",
-        ),
-      );
-    } catch {
-      /* use builder output */
+    const filePath = resolve(process.cwd(), `emails/auth/${kind}.html`);
+    if (existsSync(filePath)) {
+      content = stripHtmlComment(readFileSync(filePath, "utf8"));
     }
     const fields = FIELD_MAP[kind];
     body[fields.subject] = subject;

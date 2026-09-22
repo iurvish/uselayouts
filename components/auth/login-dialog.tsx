@@ -16,6 +16,111 @@ import { cn } from "@/lib/utils";
 
 const RESEND_SECONDS = 5 * 60;
 
+const EMAIL_FIELD_SHADOW =
+  "shadow-[0px_-1px_0px_0px_rgba(255,255,255,0.06),0px_0px_0px_1px_rgba(255,255,255,0.06),0px_0px_0px_1px_#27272a,0px_0px_1px_1.5px_rgba(0,0,0,0.24),0px_2px_2px_0px_rgba(0,0,0,0.24)]";
+const EMAIL_FIELD_FOCUS =
+  "focus-within:shadow-[0px_0px_0px_1px_#ffffff,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]";
+
+/** Anchored email chip — view truncates under a fade; Edit toggles Figma 400:2652 field + Done. */
+function EmailAddressChip({
+  email,
+  onCommit,
+  busy,
+}: {
+  email: string;
+  onCommit: (next: string) => void | Promise<void>;
+  busy?: boolean;
+}) {
+  const [editing, setEditing] = React.useState(false);
+  const [draft, setDraft] = React.useState(email);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (!editing) setDraft(email);
+  }, [email, editing]);
+
+  React.useEffect(() => {
+    if (editing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [editing]);
+
+  async function finish() {
+    const next = draft.trim();
+    if (!next || busy) return;
+    setEditing(false);
+    if (next !== email.trim()) await onCommit(next);
+  }
+
+  if (editing) {
+    return (
+      <div
+        className={cn(
+          "flex w-full items-center gap-1 overflow-clip rounded-lg bg-[#222223] py-[10px] pr-1.5 pl-2",
+          EMAIL_FIELD_SHADOW,
+          EMAIL_FIELD_FOCUS,
+        )}
+      >
+        <input
+          ref={inputRef}
+          type="email"
+          autoComplete="email"
+          value={draft}
+          disabled={busy}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              void finish();
+            }
+            if (e.key === "Escape") {
+              setDraft(email);
+              setEditing(false);
+            }
+          }}
+          className="min-w-0 flex-1 bg-transparent text-[13px] leading-[1.1] text-white outline-none placeholder:text-[#71717a] disabled:opacity-60"
+          placeholder="steve@apple.com"
+          aria-label="Email"
+        />
+        <button
+          type="button"
+          disabled={busy || !draft.trim()}
+          onClick={() => void finish()}
+          className="shrink-0 cursor-pointer px-2 text-[12px] font-medium text-[#70a7ff] transition-colors hover:text-[#9bc0ff] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {busy ? "…" : "Done"}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative flex w-full items-center overflow-hidden rounded-lg bg-[#1a1a1e]",
+        "shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]",
+      )}
+    >
+      <span className="min-w-0 flex-1 truncate py-2.5 pr-14 pl-3 text-left text-[13px] font-medium leading-[1.1] text-[#f7f7f7]">
+        {email}
+      </span>
+      {/* Fade under the action so long addresses don’t collide with Edit */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-10 w-12 bg-gradient-to-r from-transparent to-[#1a1a1e]"
+      />
+      <button
+        type="button"
+        onClick={() => setEditing(true)}
+        className="absolute top-1/2 right-1.5 z-10 -translate-y-1/2 cursor-pointer px-2 py-1.5 text-[12px] font-medium text-[#70a7ff] transition-colors hover:text-[#9bc0ff]"
+      >
+        Edit
+      </button>
+    </div>
+  );
+}
+
 function LoginBubbleBadge() {
   return (
     <div className="relative h-[53.369px] w-[202.757px]">
@@ -127,15 +232,13 @@ function PrimaryButton({
       disabled={disabled}
       className={cn(
         "relative flex w-full cursor-pointer items-center justify-center overflow-clip rounded-[10px] px-2.5 py-2",
+        "bg-[hsl(230_77%_55%)]",
         "shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.12)]",
-        "transition-transform duration-150 active:scale-[0.98]",
+        "transition-[transform,background-color] duration-150 active:scale-[0.98]",
+        "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(230_77%_58%)]",
         "disabled:cursor-not-allowed disabled:opacity-60",
       )}
     >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[10px] bg-[#3351e5]"
-      />
       <span
         className="relative text-[14px] font-medium leading-5 tracking-[-0.084px] text-white"
         style={{ fontFeatureSettings: '"ss11" 1, "calt" 0, "liga" 0' }}
@@ -161,6 +264,7 @@ export function LoginDialog() {
   const [error, setError] = React.useState<string | null>(null);
   const [resendIn, setResendIn] = React.useState(RESEND_SECONDS);
   const [resending, setResending] = React.useState(false);
+  const [chipBusy, setChipBusy] = React.useState(false);
 
   React.useEffect(() => {
     if (!loginOpen) {
@@ -170,6 +274,7 @@ export function LoginDialog() {
       setMode("login");
       setResendIn(RESEND_SECONDS);
       setResending(false);
+      setChipBusy(false);
     }
   }, [loginOpen]);
 
@@ -228,6 +333,20 @@ export function LoginDialog() {
     }
   }
 
+  async function commitChipEmail(next: string) {
+    setChipBusy(true);
+    setError(null);
+    setEmail(next);
+    try {
+      await sendOtp(next);
+      setResendIn(RESEND_SECONDS);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send login link");
+    } finally {
+      setChipBusy(false);
+    }
+  }
+
   async function signInWithGoogle() {
     setStatus("sending");
     setError(null);
@@ -246,6 +365,7 @@ export function LoginDialog() {
 
   const sentEmail = email.trim();
   const isSent = status === "sent";
+  const linkLabel = mode === "signup" ? "verification link" : "magic link";
 
   return (
     <Dialog
@@ -272,7 +392,7 @@ export function LoginDialog() {
           </DialogTitle>
           <DialogDescription className="sr-only">
             {isSent
-              ? `We sent a verification link to ${sentEmail}`
+              ? `We sent a ${linkLabel} to ${sentEmail}`
               : "Sign in with Google or email to copy components."}
           </DialogDescription>
 
@@ -287,22 +407,24 @@ export function LoginDialog() {
               {isSent ? (
                 <div className="relative flex w-full flex-col items-center">
                   <EmailConfirmationHero />
-                  <div className="flex w-full flex-col gap-6">
-                    <div className="flex w-full flex-col items-center gap-1.5 text-center">
+                  <div className="flex w-full flex-col gap-5">
+                    <div className="flex w-full flex-col items-center gap-3 text-center">
                       <p className="font-[family-name:var(--font-geist-sans)] text-[20px] font-medium tracking-[-0.3px] text-white whitespace-nowrap">
                         Check your inbox
                       </p>
-                      <p className="w-full text-[16px] leading-[1.4] tracking-[-0.24px]">
-                        <span className="font-[family-name:var(--font-geist-sans)] text-[#b7b7b8]">
-                          We sent a verification link to
-                        </span>
-                        <br />
-                        <span className="font-[family-name:var(--font-geist-sans)] text-[#f7f7f7]">
-                          {sentEmail}
-                        </span>
+                      <p className="text-[14px] leading-5 text-[#8e8e93]">
+                        We sent a {linkLabel} to
                       </p>
+                      <EmailAddressChip
+                        email={sentEmail}
+                        busy={chipBusy}
+                        onCommit={commitChipEmail}
+                      />
                     </div>
-                    <PrimaryButton onClick={() => openMailForEmail(sentEmail)}>
+                    <PrimaryButton
+                      onClick={() => openMailForEmail(sentEmail)}
+                      disabled={chipBusy}
+                    >
                       Open Mail
                     </PrimaryButton>
                   </div>
@@ -385,7 +507,7 @@ export function LoginDialog() {
                           className={cn(
                             "w-full rounded-lg bg-[#222223] px-2 py-2.5 text-[13px] leading-[1.1] text-white outline-none",
                             "placeholder:text-[#71717a]",
-                            "shadow-[0px_-1px_0px_0px_rgba(255,255,255,0.06),0px_0px_0px_1px_rgba(255,255,255,0.06),0px_0px_0px_1px_#27272a,0px_0px_1px_1.5px_rgba(0,0,0,0.24),0px_2px_2px_0px_rgba(0,0,0,0.24)]",
+                            EMAIL_FIELD_SHADOW,
                             "focus-visible:shadow-[0px_0px_0px_1px_#ffffff,0px_0px_0px_1px_#27272a,0px_2px_2px_0px_rgba(0,0,0,0.24)]",
                           )}
                         />

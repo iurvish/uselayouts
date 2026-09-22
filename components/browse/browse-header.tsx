@@ -4,9 +4,64 @@
 
 import * as React from "react";
 import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
 
 import { SearchIcon } from "./icons";
+import { useAuth } from "@/components/auth/auth-provider";
 import { BrandLogo } from "@/components/brand-logo";
+
+function userAvatarUrl(user: User) {
+  const meta = user.user_metadata ?? {};
+  if (typeof meta.avatar_url === "string" && meta.avatar_url) return meta.avatar_url;
+  if (typeof meta.picture === "string" && meta.picture) return meta.picture;
+  return null;
+}
+
+function userInitials(user: User) {
+  const meta = user.user_metadata ?? {};
+  const name =
+    (typeof meta.full_name === "string" && meta.full_name) ||
+    (typeof meta.name === "string" && meta.name) ||
+    user.email ||
+    "?";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+/** Display-only avatar — no menu on click. */
+function BrowseProfileAvatar({ user }: { user: User }) {
+  const [failed, setFailed] = React.useState(false);
+  const src = userAvatarUrl(user);
+
+  React.useEffect(() => {
+    setFailed(false);
+  }, [user.id, src]);
+
+  return (
+    <span
+      className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2a2a2e] text-[11px] font-medium text-white shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]"
+      aria-label={user.email ? `Signed in as ${user.email}` : "Signed in"}
+      title={user.email ?? "Signed in"}
+    >
+      {src && !failed ? (
+        <img
+          src={src}
+          alt=""
+          width={36}
+          height={36}
+          className="size-full object-cover"
+          referrerPolicy="no-referrer"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span aria-hidden>{userInitials(user)}</span>
+      )}
+    </span>
+  );
+}
 
 export function BrowseHeader({
   query,
@@ -15,6 +70,7 @@ export function BrowseHeader({
   query: string;
   onQueryChange: (value: string) => void;
 }) {
+  const { user } = useAuth();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [focused, setFocused] = React.useState(false);
 
@@ -83,6 +139,8 @@ export function BrowseHeader({
           />
           <img src="/brand/icon-github.svg" alt="" width={20} height={20} className="relative size-5" />
         </a>
+
+        {user ? <BrowseProfileAvatar user={user} /> : null}
       </div>
     </header>
   );
