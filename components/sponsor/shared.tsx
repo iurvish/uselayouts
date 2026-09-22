@@ -76,7 +76,6 @@ export function ProtoNav({
   const links = [
     { label: "Component", href: "/browse" },
     { label: "Documentation", href: "/docs" },
-    { label: "Meet Creator", href: "https://urvish.in" },
     { label: "Sponsor", href: "/sponsor" },
   ];
   return (

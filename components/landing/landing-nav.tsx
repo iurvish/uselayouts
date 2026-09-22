@@ -11,7 +11,6 @@ import { BrandLogo } from "@/components/brand-logo";
 export const landingNavLinks = [
   { label: "Component", href: "/browse" },
   { label: "Documentation", href: "/docs" },
-  { label: "Meet Creator", href: "https://urvish.in" },
   { label: "Sponsor", href: "/sponsor" },
 ] as const;
 
