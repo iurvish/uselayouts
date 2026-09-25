@@ -7,7 +7,7 @@ export const SPONSOR_PLANS: Record<
 > = {
   gold: {
     label: "Gold",
-    priceUsd: 150,
+    priceUsd: 250,
     productId: process.env.DODO_SPONSOR_GOLD_ID ?? "pdt_0Nnjy2g2VgpUxfuYkNeq3",
   },
   silver: {
@@ -17,7 +17,7 @@ export const SPONSOR_PLANS: Record<
   },
   bronze: {
     label: "Bronze",
-    priceUsd: 20,
+    priceUsd: 30,
     productId: process.env.DODO_SPONSOR_BRONZE_ID ?? "pdt_0Nnjy2bdky90lsOzCE9k4",
   },
 };
