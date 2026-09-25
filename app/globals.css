@@ -248,6 +248,13 @@
  * Apply `.component-showcase` (+ `.dark` / `.light`) on preview wrappers.
  */
 .component-showcase {
+  /*
+   * Contain the demo's stacking context: z-index used inside a preview
+   * (e.g. confidential-folder letter at z-999) must never escape and paint
+   * over page chrome (sidebar switcher dropdown, header actions) which lives
+   * in a sibling stacking context at z-100.
+   */
+  isolation: isolate;
   color-scheme: light;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

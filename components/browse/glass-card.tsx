@@ -59,6 +59,7 @@ export function BrowseCard({
           >
             <BrowsePreview
               poster={item.poster}
+              fallbackPoster={item.fallbackPoster}
               video={item.video}
               eager={eager}
               paused={paused}
