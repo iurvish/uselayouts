@@ -62,6 +62,10 @@ const config = {
       },
       {
         protocol: "https",
+        hostname: "cdn.uselayouts.com",
+      },
+      {
+        protocol: "https",
         hostname: "raw.githubusercontent.com",
       },
       // Cloudflare R2 public CDN (from R2_PUBLIC_URL when set)

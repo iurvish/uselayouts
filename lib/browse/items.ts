@@ -1,4 +1,5 @@
 import { isNewComponent } from "@/lib/open/new-components";
+import { browseMediaUrl } from "@/lib/browse/media-url";
 import browseMedia from "@/registry/default/browse-media.json";
 import registry from "@/registry.json";
 
@@ -13,6 +14,8 @@ export type BrowseItem = {
   tags?: string[];
   /** Still frame shown before/instead of the video. */
   poster: string;
+  /** Public fallback used when an uploaded CDN poster is temporarily unavailable. */
+  fallbackPoster: string;
   /** Muted loop preview (empty string = image only). */
   video: string;
   isNew?: boolean;
@@ -124,8 +127,12 @@ export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(s
     const override = MEDIA_OVERRIDES[seed.slug];
     return {
       ...seed,
-      poster: override?.posterUrl ?? POSTERS[index % POSTERS.length]!,
-      video: override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!,
+      poster: browseMediaUrl(override?.posterUrl ?? POSTERS[index % POSTERS.length]!),
+      // Media uploads live on a separately managed CDN. Keep a stable, public
+      // fallback so an outage or an accidental access-policy change does not
+      // turn the browse catalog into a grid of broken-image icons.
+      fallbackPoster: POSTERS[index % POSTERS.length]!,
+      video: browseMediaUrl(override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!),
       isNew: isNewComponent(seed.slug),
     };
   })

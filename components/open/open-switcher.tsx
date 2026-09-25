@@ -230,9 +230,14 @@ export function OpenSwitcher({
               </div>
             </div>
             {/* Figma 95:4696 — list gap 2; px 12 py 10 inset via padding so hover bg is full-bleed */}
+            {/* scroll-fade lives on the scroller (bg/rounding stay on the wrapper)
+                so content dissolves at the edges instead of hard-cutting */}
             <div
               ref={listRef}
-              className={cn("m-0 flex max-h-[280px] flex-col gap-0.5 overflow-auto p-0", scrollbarMinimal)}
+              className={cn(
+                "scroll-fade m-0 flex max-h-[280px] flex-col gap-0.5 overflow-y-auto overscroll-contain p-0",
+                scrollbarMinimal,
+              )}
             >
               {filtered.length === 0 ? (
                 <p className="px-3 py-4 text-center text-xs text-muted-foreground">No matches.</p>

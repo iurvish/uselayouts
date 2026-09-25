@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 export function BrowsePreview({
   poster,
+  fallbackPoster,
   video,
   eager = false,
   paused = false,
@@ -23,6 +24,8 @@ export function BrowsePreview({
   onAspect,
 }: {
   poster: string;
+  /** Stable image to use if the primary remote poster cannot be fetched. */
+  fallbackPoster?: string;
   video?: string;
   eager?: boolean;
   paused?: boolean;
@@ -35,6 +38,13 @@ export function BrowsePreview({
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = React.useState(false);
   const [inView, setInView] = React.useState(!observeVisibility);
+  const [activePoster, setActivePoster] = React.useState(poster);
+  const [videoFailed, setVideoFailed] = React.useState(false);
+
+  React.useEffect(() => {
+    setActivePoster(poster);
+    setVideoFailed(false);
+  }, [poster, video]);
 
   React.useEffect(() => {
     if (!observeVisibility) {
@@ -55,7 +65,7 @@ export function BrowsePreview({
     return () => io.disconnect();
   }, [observeVisibility]);
 
-  const mountVideo = Boolean(video) && allowVideo && inView;
+  const mountVideo = Boolean(video) && allowVideo && inView && !videoFailed;
 
   const attachVideo = React.useCallback(
     (node: HTMLVideoElement | null) => {
@@ -98,7 +108,7 @@ export function BrowsePreview({
     <div ref={rootRef} className="browse-preview" aria-hidden>
       {/* eslint-disable-next-line @next/next/no-img-element -- remote poster frames, sized by the card. */}
       <img
-        src={poster}
+        src={activePoster}
         alt=""
         loading={eager ? "eager" : "lazy"}
         decoding="async"
@@ -109,13 +119,19 @@ export function BrowsePreview({
               onAspect?.(img.naturalWidth / img.naturalHeight);
             }
           }}
+          onError={() => {
+            // Avoid an error loop if a consumer supplies the same URL twice.
+            if (fallbackPoster && activePoster !== fallbackPoster) {
+              setActivePoster(fallbackPoster);
+            }
+          }}
           draggable={false}
         />
         {mountVideo ? (
           <video
             ref={attachVideo}
             src={video}
-            poster={poster}
+            poster={activePoster}
             muted
             loop
             playsInline
@@ -132,6 +148,7 @@ export function BrowsePreview({
             setReady(true);
             if (!paused) requestPlayback(event.currentTarget, playbackPriority);
           }}
+            onError={() => setVideoFailed(true)}
           className={cn(!showVideo && "opacity-0")}
         />
       ) : null}
