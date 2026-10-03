@@ -20,13 +20,13 @@ export interface StretchyButtonProps
   children?: React.ReactNode;
   variant?: StretchyButtonVariant;
   size?: StretchyButtonSize;
-  /** Spring stiffness coefficient (default: 360) */
+  /** Spring stiffness coefficient (default: 340) */
   stiffness?: number;
-  /** Spring damping coefficient (default: 14) */
+  /** Spring damping coefficient (default: 30 — damping ratio ~0.78) */
   damping?: number;
-  /** Spring mass (default: 1) */
+  /** Spring mass (default: 1.1) */
   mass?: number;
-  /** Maximum stretch distance in pixels (default: 550 for massive screen-wide stretch) */
+  /** Soft stretch limit in pixels. tanh eases into it, so resistance builds well before it (default: 260) */
   maxStretch?: number;
   /** Enable dragging from anywhere on the interface/screen (default: true) */
   fullInterface?: boolean;
@@ -110,41 +110,44 @@ function openSplineToBezier(points: Point[], tension = 0.5): string {
   return d;
 }
 
-// Generate base perimeter points for a capsule / rounded pill
-function getCapsulePoints(width: number, height: number, count = 48): Point[] {
+// Generate base perimeter points for a capsule / rounded pill.
+//
+// Points are allocated by CURVATURE, not by arc length. Spreading a fixed budget
+// evenly over the whole perimeter starves the caps — on a 540x168 pill each 180°
+// cap got ~9 points, i.e. one vertex every 20°, and the spline through them reads
+// as a visible polygon. The straights need two points; the caps need many.
+const CAP_DEGREES_PER_POINT = 3;
+
+function getCapsulePoints(width: number, height: number): Point[] {
   const r = height / 2;
   const straightLen = Math.max(0, width - 2 * r);
   const halfStraight = straightLen / 2;
-  const arcLen = Math.PI * r;
-  const totalPerimeter = 2 * straightLen + 2 * arcLen;
+
+  // One vertex every few degrees keeps the cap smooth at any button size.
+  const perCap = Math.max(12, Math.ceil(180 / CAP_DEGREES_PER_POINT));
+  // A straight edge is exactly represented by its endpoints; a few extra give the
+  // deformation somewhere to bend without adding cost where it is not needed.
+  const perStraight = Math.max(6, Math.round(straightLen / 10));
 
   const points: Point[] = [];
 
-  for (let i = 0; i < count; i++) {
-    const s = (i / count) * totalPerimeter;
-    let x = 0;
-    let y = 0;
-
-    if (s < straightLen) {
-      x = -halfStraight + s;
-      y = -r;
-    } else if (s < straightLen + arcLen) {
-      const arcS = s - straightLen;
-      const theta = -Math.PI / 2 + (arcS / arcLen) * Math.PI;
-      x = halfStraight + r * Math.cos(theta);
-      y = r * Math.sin(theta);
-    } else if (s < 2 * straightLen + arcLen) {
-      const bottomS = s - (straightLen + arcLen);
-      x = halfStraight - bottomS;
-      y = r;
-    } else {
-      const arcS = s - (2 * straightLen + arcLen);
-      const theta = Math.PI / 2 + (arcS / arcLen) * Math.PI;
-      x = -halfStraight + r * Math.cos(theta);
-      y = r * Math.sin(theta);
-    }
-
-    points.push({ x, y });
+  // Top edge, left to right.
+  for (let i = 0; i < perStraight; i++) {
+    points.push({ x: -halfStraight + (i / perStraight) * straightLen, y: -r });
+  }
+  // Right cap, sweeping -90° to +90°.
+  for (let i = 0; i < perCap; i++) {
+    const theta = -Math.PI / 2 + (i / perCap) * Math.PI;
+    points.push({ x: halfStraight + r * Math.cos(theta), y: r * Math.sin(theta) });
+  }
+  // Bottom edge, right to left.
+  for (let i = 0; i < perStraight; i++) {
+    points.push({ x: halfStraight - (i / perStraight) * straightLen, y: r });
+  }
+  // Left cap, sweeping +90° to +270°.
+  for (let i = 0; i < perCap; i++) {
+    const theta = Math.PI / 2 + (i / perCap) * Math.PI;
+    points.push({ x: -halfStraight + r * Math.cos(theta), y: r * Math.sin(theta) });
   }
 
   return points;
@@ -214,12 +217,12 @@ function deformPoint(
       const waist = Math.max(0, 1 - u * u);
       const maxWaistPinch = halfH * 0.62;
       const rawWaistPinch = Math.abs(delta.x) * 0.14 * waist;
-      const waistPinch = Math.min(maxWaistPinch, rawWaistPinch);
+      const waistPinch = maxWaistPinch * Math.tanh(rawWaistPinch / maxWaistPinch);
       dy -= v * waistPinch;
 
       // Trumpet flaring at pulled right tip
       if (u > 0.35) {
-        const flareRatio = Math.min(1.2, Math.abs(delta.x) / halfW);
+        const flareRatio = 1.2 * Math.tanh(Math.abs(delta.x) / halfW / 1.2);
         const flare = Math.pow((u - 0.35) / 0.65, 2) * flareRatio * 0.16;
         dy += v * Math.abs(delta.x) * flare;
       }
@@ -231,12 +234,12 @@ function deformPoint(
       const waist = Math.max(0, 1 - u * u);
       const maxWaistPinch = halfH * 0.62;
       const rawWaistPinch = Math.abs(delta.x) * 0.14 * waist;
-      const waistPinch = Math.min(maxWaistPinch, rawWaistPinch);
+      const waistPinch = maxWaistPinch * Math.tanh(rawWaistPinch / maxWaistPinch);
       dy -= v * waistPinch;
 
       // Trumpet flaring at pulled left tip
       if (u < -0.35) {
-        const flareRatio = Math.min(1.2, Math.abs(delta.x) / halfW);
+        const flareRatio = 1.2 * Math.tanh(Math.abs(delta.x) / halfW / 1.2);
         const flare = Math.pow((-u - 0.35) / 0.65, 2) * flareRatio * 0.16;
         dy += v * Math.abs(delta.x) * flare;
       }
@@ -299,9 +302,10 @@ const variantStyles: Record<
   }
 > = {
   default: {
-    fill: "#6366F1",
+    fill: "#3F80FF",
     text: "text-white",
     shadow: "none",
+    stroke: "#1A4BC2",
   },
   secondary: {
     fill: "#F1F5F9",
@@ -361,10 +365,10 @@ const sizeDimensions: Record<
   StretchyButtonSize,
   { width: number; height: number; fontSize: number; textClass: string }
 > = {
-  sm: { width: 380, height: 118, fontSize: 36, textClass: "text-[36px] font-normal" },
-  default: { width: 540, height: 168, fontSize: 52, textClass: "text-[52px] font-normal tracking-wide" },
-  lg: { width: 640, height: 196, fontSize: 62, textClass: "text-[62px] font-medium" },
-  xl: { width: 760, height: 232, fontSize: 74, textClass: "text-[74px] font-medium" },
+  sm: { width: 160, height: 42, fontSize: 16, textClass: "text-[16px] font-medium" },
+  default: { width: 208, height: 54, fontSize: 19, textClass: "text-[19px] font-medium" },
+  lg: { width: 252, height: 62, fontSize: 22, textClass: "text-[22px] font-medium" },
+  xl: { width: 312, height: 74, fontSize: 26, textClass: "text-[26px] font-medium" },
 };
 
 // Fixed physics timestep (seconds) — keeps the spring identical on 60Hz, 120Hz and 144Hz displays
@@ -392,10 +396,10 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
       children = "Stretch me",
       variant = "default",
       size = "default",
-      stiffness = 320,
-      damping = 13,
-      mass = 1.2,
-      maxStretch = 650,
+      stiffness = 340,
+      damping = 30,
+      mass = 1.1,
+      maxStretch = 260,
       fullInterface = true,
       fillColor,
       strokeColor,
@@ -458,7 +462,7 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
 
     // Base geometry points
     const basePerimeter = React.useMemo(
-      () => getCapsulePoints(baseWidth, baseHeight, 48),
+      () => getCapsulePoints(baseWidth, baseHeight),
       [baseWidth, baseHeight]
     );
 
@@ -473,7 +477,6 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
     const centerlineRef = useRef<SVGPathElement>(null);
     const textRef = useRef<SVGTextElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const glowRef = useRef<HTMLDivElement>(null);
     const edgePathRef = useRef<SVGPathElement>(null);
     const bodyGroupRef = useRef<SVGGElement>(null);
 
@@ -501,7 +504,7 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
     const hoverRef = useRef<number>(0);
     const hoverTargetRef = useRef<number>(0);
 
-    const edgeDepth = Math.max(4, Math.round(baseHeight * 0.055));
+    const edgeDepth = 2;
 
     // Latest callbacks, read from the animation loop without re-creating it
     const onStretchRef = useRef(onStretch);
@@ -514,6 +517,7 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
     const centerlinePathId = `stretchy-cline-${id}`;
     const gradientId = `stretchy-grad-${id}`;
     const glossId = `stretchy-gloss-${id}`;
+    const shadowId = `stretchy-shadow-${id}`;
 
     // Write the deformed geometry straight to the DOM
     const updateVisuals = useCallback(
@@ -556,16 +560,6 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
           const textY = delta.y * 0.6;
           const slope = (delta.y / baseHeight) * (grab.x / (baseWidth / 2)) * 12;
           contentRef.current.style.transform = `translate3d(${textX.toFixed(2)}px, ${textY.toFixed(2)}px, 0px) rotate(${slope.toFixed(2)}deg)`;
-        }
-
-        // Soft glow follows the body's center of mass and stretches with it
-        if (glowRef.current) {
-          const sx = 1 + (Math.abs(delta.x) / baseWidth) * 0.9;
-          const sy = 1 + (Math.abs(delta.y) / baseHeight) * 0.3;
-          // Pressing flattens the shadow, hovering lifts it
-          const lift = 1 - key * 0.35 + hover * 0.08;
-          glowRef.current.style.transform = `translate3d(${(delta.x * 0.5).toFixed(2)}px, ${(delta.y * 0.55 + baseHeight * 0.22 * lift).toFixed(2)}px, 0) scale(${(sx * (1 - key * 0.06)).toFixed(3)}, ${(sy * lift).toFixed(3)})`;
-          glowRef.current.style.opacity = Math.max(0.15, 0.5 + Math.min(0.3, dist / 700) - key * 0.2 + hover * 0.08).toFixed(3);
         }
 
         const tipLocal = deformPoint(grab, grab, delta, baseWidth, baseHeight, pressDepth);
@@ -883,10 +877,7 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
     const variantConfig = variantStyles[variant];
     const fill = fillColor ?? variantConfig.fill;
     const stroke = strokeColor ?? variantConfig.stroke ?? "none";
-    const strokeW = strokeWidth ?? (variantConfig.stroke ? 1.5 : 0);
-    const glowColor = variantConfig.gradient
-      ? variantConfig.gradientColors?.[0] ?? "#3F9CFF"
-      : fill;
+    const strokeW = strokeWidth ?? (variantConfig.stroke ? 1 : 0);
 
     return (
       <div
@@ -928,20 +919,6 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
           {...props}
         />
 
-        {/* Soft colored glow that stretches with the body */}
-        <div
-          ref={glowRef}
-          aria-hidden="true"
-          className="absolute inset-x-[8%] inset-y-[10%] rounded-full pointer-events-none"
-          style={{
-            backgroundColor: glowColor,
-            filter: `blur(${Math.round(baseHeight * 0.28)}px)`,
-            opacity: 0.5,
-            willChange: "transform, opacity",
-            transition: "background-color 500ms ease",
-          }}
-        />
-
         {/* Dynamic morphing SVG — 1:1 viewBox, overflow visible so the stretch can reach across the whole interface */}
         <svg
           aria-hidden="true"
@@ -957,24 +934,30 @@ export const StretchyButton = React.forwardRef<HTMLButtonElement, StretchyButton
             )}
             {/* Jelly gloss: top sheen + soft bottom shade that follow the deforming shape */}
             <linearGradient id={glossId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.34" />
-              <stop offset="42%" stopColor="#FFFFFF" stopOpacity="0.04" />
-              <stop offset="70%" stopColor="#000000" stopOpacity="0" />
-              <stop offset="100%" stopColor="#000000" stopOpacity="0.16" />
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.12" />
+              <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0.06" />
             </linearGradient>
+            {/* Minimal depth: a tight contact shadow plus one soft ambient layer.
+                Both are the fill's own hue at low lightness — oklch(L 0.09 262) —
+                because a neutral black shadow under a saturated colour reads grey. */}
+            <filter id={shadowId} x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
+              <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#132B5A" floodOpacity="0.20" />
+              <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#274172" floodOpacity="0.16" />
+            </filter>
           </defs>
 
-          {/* Key edge: darker base the body sits on and sinks into */}
+          {/* Key edge: a hairline darker base the body sinks into on press */}
           <path
             ref={edgePathRef}
             transform={`translate(0 ${edgeDepth})`}
             style={{
-              fill: `color-mix(in oklab, ${variantConfig.gradient ? variantConfig.gradientColors?.[1] ?? "#8B5CF6" : fill} 68%, #000)`,
+              fill: `color-mix(in oklab, ${variantConfig.gradient ? variantConfig.gradientColors?.[1] ?? "#8B5CF6" : fill} 70%, #132B5A)`,
               transition: "fill 500ms ease",
             }}
           />
 
-          <g ref={bodyGroupRef}>
+          <g ref={bodyGroupRef} filter={`url(#${shadowId})`}>
             {/* Morphing Capsule Body */}
             <path
               ref={bodyPathRef}

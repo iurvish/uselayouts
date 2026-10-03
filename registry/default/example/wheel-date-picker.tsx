@@ -247,8 +247,6 @@ const WheelColumn: React.FC<WheelColumnProps> = (props) => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const lensRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
   const feBlurRef = useRef<SVGFEGaussianBlurElement>(null);
   const itemsRef = useRef<HTMLLIElement[]>([]);
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -321,24 +319,13 @@ const WheelColumn: React.FC<WheelColumnProps> = (props) => {
       const scale = 0.68 + 0.32 / (1 + 0.18 * d * d);
       let opacity = Math.pow(clamp(1 - ad / fadeRows, 0, 1), 1.5) * (0.6 + 0.4 * focus);
       if (i === s.hover && ad > 0.5) opacity = Math.min(0.92, opacity * 1.7 + 0.12);
-      const weight = String(Math.round((440 + 260 * focus) / 10) * 10);
 
       li.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
       li.style.opacity = opacity.toFixed(3);
-      if (li.style.fontWeight !== weight) li.style.fontWeight = weight;
     }
 
-    // Selection lens: stretches with velocity, squashes on each detent
-    const lens = lensRef.current;
-    if (lens) {
-      const k = reducedMotion ? 0 : s.kick;
-      const sy = 1 + (reducedMotion ? 0 : Math.min(0.5, speed * 0.018)) - k * 0.07;
-      const sx = 1 - (reducedMotion ? 0 : Math.min(0.08, speed * 0.003)) + k * 0.04;
-      lens.style.transform = `translateY(-50%) scale(${sx.toFixed(4)}, ${sy.toFixed(4)})`;
-    }
-    if (glowRef.current) {
-      glowRef.current.style.opacity = Math.min(1, speed * 0.045 + s.kick * 0.5).toFixed(3);
-    }
+    // Selection lens: a fixed frame. The values move through it; it never moves,
+    // scales or squashes with them, so nothing writes to its transform here.
 
     setBlur(((speed * itemHeight) / 1000) * 3.5);
   };
@@ -722,16 +709,10 @@ const WheelColumn: React.FC<WheelColumnProps> = (props) => {
 
       {/* Selection lens */}
       <div
-        ref={lensRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-1 top-1/2 rounded-[16px] border border-white/[0.09] bg-gradient-to-b from-white/[0.085] to-white/[0.03] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_10px_30px_-10px_rgba(0,0,0,0.8)] ring-0 ring-white/60 transition-[box-shadow] group-focus-visible:ring-2 will-change-transform"
+        className="pointer-events-none absolute inset-x-1 top-1/2 rounded-[16px] bg-accent/70 shadow-[0_0_0_1px_rgb(0_0_0/0.07),0_1px_2px_rgb(0_0_0/0.05),0_6px_16px_-6px_rgb(0_0_0/0.10)] ring-0 ring-ring transition-[box-shadow] group-focus-visible:ring-2 dark:shadow-[0_0_0_1px_rgb(255_255_255/0.09)]"
         style={{ height: itemHeight + 2, transform: "translateY(-50%)" }}
       >
-        <div
-          ref={glowRef}
-          className="absolute inset-0 rounded-[16px] bg-[radial-gradient(120%_90%_at_50%_50%,rgba(255,255,255,0.16),transparent_70%)]"
-          style={{ opacity: 0 }}
-        />
       </div>
 
       <div
@@ -746,8 +727,8 @@ const WheelColumn: React.FC<WheelColumnProps> = (props) => {
               role="option"
               aria-selected={false}
               data-index={i}
-              className={`absolute inset-x-0 top-0 flex cursor-pointer items-center whitespace-nowrap text-[17px] tabular-nums tracking-[-0.01em] text-white will-change-transform ${justify}`}
-              style={{ height: itemHeight, fontWeight: 440 }}
+              className={`absolute inset-x-0 top-0 flex cursor-pointer items-center whitespace-nowrap text-[17px] tabular-nums tracking-[-0.01em] text-foreground will-change-transform ${justify}`}
+              style={{ height: itemHeight, fontWeight: 400 }}
             >
               {getOptionLabel(option)}
             </li>
