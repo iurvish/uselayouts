@@ -1142,6 +1142,24 @@
       ]
     },
     {
+      "name": "stretchy-button",
+      "type": "registry:component",
+      "title": "Stretchy Button",
+      "description": "A stretchy button control with clear active states and motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/stretchy-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "tactile-button",
       "type": "registry:component",
       "title": "Tactile Button",
@@ -1202,6 +1220,23 @@
       "files": [
         {
           "path": "registry/default/example/wheel-carousel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "wheel-date-picker",
+      "type": "registry:component",
+      "title": "Wheel Date Picker",
+      "description": "A wheel date picker layout for browsing items with fluid motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/wheel-date-picker.tsx",
           "type": "registry:component"
         }
       ]
