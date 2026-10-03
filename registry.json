@@ -575,6 +575,19 @@
       ]
     },
     {
+      "name": "gooey-navbar",
+      "type": "registry:component",
+      "title": "Gooey Navbar",
+      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, active dot.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/default/example/gooey-navbar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "holographic-referral-card",
       "type": "registry:component",
       "title": "Holographic Referral Card",
@@ -587,19 +600,6 @@
       "files": [
         {
           "path": "registry/default/example/holographic-referral-card.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "gooey-navbar",
-      "type": "registry:component",
-      "title": "Gooey Navbar",
-      "description": "A pill nav that melts into its neighbor when you hover — liquid bridges, active dot.",
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/default/example/gooey-navbar.tsx",
           "type": "registry:component"
         }
       ]
@@ -753,6 +753,23 @@
       ]
     },
     {
+      "name": "paper-shred-button",
+      "type": "registry:component",
+      "title": "Paper Shred Button",
+      "description": "Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/paper-shred-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "perspective-text-scroll",
       "type": "registry:component",
       "title": "Perspective Text Scroll",
@@ -784,23 +801,6 @@
       "files": [
         {
           "path": "registry/default/example/photo-albums.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "paper-shred-button",
-      "type": "registry:component",
-      "title": "Paper Shred Button",
-      "description": "Hover Delete and a page appears above it. Click and the page clips away while paper strips draw in below. After a few seconds it resets so you can shred again.",
-      "dependencies": [
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/paper-shred-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -873,6 +873,24 @@
       "files": [
         {
           "path": "registry/default/example/pricing-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pro-card",
+      "type": "registry:component",
+      "title": "Pro Card",
+      "description": "A pro card layout for browsing items with fluid motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/pro-card.tsx",
           "type": "registry:component"
         }
       ]
@@ -1124,19 +1142,6 @@
       ]
     },
     {
-      "name": "theme-toggle",
-      "type": "registry:component",
-      "title": "Theme Toggle",
-      "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
-      "files": [
-        {
-          "path": "registry/default/example/theme-toggle.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "dependencies": []
-    },
-    {
       "name": "tactile-button",
       "type": "registry:component",
       "title": "Tactile Button",
@@ -1150,6 +1155,19 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme Toggle",
+      "description": "A physical switch with a dotted grip. Click and the knob slides across a recessed track.",
+      "files": [
+        {
+          "path": "registry/default/example/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": []
     },
     {
       "name": "vertical-tabs",
