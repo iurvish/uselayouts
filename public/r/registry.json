@@ -338,6 +338,24 @@
       ]
     },
     {
+      "name": "example",
+      "type": "registry:component",
+      "title": "Stretchy Button",
+      "description": "A stretchy button control with clear active states and motion.",
+      "dependencies": [
+        "clsx",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/example.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "expandable-gallery",
       "type": "registry:component",
       "title": "Expandable Gallery",
@@ -661,7 +679,7 @@
       "name": "rollingcardstack",
       "type": "registry:component",
       "title": "RollingCardStack",
-      "description": "It\u2019s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
+      "description": "It’s a responsive, animated rolling card stack component built with React, TypeScript, Tailwind CSS, and Framer Motion. It supports desktop/mobile layouts, swipe and keyboard navigation, autoplay, pagination, and customizable card content",
       "dependencies": [
         "motion",
         "clsx",
