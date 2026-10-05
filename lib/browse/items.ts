@@ -124,6 +124,7 @@ const SEEDS: Seed[] = [
   { slug: "memory-card-stack", title: "Memory Card Stack", description: "A fanned deck of photos you page through.", category: "Display" },
   { slug: "paywall", title: "Paywall", description: "Pick your price on a detent slider.", category: "Input" },
   { slug: "slider", title: "Slider", description: "A two-sided ratio slider with springy bars.", category: "Input" },
+  { slug: "bookshelf", title: "Bookshelf", description: "Pull a book off the shelf and turn its pages.", category: "Display" },
 ];
 
 /**

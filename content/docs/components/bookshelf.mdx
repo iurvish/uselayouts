@@ -1,0 +1,59 @@
+---
+title: Bookshelf
+description: A shelf of cloth-bound books. Pull one out and it opens on the desk — covers swing on a hinge and pages turn by the corner.
+---
+
+## Features
+
+- **Spines that answer**: Point at a book and it slides up out of the row. Width, height, cloth and foil are per book.
+- **Covers under gravity**: Each board is a rigid hinge. Lift it past upright and it falls open, with a small bounce off the desk.
+- **Paper that folds**: Drag a page by its outer half, click the dog-ear, or use the arrow keys. The crease follows your hand and never stretches the sheet.
+- **Real pagination**: Your text flows into as many pages as it needs. Spreads on wide screens, single pages on phones.
+- **Put it back**: Esc or click outside shuts the book; it is carried off and drops back into its slot.
+- **No dependencies**: CSS 3D transforms, clip-path and a few lines of physics. Respects reduced motion.
+
+## Usage
+
+```tsx
+import Bookshelf from "@/components/bookshelf";
+
+export default function Page() {
+  return <Bookshelf />;
+}
+```
+
+To shelve your own books:
+
+```tsx
+import { Bookshelf, type ShelfBook } from "@/components/bookshelf";
+
+const books: ShelfBook[] = [
+  {
+    id: "small-hours",
+    title: "The Small Hours",
+    author: "Ada Wren",
+    label: "Essays",
+    cloth: "#6f2d2a",
+    foil: "#ead6a4",
+    height: 336,
+    width: 60,
+    blurb: "On the work that only gets done after midnight.",
+    content: <p>There is a particular quiet that arrives a little after midnight…</p>,
+  },
+];
+
+<Bookshelf books={books} series="The reading room" />;
+```
+
+`Book` is exported on its own too, if you only need the reader.
+
+## Where to use
+
+- Blogs and essay archives
+- Reading lists and personal libraries
+- Changelogs or release notes told as chapters
+- Portfolios and case studies
+
+## Credits
+
+Built by [ravixalgorithm](https://github.com/ravixalgorithm).
