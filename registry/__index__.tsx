@@ -114,6 +114,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "bookshelf": {
+    name: "bookshelf",
+    description: "A shelf of cloth-bound books. Pull one out and it opens on the desk: covers swing on a hinge and pages turn by the corner.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/bookshelf.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/example/bookshelf.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "bookshelf"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "bottom-menu": {
     name: "bottom-menu",
     description: "A floating bottom navigation menu with smooth interactions.",

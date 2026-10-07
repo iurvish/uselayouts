@@ -120,6 +120,7 @@ const SEEDS: Seed[] = [
   { slug: "paper-shred-button", title: "Paper Shred Button", description: "A delete button that shreds a page into strips.", category: "Button" },
   { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
   { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
+  { slug: "bookshelf", title: "Bookshelf", description: "Pull a book off the shelf and turn its pages.", category: "Display" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug))

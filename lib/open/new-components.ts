@@ -1,5 +1,6 @@
 /** Components uploaded in the latest friend commit on feat/revive. */
 export const NEW_COMPONENT_SLUGS = new Set([
+  "bookshelf",
   "accessible-action",
   "accordionos",
   "card-folder",
