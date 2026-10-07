@@ -113,7 +113,6 @@
       "type": "registry:component",
       "title": "Bookshelf",
       "description": "A shelf of cloth-bound books. Pull one out and it opens on the desk: covers swing on a hinge and pages turn by the corner.",
-      "author": "ravixalgorithm <https://github.com/ravixalgorithm>",
       "dependencies": [],
       "files": [
         {
