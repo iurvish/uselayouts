@@ -120,6 +120,15 @@ const SEEDS: Seed[] = [
   { slug: "paper-shred-button", title: "Paper Shred Button", description: "A delete button that shreds a page into strips.", category: "Button" },
   { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
   { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
+  { slug: "add-cash", title: "Add Cash", description: "A wallet top-up that morphs open to pick an amount.", category: "Input" },
+  { slug: "copy-button", title: "Copy Button", description: "A copy button that morphs into a check.", category: "Button" },
+  { slug: "counter", title: "Counter", description: "Numbers that slide as you step up or down.", category: "Input" },
+  { slug: "flower-menu", title: "Flower Menu", description: "Quick actions that bloom out radially.", category: "Navigation" },
+  { slug: "memory-card-stack", title: "Memory Card Stack", description: "Printed photos that fan out on hover.", category: "Display" },
+  { slug: "notification-center", title: "Notification Center", description: "A notification feed with a staggered entrance.", category: "List" },
+  { slug: "paywall", title: "Paywall", description: "Pick your price on a detent slider.", category: "Input" },
+  { slug: "slider", title: "Slider", description: "A two-sided ratio slider with springy bars.", category: "Input" },
+  { slug: "status-fan", title: "Status Fan", description: "Status pills that fan out from a card header.", category: "Input" },
 ];
 
 export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug))

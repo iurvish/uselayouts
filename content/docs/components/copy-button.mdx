@@ -1,0 +1,35 @@
+---
+title: Copy Button
+description: An animated copy button with smooth morphing transitions and success feedback states.
+---
+
+## Usage
+
+### Customizing Content
+
+You can customize the button labels by editing the text variables inside the component:
+
+```tsx
+// Change Here
+const copyText = "Copy";
+const copiedText = "Copied";
+```
+
+```tsx
+import CopyButton from "@/components/copy-button";
+
+export default function Page() {
+  return <CopyButton />;
+}
+```
+
+## Features
+
+- **Morphing Animation** - Smooth transition between copy and copied states
+- **Clipboard Interaction** - Copies content instantly with a single click
+- **Success Feedback** - Visual confirmation when content is copied
+- **Animated Icons** - Dynamic icon transitions for better interaction feedback
+- **Micro-interactions** - Subtle scale, opacity, and motion effects
+- **Reusable Component** - Easily integrate into dashboards, code blocks, or command snippets
+- **Customizable Labels** - Quickly modify button text and copied content
+- **Accessible Design** - Keyboard and screen-reader friendly interactions

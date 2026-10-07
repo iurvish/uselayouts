@@ -1,0 +1,40 @@
+---
+title: Flower Menu
+description: A radial flower-style action menu with premium staggered motion and smooth easing curves.
+---
+
+## Usage
+
+```tsx
+import FlowerMenu from "@/components/flower-menu";
+
+export default function Page() {
+  return <FlowerMenu />;
+}
+```
+
+## Customization
+
+Update `FLOWER_ACTIONS` to change icons, labels, angle, and petal color:
+
+```tsx
+const FLOWER_ACTIONS = [
+  { id: "calendar", label: "Calendar", Icon: CalendarDays, angle: -145, color: "bg-violet-500" },
+  // ...
+];
+```
+
+For a slower/faster feel, tune `SPRING` and `CURVE`:
+
+```tsx
+const SPRING = { type: "spring", stiffness: 520, damping: 32, mass: 0.8 };
+const CURVE = [0.22, 1, 0.36, 1];
+```
+
+## Features
+
+- Radial flower expansion from a central action button
+- Slow-in / speed-up / slow-out motion curve for premium feel
+- Staggered petal entrance and exit
+- Active action label micro-interaction
+- Dark-mode-friendly styling

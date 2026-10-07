@@ -39,7 +39,7 @@ function SaveInput() {
           readOnly={!isEditing}
           className={cn(
             "h-12 border-0 shadow-none focus-visible:ring-0 bg-transparent p-0 text-base w-full min-w-32 pl-4 pr-12",
-            isEditing ? "text-foreground" : "text-muted-foreground"
+            isEditing ? "text-foreground" : "caret-transparent text-muted-foreground"
           )}
           placeholder="username"
         />

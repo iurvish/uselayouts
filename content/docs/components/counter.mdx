@@ -1,0 +1,41 @@
+---
+title: Counter
+description: An animated counter component with smooth number transitions and interactive increment/decrement controls.
+---
+
+## Usage
+
+### Customizing Limits
+
+You can customize the minimum value, maximum value, and initial count using props:
+
+```tsx
+<Counter
+  min={0}
+  max={20}
+  defaultValue={5}
+/>
+```
+
+```tsx
+import Counter from "@/components/counter";
+
+export default function Page() {
+  return (
+    <div className="flex items-center justify-center h-[400px] w-full">
+      <Counter />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Animated Number Transitions** - Numbers slide smoothly when incrementing or decrementing
+- **Directional Motion** - Animation direction changes based on increase or decrease
+- **Interactive Controls** - Responsive plus and minus buttons with tap feedback
+- **Boundary Limits** - Prevents values from exceeding minimum or maximum constraints
+- **Accessible Interactions** - Disabled states for invalid actions
+- **Minimal Design** - Clean UI suitable for dashboards, carts, and quantity selectors
+- **Spring-like Motion** - Smooth easing powered by Motion
+- **Customizable Props** - Easily configure ranges and starting values
