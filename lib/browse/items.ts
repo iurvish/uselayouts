@@ -125,6 +125,7 @@ const SEEDS: Seed[] = [
   { slug: "paywall", title: "Paywall", description: "Pick your price on a detent slider.", category: "Input" },
   { slug: "slider", title: "Slider", description: "A two-sided ratio slider with springy bars.", category: "Input" },
   { slug: "bookshelf", title: "Bookshelf", description: "Pull a book off the shelf and turn its pages.", category: "Display" },
+  { slug: "expanding-avatars", title: "Expanding Avatars", description: "A crowd of faces that bursts out from a headline.", category: "Display" },
 ];
 
 /**

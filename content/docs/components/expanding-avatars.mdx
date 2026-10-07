@@ -1,0 +1,54 @@
+---
+title: Expanding Avatars
+description: A crowd of avatars bursts out from a headline and settles around it. Hover any face and a pill opens toward the middle with their reach.
+---
+
+## Usage
+
+```tsx
+import ExpandingAvatars from "@/components/expanding-avatars";
+
+export default function Example() {
+  return <ExpandingAvatars />;
+}
+```
+
+Pass your own people and copy:
+
+```tsx
+<ExpandingAvatars
+  badge="niche-specific creators"
+  heading="who make you viral"
+  avatars={[
+    { name: "Alex", src: "/avatars/alex.jpg", caption: "Alex has 2.7K curious minds tuned in" },
+    { name: "Rowan", caption: "Rowan just joined" },
+  ]}
+/>
+```
+
+## Features
+
+- **Burst entrance**: Faces spring out from behind the headline, inner ring first, then the crowd. Each one sheds a blur as it lands.
+- **Any count**: The layout is computed from the number of avatars. Two rings, big faces close in, small ones near the edge. The headline area always stays clear.
+- **Inward pill**: The hover pill opens toward the centre, above or below and left or right, so it does not run off the stage.
+- **Keyboard and touch**: Tab to a face for the same pill. Tap on touch screens, tap empty space or press Escape to close.
+- **Initials fallback**: Leave out `src`, or let an image fail, and the bubble shows initials.
+- **Scales down**: The stage is 4:3 and sizes in container units, so the crowd keeps its shape on a phone.
+- **Reduced motion**: The burst is skipped. Avatars fade in where they sit.
+
+Needs `motion`. The entrance plays once, when the stage scrolls into view.
+
+## Customize
+
+- **People**: `avatars` takes `{ name, src?, caption? }`. `caption` is the pill text and the button's accessible name.
+- **Copy**: `badge` and `heading` accept any node. Pass `null` to hide either.
+- **Scatter**: `seed` reshuffles the layout. The same seed always gives the same layout, so server and client match.
+- **Replay**: Change the component's `key` to run the entrance again.
+- **Colours**: The blue pill tokens live in `BLUE_PILL`.
+
+## Where to use
+
+- Creator and community landing pages
+- Waitlists and "join 10K others" sections
+- Testimonials and social proof
+- Team or contributor walls
