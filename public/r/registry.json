@@ -1189,51 +1189,6 @@
       ]
     },
     {
-      "name": "add-cash",
-      "type": "registry:component",
-      "title": "Add Cash",
-      "description": "A premium animated wallet top-up interaction with morphing disclosure and smooth selection transitions.",
-      "dependencies": [
-        "motion"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/add-cash.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "copy-button",
-      "type": "registry:component",
-      "title": "Copy Button",
-      "description": "A compact copy interaction button with animated success feedback.",
-      "dependencies": [
-        "motion"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/copy-button.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "counter",
-      "type": "registry:component",
-      "title": "Counter",
-      "description": "An animated numeric counter with smooth increment and decrement transitions.",
-      "dependencies": [
-        "motion"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/counter.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "flower-menu",
       "type": "registry:component",
       "title": "Flower Menu",
@@ -1269,22 +1224,6 @@
       ]
     },
     {
-      "name": "notification-center",
-      "type": "registry:component",
-      "title": "Notification Center",
-      "description": "A compact animated notification feed with a staggered entrance and interactive unread badge.",
-      "dependencies": [
-        "motion",
-        "lucide-react"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/notification-center.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
       "name": "paywall",
       "type": "registry:component",
       "title": "Paywall",
@@ -1310,22 +1249,6 @@
       "files": [
         {
           "path": "registry/default/example/slider.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "status-fan",
-      "type": "registry:component",
-      "title": "Status Fan",
-      "description": "A card header with a cascading fan of status pills that animate open and crossfade between the title and selected status label.",
-      "dependencies": [
-        "motion",
-        "lucide-react"
-      ],
-      "files": [
-        {
-          "path": "registry/default/example/status-fan.tsx",
           "type": "registry:component"
         }
       ]
