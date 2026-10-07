@@ -1,7 +1,5 @@
 "use client";
 
-// Bookshelf, by ravixalgorithm (https://github.com/ravixalgorithm).
-
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent, type ReactNode, type Ref } from "react";
 
 /* ───────────── Paper: a sheet turned by one corner ───────────── */
@@ -126,6 +124,10 @@ const damp = (k: number) => 2 * Math.sqrt(k);
 const EYE = 3600;
 const THICKNESS = 8; // px ≈ 2.5mm of board
 
+/** Cloth with the light that falls near a spine: a dark edge and a thin highlight just inside it. */
+const spineLight = (dir: "90deg" | "270deg", cloth: string) =>
+  `linear-gradient(${dir}, rgb(0 0 0/.35), rgb(255 255 255/.1) 3%, rgb(0 0 0/0) 7%), ${cloth}`;
+
 /** Physical page index for the plain back of a paper leaf. */
 const BLANK = -3;
 
@@ -226,8 +228,9 @@ export function Book({
   runningHead: string;
   front: ReactNode;
   back: ReactNode;
-  /** Called once the shut book has been carried off the desk. */
-  onClose?: () => void;
+  /** Called once the book is shut, with the rect it occupies and which way up, so the shelf can carry it
+      back from exactly where it lies. */
+  onClose?: (from: DOMRect, backUp: boolean) => void;
   children: ReactNode;
 }) {
   const wide = useSyncExternalStore(subscribe, () => matchMedia(WIDE).matches, () => true);
@@ -396,15 +399,20 @@ export function Book({
       const target = deskTarget();
       d.v += (-SHIFT_K * (d.shift - target) - damp(SHIFT_K) * d.v) * dt;
       d.shift += d.v * dt;
-      const resting = b.ω === 0 && (b.θ === 0 || b.θ === Math.PI) && Math.abs(d.shift - target) < 0.05;
+      // The board is down well before the book has finished sliding to its place on the desk, and
+      // whoever is waiting on the board (the shelving flight) should not sit through that slide.
+      const down = b.ω === 0 && (b.θ === 0 || b.θ === Math.PI);
+      const resting = down && Math.abs(d.shift - target) < 0.05;
       if (resting) Object.assign(d, { shift: target, v: 0 });
       paintBoards();
-      if (resting) {
-        const { front, back } = boards.current;
-        setOpen(front.θ === Math.PI && back.θ === 0);
+      if (down) {
         const then = afterRest.current;
         afterRest.current = null;
         then?.();
+      }
+      if (resting) {
+        const { front, back } = boards.current;
+        setOpen(front.θ === Math.PI && back.θ === 0);
       } else boardFrame.current = requestAnimationFrame(step);
     };
     boardFrame.current = requestAnimationFrame(step);
@@ -533,20 +541,14 @@ export function Book({
     afterLayout.current = null;
   }, [turn]);
 
-  /** Pick the shut book up off the desk and carry it back to the shelf. */
+  /** Hand the shut book's place on the desk over to the shelf, which carries it back into its slot. */
   const putAway = () => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return onClose?.();
-    // Lifted (a little up, a little smaller as it comes off the desk), then carried off toward the shelf.
-    if (!boardEl.current) return;
-    const carry = boardEl.current.animate(
-      [
-        { transform: "translateY(0) scale(1)", opacity: 1 },
-        { transform: "translateY(-3%) scale(0.96)", opacity: 1, offset: 0.3 },
-        { transform: "translateY(-45%) scale(0.5)", opacity: 0 },
-      ],
-      { duration: 560, easing: "cubic-bezier(0.4, 0, 0.2, 1)", fill: "forwards" },
-    );
-    carry.finished.then(() => onClose?.());
+    // A shut book is only one half of its box: the right half front-up, the left half once it has been
+    // read to the end and the back cover came over onto the pages — and then it is lying blurb upward,
+    // with its spine on the right, which is where the shelf has to pick it up from.
+    const backUp = boards.current.back.θ > Math.PI / 2;
+    const half = (backUp ? leftHalf.current : rightHalf.current) ?? boardEl.current;
+    if (half) onClose?.(half.getBoundingClientRect(), backUp);
   };
 
   /** Click, key or outside-click intents. Pages get a flick across and slightly up; boards get a hand. */
@@ -806,8 +808,6 @@ export function Book({
   const ear = "absolute bottom-2.5 size-16 cursor-pointer";
   const earFold =
     "absolute bottom-0 size-6 bg-[#e3d9c5] shadow-[0_0_4px_rgb(0_0_0/.2)] transition-[width,height] duration-300 ease-[cubic-bezier(0.2,0,0,1)] group-hover/ear:size-10";
-  const spineLight = (dir: "90deg" | "270deg") =>
-    `linear-gradient(${dir}, rgb(0 0 0/.35), rgb(255 255 255/.1) 3%, rgb(0 0 0/0) 7%), ${cloth}`;
 
   return (
     <div
@@ -923,7 +923,7 @@ export function Book({
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-l-md px-14 text-center [backface-visibility:hidden]"
             style={{
-              background: spineLight("270deg"),
+              background: spineLight("270deg", cloth),
               color: foil,
               transform: `rotateY(180deg) translateZ(${THICKNESS}px)`,
             }}
@@ -957,7 +957,7 @@ export function Book({
         {/* Outside of the board, raised by its thickness above the pages. */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center gap-6 rounded-r-md px-12 text-center [backface-visibility:hidden]"
-          style={{ background: spineLight("90deg"), color: foil, transform: `translateZ(${THICKNESS}px)` }}
+          style={{ background: spineLight("90deg", cloth), color: foil, transform: `translateZ(${THICKNESS}px)` }}
         >
           <span className="h-px w-24 bg-current opacity-60" />
           <p className="font-serif text-4xl leading-[1.15] text-balance">{title}</p>
@@ -1014,6 +1014,21 @@ export type ShelfBook = {
 const spineShade =
   "linear-gradient(90deg, rgb(0 0 0/.38), rgb(255 255 255/.14) 14%, rgb(255 255 255/0) 34%, rgb(0 0 0/0) 70%, rgb(0 0 0/.32))";
 const ease = "ease-[cubic-bezier(0.2,0,0,1)]";
+/** Default spine size in px, when a book doesn't give its own. */
+const SPINE_W = 52;
+const SPINE_H = 320;
+/** The page block seen from the side: stacked leaves, shaded where the boards press them. */
+const foreEdge =
+  "linear-gradient(90deg, rgb(0 0 0/.24), rgb(0 0 0/0) 45%, rgb(0 0 0/.14)), repeating-linear-gradient(90deg, #e3d9c2 0 1px, #f3ecdd 1px 3px)";
+
+/**
+ * How a shut book fits its slot: how far it shrinks on the way, and the thickness that makes its spine
+ * exactly fill that slot once it has turned fully edge-on — so swapping it for the real spine is seamless.
+ */
+function fit(book: ShelfBook, from: DOMRect) {
+  const shrink = (book.height ?? SPINE_H) / from.height;
+  return { shrink, depth: (book.width ?? SPINE_W) / shrink };
+}
 
 /** Two thin foil bands, like the rules printed near a spine's head and tail. */
 function Bands() {
@@ -1027,20 +1042,43 @@ function Bands() {
 
 const keyframes = `
 .bookshelf-rise { animation: bookshelf-rise 650ms cubic-bezier(0.2, 0, 0, 1) backwards; }
-.bookshelf-shelve-in { animation: bookshelf-shelve-in 760ms both; }
+.bookshelf-settle { animation: bookshelf-settle 420ms; }
 @keyframes bookshelf-rise {
   from { opacity: 0; transform: perspective(1600px) translateY(90px) rotateX(18deg) scale(0.94); }
 }
-@keyframes bookshelf-shelve-in {
-  0% { opacity: 0; transform: translateY(-120%) rotate(-5deg); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }
-  12% { opacity: 1; }
-  68% { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1); }
-  82% { transform: translateY(-5%) rotate(0.8deg); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }
+/* The book has just dropped into the row and rebounds off the shelf three times, each kick about a third
+   of the last and rising slower than it falls, which is what makes it read as weight rather than a wobble.
+   The spine's origin-bottom pivots the tilt on its foot. */
+@keyframes bookshelf-settle {
+  0% { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(0, 0.6, 0.4, 1); }
+  28% { transform: translateY(-13px) rotate(1.3deg); animation-timing-function: cubic-bezier(0.6, 0, 1, 0.4); }
+  56% { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(0, 0.6, 0.4, 1); }
+  74% { transform: translateY(-5px) rotate(0.5deg); animation-timing-function: cubic-bezier(0.6, 0, 1, 0.4); }
+  88% { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(0, 0.6, 0.4, 1); }
+  95% { transform: translateY(-1.5px) rotate(0.15deg); animation-timing-function: cubic-bezier(0.6, 0, 1, 0.4); }
   100% { transform: translateY(0) rotate(0deg); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bookshelf-rise, .bookshelf-shelve-in { animation: none; }
+  .bookshelf-rise, .bookshelf-settle { animation: none; }
 }`;
+
+/** How long the shut book takes to travel from the desk back into its slot. */
+const FLIGHT = 480;
+
+/**
+ * An invisible line for the book to follow home, as a CSS `offset-path`. Both control points sit level,
+ * `lift` above the higher end, which makes the tangents vertical at both ends: the book leaves the desk
+ * straight up and comes straight back down into the row, rather than sliding there in a dull diagonal.
+ *
+ * A cubic with P1y = P2y peaks at t = ½, at (y₀ + y₁ + 6·apex) / 8 — only three quarters of the way up to
+ * its controls, so `lift` always buys less height than it looks like it should.
+ *
+ * Coordinates are the viewport's, which is what the path of a `position: fixed` element resolves against.
+ */
+export function homeward(from: Pt, to: Pt, lift: number) {
+  const apex = Math.min(from.y, to.y) - lift;
+  return `path("M ${from.x} ${from.y} C ${from.x} ${apex}, ${to.x} ${apex}, ${to.x} ${to.y}")`;
+}
 
 const caption = `font-mono text-[10px] tracking-[0.1em] uppercase ${faint}`;
 
@@ -1056,7 +1094,86 @@ export function Bookshelf({
 }) {
   const [picked, setPicked] = useState<string | null>(null);
   const [reading, setReading] = useState<ShelfBook | null>(null);
+  /** A book that has been shut and is in the air, with the place on the desk it left from and which of
+      its boards was facing up as it got there. */
+  const [flying, setFlying] = useState<{ book: ShelfBook; from: DOMRect; backUp: boolean } | null>(null);
   const [shelved, setShelved] = useState<string | null>(null);
+  const slot = useRef<HTMLButtonElement | null>(null);
+  const flier = useRef<HTMLDivElement>(null);
+  const solid = useRef<HTMLDivElement>(null);
+  const dimFront = useRef<HTMLSpanElement>(null);
+  const dimBack = useRef<HTMLSpanElement>(null);
+  const dimSpine = useRef<HTMLSpanElement>(null);
+
+  // Carry the shut book home: the wrapper flies along `homeward` while the book inside it turns spine-first
+  // into the row, the way a hand puts one back. Nothing fades in mid-air.
+  useLayoutEffect(() => {
+    if (!flying) return;
+    const { from } = flying;
+    const { shrink } = fit(flying.book, from);
+    const to = slot.current!.getBoundingClientRect();
+    const centre = (r: DOMRect) => ({ x: r.x + r.width / 2, y: r.y + r.height / 2 });
+    // Thrown, not carried. The obvious pair here — decelerate up, accelerate down — flattens to a stop on
+    // both sides of the apex and the book visibly hangs there. These leave the junction moving instead:
+    // `climb` is still running at 0.36 when it hands over, and `fall` picks it up at the same speed and
+    // carries it into the row. The arc already slows the eye at the top; the clock shouldn't do it twice.
+    const climb = "cubic-bezier(0.15, 0.45, 0.45, 0.8)";
+    const fall = "cubic-bezier(0.4, 0.15, 0.7, 0.85)";
+    const timing = { duration: FLIGHT, fill: "forwards" as const };
+    // At the apex it is already near spine size, so it recedes toward the shelf rather than filling the
+    // window on its way over.
+    const high = shrink + (1 - shrink) * 0.26;
+    // Face up on the desk → spine out in the row, by the shorter way round: a book shut on its back cover
+    // is already turned over, and both boards are on the box, so only the angle it starts at changes.
+    const spin = flying.backUp ? 180 : 0;
+    const land = 90;
+    const mid = spin + (land - spin) * 0.38;
+    // Lambert: a face is lit by how squarely it faces the reader. The boards look along ±z, so they go by
+    // cos θ; the spine looks along −x, so it goes by sin θ — dark while it is edge-on and full by the time
+    // it is square to the row, which is also what leaves it matching the spines it lands among.
+    const rad = (deg: number) => (deg * Math.PI) / 180;
+    const shade = (deg: number, facing: 1 | -1) => `${0.5 * (1 - Math.max(0, facing * Math.cos(rad(deg))))}`;
+    const spineShade_ = (deg: number) => `${0.5 * (1 - Math.max(0, Math.sin(rad(deg))))}`;
+
+    // Well up and over before it drops in, so the last stretch of the path is a fall, not a slide.
+    flier.current!.style.offsetPath = homeward(centre(from), centre(to), Math.max(210, Math.abs(to.x - from.x) * 0.5));
+    flier.current!.animate(
+      [
+        { offsetDistance: "0%", easing: climb },
+        { offsetDistance: "52%", easing: fall },
+        { offsetDistance: "100%" },
+      ],
+      timing,
+    );
+    // Turning its spine to the reader as it goes, and square-on to the row by the time it lands: at 90°
+    // only the spine shows, and `fit` sized it to fill the slot exactly.
+    const run = solid.current!.animate(
+      [
+        { transform: `scale(1) rotateY(${spin}deg)`, easing: climb },
+        { transform: `scale(${high}) rotateY(${mid}deg)`, easing: fall },
+        { transform: `scale(${shrink}) rotateY(${land}deg)` },
+      ],
+      timing,
+    );
+    for (const [el, lit] of [
+      [dimFront.current!, (deg: number) => shade(deg, 1)],
+      [dimBack.current!, (deg: number) => shade(deg, -1)],
+      [dimSpine.current!, spineShade_],
+    ] as const)
+      el.animate(
+        [
+          { opacity: lit(spin), easing: climb },
+          { opacity: lit(mid), easing: fall },
+          { opacity: lit(land) },
+        ],
+        timing,
+      );
+    run.onfinish = () => {
+      setShelved(flying.book.id);
+      setFlying(null);
+    };
+    return () => run.cancel();
+  }, [flying]);
 
   if (reading)
     return (
@@ -1070,8 +1187,9 @@ export function Bookshelf({
           series={series}
           blurb={reading.blurb}
           runningHead={reading.title}
-          onClose={() => {
-            setShelved(reading.id);
+          onClose={(from, backUp) => {
+            if (matchMedia("(prefers-reduced-motion: reduce)").matches) setShelved(reading.id);
+            else setFlying({ book: reading, from, backUp });
             setReading(null);
           }}
           front={
@@ -1094,6 +1212,9 @@ export function Bookshelf({
       </div>
     );
 
+  // The flying book's thickness, which has to be in hand to lay out its faces before the effect runs.
+  const depth = flying ? fit(flying.book, flying.from).depth : 0;
+
   return (
     <div className="w-full max-w-3xl px-4 py-10" onPointerLeave={() => setPicked(null)}>
       <style>{keyframes}</style>
@@ -1106,16 +1227,22 @@ export function Bookshelf({
             onPointerEnter={() => setPicked(b.id)}
             onFocus={() => setPicked(b.id)}
             onBlur={() => setPicked(null)}
-            onClick={() => setReading(b)}
+            onClick={() => {
+              setShelved(null);
+              setReading(b);
+            }}
+            // The slot keeps its place in the row while the book is in the air above it.
+            ref={flying?.book.id === b.id ? slot : undefined}
             style={{
-              width: b.width ?? 52,
-              height: b.height ?? 320,
+              width: b.width ?? SPINE_W,
+              height: b.height ?? SPINE_H,
               color: b.foil,
               background: `${spineShade}, ${b.cloth}`,
+              visibility: flying?.book.id === b.id ? "hidden" : undefined,
             }}
             className={`flex shrink-0 origin-bottom cursor-pointer flex-col items-center justify-between rounded-[2px] py-3 transition-[translate,rotate] duration-500 outline-none focus-visible:ring-2 focus-visible:ring-current ${ease} ${
               b.id === picked ? "-translate-y-5" : ""
-            } ${b.id === shelved ? "bookshelf-shelve-in" : ""}`}
+            } ${b.id === shelved ? "bookshelf-settle" : ""}`}
           >
             <Bands />
             <span className="line-clamp-2 max-h-[220px] rotate-180 text-left font-serif text-[13px] leading-[17px] [writing-mode:vertical-rl]">
@@ -1135,6 +1262,80 @@ export function Bookshelf({
       {/* Wooden shelf: top face catching light, then the front lip. */}
       <div className="h-2 rounded-t-[2px] bg-[linear-gradient(#a07b55,#8a6644)]" />
       <div className="h-3 rounded-b-[3px] bg-[linear-gradient(#6d4f33,#553d27)] shadow-[0_14px_24px_-12px_rgb(0_0_0/.5)]" />
+
+      {/* The shut book in the air, following `homeward` into the slot above: a real board-and-paper box, so
+          that turning it toward the row shows its spine and the page block rather than a flat card. Fixed,
+          so the path can be written in viewport coordinates and it flies over whatever the shelf sits in. */}
+      {flying && (
+        <div
+          ref={flier}
+          aria-hidden
+          className="pointer-events-none fixed top-0 left-0 z-50 [will-change:offset-distance]"
+          style={{
+            width: flying.from.width,
+            height: flying.from.height,
+            perspective: EYE / 2,
+            // Upright all the way: `offset-rotate: auto` would bank it to the path, which starts straight up.
+            offsetRotate: "0deg",
+          }}
+        >
+          {/* Faces of the shut book, half its thickness either side of z = 0, so it turns about its own
+              middle rather than swinging out from the back board. */}
+          <div ref={solid} className="relative h-full w-full [transform-style:preserve-3d] [will-change:transform]">
+            {/* Back board, turned to read the right way round from behind: this is the face up when the
+                book was shut on its last page, so it has to carry the blurb the reader just had in front
+                of them. */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-l-md px-14 text-center"
+              style={{
+                transform: `translateZ(${-depth / 2}px) rotateY(180deg)`,
+                background: spineLight("270deg", flying.book.cloth),
+                color: flying.book.foil,
+              }}
+            >
+              <p className="max-w-[28ch] font-serif text-xl leading-8 text-balance">{flying.book.blurb}</p>
+              <span className="h-px w-16 bg-current opacity-60" />
+              <p className="font-mono text-[10px] tracking-[0.2em] uppercase opacity-80">{series}</p>
+              <span ref={dimBack} className="absolute inset-0 rounded-l-md bg-black opacity-0" />
+            </div>
+            {/* The page block, along the fore-edge away from the hinge. */}
+            <div
+              className="absolute top-0 left-full h-full origin-left rounded-r-[2px]"
+              style={{ width: depth, transform: `translateZ(${-depth / 2}px) rotateY(-90deg)`, background: foreEdge }}
+            />
+            {/* The spine, on the hinge side: the face that ends up looking out of the row, so it wears the
+                same cloth and bands as the shelved spines it is joining. */}
+            <div
+              className="absolute top-0 left-0 flex h-full origin-left flex-col justify-between rounded-l-[2px] py-3"
+              style={{
+                width: depth,
+                transform: `translateZ(${-depth / 2}px) rotateY(-90deg)`,
+                background: `${spineShade}, ${flying.book.cloth}`,
+                color: flying.book.foil,
+              }}
+            >
+              <Bands />
+              <Bands />
+              <span ref={dimSpine} className="absolute inset-0 rounded-l-[2px] bg-black opacity-0" />
+            </div>
+            {/* Front board, a whole book's thickness above the back one. */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center gap-6 rounded-r-md px-12 text-center shadow-[0_24px_40px_-16px_rgb(0_0_0/.45)]"
+              style={{
+                transform: `translateZ(${depth / 2}px)`,
+                background: spineLight("90deg", flying.book.cloth),
+                color: flying.book.foil,
+              }}
+            >
+              <span className="h-px w-24 bg-current opacity-60" />
+              <p className="font-serif text-4xl leading-[1.15] text-balance">{flying.book.title}</p>
+              <span className="h-px w-24 bg-current opacity-60" />
+              <p className="font-mono text-[10px] tracking-[0.2em] uppercase opacity-80">{flying.book.author}</p>
+              <span ref={dimFront} className="absolute inset-0 rounded-r-md bg-black opacity-0" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
