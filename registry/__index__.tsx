@@ -464,6 +464,24 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
+  "expanding-avatars": {
+    name: "expanding-avatars",
+    description: "A crowd of avatars bursts out from a headline and settles around it. Hover any face and a pill opens toward the middle with their reach.",
+    type: "registry:component",
+    registryDependencies: undefined,
+    files: [{
+      path: "registry/default/example/expanding-avatars.tsx",
+      type: "registry:component",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/demo/expanding-avatars-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || "expanding-avatars"
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
   "feature-carousel": {
     name: "feature-carousel",
     description: "A smooth carousel for showcasing product features.",
