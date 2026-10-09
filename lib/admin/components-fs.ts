@@ -218,8 +218,12 @@ async function safeRename(from: string, to: string) {
 async function replaceSlugInFile(filePath: string, from: string, to: string) {
   try {
     const content = await fs.readFile(filePath, "utf8");
-    if (!content.includes(from)) return;
-    await fs.writeFile(filePath, content.replaceAll(from, to));
+    const updated = content
+      .replaceAll(`"${from}"`, `"${to}"`)
+      .replaceAll(`'${from}'`, `'${to}'`);
+    if (updated !== content) {
+      await fs.writeFile(filePath, updated);
+    }
   } catch {
     // optional file
   }

@@ -90,6 +90,26 @@
       ]
     },
     {
+      "name": "app-profile",
+      "type": "registry:component",
+      "title": "App Profile",
+      "description": "A app block with smooth motion for social proof.",
+      "dependencies": [
+        "clsx",
+        "framer-motion",
+        "lucide-react",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/app-profile.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "bento-card",
       "type": "registry:component",
       "title": "Bento Card",
@@ -104,6 +124,26 @@
       "files": [
         {
           "path": "registry/default/example/bento-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "book-acall-button",
+      "type": "registry:component",
+      "title": "Book ACall Button",
+      "description": "A book acall button control with clear active states and motion.",
+      "dependencies": [
+        "clsx",
+        "framer-motion",
+        "lucide-react",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/book-acall-button.tsx",
           "type": "registry:component"
         }
       ]
@@ -164,6 +204,26 @@
       "files": [
         {
           "path": "registry/default/example/card-folder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "card-wallet",
+      "type": "registry:component",
+      "title": "Card Wallet",
+      "description": "A leather card wallet layout for browsing items with fluid motion.",
+      "dependencies": [
+        "clsx",
+        "framer-motion",
+        "lucide-react",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/card-wallet.tsx",
           "type": "registry:component"
         }
       ]
@@ -505,6 +565,25 @@
       ]
     },
     {
+      "name": "floating-capsule-dock",
+      "type": "registry:component",
+      "title": "Floating Capsule Dock",
+      "description": "A floating capsule dock control with clear active states and motion.",
+      "dependencies": [
+        "clsx",
+        "framer-motion",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/floating-capsule-dock.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "fluid-expanding-grid",
       "type": "registry:component",
       "title": "Fluid Expanding Grid",
@@ -639,6 +718,25 @@
       "files": [
         {
           "path": "registry/default/example/inline-edit.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "invite-friend-card",
+      "type": "registry:component",
+      "title": "Invite Friend Card",
+      "description": "A invite friend card layout for browsing items with fluid motion.",
+      "dependencies": [
+        "clsx",
+        "framer-motion",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/invite-friend-card.tsx",
           "type": "registry:component"
         }
       ]
@@ -1170,6 +1268,25 @@
       "files": [
         {
           "path": "registry/default/example/tactile-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "task-card",
+      "type": "registry:component",
+      "title": "Task Card",
+      "description": "A task card block with smooth motion for social proof.",
+      "dependencies": [
+        "clsx",
+        "lucide-react",
+        "motion",
+        "react",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/task-card.tsx",
           "type": "registry:component"
         }
       ]
