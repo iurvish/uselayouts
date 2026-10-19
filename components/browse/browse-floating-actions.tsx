@@ -5,6 +5,8 @@ import * as React from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useFeedbackEligibility } from "@/hooks/use-feedback-eligibility";
 import { createSponsorCheckoutUrl } from "@/lib/sponsor/checkout";
+import { TIER_SPONSORS } from "@/lib/sponsor/sponsors";
+import { SPONSOR_LOGOS } from "@/components/sponsor/sponsor-logos";
 import { cn } from "@/lib/utils";
 import { FeedbackDialog } from "./feedback-dialog";
 import { FeedbackIcon, PlusIcon } from "./icons";
@@ -21,6 +23,10 @@ export function BrowseFloatingActions() {
   const [feedbackOpen, setFeedbackOpen] = React.useState(false);
   const [checkoutPending, setCheckoutPending] = React.useState(false);
   const [checkoutError, setCheckoutError] = React.useState<string | null>(null);
+
+  const slots = TIER_SPONSORS[SLOT_TIER];
+  const goldSponsors = slots.filter((s) => s !== null);
+  const hasOpenSlot = goldSponsors.length < slots.length;
 
   /** A Dodo checkout URL is a one-time session, so one has to exist before we
    *  can navigate. Creating it on intent rather than on click takes that
@@ -77,30 +83,73 @@ export function BrowseFloatingActions() {
           <div className="flex w-full items-center border-b-[0.6px] border-border p-2.5 text-sm text-white md:text-base">
             Sponsor Slot
           </div>
-          <div className="w-full px-2.5 py-3">
-            {/* Figma 1:85 — the dashed placement a sponsor would take. */}
-            <button
-              type="button"
-              onClick={() => void openCheckout()}
-              onPointerEnter={warmSoon}
-              onPointerLeave={cancelWarm}
-              onPointerDown={warm}
-              onFocus={warmSoon}
-              onBlur={cancelWarm}
-              disabled={checkoutPending}
-              aria-label="Sponsor useLayouts and add your logo here"
-              className={cn(
-                "flex w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-[10px] p-3",
-                "border border-dashed border-[#4e4e55] text-xs uppercase text-white md:text-sm",
-                "transition-colors duration-150 ease-out motion-reduce:transition-none",
-                "[@media(hover:hover)_and_(pointer:fine)]:hover:border-[#6b6b73] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/4",
-                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
-                "disabled:cursor-not-allowed disabled:opacity-60",
-              )}
-            >
-              <PlusIcon className="size-4 shrink-0" />
-              <span>{checkoutPending ? "Opening…" : "Add your logo Here"}</span>
-            </button>
+          <div className="flex w-full flex-col gap-2 px-2.5 py-3">
+            {/* Gold sponsors hold this placement; their marks go white rather
+                than brand colour because the dock is near-black. */}
+            {goldSponsors.map((sponsor) => {
+              const Logo = sponsor.logo ? SPONSOR_LOGOS[sponsor.logo] : null;
+              return (
+                <a
+                  key={sponsor.name}
+                  href={sponsor.href}
+                  target="_blank"
+                  rel="noreferrer sponsored"
+                  aria-label={`${sponsor.name} — Gold sponsor of useLayouts`}
+                  className={cn(
+                    "flex w-full items-center gap-2.5 overflow-hidden rounded-[10px] p-3",
+                    "border border-[#3a3a41] bg-white/[0.03] text-white",
+                    "transition-colors duration-150 ease-out motion-reduce:transition-none",
+                    "[@media(hover:hover)_and_(pointer:fine)]:hover:border-[#55555e] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.07]",
+                    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
+                  )}
+                >
+                  {Logo ? (
+                    <Logo className="size-5" />
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="flex size-5 shrink-0 items-center justify-center rounded-[6px] text-[9px] font-semibold text-white"
+                      style={{ backgroundColor: sponsor.color }}
+                    >
+                      {sponsor.abbr}
+                    </span>
+                  )}
+                  <span className="truncate text-xs md:text-sm">
+                    {sponsor.name}
+                  </span>
+                </a>
+              );
+            })}
+
+            {/* Figma 1:85 — the dashed placement a sponsor would take. Gone
+                once every Gold slot is taken: a CTA that cannot be honoured
+                is worse than no CTA. */}
+            {hasOpenSlot ? (
+              <button
+                type="button"
+                onClick={() => void openCheckout()}
+                onPointerEnter={warmSoon}
+                onPointerLeave={cancelWarm}
+                onPointerDown={warm}
+                onFocus={warmSoon}
+                onBlur={cancelWarm}
+                disabled={checkoutPending}
+                aria-label="Sponsor useLayouts and add your logo here"
+                className={cn(
+                  "flex w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-[10px] p-3",
+                  "border border-dashed border-[#4e4e55] text-xs uppercase text-white md:text-sm",
+                  "transition-colors duration-150 ease-out motion-reduce:transition-none",
+                  "[@media(hover:hover)_and_(pointer:fine)]:hover:border-[#6b6b73] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/4",
+                  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
+                  "disabled:cursor-not-allowed disabled:opacity-60",
+                )}
+              >
+                <PlusIcon className="size-4 shrink-0" />
+                <span>
+                  {checkoutPending ? "Opening…" : "Add your logo Here"}
+                </span>
+              </button>
+            ) : null}
             {checkoutError ? (
               <p className="pt-2 text-[12px] text-red-400" role="alert">
                 {checkoutError}

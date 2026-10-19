@@ -4,11 +4,24 @@ import * as React from "react";
 import { SPONSOR_HREF } from "./shared";
 
 export { SPONSOR_HREF };
-import { RibbonField, RibbonFieldDial, type RibbonPatternMode } from "./ribbon-pattern";
+import {
+  RibbonField,
+  RibbonFieldDial,
+  type RibbonPatternMode,
+} from "./ribbon-pattern";
 import { cn } from "@/lib/utils";
 import { startSponsorCheckout } from "@/lib/sponsor/checkout";
 import { SPONSOR_PLANS, type SponsorTier } from "@/lib/sponsor/plans";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { TIER_SPONSORS, type SponsorEntry } from "@/lib/sponsor/sponsors";
+import { SPONSOR_LOGOS } from "./sponsor-logos";
+
+export { TIER_SPONSORS };
+export type { SponsorEntry };
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const TIERS = ["Gold", "Silver", "Bronze"] as const;
 
@@ -20,23 +33,6 @@ const TIER_KEY: Record<(typeof TIERS)[number], SponsorTier> = {
 
 export type SponsorLogoMode = "marks" | "names" | "mixed" | "chips" | "rows";
 
-export type SponsorEntry = {
-  name: string;
-  abbr: string;
-  color: string;
-  href: string;
-  since?: string;
-};
-
-export const TIER_SPONSORS: Record<
-  (typeof TIERS)[number],
-  (SponsorEntry | null)[]
-> = {
-  Gold: [null, null, null],
-  Silver: [null, null, null],
-  Bronze: [null, null, null],
-};
-
 export const SLOT_SHAPES = [
   { src: "/sponsor/figma/slot-a.png", w: 242, h: 124 },
   { src: "/sponsor/figma/slot-b.png", w: 242, h: 124 },
@@ -45,8 +41,7 @@ export const SLOT_SHAPES = [
 
 export const HERO_COPY = {
   title: "useLayouts stays free because people like you keep the lights on",
-  body:
-    "This library needs you. Be the backbone that keeps this library standing strong. Help us keep it free for everyone",
+  body: "This library needs you. Be the backbone that keeps this library standing strong. Help us keep it free for everyone",
 } as const;
 
 function PlusIcon({ className }: { className?: string }) {
@@ -82,7 +77,26 @@ export function SponsorMark({
   sponsor: SponsorEntry;
   size?: "sm" | "md" | "lg";
 }) {
-  const sizes = { sm: "size-8 text-[11px]", md: "size-11 text-[13px]", lg: "size-14 text-[15px]" };
+  const sizes = {
+    sm: "size-8 text-[11px]",
+    md: "size-11 text-[13px]",
+    lg: "size-14 text-[15px]",
+  };
+  const Logo = sponsor.logo ? SPONSOR_LOGOS[sponsor.logo] : null;
+
+  /** A real mark is already its own shape, so it gets the footprint without
+   *  the tile — a logo boxed inside another rounded square reads as a sticker. */
+  if (Logo) {
+    return (
+      <span
+        className={cn("flex shrink-0 items-center justify-center", sizes[size])}
+        style={{ color: sponsor.color }}
+      >
+        <Logo className="size-full" />
+      </span>
+    );
+  }
+
   return (
     <span
       className={cn(
@@ -561,8 +575,8 @@ export function TierTickets({
   label: (typeof TIERS)[number];
   compact?: boolean;
 }) {
-  const sponsors = TIER_SPONSORS[label];
   const tier = TIER_KEY[label];
+  const sponsors = TIER_SPONSORS[tier];
   const plan = SPONSOR_PLANS[tier];
   return (
     <section
@@ -600,14 +614,23 @@ export function TierTickets({
 }
 
 export function TierChips({ label }: { label: (typeof TIERS)[number] }) {
-  const sponsors = TIER_SPONSORS[label];
-  const slots = [...sponsors, ...Array(Math.max(0, 3 - sponsors.length)).fill(null)].slice(0, 3);
+  const sponsors = TIER_SPONSORS[TIER_KEY[label]];
+  const slots = [
+    ...sponsors,
+    ...Array(Math.max(0, 3 - sponsors.length)).fill(null),
+  ].slice(0, 3);
   return (
     <section className="rounded-[14px] border border-[#e2e2e2] bg-[#f9f8f5] p-4 shadow-[0px_1px_1px_0px_rgba(0,0,0,0.02)]">
-      <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">{label}</h2>
+      <h2 className="text-[18px] leading-[1.15] tracking-[-0.72px] text-black">
+        {label}
+      </h2>
       <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {slots.map((s, i) => (
-          <SponsorChip key={`${label}-${i}`} sponsor={s} tier={TIER_KEY[label]} />
+          <SponsorChip
+            key={`${label}-${i}`}
+            sponsor={s}
+            tier={TIER_KEY[label]}
+          />
         ))}
       </div>
     </section>
@@ -650,7 +673,11 @@ export function HeroCard({
         )}
       >
         {dial ? (
-          <RibbonFieldDial mode={pattern} panel={dialPanel} boundsRef={stripeRef} />
+          <RibbonFieldDial
+            mode={pattern}
+            panel={dialPanel}
+            boundsRef={stripeRef}
+          />
         ) : (
           <RibbonField mode={pattern} boundsRef={stripeRef} />
         )}
@@ -673,6 +700,10 @@ export function TiersShell({ children }: { children: React.ReactNode }) {
 
 export function allSponsorSlots() {
   return TIERS.flatMap((tier) =>
-    TIER_SPONSORS[tier].map((s, i) => ({ tier, sponsor: s, index: i })),
+    TIER_SPONSORS[TIER_KEY[tier]].map((s, i) => ({
+      tier,
+      sponsor: s,
+      index: i,
+    })),
   );
 }
