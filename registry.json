@@ -109,6 +109,19 @@
       ]
     },
     {
+      "name": "bookshelf",
+      "type": "registry:component",
+      "title": "Bookshelf",
+      "description": "A shelf of cloth-bound books. Pull one out and it opens on the desk: covers swing on a hinge and pages turn by the corner.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/default/example/bookshelf.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "bottom-menu",
       "type": "registry:component",
       "title": "Bottom Menu",
