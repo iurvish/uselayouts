@@ -1,0 +1,28 @@
+---
+title: Paywall
+description: A premium paywall component with a "pick your price" detent slider, animated numeric price transitions, and a segmented plan control.
+---
+
+## Usage
+
+### Basic
+
+```tsx
+import PremiumPaywall from "@/components/paywall";
+
+export default function Page() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <PremiumPaywall />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Segmented Plan Control** — Animated pill switch between Annual and Lifetime plans with shared layout transitions.
+- **Detent Slider** — Pointer-driven slider with discrete price steps and rubber-band overshoot.
+- **Animated Price** — Directional vertical crossfade for price changes, similar to numeric text transitions.
+- **Live Captions** — Encouraging messages that animate with each price step change.
+- **Premium Motion Design** — Spring physics throughout for polished, tactile interactions.

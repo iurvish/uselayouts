@@ -1,0 +1,49 @@
+---
+title: Slider
+description: A dual-sided ratio slider animated with spring physics and drag interactions.
+---
+
+## Usage
+
+### Basic
+
+```tsx
+import CoffeeMilkSlider from "@/components/slider";
+
+export default function Page() {
+  return (
+    <div className="max-w-sm mx-auto py-12">
+      <CoffeeMilkSlider />
+    </div>
+  );
+}
+```
+
+### Custom Labels
+
+```tsx
+<CoffeeMilkSlider
+  defaultValue={40}
+  leftLabel="DAY"
+  rightLabel="NIGHT"
+/>
+```
+
+### With State
+
+```tsx
+const [value, setValue] = useState(65);
+
+<CoffeeMilkSlider
+  defaultValue={value}
+  onChange={(val) => setValue(val)}
+/>
+```
+
+## Features
+
+- **Animated Track Segments** — Each side of the slider animates with spring physics.
+- **Draggable Handle** — Real-time ratio adjustment via pointer events.
+- **Responsive Labels** — Labels fade in and out based on available width.
+- **Custom Labels** — Easily rename via props.
+- **OnChange Callback** — React to value changes in your application.
