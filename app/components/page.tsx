@@ -10,6 +10,10 @@ import {
 import { browseItems } from "@/lib/browse/items";
 import { getComponentDocsPage, getOpenNavItems } from "@/lib/open/component";
 import { getGithubStarCount } from "@/lib/github";
+import {
+  COMPONENT_CATEGORIES,
+  categoryComponents,
+} from "@/lib/seo/categories";
 import { canonical } from "@/lib/seo/site";
 
 export const revalidate = 3600;
@@ -154,16 +158,18 @@ export default async function ComponentsIndexPage() {
           </div>
         </header>
 
-        {/* In-page nav: gives the category H2s internal anchors to rank on. */}
+        {/* Real links, not #anchors. An anchor is not a URL Google can rank,
+            and these category pages are what carry the head terms. */}
         <nav aria-label="Component categories" className="flex flex-wrap gap-2.5 py-8">
-          {categories.map((category) => (
-            <a
-              key={category}
-              href={`#${category.toLowerCase()}`}
+          {COMPONENT_CATEGORIES.map((category) => (
+            <Link
+              key={category.slug}
+              href={`/components/${category.slug}`}
               className="rounded-full bg-white px-4 py-1.5 text-[14px] text-[#071A31] shadow-[inset_0_0_0_1px_rgba(7,26,49,0.1)] transition-colors hover:bg-[#FAF9F7]"
             >
-              {category} ({entries.filter((e) => e.category === category).length})
-            </a>
+              {category.heading} (
+              {categoryComponents(category, navItems).length})
+            </Link>
           ))}
         </nav>
 

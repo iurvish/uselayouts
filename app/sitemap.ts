@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { getOpenNavItems } from "@/lib/open/component";
+import { COMPONENT_CATEGORIES } from "@/lib/seo/categories";
 import { SITE_URL } from "@/lib/seo/site";
 import { source } from "@/lib/source";
 
@@ -44,6 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/browse`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/docs`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/sponsor`, changeFrequency: "monthly", priority: 0.3 },
+    // Category pages carry the head terms, so they rank above the detail pages.
+    ...COMPONENT_CATEGORIES.map((category) => ({
+      url: `${SITE_URL}/components/${category.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
   ];
 
   // `source.getPages()` includes the /docs index, which is already listed

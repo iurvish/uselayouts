@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { OpenNavItem } from "@/lib/open/component";
 import { cliInstallCommand } from "@/lib/open/package-manager";
+import type { ComponentCategory } from "@/lib/seo/categories";
 
 /**
  * The component pages used to server-render nothing but an interactive preview:
@@ -19,6 +20,7 @@ export function ComponentSeoContent({
   registryItem,
   related,
   docsContent,
+  category,
 }: {
   title: string;
   description: string;
@@ -27,6 +29,8 @@ export function ComponentSeoContent({
   registryItem?: string;
   related: OpenNavItem[];
   docsContent?: React.ReactNode;
+  /** Links up to the category page, so the hierarchy is crawlable both ways. */
+  category?: ComponentCategory;
 }) {
   return (
     <article className="border-t border-white/8 bg-[hsl(240_6%_7%)] px-6 py-16 text-foreground md:px-10 lg:px-16">
@@ -127,7 +131,15 @@ export function ComponentSeoContent({
           </section>
         ) : null}
 
-        <p className="text-[hsl(240_5%_65%)]">
+        <p className="flex flex-wrap gap-x-5 gap-y-2 text-[hsl(240_5%_65%)]">
+          {category ? (
+            <Link
+              href={`/components/${category.slug}`}
+              className="text-white underline decoration-white/30 underline-offset-4"
+            >
+              All {category.shortName}
+            </Link>
+          ) : null}
           <Link
             href="/components"
             className="text-white underline decoration-white/30 underline-offset-4"

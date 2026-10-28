@@ -10,6 +10,7 @@ import {
   getOpenComponent,
   getOpenNavItems,
 } from "@/lib/open/component";
+import { primaryCategory } from "@/lib/seo/categories";
 import { canonical } from "@/lib/seo/site";
 
 /**
@@ -72,6 +73,9 @@ export default async function OpenComponentPage(props: {
             registryItem={data.registryItem}
             related={related}
             docsContent={docsContent}
+            category={primaryCategory(
+              navItems.find((item) => item.slug === slug)?.tags,
+            )}
           />
         }
       />
