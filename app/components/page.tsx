@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { LandingNav } from "@/components/landing/landing-nav";
+import { ComponentPreviewCard } from "@/components/seo/component-preview-card";
 import {
   ComponentListJsonLd,
   FaqJsonLd,
@@ -197,28 +198,9 @@ export default async function ComponentsIndexPage() {
                   `Animated React ${category.toLowerCase()} components, free to copy.`}
               </p>
 
-              <ul className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="mt-7 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
-                  <li key={item.slug}>
-                    <h3 className="text-[17px] font-medium leading-snug tracking-[-0.01em]">
-                      <Link
-                        href={item.href}
-                        className="underline decoration-[#071A31]/20 decoration-1 underline-offset-[3px] transition-colors hover:decoration-[#071A31]/60"
-                      >
-                        {item.title} React component
-                      </Link>
-                      {item.isNew ? (
-                        <span className="ml-2 align-middle font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wide text-[#4B565E]">
-                          new
-                        </span>
-                      ) : null}
-                    </h3>
-                    {item.description ? (
-                      <p className="mt-1.5 text-[14px] leading-relaxed text-[#4B565E]">
-                        {item.description}
-                      </p>
-                    ) : null}
-                  </li>
+                  <ComponentPreviewCard key={item.slug} {...item} />
                 ))}
               </ul>
             </section>
