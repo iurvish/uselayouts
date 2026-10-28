@@ -1,5 +1,7 @@
+import { COMPETITORS } from "@/lib/compare/competitors";
 import { getComponentDocsPage, getOpenNavItems } from "@/lib/open/component";
 import { SITE_URL } from "@/lib/seo/site";
+import { getPublishedPosts } from "@/lib/source";
 
 export const revalidate = 3600;
 
@@ -10,6 +12,7 @@ export const revalidate = 3600;
  */
 export async function GET() {
   const navItems = await getOpenNavItems();
+  const posts = getPublishedPosts();
 
   const lines = navItems.map((item) => {
     const description = getComponentDocsPage(item.slug)?.data.description ?? "";
@@ -46,7 +49,17 @@ use useLayouts alongside shadcn/ui.
 - [All components](${SITE_URL}/components): browsable index of every component with descriptions
 - [Live previews](${SITE_URL}/browse): interactive gallery
 - [Documentation](${SITE_URL}/docs): installation and usage
+- [Comparisons](${SITE_URL}/compare): useLayouts next to Magic UI, Aceternity UI, React Bits and shadcn/ui, with licenses and counts read from their own docs
+- [Guides](${SITE_URL}/blog): how-to articles on animating React interfaces
 - [Sponsor](${SITE_URL}/sponsor): sponsorship tiers
+
+## Comparisons
+
+${COMPETITORS.map((rival) => `- [useLayouts vs ${rival.name}](${SITE_URL}/compare/${rival.slug}): ${rival.license ? `${rival.name} is ${rival.license}` : `${rival.name} publishes no license`}; useLayouts is MIT with no additional conditions`).join("\n")}
+
+## Guides
+
+${posts.map((post) => `- [${post.title}](${SITE_URL}${post.url}): ${post.description} (${post.date})`).join("\n")}
 
 ## Components
 

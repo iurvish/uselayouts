@@ -1090,8 +1090,11 @@ function TestimonialsSection() {
 }
 
 const footerLinks = [
-  { label: "Component", href: "/browse" },
+  { label: "Components", href: "/components" },
+  { label: "Browse", href: "/browse" },
   { label: "Documentation", href: "/docs" },
+  { label: "Compare", href: "/compare" },
+  { label: "Guides", href: "/blog" },
   { label: "Sponsor", href: "/sponsor" },
   { label: "0xUrvish", href: "https://x.com/0xUrvish" },
 ] as const;

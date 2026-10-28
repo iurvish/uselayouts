@@ -155,6 +155,12 @@ export default async function ComponentsIndexPage() {
             >
               Read the docs
             </Link>
+            <Link
+              href="/compare"
+              className="rounded-full bg-white px-5 py-2.5 text-[15px] text-[#071A31] shadow-[inset_0_0_0_1px_rgba(7,26,49,0.12)] transition-colors hover:bg-[#FAF9F7]"
+            >
+              Compare with other libraries
+            </Link>
           </div>
         </header>
 

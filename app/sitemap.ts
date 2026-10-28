@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 
+import { COMPETITORS } from "@/lib/compare/competitors";
 import { getOpenNavItems } from "@/lib/open/component";
-import { COMPONENT_CATEGORIES } from "@/lib/seo/categories";
 import { SITE_URL } from "@/lib/seo/site";
-import { source } from "@/lib/source";
+import { getPublishedPosts, source } from "@/lib/source";
 
 export const revalidate = 3600;
 
@@ -35,6 +35,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     }));
 
+  const blogPages = getPublishedPosts().map((post) => ({
+    url: `${SITE_URL}${post.url}`,
+    // Real dates, so "changed" means something to a crawler.
+    lastModified: new Date(post.updated ?? post.date),
+    changeFrequency: "yearly" as const,
+    priority: 0.7,
+  }));
+
+  const comparePages = COMPETITORS.map((rival) => ({
+    url: `${SITE_URL}/compare/${rival.slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   const staticPages: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
     {
@@ -43,20 +57,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     { url: `${SITE_URL}/browse`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/compare`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/blog`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/docs`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/sponsor`, changeFrequency: "monthly", priority: 0.3 },
-    // Category pages carry the head terms, so they rank above the detail pages.
-    ...COMPONENT_CATEGORIES.map((category) => ({
-      url: `${SITE_URL}/components/${category.slug}`,
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    })),
   ];
 
   // `source.getPages()` includes the /docs index, which is already listed
   // above, and a repeated <loc> makes the whole sitemap look untrustworthy.
   const seen = new Set<string>();
-  return [...staticPages, ...componentPages, ...docsPages].filter((entry) => {
+  return [
+    ...staticPages,
+    ...componentPages,
+    ...comparePages,
+    ...blogPages,
+    ...docsPages,
+  ].filter((entry) => {
     if (seen.has(entry.url)) return false;
     seen.add(entry.url);
     return true;
