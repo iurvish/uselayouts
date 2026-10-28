@@ -11,9 +11,9 @@ import { scrollbarMinimal, forgetScroller, rememberScroller, centerChildInScroll
 import { browsePoster, SWITCHER_THUMB } from "@/lib/browse/media";
 import { rankSearchItems } from "@/lib/component-tags";
 import type { OpenNavItem } from "@/lib/open/component";
+import { componentTitle } from "@/lib/seo/site";
 import { cn } from "@/lib/utils";
 
-const TITLE_SUFFIX = " - useLayouts";
 
 /** Figma 91:4677 container shadow */
 const DROPDOWN_SHADOW =
@@ -21,7 +21,7 @@ const DROPDOWN_SHADOW =
 
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
-  document.title = `${title}${TITLE_SUFFIX}`;
+  document.title = componentTitle(title);
 }
 
 export function OpenSwitcher({

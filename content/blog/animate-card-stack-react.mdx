@@ -1,0 +1,130 @@
+---
+title: How to animate a card stack in React
+description: Build a draggable, snapping card stack with Motion and Tailwind CSS, including the three things that make most implementations feel wrong.
+date: 2026-10-28
+author: Urvish Mali
+tags: ["react", "motion", "animation", "tailwind-css"]
+---
+
+A card stack is a pile of cards where the top one can be dragged away to reveal
+the next. Tinder popularised it; onboarding flows, photo galleries and pricing
+carousels all use it now. The layout is easy. The feel is not.
+
+Here is the shortest version that works, then the three things that usually go
+wrong.
+
+## The minimum viable stack
+
+You need three pieces: a container that establishes stacking context, cards
+positioned absolutely on top of each other, and a drag handler on the top card
+only.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { motion } from "motion/react";
+
+const CARDS = ["First", "Second", "Third", "Fourth"];
+
+export function CardStack() {
+  const [order, setOrder] = useState(CARDS);
+
+  function send() {
+    setOrder(([first, ...rest]) => [...rest, first!]);
+  }
+
+  return (
+    <div className="relative isolate h-80 w-64">
+      {order.map((card, index) => (
+        <motion.div
+          key={card}
+          drag={index === 0 ? "x" : false}
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.6}
+          onDragEnd={(_, info) => {
+            if (Math.abs(info.offset.x) > 100) send();
+          }}
+          animate={{
+            y: index * -12,
+            scale: 1 - index * 0.05,
+            zIndex: order.length - index,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="absolute inset-0 cursor-grab rounded-2xl bg-white shadow-lg active:cursor-grabbing"
+        >
+          {card}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+```
+
+That renders and drags. It also feels cheap, for three reasons.
+
+## Mistake 1: animating `top` instead of `transform`
+
+`top`, `left`, `width` and `height` all trigger layout. The browser has to
+recompute geometry for every card on every frame, and a stack of six cards at
+60fps means 360 layout passes a second. Animate `transform` and `opacity` only.
+Both are composited, so they run off the main thread.
+
+In the code above, `y` and `scale` compile to `transform`. If you reach for
+`marginTop` to space the cards, you have reintroduced the layout cost.
+
+## Mistake 2: keying on the index
+
+`key={index}` is the single most common bug in stack implementations. When you
+rotate the array, React sees the same keys in the same positions and reuses the
+DOM nodes, so the card that should have flown away stays put and its content
+swaps underneath. Key on the card's own identity, as above with `key={card}`.
+
+## Mistake 3: ignoring the velocity of the throw
+
+A card dragged 101px and released slowly should snap back. A card flicked 60px
+at speed should leave. Distance alone cannot tell those apart, so read velocity
+too:
+
+```tsx
+onDragEnd={(_, info) => {
+  const thrown =
+    Math.abs(info.offset.x) > 100 || Math.abs(info.velocity.x) > 500;
+  if (thrown) send();
+}}
+```
+
+That one line is most of the difference between a stack that feels mechanical
+and one that feels physical.
+
+## Respect reduced motion
+
+Some people have vestibular disorders, and a spring-loaded stack can cause real
+discomfort. Motion reads the OS setting for you through a hook:
+
+```tsx
+import { useReducedMotion } from "motion/react";
+
+const reduceMotion = useReducedMotion();
+
+<motion.div
+  transition={
+    reduceMotion
+      ? { duration: 0 }
+      : { type: "spring", stiffness: 300, damping: 30 }
+  }
+/>;
+```
+
+The cards still reorder. They just stop flying.
+
+## Working versions
+
+Three stacks in the useLayouts library, free and MIT licensed:
+
+- [Rolling Card Stack](/docs/components/rolling-card-stack) handles the rotate-through-the-deck pattern above
+- [Polaroid Stack](/docs/components/polaroid-stack) adds scatter and pickup
+- [Scroll Stack Deck](/docs/components/scroll-stack-deck) drives the same idea from scroll position instead of drag
+
+Each one is a single `.tsx` file you can copy, or install with
+`npx shadcn@latest add` and the component's registry URL.

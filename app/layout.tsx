@@ -7,6 +7,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { LoginDialog } from "@/components/auth/login-dialog";
+import { SiteJsonLd } from "@/components/seo/json-ld";
+import { SITE_DESCRIPTION, SITE_URL } from "@/lib/seo/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -20,16 +22,49 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+/**
+ * The brand name is unknown, so leading the title with it spent the highest
+ * weighted position in the tag on a word nobody searches. The query modifiers
+ * ("free", "animated", "react components", "ui library") lead instead.
+ */
+const DEFAULT_TITLE = "Free Animated React Components & UI Library";
+
 export const metadata: Metadata = {
   title: {
-    default: "useLayouts | Free animated React components",
-    template: "%s - useLayouts",
+    default: `${DEFAULT_TITLE} | useLayouts`,
+    template: "%s | useLayouts",
   },
-  description:
-    "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
-  authors: [{ name: "Urvish Mali" }],
-  creator: "useLayouts",
-  metadataBase: new URL("https://uselayouts.com"),
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "animated react components",
+    "free react components",
+    "react ui library",
+    "animated ui library",
+    "react component library",
+    "framer motion components",
+    "motion react components",
+    "tailwind css components",
+    "shadcn components",
+    "copy paste react components",
+  ],
+  applicationName: "useLayouts",
+  category: "technology",
+  authors: [{ name: "Urvish Mali", url: "https://urvish.in" }],
+  creator: "Urvish Mali",
+  publisher: "useLayouts",
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -42,27 +77,26 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://uselayouts.com",
-    title: "useLayouts | Free animated React components",
-    description:
-      "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
+    url: SITE_URL,
+    title: `${DEFAULT_TITLE} | useLayouts`,
+    description: SITE_DESCRIPTION,
     siteName: "useLayouts",
     images: [
       {
         url: "/og.jpg",
         width: 1200,
         height: 630,
-        alt: "useLayouts free animated React components",
+        alt: "useLayouts — free animated React components",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "useLayouts | Free animated React components",
-    description:
-      "Free React components with animation, built with Framer Motion and Tailwind CSS. Preview them, copy the code, and add them to your site.",
+    title: `${DEFAULT_TITLE} | useLayouts`,
+    description: SITE_DESCRIPTION,
     images: ["/og.jpg"],
     creator: "@0xUrvish",
+    site: "@0xUrvish",
   },
 };
 
@@ -76,6 +110,9 @@ export default function RootLayout({
     // first paint is already correct — no inline script, no hydration flash,
     // and no OS `prefers-color-scheme` path that could resolve to light.
     <html lang="en" className={`dark ${inter.variable}`}>
+      <head>
+        <SiteJsonLd />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
       >

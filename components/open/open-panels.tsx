@@ -9,7 +9,6 @@ import type { PackageManager } from "@/lib/open/package-manager";
 /** Figma 109:500 — code preview + Installation (no Usage/Code tabs) */
 export function OpenCodePanel({
   description: _description,
-  docsContent,
   usageHtml,
   usage,
   codeHtml,
@@ -23,7 +22,6 @@ export function OpenCodePanel({
   slug,
 }: {
   description?: string;
-  docsContent?: React.ReactNode;
   usageHtml: string;
   usage: string;
   codeHtml: string;
@@ -60,8 +58,6 @@ export function OpenCodePanel({
         manualHtml={manualHtml}
         slug={slug}
       />
-
-      {docsContent ? <div className="mt-1">{docsContent}</div> : null}
     </div>
   );
 }

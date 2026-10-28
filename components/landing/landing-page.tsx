@@ -390,7 +390,13 @@ function TrustedBy() {
   );
 }
 
-function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
+function HeroSection({
+  heroItems,
+  componentCount,
+}: {
+  heroItems: BrowseItem[];
+  componentCount: number;
+}) {
   return (
     <section className="px-4 pb-4 sm:px-4 lg:px-4">
       <div className="relative h-[calc(100svh-70px-1rem)] min-h-[560px] overflow-hidden rounded-[10px] bg-white">
@@ -421,12 +427,13 @@ function HeroSection({ heroItems }: { heroItems: BrowseItem[] }) {
                 />
               </a>
               <h1 className="text-balance text-[40px] leading-[1.15] tracking-[-0.04em] text-white sm:text-[54px]">
-                Build interfaces that feel as good as they look.
+                Free animated React components you can copy and paste.
               </h1>
               <p className="text-pretty text-[16px] leading-relaxed text-white/85">
-                Beautiful, interactive React components built to help you ship
-                polished interfaces without building every interaction from
-                scratch.
+                {componentCount} interactive components built with React, Motion
+                and Tailwind CSS. Preview one, copy the single file, and ship
+                interfaces that feel as good as they look without building
+                every interaction from scratch.
               </p>
             </div>
 
@@ -498,14 +505,14 @@ function FeaturesSection({ cards }: { cards: LandingCategoryCard[] }) {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex max-w-[461px] flex-col gap-4">
             <h2 className="text-[36px] leading-[1.15] tracking-[-0.04em] text-[#071A31] sm:text-[48px]">
-              Everything you need to build the interface.
+              Every animated component you need to build the interface.
             </h2>
             <p className="text-[16px] leading-[1.5] text-[#4B565E]">
               From foundational layouts to expressive interactions, create
               interfaces that feel considered, not cookie-cutter.
             </p>
           </div>
-          <LandingButton href="/browse" variant="secondary" className="shrink-0">
+          <LandingButton href="/components" variant="secondary" className="shrink-0">
             Explore full library
           </LandingButton>
         </div>
@@ -1083,8 +1090,11 @@ function TestimonialsSection() {
 }
 
 const footerLinks = [
-  { label: "Component", href: "/browse" },
+  { label: "Components", href: "/components" },
+  { label: "Browse", href: "/browse" },
   { label: "Documentation", href: "/docs" },
+  { label: "Compare", href: "/compare" },
+  { label: "Blog", href: "/blog" },
   { label: "Sponsor", href: "/sponsor" },
   { label: "0xUrvish", href: "https://x.com/0xUrvish" },
 ] as const;
@@ -1190,15 +1200,17 @@ export default function LandingPage({
   heroItems,
   categoryCards,
   githubStars,
+  componentCount,
 }: {
   heroItems: BrowseItem[];
   categoryCards: LandingCategoryCard[];
   githubStars?: number | null;
+  componentCount: number;
 }) {
   return (
     <main className="min-h-screen bg-[#F5F3EE] font-[family-name:var(--font-geist-sans)] text-[#071A31]">
       <LandingNav githubStars={githubStars} />
-      <HeroSection heroItems={heroItems} />
+      <HeroSection heroItems={heroItems} componentCount={componentCount} />
       <FeaturesSection cards={categoryCards} />
       <WhySection />
       <ToolsSection />

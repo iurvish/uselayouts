@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 
+import { canonical } from "@/lib/seo/site";
+
 import "@/styles/browse.css";
 
-const title = "Browse animated React components - useLayouts";
+const title = "Browse Animated React Components Live | useLayouts";
 const description =
-  "Look through free animated React components. Hover a card to see it move, then click to copy the code.";
+  "Preview every free animated React component in the useLayouts library. Hover a card to see it move, click to copy the code. React, Motion and Tailwind CSS, MIT licensed.";
 
 export const metadata: Metadata = {
   title: { absolute: title },
   description,
-  openGraph: { title, description },
+  ...canonical("/browse"),
+  openGraph: { title, description, url: "/browse" },
   twitter: { title, description },
 };
 

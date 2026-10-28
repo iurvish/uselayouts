@@ -28,6 +28,7 @@ import {
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { OpenNavItem } from "@/lib/open/component";
+import { componentTitle } from "@/lib/seo/site";
 import { cn } from "@/lib/utils";
 import { BrandLogo } from "@/components/brand-logo";
 
@@ -256,7 +257,7 @@ function SidebarList({
           activeHref={activeHref}
           onItemClick={(item) => {
             if (scrollRef.current) rememberScroller("sidebar", scrollRef.current);
-            document.title = `${item.title} - useLayouts`;
+            document.title = componentTitle(item.title);
           }}
           onItemHover={
             onItemHover
@@ -381,7 +382,10 @@ function OpenExperienceShell({
   const showToggle = !stage && !showDesktopPinned;
 
   return (
-    <div className="dark flex h-dvh overflow-hidden bg-[hsl(240_6%_7%)] text-foreground">
+    // min-h-dvh, not h-dvh+overflow-hidden: the component pages now carry a
+    // visible docs section under the preview, so the page itself has to scroll.
+    // The preview stays its own scrollport (see OpenComponentView).
+    <div className="dark flex min-h-dvh bg-[hsl(240_6%_7%)] text-foreground">
       {showDesktopPinned ? (
         <aside
           className="sticky top-0 bottom-0 z-24 flex h-dvh shrink-0 flex-col items-center overflow-hidden bg-[hsl(240_6%_7%)] text-foreground"
@@ -419,7 +423,7 @@ function OpenExperienceShell({
         </SheetContent>
       </Sheet>
 
-      <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-[hsl(225_7%_11%)]">
+      <div className="relative flex min-w-0 flex-1 flex-col bg-[hsl(225_7%_11%)]">
         {showToggle ? (
           <div
             className={cn(
@@ -527,5 +531,5 @@ function OpenExperienceShell({
 
 function setDocumentTitle(title: string) {
   if (typeof document === "undefined") return;
-  document.title = `${title} - useLayouts`;
+  document.title = componentTitle(title);
 }
