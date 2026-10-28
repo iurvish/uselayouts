@@ -27,6 +27,10 @@ export type ComponentCategory = {
   summary: string;
   /** Tags that put a component in this category. */
   tags: string[];
+  /** Long-tail variants, for the keywords meta and the "also searched" block. */
+  keywords: string[];
+  /** One line on what a visitor is usually trying to decide. */
+  intent: string;
   /** Prose sections. This is what the ranking competitors have and a bare grid does not. */
   sections: { heading: string; body: string }[];
   faq: { question: string; answer: string }[];
@@ -51,6 +55,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "loading",
       "discover",
     ],
+    keywords: [
+      "animated button react",
+      "react button component",
+      "tailwind button component",
+      "framer motion button",
+      "react loading button",
+      "react delete confirm button",
+      "copy paste react button",
+      "shadcn button alternative",
+    ],
+    intent:
+      "Usually you are picking a press interaction, or wiring a submit button that has to show a request finishing.",
     sections: [
       {
         heading: "What makes a button feel good to press",
@@ -67,6 +83,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Accessibility and reduced motion",
         body: "Every button here is a real <button> element, so Enter and Space work, focus order is correct, and screen readers announce it as a button. Keep the visible focus ring: removing the outline to tidy the design makes the control unusable by keyboard. Transforms are also the cheapest thing to drop under prefers-reduced-motion — the state change still reads without the spring, so honour the media query rather than animating regardless.",
+      },
+      {
+        heading: "How to install a button component",
+        body: "Open any button on this page and run the shadcn command shown there, or copy the single .tsx file out of the code panel. Both give you the same thing: one file in your project that you own and can edit. In the Next.js App Router these are client components, so the use client directive is already at the top of the file you copy. The only peer dependency is Motion, and Tailwind needs no extra configuration beyond what you already have.",
+      },
+      {
+        heading: "Which button to reach for",
+        body: "If the button triggers a request, start with Save Button — it already handles the idle, loading and success cycle and disables itself mid-flight. If it removes something, Delete Button folds the confirmation into the control. If you want press feedback with no state behind it, Tactile Button and Analog Stick are the physical ones. Discover Button and Create Menu expand into more options, so they suit a primary action that opens onto a choice rather than committing to one.",
+      },
+      {
+        heading: "Customising size, colour and motion",
+        body: "These are plain Tailwind components, so colour and size are class changes rather than a theme API — edit the file. The motion is worth tuning separately: most of the springs here use a visual duration around 0.35s with low bounce, and raising the bounce is what makes a press feel toy-like rather than precise. If you are matching an existing design system, change the spring once in the file and every state in that component follows it.",
       },
     ],
     faq: [
@@ -90,6 +118,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Motion, previously called Framer Motion. It is the only runtime dependency the animated buttons need, and it is a peer dependency you probably already have.",
       },
+      {
+        question: "Can I change the colours and size?",
+        answer:
+          "Yes. They are plain Tailwind components, so colour and size are class edits in the file you copied. There is no theme API to learn and no build step to re-run.",
+      },
+      {
+        question: "Do these work with React 19 and server components?",
+        answer:
+          "Yes. They are client components and ship with the use client directive, so they work inside server components in the Next.js App Router the same way any client component does.",
+      },
+      {
+        question: "How much do they add to my bundle?",
+        answer:
+          "Each is a single file, so you only ship the ones you use. Motion is the only peer dependency, and if you already animate anything it is already in your bundle.",
+      },
+      {
+        question: "Can I use them in a commercial product?",
+        answer:
+          "Yes. MIT licensed, personal and commercial, no attribution required.",
+      },
     ],
   },
   {
@@ -102,6 +150,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React card components built with Motion and Tailwind CSS. Cards that stack, tilt, expand and reorder, plus testimonial, pricing and profile layouts. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["card", "cards", "testimonial", "crm", "tilt", "stack", "polaroid"],
+    keywords: [
+      "react card component",
+      "animated card react",
+      "tailwind card component",
+      "framer motion card",
+      "react card stack",
+      "3d tilt card react",
+      "react testimonial card",
+      "react pricing card",
+    ],
+    intent:
+      "Usually you are choosing between a card that expands, one that stacks, and one that just needs to sit still and read well.",
     sections: [
       {
         heading: "Cards are a layout problem before they are an animation problem",
@@ -118,6 +178,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Testimonials, pricing and content cards",
         body: "Social proof and pricing cards fail on content, not motion. A testimonial needs a real face, a real name and a specific claim, because a grid of generic quotes reads as filler no matter how well it animates. A pricing card needs one obvious recommendation and a visible difference between tiers. The components here give you the layout and the motion; the specificity is yours to supply.",
+      },
+      {
+        heading: "How to install a card component",
+        body: "Run the shadcn command on the component page, or copy the .tsx file from the code panel. You get one file, and editing it is the intended workflow rather than a fallback. The animated cards are client components, so the use client directive ships in the file. Images inside the cards stay yours to serve — swap the placeholder URLs for your own, and in Next.js replace the img tags with next/image if you want the built-in optimisation.",
+      },
+      {
+        heading: "Which card to reach for",
+        body: "If the card opens into more detail, Card Folder and Folder Interaction already handle the expand. If you are showing several of something and want them to read as one object, Polaroid Stack and Scroll Stack Deck stack them. For social proof, Focus Testimonials and Shake Testimonial Card are built around a quote and a face. Client Card is the densest of them, with progress rings and an avatar rail, so it suits a dashboard row rather than a marketing page.",
+      },
+      {
+        heading: "Dark mode and surface treatment",
+        body: "Cards are where dark mode usually breaks, because a shadow that reads as elevation on white disappears on a dark surface. The fix is to stop using shadow as the only depth cue in dark mode and let a lighter surface do the work — a card one step lighter than its background reads as raised without any shadow at all. If you are porting these into a light theme, check the border contrast too: a hairline that looks right on dark often vanishes on white.",
       },
     ],
     faq: [
@@ -141,6 +213,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Yes. They work in Next.js, Vite, Remix and any React 18+ setup. The animated cards are client components, so in the Next.js App Router they need the use client directive, which is already in the file you copy.",
       },
+      {
+        question: "Can I change the colours and spacing?",
+        answer:
+          "Yes. They are Tailwind components and the file is yours after you copy it, so colour, radius and spacing are class edits rather than configuration.",
+      },
+      {
+        question: "Do the cards work in dark mode?",
+        answer:
+          "They are built on a dark surface and the classes are explicit, so porting to light means editing the surface and border colours in the file. Watch border contrast — a hairline tuned for dark often disappears on white.",
+      },
+      {
+        question: "Can I use my own images?",
+        answer:
+          "Yes. Swap the placeholder URLs in the data array at the top of the file. On Next.js, replacing the img tags with next/image gets you format negotiation and sizing.",
+      },
+      {
+        question: "Do these replace shadcn/ui Card?",
+        answer:
+          "No. shadcn/ui gives you the unstyled container; these are specific animated card layouts that sit on top. Most projects use both.",
+      },
     ],
   },
   {
@@ -153,6 +245,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React navigation components built with Motion and Tailwind CSS. Navbars, tab bars, dropdowns, drawers, command toolbars and mobile bottom menus. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["nav", "menu", "tabs", "dropdown", "drawer", "filter", "accordion"],
+    keywords: [
+      "react navbar component",
+      "animated tabs react",
+      "react dropdown menu component",
+      "tailwind navigation component",
+      "react bottom navigation",
+      "framer motion navbar",
+      "react sidebar component",
+      "animated menu react",
+    ],
+    intent:
+      "Usually you are deciding where navigation lives on mobile, and whether the active state should slide or just change.",
     sections: [
       {
         heading: "Navigation animation has one job: show where you went",
@@ -169,6 +273,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Keyboard and focus",
         body: "Navigation is the most keyboard-dependent part of an interface, so it is the worst place to break focus. A menu should trap focus while open, return it to the trigger on close, and respond to Escape. Tabs should move with arrow keys, not Tab, following the ARIA tabs pattern. An animated menu that cannot be closed with Escape is a regression regardless of how it looks.",
+      },
+      {
+        heading: "How to install a navigation component",
+        body: "Run the shadcn command from the component page or copy the .tsx file directly. These are client components and ship with the use client directive. Most of them keep their own open and active state internally so they work standalone; if you are wiring one to a router, the active item is a prop you pass rather than something the component infers, which keeps it framework-agnostic across Next.js, React Router and TanStack Router.",
+      },
+      {
+        heading: "Which navigation component to reach for",
+        body: "On mobile, Bottom Menu is the pattern most apps want, and it already pads for the home indicator. For switching between views in place, Discrete Tabs and Vertical Tabs move an indicator rather than cross-fading. Gooey Navbar and Dynamic Toolbar are for a persistent top bar that reshapes around its contents. Smooth Dropdown and Curve Drawer handle the overflow case, where there are more destinations than fit.",
+      },
+      {
+        heading: "Active state and routing",
+        body: "Navigation animation depends on knowing which item is current, and that is the part a component library cannot guess. Pass the active item in from your router — usePathname in the Next.js App Router, useLocation with React Router — and let the component animate between whatever you give it. Two things worth keeping: mark the current link with aria-current so screen readers announce it, and make sure the indicator animates from the previous item rather than always from the same edge.",
       },
     ],
     faq: [
@@ -192,6 +308,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Yes. The bottom navigation components pad for the home indicator using env(safe-area-inset-bottom) and use tap targets of at least 44px, so they sit above the gesture area rather than under it.",
       },
+      {
+        question: "How do I connect these to my router?",
+        answer:
+          "Pass the active item in as a prop — usePathname in the Next.js App Router, useLocation with React Router. The components animate between whatever you give them rather than inferring the route themselves.",
+      },
+      {
+        question: "Do they work with React Router and TanStack Router?",
+        answer:
+          "Yes. Nothing here imports a router, so the active item and the link element are both yours to supply.",
+      },
+      {
+        question: "Can I change the colours?",
+        answer:
+          "Yes. They are Tailwind components and the file is yours to edit after you copy it.",
+      },
+      {
+        question: "Is the mobile bottom menu safe-area aware?",
+        answer:
+          "Yes. The bottom navigation components pad using env(safe-area-inset-bottom), so they sit above the iPhone home indicator rather than under it.",
+      },
     ],
   },
   {
@@ -204,6 +340,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React carousel and slider components built with Motion and Tailwind CSS. Drag-driven coverflow, wheel pickers, overlapping sliders and infinite grids. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["carousel", "slider", "swipe", "drag", "coverflow"],
+    keywords: [
+      "react carousel component",
+      "animated carousel react",
+      "tailwind carousel",
+      "framer motion carousel",
+      "react slider component",
+      "drag carousel react",
+      "coverflow carousel react",
+      "touch carousel react",
+    ],
+    intent:
+      "Usually you are deciding whether this should be a carousel at all, and if so whether drag or arrows drive it.",
     sections: [
       {
         heading: "Most carousels should not be carousels",
@@ -220,6 +368,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Autoplay, accessibility and reduced motion",
         body: "Autoplay is the most common accessibility failure in carousels. If it moves on its own it needs a visible pause control, it must stop on hover and on focus, and it must not move at all under prefers-reduced-motion. Slides also need to be reachable by keyboard and announced as a group, which means real focus management rather than a row of divs. A carousel nobody can pause is worse than a static grid.",
+      },
+      {
+        heading: "How to install a carousel component",
+        body: "Run the shadcn command shown on the component page or copy the .tsx file. Each carousel ships with a placeholder data array at the top of the file — swap it for yours and the rest follows. They are client components with the use client directive already in place. Images are yours to serve, so replace the placeholder URLs and consider next/image if you are on Next.js and the carousel sits above the fold.",
+      },
+      {
+        heading: "Which carousel to reach for",
+        body: "Coverflow Drag is the one that reads as depth, so it suits a small set of visually distinct items. Wheel Carousel and Overlapping Slider are tighter and work where space is constrained. Feature Carousel is the plainest, which makes it the right default for marketing content where the copy matters more than the transition. Infinite Grid is not really a carousel at all but it solves the adjacent problem of browsing a set with no clear end.",
+      },
+      {
+        heading: "Responsive behaviour and item counts",
+        body: "The number of visible items is the setting that most often needs changing, and it is a layout decision rather than a carousel one — three across on desktop is usually one and a bit on a phone, with the bit mattering because a partially visible next item is what tells people there is more. Keep that peek on mobile. Also test with your real content length: a carousel sized around short placeholder titles breaks the moment a real one wraps to three lines.",
       },
     ],
     faq: [
@@ -243,6 +403,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Run npx shadcn@latest add with the component's registry URL, or copy the single .tsx file from the component page into your project. You own the file afterwards.",
       },
+      {
+        question: "How do I change how many items are visible?",
+        answer:
+          "It is a layout value in the file you copied. Keep a partial next item visible on mobile — that peek is what tells people there is more to scroll.",
+      },
+      {
+        question: "Can I autoplay the carousel?",
+        answer:
+          "Yes, but give it a visible pause control, stop it on hover and focus, and disable it entirely under prefers-reduced-motion. An autoplaying carousel with no pause is the most common accessibility failure in this category.",
+      },
+      {
+        question: "Do they work with keyboard navigation?",
+        answer:
+          "Slides are reachable and the controls are real buttons. If you add autoplay, make sure focus stops it, or keyboard users lose their place mid-read.",
+      },
+      {
+        question: "Can I use my own images and content?",
+        answer:
+          "Yes. Each carousel has a placeholder data array at the top of the file — replace it with yours.",
+      },
     ],
   },
   {
@@ -255,6 +435,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React gallery and grid components built with Motion and Tailwind CSS. Bento grids, expanding photo galleries, albums, masonry layouts and lightbox interactions. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["photos", "gallery", "image", "grid", "bento", "album"],
+    keywords: [
+      "react image gallery component",
+      "bento grid react",
+      "react photo gallery",
+      "tailwind grid component",
+      "animated gallery react",
+      "react masonry grid",
+      "expandable image grid react",
+      "framer motion gallery",
+    ],
+    intent:
+      "Usually you are choosing a grid shape and deciding what happens when someone taps a thumbnail.",
     sections: [
       {
         heading: "Galleries live and die on image performance",
@@ -271,6 +463,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Layout shift and aspect ratios",
         body: "Mixed aspect ratios are where grids break. Without a reserved box, each image resizes its cell as it arrives and the whole grid reflows — bad for the viewer and directly measured as Cumulative Layout Shift. Set an aspect-ratio on the cell, or carry real dimensions with the data, so the grid's geometry is known before a single image loads.",
+      },
+      {
+        heading: "How to install a gallery component",
+        body: "Run the shadcn command from the component page or copy the .tsx file. Each gallery has a placeholder image array near the top — swap in your own URLs and the layout adapts. They are client components and the use client directive is already there. If you are on Next.js, replacing the img tags with next/image gets you format negotiation and correct sizing, which matters more here than in any other category.",
+      },
+      {
+        heading: "Which gallery to reach for",
+        body: "Expandable Gallery and Dynamic Grid Gallery both grow a thumbnail into a larger view, which is the interaction most photo sets want. Magnified Bento and Bento Card are for a fixed editorial layout where the tile sizes carry meaning. Photo Albums and Polaroid Stack group images into sets rather than showing them all at once. Fluid Expanding Grid sits between the two, reflowing as you interact rather than opening a separate view.",
+      },
+      {
+        heading: "Lightboxes and full-screen viewing",
+        body: "If tapping a thumbnail opens a full-screen view, that view is a dialog and needs to behave like one: focus moves into it, Escape closes it, focus returns to the thumbnail that opened it, and the background does not scroll underneath. Arrow keys should move between images once it is open. This is the part most gallery implementations skip, and it is the difference between a gallery that works with a keyboard and one that traps people.",
       },
     ],
     faq: [
@@ -294,6 +498,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Yes. They are MIT licensed with no attribution required, and the album, polaroid and expanding grid layouts are built for exactly that kind of photographic work.",
       },
+      {
+        question: "Can I use my own images?",
+        answer:
+          "Yes. Swap the placeholder URLs in the array at the top of the file. On Next.js, replacing img with next/image handles format and sizing, which matters more in a gallery than anywhere else.",
+      },
+      {
+        question: "Will a gallery hurt my Core Web Vitals?",
+        answer:
+          "Only if the images do. The layouts reserve each cell's box so nothing shifts as images arrive, which keeps CLS flat. Serving oversized JPEGs is what moves LCP, not the component.",
+      },
+      {
+        question: "Do these support a lightbox or full-screen view?",
+        answer:
+          "Some expand in place. If you add a full-screen view, treat it as a dialog: move focus in, close on Escape, return focus to the thumbnail, and lock background scroll.",
+      },
+      {
+        question: "Can I use these for a client portfolio?",
+        answer:
+          "Yes. MIT licensed with no attribution required, for personal and commercial work.",
+      },
     ],
   },
   {
@@ -306,6 +530,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React input and form components built with Motion and Tailwind CSS. Multi-step forms, day and date pickers, inline edit fields, morphing inputs and subscribe flows. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["input", "form", "edit", "chips", "picker", "timer"],
+    keywords: [
+      "react form components",
+      "animated input react",
+      "tailwind form component",
+      "react multi step form",
+      "react date picker component",
+      "inline edit react",
+      "framer motion input",
+      "react search input component",
+    ],
+    intent:
+      "Usually you are building a form that feels less like a form, or fixing one that people abandon halfway.",
     sections: [
       {
         heading: "The two input bugs almost every site ships",
@@ -322,6 +558,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Submission states",
         body: "A submit button that stays enabled while the request is in flight will be pressed twice, and duplicate submissions are the expensive kind of bug. Disable on submit, show that something is happening, and confirm visibly when it succeeds. Support Enter to submit from a single-line field and Cmd+Enter from a textarea, because that is what people already try.",
+      },
+      {
+        heading: "How to install a form component",
+        body: "Run the shadcn command on the component page or copy the .tsx file. These are controlled React components, so they connect to whatever state you already use. They ship with the use client directive for the Next.js App Router. Nothing here brings its own form library — the value and change handler are plain props, which is what lets them drop into React Hook Form, Formik or a useState call without adapters.",
+      },
+      {
+        heading: "Which input to reach for",
+        body: "Multi Step Form is for anything long enough that people abandon it, and it keeps state across the whole sequence. Inline Edit suits settings and profile fields where most visits are reads rather than writes. Day Picker and Set Timer cover the two input types that are genuinely painful to build from scratch. Morphing Input and Prompt Box are search and composer fields, so they belong at the top of a page rather than inside a form.",
+      },
+      {
+        heading: "Wiring validation and form libraries",
+        body: "Because these are controlled inputs, React Hook Form works through Controller and Formik through its field props — no wrapper needed. Keep the validation timing rule regardless of library: validate on blur first, then live once a field has already errored. Put the error message next to the input rather than collecting errors at the top of the form, and make it say what to do rather than what went wrong. Required is not a useful error message.",
       },
     ],
     faq: [
@@ -345,6 +593,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Run npx shadcn@latest add with the component's registry URL, or copy the single .tsx file from the component page into your project. You own the file afterwards.",
       },
+      {
+        question: "Do these work with React Hook Form?",
+        answer:
+          "Yes. They are controlled inputs, so React Hook Form works through Controller and Formik through its field props. No adapter needed.",
+      },
+      {
+        question: "When should a form validate?",
+        answer:
+          "On blur for the first pass, then live once a field has already errored. Validating every keystroke shows an error before someone has finished typing their email.",
+      },
+      {
+        question: "Are the inputs accessible?",
+        answer:
+          "They use real input elements with associated labels, which is what screen readers and password managers both need. A placeholder is not a label — it disappears exactly when it is needed.",
+      },
+      {
+        question: "Can I change the styling?",
+        answer:
+          "Yes. They are Tailwind components and the file is yours after you copy it.",
+      },
     ],
   },
   {
@@ -357,6 +625,17 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of animated React list components built with Motion and Tailwind CSS. Stacked lists, reorderable collections, filtered rows and list items that respond to the cursor. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["list", "stacked"],
+    keywords: [
+      "animated list react",
+      "react list component",
+      "framer motion list",
+      "react reorder list",
+      "tailwind list component",
+      "animated collection react",
+      "react filter list animation",
+    ],
+    intent:
+      "Usually you are animating what happens when a list filters, reorders, or loses an item.",
     sections: [
       {
         heading: "Animate list changes, not list rendering",
@@ -373,6 +652,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Filtering and empty states",
         body: "Filtering is the interaction most worth animating in a list, because items leaving and the remainder closing the gap makes the filter's effect legible. It also makes the empty state unavoidable: design the no-results case deliberately, say which filter caused it, and give a way back. An empty list with no explanation reads as a broken page.",
+      },
+      {
+        heading: "How to install a list component",
+        body: "Run the shadcn command from the component page or copy the .tsx file. Each list ships with a placeholder data array — replace it with yours, and make sure every item has a stable id, because that is what the animations key off. They are client components with the use client directive in place. Motion is the only peer dependency.",
+      },
+      {
+        heading: "Which list to reach for",
+        body: "Animated Collection is the general case: items that enter, leave and reorder. Stacked List is for a set that collapses into a single object and expands back out. Filter Interaction is built around rows responding to the cursor, so it suits a list people scan rather than one they act on. Liquid Index is an index or directory rather than a list of records, and it indexes by letter rather than filtering.",
+      },
+      {
+        heading: "Drag to reorder",
+        body: "Reordering by drag has two halves, and only one is visual. The drag itself is well covered by Motion's Reorder primitives. The half that usually goes wrong is persistence: the new order has to survive a refresh, which means writing it back, and the write can fail. Update the list optimistically so the drag feels instant, then reconcile — and if the write fails, move the item back visibly rather than silently reloading the old order.",
       },
     ],
     faq: [
@@ -396,6 +687,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         answer:
           "Run npx shadcn@latest add with the component's registry URL, or copy the single .tsx file from the component page into your project.",
       },
+      {
+        question: "How do I make drag-to-reorder persist?",
+        answer:
+          "Update the list optimistically so the drag feels instant, then write the new order back. If the write fails, move the item back visibly rather than silently restoring the old order on the next load.",
+      },
+      {
+        question: "Can I use these with a virtualized list?",
+        answer:
+          "Yes, past a few hundred rows you should. Animate data changes — add, remove, reorder — but not the mount and unmount that scrolling causes, or rows scrolling out of view look like deletions.",
+      },
+      {
+        question: "Do items need a stable id?",
+        answer:
+          "Yes. The animations key off it. Keying by array index makes React reuse the element at each position, so content swaps while position stays and the animation describes something that did not happen.",
+      },
+      {
+        question: "Can I change the styling?",
+        answer:
+          "Yes. They are Tailwind components and you own the file after copying it.",
+      },
     ],
   },
   {
@@ -408,6 +719,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     summary:
       "A free collection of React scroll animation components built with Motion and Tailwind CSS. Scroll-driven card stacks, sticky section reveals, split cards and perspective text. Each is a single TypeScript file you copy into your project or install with the shadcn CLI. MIT licensed.",
     tags: ["scroll", "reveal", "sticky"],
+    keywords: [
+      "react scroll animation",
+      "scroll animation component react",
+      "framer motion scroll",
+      "react sticky scroll",
+      "scroll triggered animation react",
+      "react parallax component",
+      "scroll driven animation css",
+      "react reveal on scroll",
+    ],
+    intent:
+      "Usually you are deciding how much scroll-driven motion a page can carry before it starts fighting the reader.",
     sections: [
       {
         heading: "Scroll animation is a budget, not a feature",
@@ -424,6 +747,18 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       {
         heading: "Performance and reduced motion",
         body: "Scroll animation runs during the most jank-prone moment on the page, so it has to stay on transform and opacity — those composite on the GPU, while animating height, top or filter forces layout on every frame. Prefer scroll-driven CSS animations or a library that uses them where support allows. And honour prefers-reduced-motion: scroll effects are a common migraine and nausea trigger, so the reduced-motion path should show the content in its final state, not a faster version of the animation.",
+      },
+      {
+        heading: "How to install a scroll component",
+        body: "Run the shadcn command from the component page or copy the .tsx file. These are client components and ship with the use client directive. They need a scroll container to measure against, which is usually the page itself — if you are dropping one inside an element with its own overflow, the scroll target has to be that element rather than the window, and that is the single setting most worth checking when one of these does nothing.",
+      },
+      {
+        heading: "Which scroll component to reach for",
+        body: "Scroll Stack Deck and Stack Scroll Reveal both pin a set of cards and advance through them, which suits a sequence where order matters. Scroll Split Cards splits content as you pass it, so it works for a before and after. Perspective Text Scroll is typographic rather than structural and belongs on a title or a pull quote. All four are position-driven, so scrolling back up reverses them exactly.",
+      },
+      {
+        heading: "Sticky positioning gotchas",
+        body: "Sticky is where these break, and almost always for the same two reasons. An ancestor with overflow hidden silently disables position sticky on everything inside it, and because nothing errors, the element just scrolls away normally. The second is that a sticky element only sticks within its parent, so the parent needs enough height for the pin to last. If a pinned section releases early, the parent is too short rather than the component being wrong.",
       },
     ],
     faq: [
@@ -446,6 +781,26 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         question: "What is the difference between scroll-driven and scroll-triggered?",
         answer:
           "Scroll-driven ties a value continuously to scroll position, so scrolling back reverses it — right for parallax and sticky stacks. Scroll-triggered fires once when an element enters the viewport and belongs to IntersectionObserver.",
+      },
+      {
+        question: "Why is my sticky element not sticking?",
+        answer:
+          "Almost always an ancestor with overflow hidden, which silently disables position sticky on everything inside it. The second cause is a parent too short for the pin to last.",
+      },
+      {
+        question: "Do these work inside a scrollable container?",
+        answer:
+          "Yes, but the scroll target has to be that element rather than the window. That is the first thing to check when one of these does nothing.",
+      },
+      {
+        question: "Will scroll animations slow my page down?",
+        answer:
+          "Not if they stay on transform and opacity, which composite on the GPU. Animating height, top or filter forces layout every frame and is what causes the jank people associate with scroll effects.",
+      },
+      {
+        question: "Should I fade content in as it scrolls into view?",
+        answer:
+          "Usually not for body text. It delays what the reader came for, breaks in-page search, and can leave a blank page on a slow connection. Animate structure instead.",
       },
     ],
   },

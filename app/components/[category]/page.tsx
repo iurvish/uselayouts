@@ -16,7 +16,7 @@ import {
   categoryComponents,
   findCategory,
 } from "@/lib/seo/categories";
-import { canonical } from "@/lib/seo/site";
+import { SITE_NAME, canonical } from "@/lib/seo/site";
 
 export const revalidate = 3600;
 
@@ -35,13 +35,29 @@ export async function generateMetadata(props: {
   return {
     title: { absolute: `${category.title} | useLayouts` },
     description: category.metaDescription,
+    keywords: category.keywords,
     ...canonical(path),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        // The grids are the point of the page; let Google show the posters.
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: "en_US",
       title: category.title,
       description: category.metaDescription,
       url: path,
     },
     twitter: {
+      card: "summary_large_image",
       title: category.title,
       description: category.metaDescription,
     },
@@ -113,6 +129,9 @@ export default async function ComponentCategoryPage(props: {
           {/* 40-60 word answer block: the unit AI engines lift verbatim. */}
           <p className="max-w-[680px] text-pretty text-[17px] leading-relaxed text-[#4B565E]">
             {category.summary}
+          </p>
+          <p className="max-w-[680px] text-pretty text-[15px] leading-relaxed text-[#6B757C]">
+            {category.intent}
           </p>
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
