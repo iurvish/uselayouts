@@ -61,15 +61,20 @@ export default async function OpenComponentPage(props: {
           { name: data.title, path: `/docs/components/${slug}` },
         ]}
       />
-      <ComponentSeoContent
-        title={data.title}
-        description={description}
-        slug={slug}
-        dependencies={data.dependencies}
-        registryItem={data.registryItem}
-        related={related}
+      <OpenComponentView
+        data={data}
+        seoContent={
+          <ComponentSeoContent
+            title={data.title}
+            description={description}
+            slug={slug}
+            dependencies={data.dependencies}
+            registryItem={data.registryItem}
+            related={related}
+            docsContent={docsContent}
+          />
+        }
       />
-      <OpenComponentView data={data} docsContent={docsContent} />
     </>
   );
 }

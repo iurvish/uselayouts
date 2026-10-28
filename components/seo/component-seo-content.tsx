@@ -32,8 +32,10 @@ export function ComponentSeoContent({
     <article className="border-t border-white/8 bg-[hsl(240_6%_7%)] px-6 py-16 text-foreground md:px-10 lg:px-16">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-12">
         <header className="flex flex-col gap-3">
+          {/* The bare name ranks for nothing. "<name> React component" is
+              both the query and a natural reading of the heading. */}
           <h1 className="text-balance text-3xl font-medium tracking-[-0.5px] text-white sm:text-4xl">
-            {title}
+            {title} React component
           </h1>
           <p className="text-lg leading-[1.6] text-[hsl(240_5%_65%)]">
             {description}

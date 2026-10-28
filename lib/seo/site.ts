@@ -29,3 +29,16 @@ export function absoluteUrl(path = "/") {
 export function canonical(path = "/") {
   return { alternates: { canonical: path } } as const;
 }
+
+/**
+ * The <title> for one component page. The bare component name ("Wheel
+ * Carousel") matches nothing anyone searches, so the framework and the
+ * free/animated modifiers carry the query intent.
+ *
+ * This lives here because the client shell also writes `document.title` during
+ * client-side navigation between component pages. When that string was spelled
+ * out separately it overwrote the server title with the un-optimised name.
+ */
+export function componentTitle(name: string) {
+  return `${name} — Animated React Component (Free) | ${SITE_NAME}`;
+}

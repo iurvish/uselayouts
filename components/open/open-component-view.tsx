@@ -20,10 +20,15 @@ import { cn } from "@/lib/utils";
 
 export function OpenComponentView({
   data,
-  docsContent,
+  seoContent,
 }: {
   data: OpenComponentData;
-  docsContent?: React.ReactNode;
+  /**
+   * Server-rendered docs section under the hero. It carries the MDX prose that
+   * used to render inside the code drawer, so the drawer is now code + install
+   * only and the text is not duplicated on the page.
+   */
+  seoContent?: React.ReactNode;
 }) {
   const { panel, setPanel, stage } = useOpenPanel();
   const { user, configured } = useAuth();
@@ -42,35 +47,42 @@ export function OpenComponentView({
 
   return (
     <>
-      <main
-        className={cn(
-          "grid h-full min-h-0 w-full min-w-0 flex-1 overflow-auto",
-          scrollbarMinimal,
-        )}
-        style={
-          {
-            ...(previewBackground ? { background: previewBackground } : {}),
-            "--preview-hint-top": `${data.hintTop ?? 80}px`,
-          } as React.CSSProperties
-        }
-      >
-        <OpenPreview
-          name={data.slug}
-          hintTop={data.hintTop}
-          hint={stage ? null : data.previewHint}
-          hintTone={hintTone}
-        />
-      </main>
-
-      {stage ? null : (
-        <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
-          <OpenCliBar
-            registryItem={data.registryItem}
-            manager={manager}
-            onManagerChange={setManager}
+      {/* Viewport-height hero. `relative` so the CLI bar anchors here and not
+          to the (now much taller) page, and the preview keeps its own
+          `overflow-auto` so tall sticky demos still scroll <main>. */}
+      <div className="relative h-dvh shrink-0">
+        <main
+          className={cn(
+            "grid h-full min-h-0 w-full min-w-0 overflow-auto",
+            scrollbarMinimal,
+          )}
+          style={
+            {
+              ...(previewBackground ? { background: previewBackground } : {}),
+              "--preview-hint-top": `${data.hintTop ?? 80}px`,
+            } as React.CSSProperties
+          }
+        >
+          <OpenPreview
+            name={data.slug}
+            hintTop={data.hintTop}
+            hint={stage ? null : data.previewHint}
+            hintTone={hintTone}
           />
-        </div>
-      )}
+        </main>
+
+        {stage ? null : (
+          <div className="pointer-events-none absolute bottom-[18px] left-1/2 z-20 -translate-x-1/2 *:pointer-events-auto">
+            <OpenCliBar
+              registryItem={data.registryItem}
+              manager={manager}
+              onManagerChange={setManager}
+            />
+          </div>
+        )}
+      </div>
+
+      {stage ? null : seoContent}
 
       <OpenDrawer
         open={codeOpen}
@@ -80,7 +92,6 @@ export function OpenComponentView({
       >
         <OpenCodePanel
           description={data.description}
-          docsContent={docsContent}
           usage={data.usage}
           usageHtml={data.usageHtml}
           code={data.code}
