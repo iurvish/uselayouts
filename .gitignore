@@ -60,3 +60,6 @@ bun.lock
 # local figma / export staging
 .tmp/
 .tmp-*.png
+
+# local SEO working notes (not for the repo)
+SEO-NOTES.md
