@@ -1,0 +1,24 @@
+{
+  "dialConfig": {},
+  "disabled": [],
+  "updatedAt": "2026-10-07T00:00:00.000Z",
+  "previewBackground": {
+    "light": "#ffffff",
+    "dark": "#ffffff"
+  },
+  "interactionHints": {
+    "duration": 3,
+    "scale": 70,
+    "items": []
+  },
+  "showHint": true,
+  "hintKind": "custom",
+  "hintHeading": "Hover a face",
+  "hintDescription": "The crowd bursts out from the headline. Hover or tab to any avatar to see who they reach.",
+  "hintHideOnScroll": false,
+  "tags": [
+    "avatar",
+    "hover",
+    "social proof"
+  ]
+}

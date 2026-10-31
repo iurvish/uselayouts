@@ -467,6 +467,23 @@
       ]
     },
     {
+      "name": "expanding-avatars",
+      "type": "registry:component",
+      "title": "Expanding Avatars",
+      "description": "A crowd of avatars bursts out from a headline and settles around it. Hover any face and a pill opens toward the middle with their reach.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/expanding-avatars.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "feature-carousel",
       "type": "registry:component",
       "title": "Feature Carousel",
