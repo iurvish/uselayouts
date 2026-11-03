@@ -9,6 +9,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const config = {
   reactStrictMode: true,
   serverExternalPackages: ["ffmpeg-static", "sharp"],
+  experimental: {
+    // Next buffers/clones request bodies for middleware and truncates them at this
+    // limit, which silently corrupts large multipart uploads. Keep it above the
+    // 80MB video ceiling the admin media route enforces itself.
+    proxyClientMaxBodySize: "100mb",
+  },
   // sharp@0.35 nests libvips in @img/sharp-libvips-*; ensure NFT packs it for Vercel.
   outputFileTracingIncludes: {
     "/api/admin/components/[name]/media": [
