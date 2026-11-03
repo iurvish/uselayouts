@@ -1,4 +1,4 @@
-import { isNewComponent } from "@/lib/open/new-components";
+import { latestBatch } from "@/lib/browse/ranking";
 import { browseMediaUrl } from "@/lib/browse/media-url";
 import browseMedia from "@/registry/default/browse-media.json";
 import registry from "@/registry.json";
@@ -121,10 +121,18 @@ const SEEDS: Seed[] = [
   { slug: "holographic-referral-card", title: "Holographic Referral Card", description: "A dark invite card that tilts with a holographic glow.", category: "Display" },
   { slug: "curve-drawer", title: "Curve Drawer", description: "A side drawer whose inner edge morphs from a bulge to a line.", category: "Display" },
   { slug: "flower-menu", title: "Flower Menu", description: "Quick actions that bloom out radially.", category: "Navigation" },
-  { slug: "memory-card-stack", title: "Memory Card Stack", description: "Printed photos that fan out on hover.", category: "Display" },
+  { slug: "memory-card-stack", title: "Memory Card Stack", description: "A fanned deck of photos you page through.", category: "Display" },
   { slug: "paywall", title: "Paywall", description: "Pick your price on a detent slider.", category: "Input" },
   { slug: "slider", title: "Slider", description: "A two-sided ratio slider with springy bars.", category: "Input" },
 ];
+
+/**
+ * The components from the most recent batch. The hand-kept NEW_COMPONENT_SLUGS
+ * list had grown to 42 of 68 entries, so the "new" dot was on more of the
+ * catalogue than not and told you nothing; this is derived from the recorded
+ * add dates instead, and empties itself when the next batch lands.
+ */
+const FRESH = latestBatch();
 
 export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(seed.slug))
   .map((seed, index) => {
@@ -137,7 +145,7 @@ export const browseItems: BrowseItem[] = SEEDS.filter((seed) => LIVE_SLUGS.has(s
       // turn the browse catalog into a grid of broken-image icons.
       fallbackPoster: POSTERS[index % POSTERS.length]!,
       video: browseMediaUrl(override?.videoUrl ?? VIDEOS[index % VIDEOS.length]!),
-      isNew: isNewComponent(seed.slug),
+      isNew: FRESH.has(seed.slug),
     };
   })
   .sort((a, b) => a.title.localeCompare(b.title));
