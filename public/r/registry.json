@@ -1187,6 +1187,71 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "flower-menu",
+      "type": "registry:component",
+      "title": "Flower Menu",
+      "description": "A radial flower-style quick actions menu with staggered smooth motion.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/flower-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "memory-card-stack",
+      "type": "registry:component",
+      "title": "Memory Card Stack",
+      "description": "A stack of printed photographs that fans out on hover with spring physics, parallax tilt, and floating animations.",
+      "dependencies": [
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/memory-card-stack.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "paywall",
+      "type": "registry:component",
+      "title": "Paywall",
+      "description": "A premium paywall component with a pick your price detent slider, animated numeric price transitions, and a segmented plan control.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/paywall.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "A dual-sided ratio slider animated with spring physics and drag interactions.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "registry/default/example/slider.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

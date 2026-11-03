@@ -1,0 +1,32 @@
+{
+  "dialConfig": {
+    "previewPadding": [
+      24,
+      0,
+      96,
+      4
+    ],
+    "spring": {
+      "type": "spring",
+      "visualDuration": 0.35,
+      "bounce": 0.2
+    }
+  },
+  "disabled": [],
+  "updatedAt": "2026-10-07T07:38:55.819Z",
+  "previewBackground": {
+    "light": "hsl(0 0% 100%)",
+    "dark": "hsl(225 7% 11%)"
+  },
+  "showHint": true,
+  "hintKind": "drag",
+  "hintHeading": "",
+  "hintDescription": "",
+  "hintHideOnScroll": false,
+  "hintTop": 80,
+  "tags": [
+    "paywall",
+    "pricing",
+    "slider"
+  ]
+}
