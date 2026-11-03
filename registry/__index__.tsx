@@ -1202,7 +1202,7 @@ export const Index: Record<string, any> = {
   },
   "memory-card-stack": {
     name: "memory-card-stack",
-    description: "A stack of printed photographs that fans out on hover with spring physics, parallax tilt, and floating animations.",
+    description: "A fanned deck of five photographs. Start brings the top card up, then you page through it with the controls or throw it aside.",
     type: "registry:component",
     registryDependencies: undefined,
     files: [{

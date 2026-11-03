@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-10-07T07:38:55.819Z",
+  "updatedAt": "2026-11-03T07:14:07.145Z",
   "previewBackground": {
     "light": "hsl(0 0% 100%)",
     "dark": "hsl(225 7% 11%)"
@@ -28,5 +28,7 @@
     "cards",
     "photos",
     "hover"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/memory-card-stack/poster-28b38776a9.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/memory-card-stack/video-deef7817ed.mp4"
 }

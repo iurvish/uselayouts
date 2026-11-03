@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-10-07T07:38:55.819Z",
+  "updatedAt": "2026-11-03T07:23:52.924Z",
   "previewBackground": {
     "light": "hsl(0 0% 100%)",
     "dark": "hsl(225 7% 11%)"
@@ -28,5 +28,7 @@
     "slider",
     "ratio",
     "drag"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/slider/poster-c735711507.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/slider/video-bfeaca6715.mp4"
 }
