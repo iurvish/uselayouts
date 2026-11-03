@@ -424,102 +424,125 @@ function OpenExperienceShell({
       </Sheet>
 
       <div className="relative flex min-w-0 flex-1 flex-col bg-[hsl(225_7%_11%)]">
-        {showToggle ? (
-          <div
-            className={cn(
-              "pointer-events-none absolute top-[18px] left-[18px] z-30",
-              peek && "z-40",
-            )}
-            onMouseEnter={() => {
-              if (!isMobile) setPeek(true);
-            }}
-            onMouseLeave={() => {
-              if (!isMobile) {
-                setPeek(false);
-                setHoverPreview(null);
-              }
-            }}
-          >
-            <button
-              type="button"
-              className={cn(
-                openIconBtn,
-                "pointer-events-auto cursor-pointer p-2.5 transition-[box-shadow,border-color,background-color,transform,color] duration-150",
-                "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:brightness-0",
-                "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:invert",
-              )}
-              data-active={peek || mobileOpen ? "true" : undefined}
-              aria-label={
-                isMobile
-                  ? mobileOpen
-                    ? "Close sidebar"
-                    : "Open sidebar"
-                  : peek
-                    ? "Pin sidebar open"
-                    : "Open sidebar"
-              }
-              aria-expanded={isMobile ? mobileOpen : peek}
-              aria-pressed={false}
-              onClick={() => {
-                if (isMobile) {
-                  setMobileOpen(true);
-                  return;
-                }
-                updatePinned(true);
-                setPeek(false);
-                setHoverPreview(null);
-              }}
-            >
-              <SidebarToggleIcon />
-            </button>
-            {!isMobile ? (
-              <AnimatePresence>
-                {peek ? (
-                  <motion.div
-                    ref={peekPanelRef}
-                    className="pointer-events-auto absolute top-11 left-0 z-40 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
-                    style={{ width: SIDEBAR_WIDTH + 8 + PREVIEW_W }}
-                    initial={sidebarMotion.initial}
-                    animate={sidebarMotion.animate}
-                    exit={sidebarMotion.exit}
-                    transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    <div className={cn(sidebarShell, "max-h-[min(70dvh,560px)]")} style={{ width: SIDEBAR_WIDTH }}>
-                      <SidebarList
-                        items={navItems}
-                        activeHref={current.href}
-                        tall
-                        surface="card"
-                        onItemHover={(item, anchor) => {
-                          if (!item || !anchor || !peekPanelRef.current) {
-                            setHoverPreview(null);
-                            return;
-                          }
-                          const panelBox = peekPanelRef.current.getBoundingClientRect();
-                          const rowBox = anchor.getBoundingClientRect();
-                          setHoverPreview({
-                            slug: item.slug,
-                            title: item.title,
-                            rowMid: rowBox.top + rowBox.height / 2 - panelBox.top,
-                            panelHeight: panelBox.height,
-                          });
-                        }}
-                      />
-                    </div>
-                    <SidebarHoverPreview target={hoverPreview} />
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            ) : null}
-          </div>
-        ) : null}
 
         {/* Above preview layers that escape stacking (e.g. magnified-bento lens z-40). Drawer portal is z-[110] so it covers this chrome. */}
         {stage ? null : (
-          <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-start justify-between gap-4 *:pointer-events-auto">
-            <div className={cn(showToggle && "w-10")} />
-            {showToggle ? <OpenSwitcher current={current} items={navItems} /> : <div />}
-            <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />
+          /*
+            One row holds all three groups. The toggle used to be its own absolutely
+            positioned layer that lined up with this one only because both said
+            top-[18px] — nothing tied them together, so a height change on either
+            silently knocked it off the other's baseline. `items-center` on a single
+            row makes the alignment structural rather than coincidental.
+
+            Side slots are flex-1 so the switcher centres on the bar instead of on
+            whatever space is left between two unequal groups. The old w-10 spacer
+            stood in for a 42px button, so it never centred it anyway.
+
+            Pointer events stay off the row and the two side slots, which span the
+            full width, and come back on for the controls themselves.
+          */
+          <header className="pointer-events-none absolute inset-x-[18px] top-[18px] z-[100] flex items-center gap-4">
+            <div className="flex min-w-0 flex-1 items-center justify-start">
+            <div
+              className={cn(
+                // Lives in the header row now, so it cannot drift from the
+                // switcher or the actions. `relative` anchors the peek panel.
+                "pointer-events-auto relative",
+                peek && "z-10",
+              )}
+              onMouseEnter={() => {
+                if (!isMobile) setPeek(true);
+              }}
+              onMouseLeave={() => {
+                if (!isMobile) {
+                  setPeek(false);
+                  setHoverPreview(null);
+                }
+              }}
+            >
+              <button
+                type="button"
+                className={cn(
+                  openIconBtn,
+                  "pointer-events-auto cursor-pointer p-2.5 transition-[box-shadow,border-color,background-color,transform,color] duration-150",
+                  "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:brightness-0",
+                  "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_img]:invert",
+                )}
+                data-active={peek || mobileOpen ? "true" : undefined}
+                aria-label={
+                  isMobile
+                    ? mobileOpen
+                      ? "Close sidebar"
+                      : "Open sidebar"
+                    : peek
+                      ? "Pin sidebar open"
+                      : "Open sidebar"
+                }
+                aria-expanded={isMobile ? mobileOpen : peek}
+                aria-pressed={false}
+                onClick={() => {
+                  if (isMobile) {
+                    setMobileOpen(true);
+                    return;
+                  }
+                  updatePinned(true);
+                  setPeek(false);
+                  setHoverPreview(null);
+                }}
+              >
+                <SidebarToggleIcon />
+              </button>
+              {!isMobile ? (
+                <AnimatePresence>
+                  {peek ? (
+                    <motion.div
+                      ref={peekPanelRef}
+                      className="pointer-events-auto absolute top-11 left-0 z-40 before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']"
+                      style={{ width: SIDEBAR_WIDTH + 8 + PREVIEW_W }}
+                      initial={sidebarMotion.initial}
+                      animate={sidebarMotion.animate}
+                      exit={sidebarMotion.exit}
+                      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+                    >
+                      <div className={cn(sidebarShell, "max-h-[min(70dvh,560px)]")} style={{ width: SIDEBAR_WIDTH }}>
+                        <SidebarList
+                          items={navItems}
+                          activeHref={current.href}
+                          tall
+                          surface="card"
+                          onItemHover={(item, anchor) => {
+                            if (!item || !anchor || !peekPanelRef.current) {
+                              setHoverPreview(null);
+                              return;
+                            }
+                            const panelBox = peekPanelRef.current.getBoundingClientRect();
+                            const rowBox = anchor.getBoundingClientRect();
+                            setHoverPreview({
+                              slug: item.slug,
+                              title: item.title,
+                              rowMid: rowBox.top + rowBox.height / 2 - panelBox.top,
+                              panelHeight: panelBox.height,
+                            });
+                          }}
+                        />
+                      </div>
+                      <SidebarHoverPreview target={hoverPreview} />
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              ) : null}
+            </div>
+            </div>
+            {showToggle ? (
+              <div className="pointer-events-auto flex shrink-0 items-center">
+                <OpenSwitcher current={current} items={navItems} />
+              </div>
+            ) : null}
+            <div className="flex min-w-0 flex-1 items-center justify-end">
+              <div className="pointer-events-auto flex items-center">
+                <OpenActions panel={panel} onChange={setPanel} slug={current.slug} />
+              </div>
+            </div>
           </header>
         )}
 
