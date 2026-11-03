@@ -180,7 +180,7 @@ export function OpenSwitcher({
       <button
         type="button"
         className={cn(
-          "relative inline-flex max-w-[min(42vw,320px)] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[14px] border-0 px-3.5 py-2 text-base tracking-[-0.42px] text-white outline-none focus-visible:outline-none focus-visible:ring-0",
+          "relative inline-flex max-w-[min(42vw,320px)] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[14px] border-0 px-3.5 h-[42px] text-base tracking-[-0.42px] text-white outline-none focus-visible:outline-none focus-visible:ring-0",
           "bg-[hsl(240_6%_22%)]",
           "transition-[background-color] duration-150",
           "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(240_6%_25%)]",
