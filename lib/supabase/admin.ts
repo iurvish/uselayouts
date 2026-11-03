@@ -50,6 +50,35 @@ export async function upsertComponentRow(row: {
   );
 }
 
+/**
+ * Public aggregate of copy_events with timestamps, keyed by registry slug.
+ * `copies` alone cannot tell a component copied 50 times last week from one
+ * copied 50 times last winter, so the admin views read `last_copied_at` too.
+ */
+export async function getComponentCopyStats(): Promise<
+  Record<string, { copies: number; lastCopiedAt: string | null }>
+> {
+  const supabase = createServiceClient();
+  if (!supabase) return {};
+
+  const { data, error } = await supabase
+    .from("component_copy_counts")
+    .select("component_slug, copies, last_copied_at");
+
+  if (error || !data) return {};
+
+  return Object.fromEntries(
+    data.map((row) => [
+      String(row.component_slug),
+      {
+        copies: Number(row.copies) || 0,
+        lastCopiedAt:
+          typeof row.last_copied_at === "string" ? row.last_copied_at : null,
+      },
+    ]),
+  );
+}
+
 /** Public aggregate of copy_events, keyed by registry slug. */
 export async function getComponentCopyCounts(): Promise<Record<string, number>> {
   const supabase = createServiceClient();
