@@ -43,6 +43,7 @@ export const NEW_COMPONENT_SLUGS = new Set([
   "memory-card-stack",
   "paywall",
   "slider",
+  "expanding-avatars",
 ]);
 
 export function isNewComponent(slug: string) {
