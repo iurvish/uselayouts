@@ -1,6 +1,6 @@
 ---
 title: Memory Card Stack
-description: An interactive memory card stack that fans out on hover with parallax tilt.
+description: A fanned deck of five photographs. Start brings the top card up, then you page through it or throw it aside.
 ---
 
 ## Usage
@@ -15,8 +15,29 @@ export default function Page() {
 
 ## Features
 
-- **Hover fan-out** — three photo cards spread apart on hover or focus
-- **Parallax tilt** — cards respond to mouse movement with a soft 3D tilt
-- **Spring physics** — spring-based fan-out with staggered float animations
-- **Reduced motion** — respects the `prefers-reduced-motion` preference
-- **Keyboard accessible** — focusable with `aria-expanded` for assistive tech
+- **Fanned at rest** — the deck sits spread, with the centre card covering the two behind it. Pressing **Start** grows what is already face up rather than dealing a new card.
+- **Page or throw** — Back, Close and Next drive the run; dragging the centre card sideways does the same. A throw counts past a third of the card's width or 500px/s of velocity, so a half-hearted drag snaps back.
+- **Collapse, not a page turn** — closing shrinks the card in place and rewinds the deck once that lands, so the exit never fires the 480ms lateral slide built for next/prev.
+- **Stable backdrop** — the two cards behind are keyed by slot, not by index, so they hold their photographs instead of reshuffling under the card being read.
+- **Next becomes done** — the forward control stays an ordinary button while pages remain, then fills in black and swaps to a check on the last card.
+- **Springs that spring** — three springs at damping ratios of roughly 0.65 to 0.79, so each move overshoots once and settles. The deck settling back around its card gets the loosest of the three.
+- **Per-card colour** — one hue each, chroma held at 70% of that hue's own sRGB ceiling so equal vividness reads as equal, with a lightness ramp that lands the white label at APCA Lc ≈ 105 over the scrim.
+- **Real photographs** — five Unsplash images, cropped and compressed at the CDN at 60–90KB each. A plain `img`, not `next/image`, so a copy of this component carries no Next-only dependency.
+- **Labelled controls** — every icon button carries an `aria-label`, and Back is disabled on the first card.
+
+## Customization
+
+Cards are a flat array. Each entry is a label, a date, a hue and chroma for its gradient, and an Unsplash id:
+
+```tsx
+const CARDS = [
+  { id: 0, label: "Greenfields", date: "Jul 9, 2022", hue: 163, chroma: 0.07, src: photo("photo-1746898260024-497ff3b0be71") },
+  // ...
+];
+```
+
+`BROWSE_MS` is both the length of the next/prev exit and how long the control lock is held, so the two cannot drift apart:
+
+```tsx
+const BROWSE_MS = 480;
+```

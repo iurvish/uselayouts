@@ -4,19 +4,28 @@ import { BrowseExperience } from "@/components/browse/browse-experience";
 import { ComponentListJsonLd } from "@/components/seo/json-ld";
 import { loadComponentTags } from "@/lib/admin/components-fs";
 import { browseItems } from "@/lib/browse/items";
+import { getCopyStats } from "@/lib/browse/copy-stats";
+import { rankComponents } from "@/lib/browse/ranking";
 import { getGithubStarCount } from "@/lib/github";
 
 export const revalidate = 3600;
 
 export default async function BrowsePage() {
-  const [tags, stars] = await Promise.all([
+  const [tags, stars, copyStats] = await Promise.all([
     loadComponentTags(),
     getGithubStarCount(),
+    getCopyStats(),
   ]);
-  const items = browseItems.map((item) => ({
-    ...item,
-    tags: tags[item.slug] ?? [],
-  }));
+
+  // Ranked here rather than in the client: both the grid and the canvas render
+  // whatever order they are handed, and the canvas centres its camera on
+  // items[0], so this decides what you actually land on. Copy totals are read
+  // once per `revalidate` window rather than per request.
+  const items = rankComponents(
+    browseItems.map((item) => ({ ...item, tags: tags[item.slug] ?? [] })),
+    copyStats,
+    (item) => ({ slug: item.slug, title: item.title }),
+  );
 
   return (
     <>

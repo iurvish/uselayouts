@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { BarChart3, Plus, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,6 +18,8 @@ type Item = {
   disabledCount: number;
   tags: string[];
   copies: number;
+  isNew: boolean;
+  addedAt: string | null;
 };
 
 export default function AdminHomePage() {
@@ -76,13 +78,22 @@ export default function AdminHomePage() {
           <h1 className="text-2xl font-semibold tracking-tight">Components</h1>
           <p className="text-sm text-muted-foreground">
             Local file editor — paste code, generate MDX, upload browse media.
-            Ranked by copies.
+            Newest batch first.
           </p>
         </div>
-        <Link href="/admin/new" className={cn(buttonVariants())}>
-          <Plus data-icon="inline-start" />
-          New component
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/admin/copies"
+            className={cn(buttonVariants({ variant: "outline" }))}
+          >
+            <BarChart3 data-icon="inline-start" />
+            Copies
+          </Link>
+          <Link href="/admin/new" className={cn(buttonVariants())}>
+            <Plus data-icon="inline-start" />
+            New component
+          </Link>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -134,6 +145,7 @@ export default function AdminHomePage() {
                     <code className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">
                       {item.name}
                     </code>
+                    {item.isNew ? <Badge>New</Badge> : null}
                     {item.hasMdx ? (
                       <Badge variant="secondary">MDX</Badge>
                     ) : (

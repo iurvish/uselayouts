@@ -42,8 +42,10 @@ const [value, setValue] = useState(65);
 
 ## Features
 
-- **Animated Track Segments** — Each side of the slider animates with spring physics.
-- **Draggable Handle** — Real-time ratio adjustment via pointer events.
-- **Responsive Labels** — Labels fade in and out based on available width.
-- **Custom Labels** — Easily rename via props.
-- **OnChange Callback** — React to value changes in your application.
+- **1:1 tracking** — the two shares follow the pointer directly while dragging; released, they settle on a spring.
+- **Presence, not brightness** — each side's tint firms up as its share grows and thins as it shrinks, on opacity. The old `brightness()` read backwards once the fills were pale, since brightening a light tint against a white page weakens it.
+- **Collapses to a pill** — once either share falls under 30% the bar drops from 56px to 26px, because a thin slab has no business being tall.
+- **Labels step clear** — a label moves above the track only when its own bar has actually run out of room for it, measured in pixels rather than guessed from the value.
+- **Tabular figures** — the digits hold their columns as the value runs, so the label does not reflow on every pointermove and drag the fit test with it.
+- **Both themes** — every ink and ground pair clears WCAG AA on its own fill, the lowest being the dark coffee word at 5.8:1. Two first-pick colours were outside sRGB and were clamped to their hue's real ceiling.
+- **Custom labels** — `leftLabel` and `rightLabel`, with `defaultValue` and an `onChange` callback for the left share.

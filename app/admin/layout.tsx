@@ -37,6 +37,14 @@ export default async function AdminLayout({
           <nav className="flex items-center gap-1">
             {dev ? (
               <Link
+                href="/admin/copies"
+                className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+              >
+                Copies
+              </Link>
+            ) : null}
+            {dev ? (
+              <Link
                 href="/admin/landing"
                 className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
               >

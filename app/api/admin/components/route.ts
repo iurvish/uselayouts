@@ -5,21 +5,35 @@ import {
   upsertComponent,
 } from "@/lib/admin/components-fs";
 import { extractControlsFromSource } from "@/lib/admin/dial-extract";
-import { getComponentCopyCounts } from "@/lib/supabase/admin";
+import { getComponentCopyStats } from "@/lib/supabase/admin";
+import { DATES, latestBatch } from "@/lib/browse/ranking";
 
 export async function GET() {
   try {
     assertDevOnly();
-    const [items, copyCounts] = await Promise.all([
+    const [items, copyStats] = await Promise.all([
       listComponents(),
-      getComponentCopyCounts(),
+      getComponentCopyStats(),
     ]);
+    const fresh = latestBatch();
+    // Newest batch first here, not the blended browse score: this list is for
+    // editing, and what you just added is what you are most likely to open.
+    // /admin/copies is the view ranked by how well things are doing.
     const ranked = items
       .map((item) => ({
         ...item,
-        copies: copyCounts[item.name] ?? 0,
+        copies: copyStats[item.name]?.copies ?? 0,
+        lastCopiedAt: copyStats[item.name]?.lastCopiedAt ?? null,
+        addedAt: DATES[item.name] ?? null,
+        isNew: fresh.has(item.name),
       }))
-      .sort((a, b) => b.copies - a.copies || a.title.localeCompare(b.title));
+      .sort(
+        (a, b) =>
+          Number(b.isNew) - Number(a.isNew) ||
+          (b.addedAt ?? "").localeCompare(a.addedAt ?? "") ||
+          b.copies - a.copies ||
+          a.title.localeCompare(b.title),
+      );
     return NextResponse.json({ items: ranked });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed";

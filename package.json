@@ -24,9 +24,10 @@
     "start": "next start",
     "lint": "eslint",
     "build:docs": "fumadocs-mdx",
-    "build:registry": "tsx scripts/build-registry.mts",
+    "build:registry": "tsx scripts/build-component-dates.mts && tsx scripts/build-registry.mts",
     "push:auth-emails": "tsx scripts/push-auth-emails.mts",
-    "postinstall": "fumadocs-mdx"
+    "postinstall": "fumadocs-mdx",
+    "build:dates": "tsx scripts/build-component-dates.mts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1127.0",

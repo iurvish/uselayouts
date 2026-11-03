@@ -5,9 +5,7 @@
   "description": "A radial flower-style quick actions menu with staggered smooth motion.",
   "dependencies": [
     "motion",
-    "lucide-react",
-    "clsx",
-    "tailwind-merge"
+    "lucide-react"
   ],
   "files": [
     {

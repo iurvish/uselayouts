@@ -13,7 +13,7 @@
     }
   },
   "disabled": [],
-  "updatedAt": "2026-10-07T07:38:55.819Z",
+  "updatedAt": "2026-11-03T07:23:18.212Z",
   "previewBackground": {
     "light": "hsl(0 0% 100%)",
     "dark": "hsl(225 7% 11%)"
@@ -28,5 +28,7 @@
     "paywall",
     "pricing",
     "slider"
-  ]
+  ],
+  "posterUrl": "https://cdn.uselayouts.com/components/paywall/poster-63697ec9f1.avif",
+  "videoUrl": "https://cdn.uselayouts.com/components/paywall/video-ac9b8f1dcd.mp4"
 }
