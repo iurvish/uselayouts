@@ -270,5 +270,9 @@
   "slider": {
     "posterUrl": "https://cdn.uselayouts.com/components/slider/poster-c735711507.avif",
     "videoUrl": "https://cdn.uselayouts.com/components/slider/video-bfeaca6715.mp4"
+  },
+  "bookshelf": {
+    "posterUrl": "https://cdn.uselayouts.com/components/bookshelf/poster-078f6a0348.avif",
+    "videoUrl": "https://cdn.uselayouts.com/components/bookshelf/video-b240a02662.mp4"
   }
 }
