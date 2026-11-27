@@ -5,11 +5,14 @@
 import * as React from "react";
 import { motion, useReducedMotion } from "motion/react";
 
+import { ProfileDialog } from "@/components/account/profile-dialog";
+import { useAuth } from "@/components/auth/auth-provider";
 import { CodeBlockCommand } from "@/components/open/code-block-command";
+import { DocsSteps } from "@/components/open/docs-steps";
 import { DocsCodeBlock } from "@/components/open/docs-code-block";
 import { openPressMotion, shikiCommandSurface } from "@/components/open/ui";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGatedCopy } from "@/hooks/use-gated-copy";
+import { useGatedCopy, type CopySource } from "@/hooks/use-gated-copy";
 import {
   cliInstallCommand,
   manualInstallCommand,
@@ -20,53 +23,21 @@ import { cn } from "@/lib/utils";
 /** Same spring as browse dock Grid/Canvas tabs. */
 const installModeSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
 
-/** Figma 117:3894 — numbered steps with #47474d connectors */
-export function DocsSteps({ children }: { children: React.ReactNode }) {
-  const items = React.Children.toArray(children);
-  return (
-    <ol className="relative my-0 grid list-none gap-0 p-0">
-      {items.map((child, index) => (
-        <li
-          key={index}
-          className={cn(
-            "relative grid grid-cols-[24px_minmax(0,1fr)] gap-3",
-            index !== items.length - 1 && "pb-4",
-            index !== items.length - 1 &&
-              "before:absolute before:top-6 before:bottom-0 before:left-3 before:w-px before:-translate-x-1/2 before:bg-[hsl(240_4%_29%)] before:content-['']",
-          )}
-        >
-          {/* Figma 120:43 — 24px, radius 8, fill #323239, outer ring + inset highlight */}
-          <span
-            className={cn(
-              "relative z-1 grid size-6 place-items-center overflow-hidden rounded-md border border-[hsl(240_4%_29%)] bg-[hsl(240_5%_21%)] text-[15px] tracking-[-0.45px] text-[hsl(240_4%_58%)]",
-              "shadow-[0_0_0_1px_rgba(0,0,0,0.2)]",
-              "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
-              "after:shadow-[inset_0_1px_0.5px_0_hsla(0,0%,100%,0.08)]",
-            )}
-            aria-hidden
-          >
-            <span className="relative">{index + 1}</span>
-          </span>
-          <div className="min-w-0">{child}</div>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
 function ManualDepCommand({
   command,
   html,
   componentSlug,
+  source = "manual_deps",
 }: {
   command: string;
   html: string;
   componentSlug?: string;
+  source?: CopySource;
 }) {
   const [copied, setCopied] = React.useState(false);
   const gatedCopy = useGatedCopy({
     componentSlug,
-    source: "manual_deps",
+    source,
   });
 
   async function copy() {
@@ -113,7 +84,51 @@ function ManualDepCommand({
   );
 }
 
-/** Paper 114-0 / 117-0 — Installation CLI | Manual */
+/** The key lives in the profile dialog; signing in first is the only way to it. */
+function McpSteps({ slug }: { slug: string }) {
+  const { requireAuth } = useAuth();
+  const [profileOpen, setProfileOpen] = React.useState(false);
+  const prompt = `Use the uselayouts MCP to add the ${slug} component to this project`;
+
+  return (
+    <DocsSteps>
+      <div className="flex min-w-0 flex-col gap-3">
+        <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
+          Connect your editor
+        </h3>
+        <p className="text-base leading-[1.3] tracking-[-0.16px] text-[hsl(240_5%_69%)]">
+          Once per editor. Generate an API key, then paste the setup into Claude Code, Cursor, or
+          VS Code.
+        </p>
+        <button
+          type="button"
+          onClick={() => void requireAuth(() => setProfileOpen(true))}
+          className={cn(
+            "relative w-fit cursor-pointer overflow-clip rounded-[10px] bg-[hsl(230_77%_55%)] px-3 py-1.5 text-[14px] leading-5 font-medium tracking-[-0.084px] text-white",
+            "shadow-[0px_2px_2px_-1px_rgba(0,0,0,0.16),0px_4px_4px_-2px_rgba(0,0,0,0.24),0px_0px_0px_1px_rgba(0,0,0,0.12)]",
+            "transition-[transform,background-color] duration-150 active:scale-[0.98]",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-[hsl(230_77%_58%)]",
+          )}
+        >
+          Get your API key
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0px_1px_0px_0.2px_rgba(255,255,255,0.16)]"
+          />
+        </button>
+        <ProfileDialog open={profileOpen} onOpenChange={setProfileOpen} />
+      </div>
+      <div className="flex min-w-0 flex-col gap-3">
+        <h3 className="text-base leading-6 font-normal tracking-[-0.48px] text-[#fafafa]">
+          Ask for it
+        </h3>
+        <ManualDepCommand command={prompt} html="" componentSlug={slug} source="mcp" />
+      </div>
+    </DocsSteps>
+  );
+}
+
+/** Paper 114-0 / 117-0 — Installation CLI | Manual | MCP */
 export function InstallGuide({
   registryItem,
   dependencies,
@@ -139,7 +154,7 @@ export function InstallGuide({
   manualHtml?: Partial<Record<PackageManager, string>>;
   slug: string;
 }) {
-  const [mode, setMode] = React.useState<"cli" | "manual">("cli");
+  const [mode, setMode] = React.useState<"cli" | "manual" | "mcp">("cli");
   const reduceMotion = useReducedMotion();
   const file = `${slug}.tsx`;
   const commands = {
@@ -158,7 +173,7 @@ export function InstallGuide({
       <Tabs
         value={mode}
         onValueChange={(next) => {
-          if (next === "cli" || next === "manual") setMode(next);
+          if (next === "cli" || next === "manual" || next === "mcp") setMode(next);
         }}
         className="flex min-w-0 flex-col gap-3"
       >
@@ -174,6 +189,7 @@ export function InstallGuide({
             [
               { value: "cli", label: "CLI" },
               { value: "manual", label: "Manual" },
+              { value: "mcp", label: "MCP" },
             ] as const
           ).map((option) => {
             const active = option.value === mode;
@@ -217,6 +233,8 @@ export function InstallGuide({
               onValueChange={onManagerChange}
               componentSlug={slug}
             />
+          ) : mode === "mcp" ? (
+            <McpSteps slug={slug} />
           ) : (
             <DocsSteps>
               <div className="flex min-w-0 flex-col gap-3">

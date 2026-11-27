@@ -30,6 +30,10 @@ npx shadcn@latest add https://uselayouts.com/r/3d-book
 
 Replace `3d-book` with any component name from our [documentation](https://uselayouts.com/docs/introduction).
 
+### MCP
+
+Connect Claude Code, Cursor, or VS Code to the hosted MCP server at `https://uselayouts.com/api/mcp` with a free API key from your profile, or use the keyless [shadcn MCP server](https://ui.shadcn.com/docs/mcp). Setup: [uselayouts.com/docs/mcp](https://uselayouts.com/docs/mcp).
+
 ## Features
 
 - **Accessible**: Built on top of accessible primitives.
