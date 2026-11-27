@@ -15,58 +15,26 @@ import {
 import { formatStarCount, GITHUB_URL } from "@/lib/github";
 import { useAuth } from "@/components/auth/auth-provider";
 import { BrandLogo } from "@/components/brand-logo";
+import { ProfileDialog } from "@/components/account/profile-dialog";
+import { UserAvatar } from "@/components/account/user-avatar";
 
-function userAvatarUrl(user: User) {
-  const meta = user.user_metadata ?? {};
-  if (typeof meta.avatar_url === "string" && meta.avatar_url)
-    return meta.avatar_url;
-  if (typeof meta.picture === "string" && meta.picture) return meta.picture;
-  return null;
-}
-
-function userInitials(user: User) {
-  const meta = user.user_metadata ?? {};
-  const name =
-    (typeof meta.full_name === "string" && meta.full_name) ||
-    (typeof meta.name === "string" && meta.name) ||
-    user.email ||
-    "?";
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length >= 2) {
-    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-}
-
-/** Display-only avatar — no menu on click. */
-function BrowseProfileAvatar({ user }: { user: User }) {
-  const [failed, setFailed] = React.useState(false);
-  const src = userAvatarUrl(user);
-
-  React.useEffect(() => {
-    setFailed(false);
-  }, [user.id, src]);
+/** Opens the profile dialog, which is also where the MCP key lives. */
+function BrowseProfileButton({ user }: { user: User }) {
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <span
-      className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2a2a2e] text-[11px] font-medium text-white shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]"
-      aria-label={user.email ? `Signed in as ${user.email}` : "Signed in"}
-      title={user.email ?? "Signed in"}
-    >
-      {src && !failed ? (
-        <img
-          src={src}
-          alt=""
-          width={36}
-          height={36}
-          className="size-full object-cover"
-          referrerPolicy="no-referrer"
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        <span aria-hidden>{userInitials(user)}</span>
-      )}
-    </span>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={user.email ? `Profile, signed in as ${user.email}` : "Profile"}
+        title={user.email ?? "Profile"}
+        className="cursor-pointer rounded-full transition-[transform,opacity] duration-150 active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-85"
+      >
+        <UserAvatar user={user} />
+      </button>
+      <ProfileDialog open={open} onOpenChange={setOpen} />
+    </>
   );
 }
 
@@ -173,7 +141,7 @@ export function BrowseHeader({
           <TooltipContent side="bottom">Star us on GitHub 🥹</TooltipContent>
         </Tooltip>
 
-        {user ? <BrowseProfileAvatar user={user} /> : null}
+        {user ? <BrowseProfileButton user={user} /> : null}
       </div>
     </header>
   );

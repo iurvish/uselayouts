@@ -1,0 +1,103 @@
+---
+title: MCP
+description: Let your AI editor browse, search, and install uselayouts components for you.
+---
+
+Connect Claude Code, Cursor, or VS Code to uselayouts over [MCP](https://modelcontextprotocol.io), then ask for a component in plain words. Your editor searches the library, reads the source, and installs the one that fits.
+
+There are two ways in. The hosted server needs a free API key and nothing else. The shadcn server needs no key but wants a `components.json` in your project.
+
+## Hosted server
+
+### Get an API key
+
+[Sign in on Browse](/browse), click your avatar, and choose **Generate API key**. Copy it straight away: it's shown once. If you lose it, regenerate, and the old one stops working.
+
+The same dialog has the setup below with your key already filled in, so you can copy it from there instead.
+
+### Connect your editor
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http uselayouts https://uselayouts.com/api/mcp \
+  --header "Authorization: Bearer ul_your_api_key"
+```
+
+Run `/mcp` inside Claude Code to check that `uselayouts` shows as connected.
+
+#### Cursor
+
+In `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "uselayouts": {
+      "url": "https://uselayouts.com/api/mcp",
+      "headers": { "Authorization": "Bearer ul_your_api_key" }
+    }
+  }
+}
+```
+
+#### VS Code
+
+In `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "uselayouts": {
+      "type": "http",
+      "url": "https://uselayouts.com/api/mcp",
+      "headers": { "Authorization": "Bearer ul_your_api_key" }
+    }
+  }
+}
+```
+
+### What it can do
+
+- `search_components`: find components by what they do.
+- `list_components`: every component, with a one-line description.
+- `get_component`: full source, npm dependencies, and the docs link.
+- `get_install_command`: the shadcn command for npm, pnpm, yarn, or bun.
+
+Install commands use full registry URLs, so they work even without a `components.json` entry.
+
+## shadcn server
+
+No key needed. Add the registry to your project's `components.json`:
+
+```json
+{
+  "registries": {
+    "@uselayouts": "https://uselayouts.com/r/{name}.json"
+  }
+}
+```
+
+Then let shadcn write the editor config:
+
+```bash
+npx shadcn@latest mcp init --client claude
+```
+
+Swap `claude` for `cursor`, `vscode`, or `codex`. See the [shadcn MCP docs](https://ui.shadcn.com/docs/mcp) for manual setup.
+
+## Ask for things
+
+```text
+Find a uselayouts component for a delete button that needs confirmation
+```
+
+```text
+Add the uselayouts discrete-tabs component to the settings page
+```
+
+```text
+Show me every uselayouts component that animates a list
+```
+
+The file lands in your project the same way `npx shadcn add` puts it there. After that it's your code, so ask your editor to change the spring or rename the props next.

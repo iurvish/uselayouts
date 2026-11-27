@@ -12,6 +12,7 @@ import { BrandLogo } from "@/components/brand-logo";
 export const landingNavLinks = [
   { label: "Component", href: "/browse" },
   { label: "Documentation", href: "/docs" },
+  { label: "MCP", href: "/docs/mcp" },
   { label: "Blog", href: "/blog" },
   { label: "Sponsor", href: "/sponsor" },
   {

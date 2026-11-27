@@ -33,6 +33,7 @@ export async function GET() {
 - Built with: React 18+, TypeScript, Motion, Tailwind CSS
 - Works in: Next.js, Vite, Remix, any React 18+ project
 - Install: \`npx shadcn@latest add <registry-url>\`, or copy the single .tsx file
+- MCP: hosted server at ${SITE_URL}/api/mcp (Streamable HTTP, free API key as a Bearer token), or the keyless shadcn MCP server. Setup: ${SITE_URL}/docs/mcp
 - Source: https://github.com/iurvish/uselayouts
 - Author: Urvish Mali (https://urvish.in)
 

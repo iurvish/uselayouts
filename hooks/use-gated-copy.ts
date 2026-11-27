@@ -6,7 +6,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { copyEventSlug } from "@/lib/open/package-manager";
 import { createClient } from "@/lib/supabase/client";
 
-export type CopySource = "cli" | "code" | "manual_deps";
+export type CopySource = "cli" | "code" | "manual_deps" | "mcp";
 
 function queueCopyEvent(userId: string, slug: string, source: CopySource) {
   void createClient()
